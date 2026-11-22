@@ -275,7 +275,7 @@ The authoritative version is `content/cards/day3.json`. Written 2026-11-23 from 
 Numbers:
 - Doctor's course: modifier `derm_course`, skin −3 on each of 10 mornings (days 4–13), skipped days included. Free.
 - Promo cleaning: 40 coins. Often (3 of 4): skin +6 now, removed on the morning of day 5, so the face is worse on days 3 and 4. Sometimes (1 of 4): nothing. The course starts the same day either way.
-- The photo condition has no sum in `Cond`; it is `any` of: `useful` ≥ 2; `d1_run` and `d1_clean`; `d1_run` and `useful` ≥ 1; `d1_clean` and `useful` ≥ 1 ("and" is written as `not(any(not a, not b))`). The doctor visit itself is not counted as a useful action. Day 3 actions that count: K3-01 `neat`, `A3-run`, `A3-clean`. The card arrives as soon as the condition holds, also later in the evening or at night.
+- The photo condition has no sum in `Cond`; it is `any` of: `useful` ≥ 2; `d1_run` and `d1_clean`; `d1_run` and `useful` ≥ 1; `d1_clean` and `useful` ≥ 1 ("and" is written as `not(any(not a, not b))`). The doctor visit to office 12 counts as one useful action (author decision, 2026-11-23): every K3-05 outcome adds 1 to `useful`. Day 3 actions that count: K3-01 `neat`, `A3-run`, `A3-clean`. The card arrives as soon as the condition holds, also later in the evening or at night.
 
 Smoking count: `smoke_free` is days without a cigarette. Day 2 has no smoking card and is counted as the day before it: smoke-free after Day 1 `quit`, a smoking day otherwise. So on Day 3 not smoking sets the counter to 3 after `d1_no_smoke` and to 1 after `d1_smoked` or `d1_half`; a cigarette sets it to 0. `d1_half` has no separate Day 3 option.
 
