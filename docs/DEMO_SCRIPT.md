@@ -131,7 +131,7 @@ The authoritative version is `content/cards/day1.json`. This section records int
 | K1-08 Read receipt | night | «Алина была в сети в 23:41. Ответа нет». The chance scale appears: 3% | none |
 | K1-09 Sleep | night | Sleep now, or phone until three | `d1_late` |
 
-Neutral choice per story card, taken when the card is skipped (free, no requirements, smallest consequences): K1-01 `lurk`, K1-02 `ok`, K1-03 `fine`, K1-04 `one`, K1-05 `close`, K1-06 `half`, K1-07a `scroll`, K1-07b `scroll`, K1-08 `ok`, K1-08c `ok`, K1-08b `ok`. A fully skipped Day 1 therefore runs K1-01, K1-02, K1-03, K1-05, K1-06, K1-07a, K1-07b, K1-08b and leaves `d1_lurked`, `d1_mirror`, `d1_mom_dark`, `d1_no_contact`, `d1_half`, `chance_shown`; Day 2 then goes through K2-01c and the evening call K2-06. K1-06 `half` (care +1) was chosen over `smoke` (care +2) by the builder; the authors may prefer `smoke` as "the usual".
+Neutral choice per story card, taken when the card is skipped (free, no requirements, smallest consequences): K1-01 `lurk`, K1-02 `ok`, K1-03 `fine`, K1-04 `one`, K1-05 `close`, K1-06 `smoke`, K1-07a `scroll`, K1-07b `scroll`, K1-08 `ok`, K1-08c `ok`, K1-08b `ok`. A fully skipped Day 1 therefore runs K1-01, K1-02, K1-03, K1-05, K1-06, K1-07a, K1-07b, K1-08b and leaves `d1_lurked`, `d1_mirror`, `d1_mom_dark`, `d1_no_contact`, `d1_half`, `chance_shown`; Day 2 then goes through K2-01c and the evening call K2-06. K1-06 `half` (care +1) was chosen over `smoke` (care +2) by the builder; the authors may prefer `smoke` as "the usual".
 
 Day 1 card: hero frame, stat changes, 2–3 key decisions. Reward: 50 gold and gum (removes one cigarette craving once). Line for tomorrow: «Утром: сообщение от мамы».
 

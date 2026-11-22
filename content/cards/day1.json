@@ -356,6 +356,7 @@
     "choices": [
       {
         "id": "smoke",
+        "neutral": true,
         "label": "Выкурить как обычно",
         "outcomes": [
           {
@@ -374,7 +375,6 @@
       },
       {
         "id": "half",
-        "neutral": true,
         "label": "Выкурить половину",
         "outcomes": [
           {
