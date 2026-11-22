@@ -156,6 +156,35 @@ Every Day 1 flag must be used by a later card. Write these into days 2–7.
 | `d1_tea_saved` | 2 | The feed shows «Заказать чудо-чай» |
 | `d1_late` | 2 | Morning card «Проспал», the morning part is shorter |
 
+## 5a. Demo economy (proposed, 2026-11-22)
+
+Coins are earned only. Goal: a week of income buys about half of the shop, so every purchase is a choice. Numbers are starting values for balancing. Implemented in `content/items.json`, `content/cards/side-jobs.json` and `content/balance.json` (`energyCap` raised 20 → 24 so the gym pass works on boosted days 1–3).
+
+Income over days 1–7:
+
+| Source | Amount | Notes |
+|---|---|---|
+| Start | 100 | `startCoins` |
+| Day reward | 50 × 6 = 300 | days 1–6; the day 7 reward arrives after the demo ends |
+| Side job `A-job` | 20–30 per day, up to ~210 | costs 4 energy, once a day, day and evening |
+| Total | ~400 without the job, ~610 at most | |
+
+Spending (total 770):
+
+| Item | Price | Effect (engine units) | Once |
+|---|---|---|---|
+| `gym_pass` Абонемент в зал | 200 | +2 energy each morning and weight −1 each morning, 7 days | no |
+| `cream_premium` Крем «Сияние» | 220 | skin −3 each morning, 5 days (−15 total) | yes |
+| `cream_zina` Крем с Садовой | 40, paid in the Day 5 pharmacy card | skin −2 each morning, 10 days (−20 total) | not sold in the shop |
+| `frame` Новая оправа | 150 | style −12, conf −2, round glasses | yes |
+| `haircut` Стрижка у барбера | 70 + 2 energy | care −6, conf −2 | yes |
+| `shirt` Новая рубашка | 90 | style −6, blue shirt | yes |
+
+Rules:
+- `cream_zina` has no shop price. The Day 5 pharmacy card sells it with `"cost": { "coins": 40 }` and `{ "item": "cream_zina", "add": 1 }`. The quest solution is cheaper and stronger than the premium cream, but slower.
+- A bought item sets the flag `bought_<id>`, so later cards can react («Новая оправа тебе идёт»).
+- Not done: a paid course does not pause while the player is away (proposed red line in `docs/DESIGN.md` section 12).
+
 ## 6. Sample phrase bank for Alina
 
 Situation `alina_cold_hello`, used from day 5. One variant is picked at random.

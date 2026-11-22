@@ -3,7 +3,7 @@ import { content } from '../content';
 import { msToNextPart, type Clock } from '../engine/clock';
 import {
   actionsFor, buy, chance, choicesFor, choose, crush, currentLook, dayEnergy, drawEvent, drawStory,
-  fill, hasEvents, hero, markSummarySeen, newGame, oddsFor, progress, startLook, syncClock, useItem,
+  fill, hasEvents, hero, markSummarySeen, newGame, oddsFor, progress, soldOut, startLook, syncClock, useItem,
 } from '../engine/game';
 import type { SaveStore } from '../engine/save';
 import { DAY_PARTS, type Card, type Choice, type DaySummary, type GameState, type LogEntry } from '../engine/types';
@@ -445,7 +445,9 @@ function Shop({ state, commit }: { state: GameState; commit: (s: GameState) => v
         <div class="limits">{it.limits}</div>
         {(selling || (have > 0 && it.onUse)) && (
           <div class="item-actions">
-            {selling && (coins !== undefined
+            {selling && (soldOut(state, it)
+              ? <button class="buy" disabled>Куплено</button>
+              : coins !== undefined
               ? <button class="buy" disabled={state.coins < coins} onClick={() => commit(buy(content, state, it.id))}>Купить <Icon name="coin" size={16} />{coins}</button>
               : <button class="buy" disabled>За реальные деньги, в прототипе выключено</button>)}
             {have > 0 && it.onUse && <button class="use" onClick={() => commit(useItem(content, state, it.id))}>Применить</button>}

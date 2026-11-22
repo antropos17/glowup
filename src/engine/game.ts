@@ -7,7 +7,7 @@ import { DEFAULT_LOOK, type Look } from '../art/avatar';
 import { slotAt, slotIndex } from './clock';
 import {
   DAY_PARTS, type Card, type Choice, type Cond, type Content, type DayPart,
-  type DaySummary, type Effect, type GameState, type Outcome,
+  type DaySummary, type Effect, type GameState, type Item, type Outcome,
 } from './types';
 
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
@@ -432,10 +432,18 @@ export function buy(c: Content, state: GameState, itemId: string): GameState {
   const price = item?.price?.coins;
   if (!item || price === undefined) throw new Error(`Предмет ${itemId} не продаётся за монеты`);
   if (state.coins < price) throw new Error('Не хватает монет');
+  if (soldOut(state, item)) throw new Error(`Предмет ${itemId} продаётся один раз`);
   const s = clone(state);
   s.coins -= price;
   s.items[itemId] = (s.items[itemId] ?? 0) + 1;
+  // remembered even after the item is used up, so `once` holds and later cards can check it
+  s.flags[`bought_${itemId}`] = { value: true, day: s.day };
   return s;
+}
+
+/** A once-only item that this run has already bought. */
+export function soldOut(s: GameState, item: Item): boolean {
+  return !!item.once && `bought_${item.id}` in s.flags;
 }
 
 export function useItem(c: Content, state: GameState, itemId: string): GameState {

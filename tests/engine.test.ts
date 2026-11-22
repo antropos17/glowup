@@ -3,7 +3,7 @@ import { content } from '../src/content';
 import { slotAt, msToNextPart } from '../src/engine/clock';
 import {
   actionsFor, chance, choicesFor, choose, currentLook, dayEnergy, draw, drawStory,
-  newGame, oddsFor, startLook, syncClock,
+  buy, newGame, oddsFor, soldOut, startLook, syncClock, useItem,
 } from '../src/engine/game';
 import { validateContent } from '../src/engine/validate';
 import type { Content, GameState } from '../src/engine/types';
@@ -90,7 +90,7 @@ describe('день 1', () => {
     let s = story(start());
     expect(actionsFor(content, s)).toHaveLength(0);          // утром меню пустое
     s = story(syncClock(content, s, at(13)));
-    expect(actionsFor(content, s).map((c) => c.id)).toEqual(['A1-run', 'A1-clean', 'A1-dentist', 'A1-couch']);
+    expect(actionsFor(content, s).map((c) => c.id)).toEqual(['A1-run', 'A1-clean', 'A1-dentist', 'A1-couch', 'A-job']);
     const before = s.energy;
     s = pick(s, 'A1-run', 'go');
     expect(s.energy).toBe(before - 4);
@@ -172,5 +172,42 @@ describe('переход в следующий день', () => {
     const s = syncClock(full, start(), START + 31 * 24 * H);
     expect(s.verdict).toBeDefined();
     expect(s.verdict!.chance).toBeLessThanOrEqual(content.balance.chanceCap);
+  });
+});
+
+describe('economy', () => {
+  const item = (id: string) => content.items.find((x) => x.id === id)!;
+  const rich = (s: GameState) => ({ ...s, coins: 1000 });
+
+  it('a once-only item sells once and stays sold after use', () => {
+    let s = buy(content, rich(start()), 'frame');
+    expect(() => buy(content, s, 'frame')).toThrow();
+    s = useItem(content, s, 'frame');
+    expect(s.items.frame).toBe(0);
+    expect(soldOut(s, item('frame'))).toBe(true);
+    expect(currentLook(content, s).glasses).toBe('round');
+    expect(() => buy(content, s, 'frame')).toThrow();
+  });
+  it('the gym pass adds energy and fitness from the next morning', () => {
+    let s = useItem(content, buy(content, rich(start()), 'gym_pass'), 'gym_pass');
+    const weight = s.problems.weight;
+    s = syncClock(full, pick(syncClock(full, s, at(23.5)), 'K1-09', 'sleep', full), at(33));
+    expect(s.day).toBe(2);
+    expect(s.energy).toBe(content.balance.energyPerDay * content.balance.earlyBoost.factor + 2);
+    expect(s.problems.weight).toBe(weight - 1);
+  });
+  it('the side job pays coins for energy, once a day', () => {
+    let s = syncClock(content, start(), at(13));
+    const { coins, energy } = s;
+    s = pick(s, 'A-job', 'go');
+    expect([coins + 20, coins + 30]).toContain(s.coins);
+    expect(s.energy).toBe(energy - 4);
+    expect(actionsFor(content, s).map((c) => c.id)).not.toContain('A-job');
+  });
+  it('a full week of income does not cover everything in the shop', () => {
+    const b = content.balance;
+    const maxIncome = b.startCoins + b.dayCoins * 6 + 30 * 7;
+    const shop = content.items.reduce((a, x) => a + (x.price?.coins ?? 0), 0);
+    expect(shop).toBeGreaterThan(maxIncome);
   });
 });

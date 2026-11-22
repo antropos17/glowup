@@ -4,8 +4,9 @@
   "verified": {
     "date": "2026-11-22",
     "typecheck": "pass",
-    "tests": "20/20",
-    "check_content": "pass: 15 cards (10 story, 5 action), 1 archetype, 1 crush",
+    "tests": "24/24",
+    "check_content": "pass: 17 cards (11 story, 6 action), 1 archetype, 1 crush",
+    "economy": "demo economy in items.json, side-jobs.json, balance.json; see docs/DEMO_SCRIPT.md section 5a",
     "build": "pass: dist/index.html 298 kB",
     "playthrough": "game opens at 375x812 with no console errors; Day 1 not played through by hand in Claude Code yet"
   },

@@ -167,6 +167,8 @@ export interface Item {
   icon: string;
   /** без цены предмет не продаётся, его можно только получить */
   price?: { coins?: number; iap?: string };
+  /** sold only once per run: a second frame or cream course would add nothing */
+  once?: boolean;
   /** обязательная честная приписка: что предмет не гарантирует */
   limits: string;
   onUse?: Effect[];
