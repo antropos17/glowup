@@ -244,6 +244,14 @@ describe('economy', () => {
     expect(s.energy).toBe(content.balance.energyPerDay * content.balance.earlyBoost.factor + 2);
     expect(s.problems.weight).toBe(weight - 1);
   });
+  it('a 7-day gym pass works for exactly seven mornings', () => {
+    const s = useItem(content, buy(content, rich(start()), 'gym_pass'), 'gym_pass');
+    const morning = (day: number) => syncClock(full, s, at(9 + 24 * (day - 1)));
+    for (let day = 2; day <= 8; day++) expect(morning(day).modifiers.map((m) => m.id)).toEqual(['gym']);
+    expect(morning(8).energy).toBe(content.balance.energyPerDay + 2);
+    expect(morning(9).modifiers).toEqual([]);
+    expect(morning(9).energy).toBe(content.balance.energyPerDay);
+  });
   it('the side job pays coins for energy, once a day', () => {
     let s = syncClock(content, start(), at(13));
     const { coins, energy } = s;
@@ -272,7 +280,7 @@ describe('economy', () => {
     expect(ids(s0)).toEqual(['park', 'gym', 'later']);
     // bought in the card: the shop shows the course as running and will not apply a second one
     const viaCard = pick(s0, 'K2-04', 'gym');
-    expect(viaCard.coins).toBe(s0.coins - 200);
+    expect(viaCard.coins).toBe(s0.coins - item('gym_pass').price!.coins!);
     expect(viaCard.modifiers.map((m) => m.id)).toEqual(['gym']);
     expect(courseActive(viaCard, item('gym_pass'))).toBe(true);
     expect(() => useItem(content, buy(content, viaCard, 'gym_pass'), 'gym_pass')).toThrow();

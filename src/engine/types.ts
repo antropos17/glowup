@@ -54,7 +54,7 @@ export interface Modifier {
   title: string;
   /** сколько энергии добавляет каждое утро */
   energyPerDay?: number;
-  /** на сколько дней, без поля действует до конца игры */
+  /** how many mornings it works, starting the morning after it was set; without the field it lasts to the end of the game */
   days?: number;
   /** каждый день с этим модификатором проблема меняется на столько */
   daily?: { problem: string; add: number }[];

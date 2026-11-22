@@ -165,7 +165,7 @@ A modifier:
                 "daily": [{ "problem": "weight", "add": -2 }] } }
 ```
 
-`energyPerDay` adds to each morning's energy, `daily` changes problems each morning, `days` limits the duration (without it, to the end of the game). A modifier with the same `id` replaces the old one.
+`energyPerDay` adds to each morning's energy, `daily` changes problems each morning, `days` is the number of mornings it works, starting the morning after it was set (without it, to the end of the game). A modifier with the same `id` replaces the old one.
 
 ### The chance to be liked
 

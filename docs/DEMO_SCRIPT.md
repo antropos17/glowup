@@ -169,11 +169,11 @@ Income over days 1–7:
 | Side job `A-job` | 20–30 per day, up to ~210 | costs 4 energy, once a day, day and evening |
 | Total | ~400 without the job, ~610 at most | |
 
-Spending (total 770):
+Spending (total 720):
 
 | Item | Price | Effect (engine units) | Once |
 |---|---|---|---|
-| `gym_pass` Абонемент в зал | 200 | +2 energy each morning and weight −1 each morning, 7 days | no |
+| `gym_pass` Абонемент в зал | 150 | +2 energy each morning and weight −1 each morning, 7 days | no |
 | `cream_premium` Крем «Сияние» | 220 | skin −3 each morning, 5 days (−15 total) | yes |
 | `cream_zina` Крем с Садовой | 40, paid in the Day 5 pharmacy card | skin −2 each morning, 10 days (−20 total) | not sold in the shop |
 | `frame` Новая оправа | 150 | style −12, conf −2, round glasses | yes |
@@ -198,7 +198,7 @@ The authoritative version is `content/cards/day2.json`. Written 2026-11-22; the 
 | K2-02a Mirror | morning | «Пирожки никуда не делись» | `d1_ate_pies` | none |
 | K2-02b Mirror | morning | «Понедельник наступил» | `d1_couch` | none |
 | K2-03 For bread | morning | Go to the shop or stay home. Going out in the morning without oversleeping shows Aunt Zina's note | none | `d2_saw_note` |
-| K2-04 Park or gym | day | Park run (4 energy, random) or gym pass (200 coins + 3 energy for the first workout; the same pass as the shop item `gym_pass`, section 5a: +2 energy and weight −1 every morning, 7 days, skipped days included), or decide later | none | `d2_park`, `d2_gym`; counter `useful` +1 |
+| K2-04 Park or gym | day | Park run (4 energy, random) or gym pass (150 coins + 3 energy for the first workout; the same pass as the shop item `gym_pass`, section 5a: +2 energy and weight −1 every morning, 7 days, skipped days included), or decide later | none | `d2_park`, `d2_gym`; counter `useful` +1 |
 | K2-05a Feed: miracle tea | day | The saved post: order for 30 coins (energy −2 on days 3 and 4) or delete it | `d1_tea_saved` | `d2_tea` |
 | K2-05b Feed: miracle tea | day | The ad again: order or scroll | not `d1_tea_saved` | `d2_tea` |
 | K2-06 Mum calls back | evening | Same number, slot moved to 15:00 | `d1_mom_dark` | `d2_derm_slot` = `day` |
@@ -234,7 +234,7 @@ Engine notes for days 3+:
 - The first like on day 3 needs "two useful actions over three days": `Cond` has no sum, so express it with `any`/`not`, for example `{ "counter": "useful", "gte": 2 }` or `not(any(not d1_run, counter useful < 1))`.
 - `smoke_free` is not advanced on day 2: there is no smoking card that day. Day 4 decides how quitting is counted.
 - K2-04 never charges twice for the pass: the buy choice needs `bought_gym_pass` unset (the shop sets this flag, and so does the card); with the flag set the card offers `gym_have` (3 energy, the workout only; a pass still in the bag is activated). In the shop a pass or cream whose course is running shows «Уже действует» and cannot be bought or applied.
-- The gym pass in K2-04 is the shop pass (section 5a): same price, same modifier `gym`. With `energyCap` 24 its +2 energy works on day 3 as well (20 + 2). On day 2 a player has about 150–180 coins, so the 200-coin pass is usually out of reach in K2-04 and can be bought in the shop later.
+- The gym pass in K2-04 is the shop pass (section 5a): same price, same modifier `gym`. With `energyCap` 24 its +2 energy works on day 3 as well (20 + 2). On day 2 a player has 150–180 coins, so the 150-coin pass is affordable in K2-04, at the cost of nearly all savings.
 
 ## 6. Sample phrase bank for Alina
 

@@ -169,7 +169,7 @@ export function syncClock(c: Content, state: GameState, now: number): GameState 
       s.day += 1;
       s.part = 'morning';
       delete s.closedDay;
-      s.modifiers = s.modifiers.filter((m) => m.days === undefined || s.day < m.fromDay + m.days);
+      s.modifiers = s.modifiers.filter((m) => m.days === undefined || s.day <= m.fromDay + m.days);
       for (const m of s.modifiers) for (const d of m.daily ?? []) addProblem(s, d.problem, d.add);
       s.energy = dayEnergy(c, s);
       // то, что было отложено «на завтра»
