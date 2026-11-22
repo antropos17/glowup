@@ -1,6 +1,6 @@
 # 7-day demo — script
 
-Status: draft v1, 2026-11-22. The 7-day grid and the Day 1 design are done. Day 1 is implemented in `content/cards/day1.json`, Day 2 in `content/cards/day2.json`. Days 3–7 are to be written directly in the engine format.
+Status: draft v1, 2026-11-22. The 7-day grid and the Day 1 design are done. Day 1 is implemented in `content/cards/day1.json`, Day 2 in `content/cards/day2.json`, Day 3 in `content/cards/day3.json`. Days 4–7 are to be written directly in the engine format.
 
 This file is the design-level description in English. Russian strings in «quotes» are in-game text: copy them verbatim into content.
 
@@ -246,9 +246,67 @@ Day 1 payoffs done on day 2: `d1_mom_knows` (K2-01a), `d1_mom_dark` (K2-01c, K2-
 
 Engine notes for days 3+:
 - The first like on day 3 needs "two useful actions over three days": `Cond` has no sum, so express it with `any`/`not`, for example `{ "counter": "useful", "gte": 2 }` or `not(any(not d1_run, counter useful < 1))`.
-- `smoke_free` is not advanced on day 2: there is no smoking card that day. Day 4 decides how quitting is counted.
+- `smoke_free` is not advanced on day 2: there is no smoking card that day. Day 3 continues the count on the polyclinic porch (section 5c).
 - K2-04 never charges twice for the pass: the buy choice needs `bought_gym_pass` unset (the shop sets this flag, and so does the card); with the flag set the card offers `gym_have` (3 energy, the workout only; a pass still in the bag is activated). In the shop a pass or cream whose course is running shows «Уже действует» and cannot be bought or applied.
 - The gym pass in K2-04 is the shop pass (section 5a): same price, same modifier `gym`. With `energyCap` 24 its +2 energy works on day 3 as well (20 + 2). On day 2 a player has 150–180 coins, so the 150-coin pass is affordable in K2-04, at the cost of nearly all savings.
+
+## 5c. Day 3 design (implemented)
+
+The authoritative version is `content/cards/day3.json`. Written 2026-11-23 from `DECISIONS.md` rows 9–12 and section 3; the texts are not reviewed by the authors yet. Story cards are listed in display order.
+
+"Visit time" below means: from the morning when `d2_derm_slot` is `morning` or missing, from the day part when it is `day`. "Late" means `d2_late` together with the morning slot; with the 15:00 slot Andrey is never late.
+
+| Card | Part | What happens | Condition | Flags set |
+|---|---|---|---|---|
+| K3-00a Tea works | morning | «Чудо-чай всё ещё действует: сегодня на 2 энергии меньше». A line only: the energy was already taken by Day 2's `tomorrow` effect | `d2_tea` | none |
+| K3-00b Gym pass works | morning | «Абонемент в зал работает: с утра +2 энергии». A line only | `d2_gym`, or the shop pass bought on an earlier day and no longer in the bag | none |
+| K3-01 Packing | morning | Mum: take the insurance card, dress decently. Tidy up (1 energy, care −2, counter `useful` +1) or go as is | none | none |
+| K3-02 Polyclinic porch | visit time | Two men smoke by the bin and offer one. Smoke (care +2), gum (uses the Day 1 gift), or «Спасибо, бросаю» (1 energy, conf −1); not smoking gives care −2 | none | `d3_smoked` or `d3_no_smoke`; counter `smoke_free` |
+| K3-03a Third floor | visit time | Two doors: 12 with a queue, 12А «Кожа. Без очереди». On time: 12 is free and almost immediate | on time, not `d2_asked_office` | `d3_door` = `12` or `12a` |
+| K3-03b Third floor | visit time | Same, plus the doctor's name on door 12 and mum's «в соседнем какие-то акции» | on time, `d2_asked_office` | `d3_door` |
+| K3-03c Third floor | visit time | Late: the doctor took the next patient. The queue to 12 costs 3 energy (an effect, the choice is free), or walk into 12А | late, not `d2_asked_office` | `d3_door` |
+| K3-03d Third floor | visit time | Late, with the doctor's name and mum's words | late, `d2_asked_office` | `d3_door` |
+| K3-04 Office 12А | visit time | The cosmetologist offers the promo cleaning for 40 coins. The button shows «часто: раздражение на два дня, иногда: ничего». Either way the doctor is then reached through the queue: −3 energy, stated in the card text | `d3_door` = `12a` | `d3_cleaning` = `bad` or `none` |
+| K3-05 Office 12 | visit time | Galina Petrovna starts the course. With the patches in the bag Andrey can ask about them: «Пока идёт курс, не клеить» | `d3_door` = `12`, or K3-04 was played | `d3_course` |
+| K3-06 Photo | evening | Offered only with two or more useful actions over days 1–3. Post (conf −2, a feed post, Vitya's comment by the Day 1 chat choice) or keep it | `d1_run` + `d1_clean` + counter `useful` ≥ 2 | `d3_posted` |
+| K3-07 Like | night | «Алина оценила ваше фото»: `affinity` +5, reason «Алина лайкнула твоё фото», a status line in the chat (`status_liked_photo`) | `d3_posted` | `d3_alina_liked` |
+| K3-08 Aunt Zina | night | Met on the stairs with the bin. With `d2_saw_note` the hello line mentions the note and Andrey can ask about it; she does not explain it yet | no `d3_posted` | `d3_met_zina`, `d3_asked_note` |
+
+Numbers:
+- Doctor's course: modifier `derm_course`, skin −3 on each of 10 mornings (days 4–13), skipped days included. Free.
+- Promo cleaning: 40 coins. Often (3 of 4): skin +6 now, removed on the morning of day 5, so the face is worse on days 3 and 4. Sometimes (1 of 4): nothing. The course starts the same day either way.
+- The photo condition has no sum in `Cond`; it is `any` of: `useful` ≥ 2; `d1_run` and `d1_clean`; `d1_run` and `useful` ≥ 1; `d1_clean` and `useful` ≥ 1 ("and" is written as `not(any(not a, not b))`). The doctor visit to office 12 counts as one useful action (author decision, 2026-11-23): every K3-05 outcome adds 1 to `useful`. Day 3 actions that count: K3-01 `neat`, `A3-run`, `A3-clean`. The card arrives as soon as the condition holds, also later in the evening or at night.
+
+Smoking count: `smoke_free` is days without a cigarette. Day 2 has no smoking card and is counted as the day before it: smoke-free after Day 1 `quit`, a smoking day otherwise. So on Day 3 not smoking sets the counter to 3 after `d1_no_smoke` and to 1 after `d1_smoked` or `d1_half`; a cigarette sets it to 0. `d1_half` has no separate Day 3 option.
+
+Plus actions on day 3 (day, evening, night): park run (4, weight −3 or −1, counter `useful`), shower and clean T-shirt (2, care −5, counter `useful`), teeth by the timer (1, teeth −1), sofa (0, conf +1). Sleep (night) closes the day; «Посидеть в телефоне до трёх» sets `d3_late` and −4 energy on day 4.
+
+Neutral choice per story card (marked `"neutral": true`): K3-00a `ok`, K3-00b `ok`, K3-01 `asis`, K3-02 `smoke`, K3-03a–d `office12` (on the late variants it takes 3 energy as an effect), K3-04 `leave`, K3-05 `take`, K3-06 `keep`, K3-07 `ok`, K3-08 `hello`. A fully skipped Day 3 therefore runs K3-01, K3-02, K3-03x, K3-05, K3-06 if it is on offer, K3-08: Andrey smokes, goes to office 12, the course starts (`DECISIONS.md` row 10, the agreed exception to "a neutral choice does not start a course"), nothing is posted, no coins are spent, nothing is written to Alina.
+
+Day 3 card: reward 50 gold and dental floss (`floss`, teeth −1 once). Line for tomorrow: «Завтра сил будет вдвое меньше».
+
+Earlier flags paid off on day 3: `d2_derm_slot` (visit time), `d2_late` (K3-03c/d), `d2_asked_office` (K3-03b/d), `d2_tea` (K3-00a), `d2_gym` (K3-00b), `d2_saw_note` (K3-08), counter `useful`, `d1_run`, `d1_clean` (K3-06), `d1_said_coming`, `d1_joked`, `d1_lurked` (Vitya's comment in K3-06), `d1_no_smoke` (K3-02 count), the Day 1 gift `gum` and the Day 2 gift `acne_patch` (K3-02, K3-05).
+
+### How Day 3 pays off later
+
+| Flag | Day | Payoff |
+|---|---|---|
+| `d3_door` | 3 | Opens K3-04 (`12a`) or K3-05 (`12`) |
+| `d3_cleaning` | 3, 4 | `bad`: the doctor comments on the red cheeks (K3-05); the Day 4 mirror can mention them (proposed) |
+| `d3_course` | 5 | The pharmacy and Aunt Zina's cream know that a course is already running (`DECISIONS.md` row 12: the cream must give something else) |
+| `d3_smoked`, `d3_no_smoke`, counter `smoke_free` | 4 | Strength of the Day 4 craving; the counter goes on from here |
+| `d3_posted` | 3, 4 | Opens K3-07; Vitya can refer to the photo at the barbecue (proposed) |
+| `d3_alina_liked` | 4, 5 | Day 4 "likes on a good day" is then the second like; her first message can follow from it |
+| `d3_met_zina` | 5 | Aunt Zina already greeted him on the stairs before asking for help |
+| `d3_asked_note` | 5 | «Зайдёшь как-нибудь, расскажу»: she keeps the promise and names the cream |
+| `d3_late` | 4 | Morning «Проспал» on the first half-energy day |
+
+Engine notes for days 4+ (nothing in `src/` was changed):
+- A card's `parts` are fixed, so "morning or day depending on a flag" is written as `parts: ["morning"]` plus `any(not slot = day, not part = morning)`. Side effect: a visit card auto-played on a skipped day is filed under the morning in the journal even for the 15:00 slot.
+- `Cond` cannot ask whether a modifier is active. K3-00b infers the gym pass from flags and the bag; a pass bought earlier and applied on the morning of day 3 before the card is read shows the line one day early.
+- The doctor's «не клеить» about the patches is a line only: nothing stops the player from applying them, and nothing reacts if they do.
+- A neutral choice cannot have `cost`, so the queue price on the late door card is an effect and is written into the button label instead of the cost badge.
+- The reason line shows the chance delta. The like is `affinity` +5, which is +5 on the scale except at the 1% floor.
 
 ## 6. Sample phrase bank for Alina
 

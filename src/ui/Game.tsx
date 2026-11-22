@@ -11,7 +11,7 @@ import type { Look } from '../art/avatar';
 import { Body, Cost, Icon, Portrait } from './bits';
 import { timelapsePng } from './shareTimelapse';
 import { DAY_CARD, DEMO_END, duration, MISSED, PART_ICON, PART_NAME, PART_NEXT, SOUND } from './ru';
-import { isMuted, play, setMuted, tap } from './sound';
+import { isMuted, play, played, setMuted, tap } from './sound';
 
 type Tab = 'journal' | 'mirror' | 'chat' | 'feed' | 'shop';
 type Sheet =
@@ -53,9 +53,17 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
     const t = setInterval(refresh, 20_000);
     document.addEventListener('visibilitychange', refresh);
     // every button of the game taps, unless its own handler has already played something more specific
-    const onTap = (e: Event) => { if ((e.target as Element | null)?.closest?.('.game button')) tap(); };
+    // The button is looked up on the way down: by the time the click bubbles back up, the button's own handler
+    // has often re-rendered the sheet and the pressed button is no longer in the page.
+    let onButton = false, mark = 0;
+    const onDown = (e: Event) => { onButton = !!(e.target as Element | null)?.closest?.('.game button'); mark = played(); };
+    const onTap = () => { if (onButton) tap(mark); onButton = false; };
+    document.addEventListener('click', onDown, true);
     document.addEventListener('click', onTap);
-    return () => { clearInterval(t); document.removeEventListener('visibilitychange', refresh); document.removeEventListener('click', onTap); };
+    return () => {
+      clearInterval(t); document.removeEventListener('visibilitychange', refresh);
+      document.removeEventListener('click', onDown, true); document.removeEventListener('click', onTap);
+    };
   }, []);
   useEffect(() => {
     if (!scroller.current) return;

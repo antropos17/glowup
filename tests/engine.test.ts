@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { content } from '../src/content';
 import { slotAt, msToNextPart } from '../src/engine/clock';
 import {
-  actionsFor, chance, choicesFor, choose, currentLook, dayEnergy, draw, drawStory,
+  actionsFor, chance, check, choicesFor, choose, currentLook, dayEnergy, draw, drawStory,
   buy, courseActive, markMissedSeen, newGame, oddsFor, soldOut, startLook, syncClock, useItem,
 } from '../src/engine/game';
 import { validateContent } from '../src/engine/validate';
@@ -183,6 +183,275 @@ describe('день 2', () => {
   });
 });
 
+/** days 1 and 2 with sleep, then day 3 part by part up to the night; `sleep2` is how day 2 ended */
+function day3(p1: Record<string, string> = {}, p2: Record<string, string> = {}, p3: Record<string, string> = {}, sleep2 = 'sleep'): GameState {
+  let s = pick(day2(p1, p2), 'K2-sleep', sleep2);
+  for (const h of [57, 61, 67, 71.5]) s = story(syncClock(content, s, at(h)), p3);
+  return s;
+}
+
+describe('день 3', () => {
+  const seen = (s: GameState) => Object.keys(s.seen);
+  const d3 = (s: GameState) => seen(s).filter((id) => id.startsWith('K3-'));
+  const card = (id: string) => content.cards.find((c) => c.id === id)!;
+  const skinRegress = content.problems.find((p) => p.id === 'skin')!.regress;
+  /** quiet day 2: no tea, no run, mum does not name the office */
+  const QUIET2 = { 'K2-04': 'later', 'K2-05a': 'delete', 'K2-09': 'ok' };
+  /** the morning of day 3 after a quiet day 2 */
+  const morning3 = (p1: Record<string, string> = {}, p2: Record<string, string> = QUIET2, sleep2 = 'sleep') =>
+    syncClock(content, pick(day2(p1, p2), 'K2-sleep', sleep2), at(57));
+  /** the same morning, already at the door card */
+  const atDoor = (s: GameState) => pick(pick(s, 'K3-01', 'asis'), 'K3-02', 'smoke');
+
+  it('on time: straight into office 12, and the door card depends on whether mum was asked', () => {
+    const plain = day3({}, QUIET2);
+    expect(d3(plain)).toEqual(expect.arrayContaining(['K3-01', 'K3-02', 'K3-03a', 'K3-05']));
+    expect(d3(plain)).not.toContain('K3-04');
+    expect(plain.flags.d3_door.value).toBe('12');
+    const asked = day3({}, { ...QUIET2, 'K2-09': 'ask' });
+    expect(d3(asked)).toContain('K3-03b');
+    expect(d3(asked)).not.toContain('K3-03a');
+    expect(card('K3-03b').text).toContain('Галина Петровна');
+    expect(card('K3-03b').text).toContain('в соседнем какие-то акции');
+    // arriving on time costs nothing
+    const door = atDoor(morning3());
+    expect(pick(door, 'K3-03a', 'office12').energy).toBe(door.energy);
+  });
+  it('late for the morning slot: the queue costs 3 energy as an effect, so the choice is always open', () => {
+    const s = atDoor(morning3({}, QUIET2, 'late'));
+    const open = drawStory(content, s);
+    expect(open.card?.id).toBe('K3-03c');
+    const queue = open.card!.choices.find((c) => c.id === 'office12')!;
+    expect(queue.cost).toBeUndefined();
+    expect(queue.label).toContain('−3 энергии');
+    const after = pick(open.state, 'K3-03c', 'office12');
+    expect(after.energy).toBe(s.energy - 3);
+    expect(drawStory(content, after).card?.id).toBe('K3-05');
+    // with no energy left the neutral choice still works
+    expect(pick({ ...open.state, energy: 0 }, 'K3-03c', 'office12').energy).toBe(0);
+    expect(d3(day3({}, { ...QUIET2, 'K2-09': 'ask' }, {}, 'late'))).toContain('K3-03d');
+  });
+  it('the 15:00 slot: the visit waits for the day part, and staying up late does not make him late', () => {
+    let s = morning3({ 'K1-03': 'fine' }, QUIET2, 'late');
+    expect(s.flags.d2_derm_slot.value).toBe('day');
+    s = story(s, { 'K3-01': 'asis' });
+    expect(d3(s)).toEqual(['K3-01']);                          // the morning has only the packing card
+    s = story(syncClock(content, s, at(61)));
+    expect(d3(s)).toEqual(['K3-01', 'K3-02', 'K3-03a', 'K3-05']);
+  });
+  it('a missing slot flag counts as the morning slot', () => {
+    const s = morning3();
+    delete s.flags.d2_derm_slot;
+    expect(d3(story(s))).toEqual(expect.arrayContaining(['K3-03a', 'K3-05']));
+  });
+  it('office 12 starts the course: skin −3 on each of ten mornings, −12 by day 7', () => {
+    const s = day3({}, QUIET2);
+    expect(s.modifiers.find((m) => m.id === 'derm_course')).toMatchObject({ days: 10, daily: [{ problem: 'skin', add: -3 }] });
+    expect(s.flags.d3_course).toBeDefined();
+    expect(s.hints).toContain('derm_course');
+    const slept = pick(s, 'K3-sleep', 'sleep', full);
+    const on = (day: number) => syncClock(full, slept, at(9 + 24 * (day - 1)));
+    // days 4–6 are skipped here, so each of them also adds the skin regress at its end
+    expect(on(4).problems.skin).toBe(slept.problems.skin - 3);
+    expect(on(7).problems.skin).toBe(slept.problems.skin - 12 + 3 * skinRegress);
+    expect(on(13).modifiers.some((m) => m.id === 'derm_course')).toBe(true);    // the tenth morning
+    expect(on(14).modifiers.some((m) => m.id === 'derm_course')).toBe(false);
+  });
+  it('the doctor answers about the patches only when they are in the bag', () => {
+    const ids = (s: GameState) => choicesFor(content, s, card('K3-05')).map((x) => x.choice.id);
+    const s = day3({}, QUIET2);
+    expect(s.items.acne_patch).toBe(1);
+    expect(ids(s)).toEqual(['take', 'patch']);
+    expect(ids({ ...s, items: {} })).toEqual(['take']);
+    const door = pick(atDoor(morning3()), 'K3-03a', 'office12');
+    expect(pick(door, 'K3-05', 'patch').modifiers.map((m) => m.id)).toContain('derm_course');
+  });
+  it('12А: leaving costs no coins and still leads to the doctor through the queue', () => {
+    const s = pick(atDoor(morning3()), 'K3-03a', 'office12a');
+    expect(drawStory(content, s).card?.id).toBe('K3-04');
+    const left = pick(s, 'K3-04', 'leave');
+    expect(left.coins).toBe(s.coins);
+    expect(left.energy).toBe(s.energy - 3);
+    expect(left.problems.skin).toBe(s.problems.skin);
+    expect(drawStory(content, left).card?.id).toBe('K3-05');
+    expect(pick(left, 'K3-05', 'take').modifiers.map((m) => m.id)).toContain('derm_course');
+  });
+  it('12А: the cleaning shows its odds in words, costs 40 coins, and the irritation lasts two days', () => {
+    const clean = card('K3-04').choices.find((c) => c.id === 'clean')!;
+    expect(clean.cost).toEqual({ coins: 40 });
+    const results = new Set<string>();
+    for (let seed = 1; seed <= 40 && results.size < 2; seed++) {
+      const s = pick(atDoor({ ...morning3({}, QUIET2, 'late'), seed }), 'K3-03c', 'office12a');
+      expect(oddsFor(content, s, clean)).toEqual([{ word: 'часто', hint: 'раздражение на два дня' }, { word: 'иногда', hint: 'ничего' }]);
+      const done = pick(s, 'K3-04', 'clean');
+      const result = done.flags.d3_cleaning.value as string;
+      if (results.has(result)) continue;
+      results.add(result);
+      const rash = result === 'bad' ? 6 : 0;
+      expect(done.coins).toBe(s.coins - 40);
+      expect(done.energy).toBe(s.energy - 3);
+      expect(done.problems.skin).toBe(s.problems.skin + rash);
+      // the doctor is still reached, and the course starts either way
+      const treated = pick(done, 'K3-05', 'take', full);
+      expect(treated.modifiers.map((m) => m.id)).toContain('derm_course');
+      const slept = pick(syncClock(full, treated, at(71.5)), 'K3-sleep', 'sleep', full);
+      const day4 = syncClock(full, slept, at(81)).problems.skin;
+      expect(day4).toBe(slept.problems.skin - 3);              // still irritated, the course has begun
+      expect(syncClock(full, slept, at(105)).problems.skin).toBe(day4 + skinRegress - 3 - rash);   // gone by the morning of day 5
+    }
+    expect([...results].sort()).toEqual(['bad', 'none']);
+  });
+  it('the photo card needs two useful actions over days 1–3, in every combination', () => {
+    const requires = card('K3-06').when!.requires!;
+    const base = syncClock(content, morning3(), at(67));
+    for (const run of [false, true]) for (const clean of [false, true]) for (const useful of [0, 1, 2, 3]) {
+      const s: GameState = structuredClone(base);
+      delete s.flags.d1_run; delete s.flags.d1_clean;
+      if (run) s.flags.d1_run = { value: true, day: 1 };
+      if (clean) s.flags.d1_clean = { value: true, day: 1 };
+      s.counters.useful = useful;
+      const offered = requires.every((x) => check(content, s, x));
+      expect(offered, `run ${run}, clean ${clean}, useful ${useful}`).toBe(Number(run) + Number(clean) + useful >= 2);
+    }
+    // a missing counter is zero
+    const none: GameState = structuredClone(base);
+    delete none.counters.useful;
+    expect(requires.every((x) => check(content, none, x))).toBe(false);
+  });
+  it('the doctor visit counts as a useful action, and one more on day 3 brings the photo card', () => {
+    let s = story(syncClock(content, story(morning3(), { 'K3-01': 'asis' }), at(67)));
+    expect(s.counters.useful).toBe(1);                         // the visit to office 12 alone
+    expect(drawStory(content, s).card).toBeNull();             // one action is not enough
+    s = pick(s, 'A3-clean', 'go');
+    expect(s.counters.useful).toBe(2);
+    expect(drawStory(content, s).card?.id).toBe('K3-06');
+  });
+  it('photo posted: the like arrives at night with its reason, as a notification and not her words', () => {
+    const P2 = { ...QUIET2, 'K2-04': 'park' };
+    const P3 = { 'K3-01': 'neat', 'K3-06': 'post' };
+    const s = day3({}, P2, P3);
+    expect(s.flags.d3_posted).toBeDefined();
+    expect(d3(s).at(-1)).toBe('K3-07');
+    expect(d3(s)).not.toContain('K3-08');
+    expect(s.lastChange).toEqual({ delta: 5, why: 'Алина лайкнула твоё фото' });
+    expect(s.flags.d3_alina_liked).toBeDefined();
+    expect(s.chat.at(-1)).toMatchObject({ day: 3, from: 'crush', status: true });
+    expect(content.chat.status_liked_photo).toHaveLength(10);
+    expect(s.chat.filter((m) => m.day === 3 && m.from === 'hero')).toEqual([]);
+    expect(s.rumors.map((r) => r.id)).toContain('my_photo');
+    // Vitya's comment follows the Day 1 chat choice
+    const comment = (k: string) => day3({ 'K1-01': k }, P2, P3).log.find((l) => l.day === 3 && l.title === 'Фото')!.text;
+    expect(comment('coming')).toContain('верю, что придёшь');
+    expect(comment('joke')).toContain('пролезаешь');
+    expect(comment('lurk')).toContain('в чате молчишь');
+  });
+  it('no photo: the day ends on Aunt Zina, with a different line if the note was seen', () => {
+    const few = day3({}, QUIET2, { 'K3-01': 'asis' });
+    expect(d3(few)).not.toContain('K3-06');
+    expect(d3(few).at(-1)).toBe('K3-08');
+    expect(few.affinity).toBe(day2({}, QUIET2).affinity);
+    const line = (s: GameState) => s.log.find((l) => l.day === 3 && l.title === 'Тётя Зина')!.text;
+    expect(few.flags.d2_saw_note).toBeDefined();               // default Day 2 goes to the shop and sees the note
+    expect(line(few)).toContain('записка');
+    expect(line(day3({}, { ...QUIET2, 'K2-03': 'home' }, { 'K3-01': 'asis' }))).toContain('Ну-ну');
+    expect(choicesFor(content, { ...few, flags: {} }, card('K3-08')).map((x) => x.choice.id)).toEqual(['hello']);
+    // offered and declined: still Aunt Zina, no like
+    const kept = day3({}, { ...QUIET2, 'K2-04': 'park' }, { 'K3-01': 'neat', 'K3-06': 'keep' });
+    expect(d3(kept).slice(-2)).toEqual(['K3-06', 'K3-08']);
+    expect(kept.flags.d3_alina_liked).toBeUndefined();
+    // she does not hand out the Day 5 cream yet
+    expect(kept.items.cream_zina).toBeUndefined();
+    expect(kept.hints.filter((h) => h.includes('cream'))).toEqual([]);
+    expect(actionsFor(content, kept).map((c) => c.id)).toContain('K3-sleep');
+  });
+  it('smoking goes through care and the smoke_free counter', () => {
+    const porch = (p1: Record<string, string>) => {
+      const s = pick(morning3(p1), 'K3-01', 'asis');
+      expect(drawStory(content, s).card?.id).toBe('K3-02');
+      return s;
+    };
+    const quit = porch({ 'K1-06': 'quit' });
+    expect(quit.counters.smoke_free).toBe(1);
+    const smoked = pick(quit, 'K3-02', 'smoke');
+    expect(smoked.counters.smoke_free).toBe(0);
+    expect(smoked.problems.care).toBe(quit.problems.care + 2);
+    const held = pick(quit, 'K3-02', 'hold');
+    expect(held.counters.smoke_free).toBe(3);                  // days 1, 2 and 3
+    expect(held.problems.care).toBe(quit.problems.care - 2);
+    expect(held.energy).toBe(quit.energy - 1);
+    const smoker = porch({ 'K1-06': 'smoke' });
+    const gum = pick(smoker, 'K3-02', 'gum');
+    expect(gum.counters.smoke_free).toBe(1);                   // the first smoke-free day
+    expect(gum.items.gum).toBe(0);
+    expect(gum.energy).toBe(smoker.energy);
+    expect(choicesFor(content, gum, card('K3-02')).map((x) => x.choice.id)).toEqual(['smoke', 'hold']);
+  });
+  it('morning lines explain the tea and the gym pass without charging twice', () => {
+    const tea = morning3({}, { ...QUIET2, 'K2-05a': 'order' });
+    expect(tea.energy).toBe(20 - 2);
+    expect(drawStory(content, tea).card?.id).toBe('K3-00a');
+    expect(pick(tea, 'K3-00a', 'ok').energy).toBe(20 - 2);
+    expect(d3(day3({}, QUIET2))).not.toContain('K3-00a');
+    // the pass bought in the Day 2 card
+    const rich = { ...syncClock(content, story(syncClock(content, pick(day1(), 'K1-09', 'sleep'), at(33))), at(37)), coins: 500 };
+    const gym = syncClock(content, pick(syncClock(content, pick(rich, 'K2-04', 'gym'), at(47.5)), 'K2-sleep', 'sleep'), at(57));
+    expect(gym.energy).toBe(22);
+    expect(drawStory(content, gym).card?.id).toBe('K3-00b');
+    expect(pick(gym, 'K3-00b', 'ok').energy).toBe(22);
+    // bought in the shop and applied on an earlier day: the same line; still in the bag: no line
+    const quiet = morning3();
+    const bought: GameState = { ...quiet, flags: { ...quiet.flags, bought_gym_pass: { value: true, day: 1 } } };
+    expect(drawStory(content, quiet).card?.id).toBe('K3-01');
+    expect(drawStory(content, bought).card?.id).toBe('K3-00b');
+    expect(drawStory(content, { ...bought, items: { ...quiet.items, gym_pass: 1 } }).card?.id).toBe('K3-01');
+  });
+  it('plus actions and sleep: staying up costs four energy on the first half-energy day', () => {
+    const s = day3({}, QUIET2);
+    expect(actionsFor(content, s).map((c) => c.id)).toEqual(['A3-run', 'A3-clean', 'A3-teeth', 'A3-couch', 'K3-sleep']);
+    const late = syncClock(full, pick(s, 'K3-sleep', 'late', full), at(81));
+    expect(late.flags.d3_late).toBeDefined();
+    expect(late.energy).toBe(10 - 4);
+    expect(content.days.find((d) => d.day === 3)!.teaser).toBe('Завтра сил будет вдвое меньше');
+  });
+  it('the demo ends after day 3 with three day frames and the day 3 gift', () => {
+    expect(content.balance.contentDays).toBe(3);
+    const s = syncClock(content, pick(day3({}, QUIET2), 'K3-sleep', 'sleep'), at(81));
+    expect(s.demoOver).toBe(true);
+    expect(s.day).toBe(3);
+    expect(s.summaries.map((d) => [d.day, d.played])).toEqual([[1, true], [2, true], [3, true]]);
+    expect(s.summaries[2].gift).toBe('floss');
+    expect(s.items.floss).toBe(1);
+  });
+  it('a fully skipped Day 3 after played days 1–2: office 12, the course started, nothing posted or spent', () => {
+    for (const p1 of [{}, { 'K1-03': 'fine' }] as Record<string, string>[]) for (const sleep2 of ['sleep', 'late']) {
+      const before = pick(day2(p1, { ...QUIET2, 'K2-04': 'park' }), 'K2-sleep', sleep2, full);
+      before.counters.useful = 2;                              // the photo card is on offer
+      const s = syncClock(full, before, at(81));
+      const where = `${JSON.stringify(p1)} ${sleep2}`;
+      expect(s.day, where).toBe(4);
+      expect(s.flags.d3_door.value, where).toBe('12');
+      expect(d3(s), where).toEqual(expect.arrayContaining(['K3-01', 'K3-02', 'K3-05', 'K3-06', 'K3-08']));
+      expect(d3(s), where).not.toContain('K3-04');
+      expect(d3(s), where).not.toContain('K3-07');
+      expect(s.modifiers.map((m) => m.id), where).toContain('derm_course');
+      expect(s.problems.skin, where).toBe(before.problems.skin + skinRegress - 3);
+      expect(s.flags.d3_posted, where).toBeUndefined();
+      expect(s.affinity, where).toBe(before.affinity);
+      expect(s.coins, where).toBe(before.coins);
+      expect(s.chat.filter((m) => m.day === 3), where).toEqual([]);
+      expect(s.counters.smoke_free ?? 0, where).toBe(0);
+      expect(s.summaries[2], where).toMatchObject({ day: 3, played: false, coins: 0 });
+      expect(s.history.some((h) => h.day === 3), where).toBe(false);
+      // «Пока тебя не было» lists the day's cards in order, each with its neutral outcome
+      const missed = s.missed!.at(-1)!;
+      expect(missed.day, where).toBe(3);
+      expect(missed.items.map((i) => i.title), where).toEqual(['Сборы', 'Крыльцо поликлиники', 'Третий этаж', 'Кабинет 12', 'Фото', 'Тётя Зина']);
+      expect(missed.items.find((i) => i.title === 'Кабинет 12')!.text, where).toContain('Курс начат');
+      expect(missed.items.find((i) => i.title === 'Фото')!.text, where).toBe('Фото осталось в телефоне.');
+    }
+  });
+});
+
 describe('переход в следующий день', () => {
   it('бросил курить и засиделся: завтра энергии меньше на 1 и на 4', () => {
     let s = day1({ 'K1-06': 'quit' }, full);
@@ -264,9 +533,11 @@ describe('economy', () => {
   it('a 7-day gym pass works for exactly seven mornings', () => {
     const s = useItem(content, buy(content, rich(start()), 'gym_pass'), 'gym_pass');
     const morning = (day: number) => syncClock(full, s, at(9 + 24 * (day - 1)));
-    for (let day = 2; day <= 8; day++) expect(morning(day).modifiers.map((m) => m.id)).toEqual(['gym']);
+    // a skipped Day 3 starts the doctor's course by itself, so only the pass is watched here
+    const gym = (x: GameState) => x.modifiers.filter((m) => m.id === 'gym');
+    for (let day = 2; day <= 8; day++) expect(gym(morning(day))).toHaveLength(1);
     expect(morning(8).energy).toBe(content.balance.energyPerDay + 2);
-    expect(morning(9).modifiers).toEqual([]);
+    expect(gym(morning(9))).toEqual([]);
     expect(morning(9).energy).toBe(content.balance.energyPerDay);
   });
   it('the side job pays coins for energy, once a day', () => {
