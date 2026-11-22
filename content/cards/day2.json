@@ -1,0 +1,1208 @@
+[
+  {
+    "id": "K2-00",
+    "kind": "story",
+    "title": "Проспал",
+    "when": {
+      "days": [
+        2,
+        2
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d1_late"
+        }
+      ]
+    },
+    "text": "Будильник звонил три раза. На часах почти одиннадцать, голова ватная.",
+    "choices": [
+      {
+        "id": "up",
+        "label": "Встать и умыться холодной водой",
+        "outcomes": [
+          {
+            "text": "Проснулся. От утра осталось полчаса.",
+            "effects": [
+              {
+                "flag": "d2_overslept"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "snooze",
+        "label": "Полежать ещё десять минут",
+        "outcomes": [
+          {
+            "text": "Десять минут стали сорока. Утро почти кончилось.",
+            "effects": [
+              {
+                "flag": "d2_overslept"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K2-01a",
+    "kind": "story",
+    "title": "Мамин номер",
+    "speaker": "Мама",
+    "when": {
+      "days": [
+        2,
+        2
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d1_mom_dark",
+          "set": false
+        },
+        {
+          "flag": "d1_mom_pies",
+          "set": false
+        }
+      ]
+    },
+    "text": "«Нашла тебе дерматолога, говорят, очень хорошая. Поликлиника, третий этаж. Записала на завтра, на десять».",
+    "choices": [
+      {
+        "id": "thanks",
+        "label": "Записать и сказать спасибо",
+        "outcomes": [
+          {
+            "text": "Мама: «Не опаздывай, она строгая».",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "hint": "derm_number"
+              },
+              {
+                "flag": "d2_derm_slot",
+                "value": "morning"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ok",
+        "label": "Ответить «Ладно»",
+        "outcomes": [
+          {
+            "text": "Мама: «Вот и хорошо». Номер сохранён.",
+            "effects": [
+              {
+                "hint": "derm_number"
+              },
+              {
+                "flag": "d2_derm_slot",
+                "value": "morning"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K2-01b",
+    "kind": "story",
+    "title": "Мамин номер",
+    "speaker": "Мама",
+    "when": {
+      "days": [
+        2,
+        2
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d1_mom_pies"
+        }
+      ]
+    },
+    "text": "«Нашла тебе дерматолога: поликлиника, третий этаж, завтра в десять. Пирожки доел?»",
+    "choices": [
+      {
+        "id": "honest",
+        "label": "Ответить честно",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d1_ate_pies"
+              }
+            ],
+            "text": "«Пять съел». Мама: «Вот и молодец, ещё напеку».",
+            "effects": [
+              {
+                "hint": "derm_number"
+              },
+              {
+                "flag": "d2_derm_slot",
+                "value": "morning"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d1_one_pie"
+              }
+            ],
+            "text": "«Один. Остальные в холодильнике». Мама: «Смотри, чтобы не пропали».",
+            "effects": [
+              {
+                "hint": "derm_number"
+              },
+              {
+                "flag": "d2_derm_slot",
+                "value": "morning"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d1_refused_pies"
+              }
+            ],
+            "text": "«Я не стал». Мама: «Ну как знаешь. К врачу только сходи».",
+            "effects": [
+              {
+                "hint": "derm_number"
+              },
+              {
+                "flag": "d2_derm_slot",
+                "value": "morning"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "not": {
+                  "any": [
+                    {
+                      "flag": "d1_ate_pies"
+                    },
+                    {
+                      "flag": "d1_one_pie"
+                    },
+                    {
+                      "flag": "d1_refused_pies"
+                    }
+                  ]
+                }
+              }
+            ],
+            "text": "Мама: «Ладно, потом расскажешь. К врачу сходи».",
+            "effects": [
+              {
+                "hint": "derm_number"
+              },
+              {
+                "flag": "d2_derm_slot",
+                "value": "morning"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "topic",
+        "label": "Перевести разговор на врача",
+        "outcomes": [
+          {
+            "text": "«Спасибо за номер, мам». Про пирожки мама забыла. Почти.",
+            "effects": [
+              {
+                "hint": "derm_number"
+              },
+              {
+                "flag": "d2_derm_slot",
+                "value": "morning"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K2-01c",
+    "kind": "story",
+    "title": "Сообщение от мамы",
+    "speaker": "Мама",
+    "when": {
+      "days": [
+        2,
+        2
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d1_mom_dark"
+        }
+      ]
+    },
+    "text": "«Андрюша, вечером позвоню. Не пропадай».",
+    "choices": [
+      {
+        "id": "ok",
+        "label": "Ответить «Хорошо»",
+        "outcomes": [
+          {
+            "text": "Мама прислала сердечко."
+          }
+        ]
+      },
+      {
+        "id": "like",
+        "label": "Поставить на сообщение лайк",
+        "outcomes": [
+          {
+            "text": "Мама не поняла, что это значит, но обрадовалась."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K2-02a",
+    "kind": "story",
+    "title": "Зеркало",
+    "when": {
+      "days": [
+        2,
+        2
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d1_ate_pies"
+        }
+      ]
+    },
+    "text": "Утро, зеркало. Пирожки никуда не делись.",
+    "choices": [
+      {
+        "id": "belly",
+        "label": "Втянуть живот",
+        "outcomes": [
+          {
+            "text": "Живот продержался десять секунд."
+          }
+        ]
+      },
+      {
+        "id": "salad",
+        "label": "Пообещать себе салат",
+        "outcomes": [
+          {
+            "text": "Зеркало не поверило, но промолчало."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K2-02b",
+    "kind": "story",
+    "title": "Зеркало",
+    "when": {
+      "days": [
+        2,
+        2
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d1_couch"
+        }
+      ]
+    },
+    "text": "Вчера {hero} лёг на диван «до понедельника». Понедельник наступил.",
+    "choices": [
+      {
+        "id": "straight",
+        "label": "Встать ровнее",
+        "outcomes": [
+          {
+            "text": "Плечи расправлены. Уже похоже на понедельник.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ignore",
+        "label": "Сделать вид, что не понял",
+        "outcomes": [
+          {
+            "text": "Зеркало подождёт до следующего понедельника."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K2-03",
+    "kind": "story",
+    "title": "За хлебом",
+    "when": {
+      "days": [
+        2,
+        2
+      ],
+      "parts": [
+        "morning"
+      ]
+    },
+    "text": "Кофе кончился, хлеба нет.",
+    "choices": [
+      {
+        "id": "shop",
+        "label": "Сходить в магазин у дома",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "part": [
+                  "morning"
+                ]
+              },
+              {
+                "flag": "d2_overslept",
+                "set": false
+              }
+            ],
+            "text": "На двери тёти Зины записка: «Крем брать только в аптеке на Садовой». {hero} запомнил.",
+            "effects": [
+              {
+                "hint": "zina_note"
+              },
+              {
+                "flag": "d2_saw_note"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "any": [
+                  {
+                    "flag": "d2_overslept"
+                  },
+                  {
+                    "not": {
+                      "part": [
+                        "morning"
+                      ]
+                    }
+                  }
+                ]
+              }
+            ],
+            "text": "Сбегал в магазин и обратно. По сторонам не смотрел, торопился."
+          }
+        ]
+      },
+      {
+        "id": "home",
+        "label": "Обойтись чаем и остаться дома",
+        "outcomes": [
+          {
+            "text": "Пакетик чая и сухарь. Из квартиры {hero} сегодня утром не вышел."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K2-04",
+    "kind": "story",
+    "title": "Парк или зал",
+    "when": {
+      "days": [
+        2,
+        2
+      ],
+      "parts": [
+        "day"
+      ]
+    },
+    "text": "Форму пора начинать. Парк у дома бесплатный. Абонемент в зал стоит 80 монет: до 11-го дня каждое утро форма +1, даже в пропущенные дни, а с 4-го дня ещё +1 энергия. Больше абонемент сам ничего не делает.",
+    "choices": [
+      {
+        "id": "park",
+        "label": "Бегать в парке бесплатно",
+        "cost": {
+          "energy": 4
+        },
+        "outcomes": [
+          {
+            "weight": 3,
+            "hint": "получилось",
+            "text": "Три круга по парку. Пахнет листьями, а не чужим потом.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "flag": "d2_park"
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          },
+          {
+            "weight": 1,
+            "hint": "закололо в боку",
+            "text": "На втором круге закололо в боку. Дошёл шагом.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -1
+              },
+              {
+                "flag": "d2_park"
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gym",
+        "label": "Купить абонемент в зал",
+        "cost": {
+          "coins": 80,
+          "energy": 3
+        },
+        "outcomes": [
+          {
+            "text": "Первая тренировка. Тренер показал тренажёры и ни разу не засмеялся.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "modifier": {
+                  "id": "gym_pass",
+                  "title": "Абонемент в зал",
+                  "energyPerDay": 1,
+                  "days": 10,
+                  "daily": [
+                    {
+                      "problem": "weight",
+                      "add": -1
+                    }
+                  ]
+                }
+              },
+              {
+                "flag": "d2_gym"
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "later",
+        "label": "Решить потом",
+        "outcomes": [
+          {
+            "text": "Решение отложено. Парк никуда не денется."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K2-05a",
+    "kind": "story",
+    "title": "Лента: чудо-чай",
+    "speaker": "Лента",
+    "when": {
+      "days": [
+        2,
+        2
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d1_tea_saved"
+        }
+      ]
+    },
+    "text": "Сохранённый пост напоминает о себе: «Чудо-чай: минус 5 кг за неделю. Всего 30 монет».",
+    "choices": [
+      {
+        "id": "order",
+        "label": "Заказать чудо-чай за 30 монет",
+        "cost": {
+          "coins": 30
+        },
+        "outcomes": [
+          {
+            "text": "Чай пришёл через час. Вкус сена, весь вечер бегом в туалет. Весы показали минус килограмм, к утру он вернулся. Завтра и послезавтра на 2 энергии меньше.",
+            "effects": [
+              {
+                "flag": "d2_tea"
+              },
+              {
+                "tomorrow": [
+                  {
+                    "stat": "energy",
+                    "add": -2
+                  },
+                  {
+                    "tomorrow": [
+                      {
+                        "stat": "energy",
+                        "add": -2
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "delete",
+        "label": "Удалить из сохранённых",
+        "outcomes": [
+          {
+            "text": "Пост удалён. Минус пять кило за неделю бывает только в рекламе.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K2-05b",
+    "kind": "story",
+    "title": "Лента: чудо-чай",
+    "speaker": "Лента",
+    "when": {
+      "days": [
+        2,
+        2
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d1_tea_saved",
+          "set": false
+        }
+      ]
+    },
+    "text": "Реклама снова тут: «Чудо-чай: минус 5 кг за неделю. Всего 30 монет».",
+    "choices": [
+      {
+        "id": "order",
+        "label": "Заказать чудо-чай за 30 монет",
+        "cost": {
+          "coins": 30
+        },
+        "outcomes": [
+          {
+            "text": "Чай пришёл через час. Вкус сена, весь вечер бегом в туалет. Весы показали минус килограмм, к утру он вернулся. Завтра и послезавтра на 2 энергии меньше.",
+            "effects": [
+              {
+                "flag": "d2_tea"
+              },
+              {
+                "tomorrow": [
+                  {
+                    "stat": "energy",
+                    "add": -2
+                  },
+                  {
+                    "tomorrow": [
+                      {
+                        "stat": "energy",
+                        "add": -2
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "scroll",
+        "label": "Пролистать",
+        "outcomes": [
+          {
+            "text": "Пост уехал вверх."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K2-06",
+    "kind": "story",
+    "title": "Мама перезвонила",
+    "speaker": "Мама",
+    "when": {
+      "days": [
+        2,
+        2
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d1_mom_dark"
+        }
+      ]
+    },
+    "text": "«Андрюша, я же слышу, что не всё нормально. Нашла тебе дерматолога: поликлиника, третий этаж. Утром она занята, записала на завтра на три».",
+    "choices": [
+      {
+        "id": "thanks",
+        "label": "Сказать «Спасибо, мам. Правда спасибо»",
+        "outcomes": [
+          {
+            "text": "Мама: «Ну вот. А то „нормально“».",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "hint": "derm_number_late"
+              },
+              {
+                "flag": "d2_derm_slot",
+                "value": "day"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ok",
+        "label": "Буркнуть «Ладно»",
+        "outcomes": [
+          {
+            "text": "Мама: «Только не забудь».",
+            "effects": [
+              {
+                "hint": "derm_number_late"
+              },
+              {
+                "flag": "d2_derm_slot",
+                "value": "day"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K2-07",
+    "kind": "story",
+    "title": "Фото из «Зерна»",
+    "speaker": "Лента",
+    "when": {
+      "days": [
+        2,
+        2
+      ],
+      "parts": [
+        "evening"
+      ]
+    },
+    "text": "{crush} выложила фото из кофейни «Зерно»: капучино на подоконнике.",
+    "choices": [
+      {
+        "id": "like",
+        "label": "Лайкнуть",
+        "outcomes": [
+          {
+            "text": "Лайк поставлен.",
+            "effects": [
+              {
+                "rumor": "zerno"
+              },
+              {
+                "flag": "d2_liked_photo"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "remember",
+        "label": "Запомнить, где эта кофейня",
+        "outcomes": [
+          {
+            "text": "«Зерно», на углу у парка. {hero} запомнил.",
+            "effects": [
+              {
+                "rumor": "zerno"
+              },
+              {
+                "hint": "zerno"
+              },
+              {
+                "flag": "d2_zerno_known"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "write",
+        "label": "Написать: «Классное место!»",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "any": [
+                  {
+                    "flag": "d1_wrote_plain"
+                  },
+                  {
+                    "flag": "d1_wrote_flirty"
+                  }
+                ]
+              }
+            ],
+            "text": "Сообщение доставлено. Это второе подряд.",
+            "why": "Второе сообщение без ответа",
+            "effects": [
+              {
+                "rumor": "zerno"
+              },
+              {
+                "write": "Классное место!"
+              },
+              {
+                "stat": "affinity",
+                "add": -1
+              },
+              {
+                "flag": "d2_wrote_zerno"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "not": {
+                  "any": [
+                    {
+                      "flag": "d1_wrote_plain"
+                    },
+                    {
+                      "flag": "d1_wrote_flirty"
+                    }
+                  ]
+                }
+              }
+            ],
+            "text": "Сообщение доставлено.",
+            "effects": [
+              {
+                "rumor": "zerno"
+              },
+              {
+                "write": "Классное место!"
+              },
+              {
+                "flag": "d2_wrote_zerno"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "scroll",
+        "label": "Пролистать",
+        "outcomes": [
+          {
+            "text": "Фото осталось в ленте.",
+            "effects": [
+              {
+                "rumor": "zerno"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K2-08",
+    "kind": "story",
+    "title": "В сети",
+    "when": {
+      "days": [
+        2,
+        2
+      ],
+      "parts": [
+        "night"
+      ],
+      "requires": [
+        {
+          "any": [
+            {
+              "flag": "d1_wrote_plain"
+            },
+            {
+              "flag": "d1_wrote_flirty"
+            },
+            {
+              "flag": "d2_wrote_zerno"
+            }
+          ]
+        }
+      ]
+    },
+    "text": "{crush} была в сети. Ответа нет.",
+    "choices": [
+      {
+        "id": "ok",
+        "label": "Отложить телефон",
+        "outcomes": [
+          {
+            "text": "Телефон экраном вниз. Чат молчит.",
+            "effects": [
+              {
+                "chat": "status_online_no_reply"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K2-09",
+    "kind": "story",
+    "title": "Мама",
+    "speaker": "Мама",
+    "when": {
+      "days": [
+        2,
+        2
+      ],
+      "parts": [
+        "night"
+      ]
+    },
+    "text": "«Кабинет не перепутай, там их два».",
+    "choices": [
+      {
+        "id": "ask",
+        "label": "Спросить, какой из двух",
+        "outcomes": [
+          {
+            "text": "Мама: «Номер не помню. Врач — Галина Петровна. А в соседнем какие-то акции».",
+            "effects": [
+              {
+                "hint": "derm_office"
+              },
+              {
+                "flag": "d2_asked_office"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ok",
+        "label": "Ответить «Не перепутаю»",
+        "outcomes": [
+          {
+            "text": "Мама прислала три сердечка."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A2-run",
+    "kind": "action",
+    "title": "Пробежка в парке",
+    "when": {
+      "days": [
+        2,
+        2
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Пробежка в парке",
+        "cost": {
+          "energy": 4
+        },
+        "outcomes": [
+          {
+            "weight": 3,
+            "hint": "получилось",
+            "text": "Ещё три круга. Ноги помнят вчерашнее, но бегут.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          },
+          {
+            "weight": 1,
+            "hint": "закололо в боку",
+            "text": "Закололо в боку, полкруга пришлось идти шагом.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -1
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A2-clean",
+    "kind": "action",
+    "title": "Душ и свежая футболка",
+    "when": {
+      "days": [
+        2,
+        2
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Душ и свежая футболка",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Горячий душ, футболка из шкафа, а не со стула.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -5
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A2-teeth",
+    "kind": "action",
+    "title": "Почистить зубы по таймеру",
+    "when": {
+      "days": [
+        2,
+        2
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Почистить зубы две минуты по таймеру",
+        "cost": {
+          "energy": 1
+        },
+        "outcomes": [
+          {
+            "text": "Две минуты оказались длиннее, чем казалось.",
+            "effects": [
+              {
+                "problem": "teeth",
+                "add": -1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A2-couch",
+    "kind": "action",
+    "title": "Полежать на диване",
+    "when": {
+      "days": [
+        2,
+        2
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Полежать на диване",
+        "outcomes": [
+          {
+            "text": "Полчаса с телефоном. Ничего не случилось.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K2-sleep",
+    "kind": "action",
+    "title": "Сон",
+    "when": {
+      "days": [
+        2,
+        2
+      ],
+      "parts": [
+        "night"
+      ]
+    },
+    "text": "День почти закончился.",
+    "choices": [
+      {
+        "id": "sleep",
+        "label": "Лечь сейчас",
+        "outcomes": [
+          {
+            "text": "Свет выключен. Завтра поликлиника.",
+            "effects": [
+              {
+                "closeDay": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "late",
+        "label": "Посидеть в телефоне до трёх",
+        "outcomes": [
+          {
+            "text": "В три часа ночи лента всё ещё не кончилась. Завтра на четыре энергии меньше.",
+            "effects": [
+              {
+                "flag": "d2_late"
+              },
+              {
+                "tomorrow": [
+                  {
+                    "stat": "energy",
+                    "add": -4
+                  }
+                ]
+              },
+              {
+                "closeDay": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

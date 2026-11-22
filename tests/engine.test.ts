@@ -125,13 +125,61 @@ describe('день 1', () => {
     expect(next.summaries).toHaveLength(1);
   });
   it('после написанных дней идёт «продолжение следует»', () => {
-    const s = syncClock(content, day1(), at(33));
+    const last = content.balance.contentDays;
+    expect(syncClock(content, day1(), at(9 + 24 * (last - 1))).demoOver).toBeUndefined();
+    const s = syncClock(content, day1(), at(9 + 24 * last));
     expect(s.demoOver).toBe(true);
-    expect(s.day).toBe(1);
+    expect(s.day).toBe(last);
     expect(draw(content, s).card).toBeNull();
   });
   it('одно зерно даёт одно и то же прохождение', () => {
     expect(day1().log).toEqual(day1().log);
+  });
+});
+
+/** день 1 со сном, затем день 2 по частям суток до ночи включительно */
+function day2(p1: Record<string, string> = {}, p2: Record<string, string> = {}, sleep = 'sleep'): GameState {
+  let s = pick(day1(p1), 'K1-09', sleep);
+  for (const h of [33, 37, 43, 47.5]) s = story(syncClock(content, s, at(h)), p2);
+  return s;
+}
+
+describe('день 2', () => {
+  const seen = (s: GameState) => Object.keys(s.seen);
+  it('мама даёт номер утром, если ей рассказали, и вечером, если сказали «нормально»', () => {
+    const told = day2({ 'K1-03': 'tell' });
+    expect(seen(told)).toContain('K2-01a');
+    expect(told.flags.d2_derm_slot.value).toBe('morning');
+    const dark = day2({ 'K1-03': 'fine' });
+    expect(seen(dark)).toEqual(expect.arrayContaining(['K2-01c', 'K2-06']));
+    expect(seen(dark)).not.toContain('K2-01a');
+    expect(dark.flags.d2_derm_slot.value).toBe('day');
+    expect(dark.hints).toContain('derm_number_late');
+  });
+  it('пирожки: мама спрашивает, зеркало помнит', () => {
+    const s = day2({ 'K1-03': 'complain', 'K1-04': 'five' });
+    expect(seen(s)).toEqual(expect.arrayContaining(['K2-01b', 'K2-02a']));
+  });
+  it('проспал: записку тёти Зины не заметить', () => {
+    const late = day2({}, { 'K2-03': 'shop' }, 'late');
+    expect(seen(late)).toContain('K2-00');
+    expect(late.hints).not.toContain('zina_note');
+    expect(day2({}, { 'K2-03': 'shop' }).hints).toContain('zina_note');
+  });
+  it('чудо-чай: заказ из сохранённого поста, энергия ниже два следующих дня', () => {
+    let s = day2({ 'K1-07a': 'save' }, { 'K2-05a': 'order' });
+    expect(seen(s)).toContain('K2-05a');
+    expect(s.flags.d2_tea).toBeDefined();
+    s = syncClock(full, pick(s, 'K2-sleep', 'sleep', full), at(57));
+    expect(s.energy).toBe(20 - 2);
+    s = syncClock(full, s, at(81));
+    expect(s.energy).toBe(10 - 2);
+  });
+  it('день кончается маминым «Кабинет не перепутай»', () => {
+    const s = day2();
+    expect(s.log.filter((l) => l.kind === 'story').at(-1)!.title).toBe('Мама');
+    expect(seen(s).at(-1)).toBe('K2-09');
+    expect(actionsFor(content, s).map((c) => c.id)).toContain('K2-sleep');
   });
 });
 

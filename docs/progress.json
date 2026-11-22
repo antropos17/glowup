@@ -4,14 +4,14 @@
   "verified": {
     "date": "2026-11-22",
     "typecheck": "pass",
-    "tests": "20/20",
-    "check_content": "pass: 15 cards (10 story, 5 action), 1 archetype, 1 crush",
-    "build": "pass: dist/index.html 298 kB",
-    "playthrough": "game opens at 375x812 with no console errors; Day 1 not played through by hand in Claude Code yet"
+    "tests": "25/25",
+    "check_content": "pass: 35 cards (25 story, 10 action), 1 archetype, 1 crush",
+    "build": "pass: dist/index.html 315 kB",
+    "playthrough": "Days 1-2 played through in the in-app browser at 375x812 with the dev time-skip buttons, no console errors; scripted engine playthroughs of three Day 1 paths reach the end of day 2"
   },
   "demo_days": {
     "1": { "status": "in_game", "file": "content/cards/day1.json", "note": "outcome texts reviewed by the authors on 2026-11-22" },
-    "2": { "status": "todo" },
+    "2": { "status": "in_game", "file": "content/cards/day2.json", "note": "written 2026-11-22, texts not reviewed by the authors yet" },
     "3": { "status": "todo" },
     "4": { "status": "todo" },
     "5": { "status": "todo" },
