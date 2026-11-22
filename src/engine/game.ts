@@ -446,9 +446,15 @@ export function soldOut(s: GameState, item: Item): boolean {
   return !!item.once && `bought_${item.id}` in s.flags;
 }
 
+/** The item starts a course (a modifier) that is already running, so a second one would only restart it. */
+export function courseActive(s: GameState, item: Item): boolean {
+  return (item.onUse ?? []).some((e) => 'modifier' in e && s.modifiers.some((m) => m.id === e.modifier.id));
+}
+
 export function useItem(c: Content, state: GameState, itemId: string): GameState {
   const item = c.items.find((x) => x.id === itemId);
   if (!item || !(state.items[itemId] > 0)) throw new Error(`Нет предмета ${itemId}`);
+  if (courseActive(state, item)) throw new Error(`Курс ${itemId} уже действует`);
   if (state.energy < (item.energy ?? 0)) throw new Error('Не хватает энергии');
   const s = clone(state);
   s.items[itemId] -= 1;

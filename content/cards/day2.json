@@ -507,6 +507,12 @@
       {
         "id": "gym",
         "label": "Купить абонемент в зал",
+        "requires": [
+          {
+            "flag": "bought_gym_pass",
+            "set": false
+          }
+        ],
         "cost": {
           "coins": 200,
           "energy": 3
@@ -532,6 +538,85 @@
                     }
                   ]
                 }
+              },
+              {
+                "flag": "bought_gym_pass"
+              },
+              {
+                "flag": "d2_gym"
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gym_have",
+        "label": "Пойти в зал по абонементу",
+        "requires": [
+          {
+            "flag": "bought_gym_pass"
+          }
+        ],
+        "cost": {
+          "energy": 3
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "item": "gym_pass"
+              }
+            ],
+            "text": "Абонемент из магазина наконец пригодился. Первая тренировка: тренер показал тренажёры и ни разу не засмеялся.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "item": "gym_pass",
+                "add": -1
+              },
+              {
+                "modifier": {
+                  "id": "gym",
+                  "title": "Абонемент в зал",
+                  "energyPerDay": 2,
+                  "days": 7,
+                  "daily": [
+                    {
+                      "problem": "weight",
+                      "add": -1
+                    }
+                  ]
+                }
+              },
+              {
+                "flag": "d2_gym"
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "not": {
+                  "item": "gym_pass"
+                }
+              }
+            ],
+            "text": "Абонемент уже действует. Тренер показал тренажёры и ни разу не засмеялся.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
               },
               {
                 "flag": "d2_gym"

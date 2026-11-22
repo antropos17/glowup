@@ -1,14 +1,14 @@
 {
-  "updated": "2026-11-22",
+  "updated": "2026-11-23",
   "goal": "7-day demo: first 7 days of the 30-day game, full presentation",
   "verified": {
-    "date": "2026-11-22",
+    "date": "2026-11-23",
     "typecheck": "pass",
-    "tests": "pending: merge of economy, demo end screen and Day 2",
-    "check_content": "pending",
+    "tests": "31/31",
+    "check_content": "pass: 36 cards (25 story, 11 action), 1 archetype, 1 crush",
     "economy": "demo economy in items.json, side-jobs.json, balance.json; see docs/DEMO_SCRIPT.md section 5a",
-    "build": "pending",
-    "playthrough": "pending"
+    "build": "pass: dist/index.html 325 kB",
+    "playthrough": "merge of economy, demo end screen and Day 2 played in the in-app browser at 375x812 with the dev time-skip buttons: Day 1 to sleep, Day 2 with a plus action, the side job and a shop purchase, demo end screen, read-only mode, restart; end screen and one Day 2 card also at 320x568 and 390x844; no console errors, no horizontal overflow"
   },
   "demo_days": {
     "1": { "status": "in_game", "file": "content/cards/day1.json", "note": "outcome texts reviewed by the authors on 2026-11-22" },

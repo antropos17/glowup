@@ -12,10 +12,17 @@ export function duration(ms: number) {
   return r ? `${h} ч ${r} мин` : `${h} ч`;
 }
 
+/** Russian plural of «день» for a count: 1 день, 2 дня, 5 дней, 11 дней, 21 день. */
+export function dayWord(n: number) {
+  const d = Math.abs(n) % 10, h = Math.abs(n) % 100;
+  if (h >= 11 && h <= 14) return 'дней';
+  return d === 1 ? 'день' : d >= 2 && d <= 4 ? 'дня' : 'дней';
+}
+
 /** Demo end screen. */
 export const DEMO_END = {
   title: 'Продолжение следует',
-  written: (days: number, total: number) => `Написан ${days === 1 ? 'первый день' : `сценарий на ${days} дней`} из ${total}. Дальше игра пока не идёт.`,
+  written: (days: number, total: number) => `Написан ${days === 1 ? 'первый день' : `сценарий на ${days} ${dayWord(days)}`} из ${total}. Дальше игра пока не идёт.`,
   heroHead: 'Как изменился герой',
   chance: 'Шанс понравиться',
   shareHead: 'Позвать друга',

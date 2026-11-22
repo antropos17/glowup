@@ -3,7 +3,7 @@ import { content } from '../src/content';
 import { slotAt, msToNextPart } from '../src/engine/clock';
 import {
   actionsFor, chance, choicesFor, choose, currentLook, dayEnergy, draw, drawStory,
-  buy, newGame, oddsFor, soldOut, startLook, syncClock, useItem,
+  buy, courseActive, newGame, oddsFor, soldOut, startLook, syncClock, useItem,
 } from '../src/engine/game';
 import { validateContent } from '../src/engine/validate';
 import type { Content, GameState } from '../src/engine/types';
@@ -251,6 +251,43 @@ describe('economy', () => {
     expect([coins + 20, coins + 30]).toContain(s.coins);
     expect(s.energy).toBe(energy - 4);
     expect(actionsFor(content, s).map((c) => c.id)).not.toContain('A-job');
+  });
+  it('the side job comes back the next day', () => {
+    let s = pick(syncClock(content, start(), at(13)), 'A-job', 'go');
+    s = pick(syncClock(content, s, at(23.5)), 'K1-09', 'sleep');
+    expect(actionsFor(content, syncClock(content, s, at(33))).map((c) => c.id)).not.toContain('A-job'); // morning
+    s = syncClock(content, s, at(37));
+    expect(actionsFor(content, s).map((c) => c.id)).toContain('A-job');
+    expect(actionsFor(content, pick(s, 'A-job', 'go')).map((c) => c.id)).not.toContain('A-job');
+  });
+  it('the Day 2 card sells the same gym pass as the shop, and never twice', () => {
+    const card = content.cards.find((c) => c.id === 'K2-04')!;
+    const ids = (s: GameState) => choicesFor(content, s, card).map((x) => x.choice.id);
+    const gymChoice = card.choices.find((c) => c.id === 'gym')!;
+    const fromItem = item('gym_pass').onUse!.find((e) => 'modifier' in e);
+    expect(gymChoice.cost?.coins).toBe(item('gym_pass').price?.coins);
+    expect(gymChoice.outcomes[0].effects!.find((e) => 'modifier' in e)).toEqual(fromItem);
+
+    const s0 = rich(start());
+    expect(ids(s0)).toEqual(['park', 'gym', 'later']);
+    // bought in the card: the shop shows the course as running and will not apply a second one
+    const viaCard = pick(s0, 'K2-04', 'gym');
+    expect(viaCard.coins).toBe(s0.coins - 200);
+    expect(viaCard.modifiers.map((m) => m.id)).toEqual(['gym']);
+    expect(courseActive(viaCard, item('gym_pass'))).toBe(true);
+    expect(() => useItem(content, buy(content, viaCard, 'gym_pass'), 'gym_pass')).toThrow();
+    // bought in the shop and still in the bag: the card activates it instead of charging again
+    const inBag = buy(content, s0, 'gym_pass');
+    expect(ids(inBag)).toEqual(['park', 'gym_have', 'later']);
+    const used = pick(inBag, 'K2-04', 'gym_have');
+    expect(used.coins).toBe(inBag.coins);
+    expect(used.items.gym_pass).toBe(0);
+    expect(used.modifiers.map((m) => m.id)).toEqual(['gym']);
+    // bought and already applied: the card is only a workout, the course keeps its start day
+    const running = { ...useItem(content, inBag, 'gym_pass'), day: 2 };
+    const trained = pick(running, 'K2-04', 'gym_have');
+    expect(trained.coins).toBe(running.coins);
+    expect(trained.modifiers).toEqual(running.modifiers);
   });
   it('a full week of income does not cover everything in the shop', () => {
     const b = content.balance;

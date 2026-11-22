@@ -233,6 +233,7 @@ Day 1 payoffs done on day 2: `d1_mom_knows` (K2-01a), `d1_mom_dark` (K2-01c, K2-
 Engine notes for days 3+:
 - The first like on day 3 needs "two useful actions over three days": `Cond` has no sum, so express it with `any`/`not`, for example `{ "counter": "useful", "gte": 2 }` or `not(any(not d1_run, counter useful < 1))`.
 - `smoke_free` is not advanced on day 2: there is no smoking card that day. Day 4 decides how quitting is counted.
+- K2-04 never charges twice for the pass: the buy choice needs `bought_gym_pass` unset (the shop sets this flag, and so does the card); with the flag set the card offers `gym_have` (3 energy, the workout only; a pass still in the bag is activated). In the shop a pass or cream whose course is running shows «Уже действует» and cannot be bought or applied.
 - The gym pass in K2-04 is the shop pass (section 5a): same price, same modifier `gym`. With `energyCap` 24 its +2 energy works on day 3 as well (20 + 2). On day 2 a player has about 150–180 coins, so the 200-coin pass is usually out of reach in K2-04 and can be bought in the shop later.
 
 ## 6. Sample phrase bank for Alina

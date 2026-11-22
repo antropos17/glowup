@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { content } from '../content';
 import { msToNextPart, type Clock } from '../engine/clock';
 import {
-  actionsFor, buy, chance, choicesFor, choose, crush, currentLook, dayEnergy, drawEvent, drawStory,
+  actionsFor, buy, chance, choicesFor, choose, courseActive, crush, currentLook, dayEnergy, drawEvent, drawStory,
   fill, hasEvents, hero, markSummarySeen, newGame, oddsFor, progress, soldOut, startLook, syncClock, useItem,
 } from '../engine/game';
 import type { SaveStore } from '../engine/save';
@@ -466,6 +466,8 @@ function Shop({ state, commit }: { state: GameState; commit: (s: GameState) => v
   const card = (it: (typeof content.items)[number], selling: boolean) => {
     const have = state.items[it.id] ?? 0;
     const coins = it.price?.coins;
+    // a running course: a second pass or cream would only restart it, so neither sell nor apply
+    const active = courseActive(state, it);
     return (
       <div class="item">
         <div class="item-head">
@@ -477,10 +479,12 @@ function Shop({ state, commit }: { state: GameState; commit: (s: GameState) => v
           <div class="item-actions">
             {selling && (soldOut(state, it)
               ? <button class="buy" disabled>Куплено</button>
+              : active
+              ? <button class="buy" disabled>Уже действует</button>
               : coins !== undefined
               ? <button class="buy" disabled={state.coins < coins} onClick={() => commit(buy(content, state, it.id))}>Купить <Icon name="coin" size={16} />{coins}</button>
               : <button class="buy" disabled>За реальные деньги, в прототипе выключено</button>)}
-            {have > 0 && it.onUse && <button class="use" onClick={() => commit(useItem(content, state, it.id))}>Применить</button>}
+            {have > 0 && it.onUse && <button class="use" disabled={active} onClick={() => commit(useItem(content, state, it.id))}>Применить</button>}
           </div>
         )}
       </div>
