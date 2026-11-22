@@ -21,6 +21,7 @@
     "choices": [
       {
         "id": "up",
+        "neutral": true,
         "label": "Встать и умыться холодной водой",
         "outcomes": [
           {
@@ -99,6 +100,7 @@
       },
       {
         "id": "ok",
+        "neutral": true,
         "label": "Ответить «Ладно»",
         "outcomes": [
           {
@@ -226,6 +228,7 @@
       },
       {
         "id": "topic",
+        "neutral": true,
         "label": "Перевести разговор на врача",
         "outcomes": [
           {
@@ -267,6 +270,7 @@
     "choices": [
       {
         "id": "ok",
+        "neutral": true,
         "label": "Ответить «Хорошо»",
         "outcomes": [
           {
@@ -307,6 +311,7 @@
     "choices": [
       {
         "id": "belly",
+        "neutral": true,
         "label": "Втянуть живот",
         "outcomes": [
           {
@@ -362,6 +367,7 @@
       },
       {
         "id": "ignore",
+        "neutral": true,
         "label": "Сделать вид, что не понял",
         "outcomes": [
           {
@@ -435,6 +441,7 @@
       },
       {
         "id": "home",
+        "neutral": true,
         "label": "Обойтись чаем и остаться дома",
         "outcomes": [
           {
@@ -631,6 +638,7 @@
       },
       {
         "id": "later",
+        "neutral": true,
         "label": "Решить потом",
         "outcomes": [
           {
@@ -696,6 +704,7 @@
       },
       {
         "id": "delete",
+        "neutral": true,
         "label": "Удалить из сохранённых",
         "outcomes": [
           {
@@ -768,6 +777,7 @@
       },
       {
         "id": "scroll",
+        "neutral": true,
         "label": "Пролистать",
         "outcomes": [
           {
@@ -822,6 +832,7 @@
       },
       {
         "id": "ok",
+        "neutral": true,
         "label": "Буркнуть «Ладно»",
         "outcomes": [
           {
@@ -960,6 +971,7 @@
       },
       {
         "id": "scroll",
+        "neutral": true,
         "label": "Пролистать",
         "outcomes": [
           {
@@ -1006,6 +1018,7 @@
     "choices": [
       {
         "id": "ok",
+        "neutral": true,
         "label": "Отложить телефон",
         "outcomes": [
           {
@@ -1055,6 +1068,7 @@
       },
       {
         "id": "ok",
+        "neutral": true,
         "label": "Ответить «Не перепутаю»",
         "outcomes": [
           {

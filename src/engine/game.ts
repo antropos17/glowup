@@ -151,6 +151,7 @@ export function newGame(c: Content, o: { seed: number; now: number; tzOffsetMin:
 /**
  * Подтянуть состояние к настоящему моменту. Вызывается при каждом открытии игры.
  * Пропущенный день не проходит бесследно: герой срывается, проблемы растут.
+ * Story cards the player did not get to are resolved by their neutral choice (see autoPlayStory).
  */
 export function syncClock(c: Content, state: GameState, now: number): GameState {
   const target = slotAt(state.startedAt, now, state.tzOffsetMin);
@@ -163,6 +164,8 @@ export function syncClock(c: Content, state: GameState, now: number): GameState 
       s.part = DAY_PARTS[i + 1];
       s.energy = Math.min(dayEnergy(c, s), s.energy + c.balance.energyPerPart);
     } else {
+      // the clock ends the day, not the player's sleep: the story the player missed resolves itself first
+      if (s.closedDay !== s.day) autoPlayStory(c, s);
       closeDay(c, s);
       if (s.day >= c.balance.days) return finalize(c, s);
       if (s.day >= c.balance.contentDays) { s.demoOver = true; return s; }
@@ -181,6 +184,42 @@ export function syncClock(c: Content, state: GameState, now: number): GameState 
     s.playedThisPart = 0;
     delete s.current;
   }
+  return s;
+}
+
+/**
+ * The day is ending without the player: every story card of this day that is still waiting
+ * is played with its neutral choice, in file order. Eligibility is re-checked after each card,
+ * because an earlier neutral choice sets flags that gate later cards. Called at night,
+ * so cards of every part of the day count as reached.
+ * This does not make the day "played": no reward, the streak resets, problems regress.
+ */
+function autoPlayStory(c: Content, s: GameState) {
+  const items: { title: string; text: string }[] = [];
+  for (;;) {
+    const card = c.cards.find((x) => x.kind === 'story' && eligible(c, s, x));
+    const ch = card?.choices.find((x) => x.neutral);
+    if (!card || !ch) break;
+    // the crush writes first when the card opens; a card left open has already said its line
+    if (card.says && s.current !== card.id) say(c, s, card.says);
+    const outcome = pickOutcome(c, s, ch);
+    applyEffects(c, s, (outcome.effects ?? []).filter((e) => !('closeDay' in e)));
+    s.seen[card.id] = s.day;
+    delete s.current;
+    const entry = { title: fill(c, s, card.title), text: fill(c, s, outcome.text) };
+    // filed under the part of the day the card belongs to, not under the night it was resolved in
+    const part = DAY_PARTS.find((p) => card.when?.parts?.includes(p)) ?? s.part;
+    s.log.push({ day: s.day, part, kind: 'auto', ...entry });
+    items.push(entry);
+  }
+  if (items.length) (s.missed ??= []).push({ day: s.day, items });
+}
+
+/** The player has read «Пока тебя не было». */
+export function markMissedSeen(state: GameState): GameState {
+  if (!state.missed) return state;
+  const s = clone(state);
+  delete s.missed;
   return s;
 }
 
@@ -391,6 +430,12 @@ function say(c: Content, s: GameState, key: string) {
   s.chat.push({ day: s.day, part: s.part, from: 'crush', text: fill(c, s, variants[i]), ...(key.startsWith('status_') ? { status: true } : {}) });
 }
 
+/** One of the outcomes whose conditions hold, by weight and the seeded roll; the last outcome if none fits. */
+function pickOutcome(c: Content, s: GameState, ch: Choice): Outcome {
+  const fits = ch.outcomes.filter((o) => all(c, s, o.if));
+  return fits.length ? pickWeighted(s, fits, (o) => o.weight ?? 1) : ch.outcomes[ch.outcomes.length - 1];
+}
+
 export interface Resolved { state: GameState; outcome: Outcome; chanceDelta: number }
 
 export function choose(c: Content, state: GameState, cardId: string, choiceId: string): Resolved {
@@ -404,8 +449,7 @@ export function choose(c: Content, state: GameState, cardId: string, choiceId: s
   s.energy -= ch.cost?.energy ?? 0;
   s.coins -= ch.cost?.coins ?? 0;
 
-  const fits = ch.outcomes.filter((o) => all(c, s, o.if));
-  const outcome = fits.length ? pickWeighted(s, fits, (o) => o.weight ?? 1) : ch.outcomes[ch.outcomes.length - 1];
+  const outcome = pickOutcome(c, s, ch);
   if (card.kind === 'chat') s.chat.push({ day: s.day, part: s.part, from: 'hero', text: ch.label });
   // день закрывается последним, чтобы этот выбор попал в его итог
   const effects = outcome.effects ?? [];

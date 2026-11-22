@@ -131,6 +131,8 @@ The authoritative version is `content/cards/day1.json`. This section records int
 | K1-08 Read receipt | night | «Алина была в сети в 23:41. Ответа нет». The chance scale appears: 3% | none |
 | K1-09 Sleep | night | Sleep now, or phone until three | `d1_late` |
 
+Neutral choice per story card, taken when the card is skipped (free, no requirements, smallest consequences): K1-01 `lurk`, K1-02 `ok`, K1-03 `fine`, K1-04 `one`, K1-05 `close`, K1-06 `half`, K1-07a `scroll`, K1-07b `scroll`, K1-08 `ok`, K1-08c `ok`, K1-08b `ok`. A fully skipped Day 1 therefore runs K1-01, K1-02, K1-03, K1-05, K1-06, K1-07a, K1-07b, K1-08b and leaves `d1_lurked`, `d1_mirror`, `d1_mom_dark`, `d1_no_contact`, `d1_half`, `chance_shown`; Day 2 then goes through K2-01c and the evening call K2-06. K1-06 `half` (care +1) was chosen over `smoke` (care +2) by the builder; the authors may prefer `smoke` as "the usual".
+
 Day 1 card: hero frame, stat changes, 2–3 key decisions. Reward: 50 gold and gum (removes one cigarette craving once). Line for tomorrow: «Утром: сообщение от мамы».
 
 Changes the Production chat made while implementing (all proposed):
@@ -220,7 +222,7 @@ The authoritative version is `content/cards/day2.json`. Written 2026-11-22; the 
 
 Plus actions on day 2 (day, evening, night): park run (4, counter `useful`), shower and fresh T-shirt (2, care −5, counter `useful`), brush teeth by the timer (1, teeth −1), lie on the sofa (0, conf +1). Sleep (night) closes the day; «Посидеть в телефоне до трёх» sets `d2_late` and −4 energy tomorrow.
 
-Neutral choice per story card (free, no requirements, smallest consequences), for the planned auto-resolve of a skipped day: K2-00 `up`, K2-01a `ok`, K2-01b `topic`, K2-01c `ok`, K2-02a `belly`, K2-02b `ignore`, K2-03 `home`, K2-04 `later`, K2-05a `delete`, K2-05b `scroll`, K2-06 `ok`, K2-07 `scroll`, K2-08 `ok`, K2-09 `ok`.
+Neutral choice per story card (free, no requirements, smallest consequences), taken by the auto-resolve of a skipped day (implemented 2026-11-23, marked `"neutral": true` in the file): K2-00 `up`, K2-01a `ok`, K2-01b `topic`, K2-01c `ok`, K2-02a `belly`, K2-02b `ignore`, K2-03 `home`, K2-04 `later`, K2-05a `delete`, K2-05b `scroll`, K2-06 `ok`, K2-07 `scroll`, K2-08 `ok`, K2-09 `ok`.
 
 Day 2 card: reward 50 gold and acne patches (`acne_patch`, skin −3 once). Line for tomorrow: «Завтра: поликлиника, третий этаж».
 
@@ -270,5 +272,5 @@ Banks of the same size are needed for: seen-no-reply, like, cold question, neutr
 1. Confirm or change the assumptions in section 0.
 2. Is a heroine needed in the demo from the start, or Andrey only?
 3. Should the demo include real payments?
-4. Skipped part of the day: the prototype makes the story card wait until the end of the day. Confirm or choose "resolve with a neutral option".
+4. Skipped part of the day: decided 2026-11-22 (`docs/DECISIONS.md` row 3) and built 2026-11-23. A story card waits until the end of its day, then resolves with its neutral option.
 5. The script says the chance scale "swings a lot"; the engine moves it by 1–2 points per action. Which events should move it strongly, and by how much?

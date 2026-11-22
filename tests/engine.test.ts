@@ -3,7 +3,7 @@ import { content } from '../src/content';
 import { slotAt, msToNextPart } from '../src/engine/clock';
 import {
   actionsFor, chance, choicesFor, choose, currentLook, dayEnergy, draw, drawStory,
-  buy, courseActive, newGame, oddsFor, soldOut, startLook, syncClock, useItem,
+  buy, courseActive, markMissedSeen, newGame, oddsFor, soldOut, startLook, syncClock, useItem,
 } from '../src/engine/game';
 import { validateContent } from '../src/engine/validate';
 import type { Content, GameState } from '../src/engine/types';
@@ -302,5 +302,110 @@ describe('economy', () => {
     const maxIncome = b.startCoins + b.dayCoins * 6 + 30 * 7;
     const shop = content.items.reduce((a, x) => a + (x.price?.coins ?? 0), 0);
     expect(shop).toBeGreaterThan(maxIncome);
+  });
+});
+
+describe('skipped story resolves itself', () => {
+  const seen = (s: GameState) => Object.keys(s.seen);
+  const storyIds = (day: number) => content.cards.filter((c) => c.kind === 'story' && c.when?.days?.[0] === day).map((c) => c.id);
+  const neutralOf = (id: string) => content.cards.find((c) => c.id === id)!.choices.find((ch) => ch.neutral)!;
+  /** Day 1 played to the end with sleep, then nobody opens the game until the morning of day 3 */
+  const skipDay2 = (p1: Record<string, string> = {}) => syncClock(full, pick(day1(p1, full), 'K1-09', 'sleep', full), at(57));
+
+  it('every story card has one free neutral choice, and the checker catches a missing one', () => {
+    const broken: Content = { ...content, cards: content.cards.map((c) => (c.id === 'K1-01' ? { ...c, choices: c.choices.map(({ neutral: _, ...ch }) => ch) } : c)) };
+    expect(validateContent(broken).join('\n')).toContain('K1-01');
+    const paid: Content = { ...content, cards: content.cards.map((c) => (c.id === 'K1-01' ? { ...c, choices: c.choices.map((ch) => (ch.neutral ? { ...ch, cost: { energy: 1 } } : ch)) } : c)) };
+    expect(validateContent(paid).join('\n')).toContain('neutral choice must be free');
+  });
+  it('a fully skipped Day 2 after a played Day 1 plays its story with neutral choices', () => {
+    const s = skipDay2();
+    expect(s.day).toBe(3);
+    // Day 1 defaults: told mum, saved the tea post, wrote to Alina
+    expect(seen(s).filter((id) => id.startsWith('K2-'))).toEqual(['K2-01a', 'K2-03', 'K2-04', 'K2-05a', 'K2-07', 'K2-08', 'K2-09']);
+    expect(s.flags.d2_derm_slot.value).toBe('morning');
+    expect(s.hints).toContain('derm_number');
+    expect(s.hints).not.toContain('zina_note');                  // K2-03 `home`, not `shop`
+    expect(s.modifiers).toEqual([]);                             // K2-04 `later`: no gym pass bought for the player
+    expect(s.log.filter((l) => l.kind === 'auto').map((l) => l.text)).toContain(neutralOf('K2-09').outcomes[0].text);
+    expect(s.missed).toEqual([{ day: 2, items: s.log.filter((l) => l.kind === 'auto').map(({ title, text }) => ({ title, text })) }]);
+    expect(s.history.some((h) => h.day === 2)).toBe(false);      // not the player's decisions
+    expect(s.current).toBeUndefined();
+  });
+  it('a card gated by a flag from an earlier neutral choice is handled in order', () => {
+    // «всё нормально» on Day 1 → morning message, then the evening call that gives the number
+    const dark = skipDay2({ 'K1-03': 'fine' });
+    const order = seen(dark).filter((id) => id.startsWith('K2-'));
+    expect(order.indexOf('K2-01c')).toBeGreaterThanOrEqual(0);
+    expect(order.indexOf('K2-06')).toBeGreaterThan(order.indexOf('K2-01c'));
+    expect(dark.flags.d2_derm_slot.value).toBe('day');
+    // inside one skipped day: K1-05 `close` sets d1_no_contact, which opens the night card K1-08b
+    const d1 = syncClock(full, start(), at(33));
+    expect(seen(d1)).toEqual(['K1-01', 'K1-02', 'K1-03', 'K1-05', 'K1-06', 'K1-07a', 'K1-07b', 'K1-08b']);
+    expect(d1.flags.chance_shown).toBeDefined();
+    expect(d1.log.find((l) => l.title === 'Чат класса')).toMatchObject({ day: 1, part: 'morning', kind: 'auto' });
+  });
+  it('the day still counts as skipped: no coins, regress applied, streak 0', () => {
+    const before = pick(day1({}, full), 'K1-09', 'sleep', full);
+    expect(before.streak).toBe(1);
+    const s = skipDay2();
+    expect(s.coins).toBe(before.coins);
+    expect(s.streak).toBe(0);
+    expect(s.playedDays).toEqual([1]);
+    expect(s.summaries[1]).toMatchObject({ day: 2, played: false, coins: 0 });
+    expect(s.summaries[1].picks).toEqual([]);
+    for (const def of content.problems.filter((p) => p.regress > 0 && p.id !== 'conf')) {
+      expect(s.problems[def.id]).toBe(Math.min(100, before.problems[def.id] + def.regress));
+    }
+    expect(s.log.at(-1)!.kind).toBe('miss');
+  });
+  it('a partly played day auto-plays only the remaining cards, including one left open', () => {
+    let s = story(syncClock(full, pick(day1({}, full), 'K1-09', 'sleep', full), at(33)), { 'K2-03': 'shop' }, full);
+    const playedMorning = seen(s).filter((id) => id.startsWith('K2-'));
+    expect(playedMorning).toEqual(['K2-01a', 'K2-03']);
+    // the day card is opened and left on the screen
+    const open = drawStory(full, syncClock(full, s, at(37)));
+    expect(open.card?.id).toBe('K2-04');
+    s = syncClock(full, open.state, at(57));
+    expect(s.missed).toHaveLength(1);
+    expect(s.missed![0].items.map((i) => i.title)).toHaveLength(storyIds(2).filter((id) => id in s.seen).length - playedMorning.length);
+    expect(s.log.filter((l) => l.day === 2 && l.kind === 'story')).toHaveLength(2);
+    expect(s.hints).toContain('zina_note');                      // the player's own choice is kept
+    expect(s.summaries[1]).toMatchObject({ day: 2, played: true, coins: content.balance.dayCoins });
+    expect(s.current).toBeUndefined();
+  });
+  it('the same seed gives the same result', () => {
+    const run = (seed: number) => syncClock(full, start(seed), at(57));
+    expect(run(7)).toEqual(run(7));
+    expect(run(7).rolls).toBeGreaterThan(start(7).rolls);
+  });
+  it('two skipped days in a row both resolve', () => {
+    const s = syncClock(full, start(), at(57));
+    expect(s.day).toBe(3);
+    expect(s.missed!.map((m) => m.day)).toEqual([1, 2]);
+    // Day 1 neutral `fine` → mum calls back in the evening of Day 2
+    expect(seen(s)).toEqual(expect.arrayContaining(['K1-08b', 'K2-01c', 'K2-06', 'K2-09']));
+    expect(seen(s)).not.toContain('K2-08');                      // nobody wrote to Alina
+    expect(s.flags.d2_derm_slot.value).toBe('day');
+    expect(s.summaries.map((d) => d.played)).toEqual([false, false]);
+    expect(markMissedSeen(s).missed).toBeUndefined();
+  });
+  it('sleep is not auto-played, and a day the player closed is left alone', () => {
+    const slept = pick(day1(), 'K1-09', 'sleep');
+    expect(syncClock(full, slept, at(33)).missed).toBeUndefined();
+    const s = syncClock(full, start(), at(33));
+    expect(seen(s)).not.toContain('K1-09');
+    expect(s.flags.d1_late).toBeUndefined();
+  });
+  it('a quest step queued for a skipped day stays in the queue', () => {
+    const quest: Content = {
+      ...full,
+      cards: [...full.cards, { id: 'Q-test', kind: 'quest', title: 'Q', text: '', choices: [{ id: 'ok', label: 'ok', outcomes: [{ text: 'done' }] }] }],
+    };
+    const queued: GameState = { ...start(), queue: [{ cardId: 'Q-test', day: 1 }] };
+    const s = syncClock(quest, queued, at(33));
+    expect(s.queue).toEqual([{ cardId: 'Q-test', day: 1 }]);
+    expect(seen(s)).not.toContain('Q-test');
+    expect(drawStory(quest, s).card?.id).toBe('Q-test');
   });
 });

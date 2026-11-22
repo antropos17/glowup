@@ -28,9 +28,12 @@ The full Day 3 design is in `DEMO_SCRIPT.md`, section 3. Items there marked "pro
 
 ## What these decisions require
 
+Built:
+
+- Row 3 (2026-11-23): `"neutral": true` on one choice of every story card, checked by `validate.ts`; `syncClock()` auto-plays the story cards a day still has when the clock ends it; the «Пока тебя не было» summary is shown once on the next visit, before the day cards and before the demo end screen. Days 1 and 2 are marked; days 3–7 must mark the neutral choice as they are written (`/write-day` says so). Format and rules: `docs/CONTENT_FORMAT.en.md`, "Skipped story cards". Neutral lists: `docs/DEMO_SCRIPT.md` sections 4 and 5b.
+
 Not built yet on 2026-11-22:
 
-- Row 3 needs an engine feature: a way to mark the neutral choice of a story card (for example `"neutral": true` on a choice) and auto-play of skipped story cards on the next visit, plus the summary screen. Every story card of days 1–7 then needs its neutral choice marked.
 - Row 4: Day 1 `affinity` steps should be re-checked against these sizes; days 2–7 are written with them.
 - Row 5: Day 1 cigarette card and later smoking cards need `care` effects; the UI needs a visible `smoke_free` counter.
 - Row 8: the demo end screen needs the read-only state behind «Закрыть» and the «Начать заново» button.

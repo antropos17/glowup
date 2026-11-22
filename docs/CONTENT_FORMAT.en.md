@@ -86,6 +86,11 @@ Every card except `action` needs at least one choice with no cost and no require
 
 - `requires`: a choice whose conditions fail is hidden.
 - `cost`: `{ "energy": n, "coins": n }`. A choice the player cannot afford is shown but cannot be picked.
+- `neutral`: `true` on the calmest choice of a `story` card, the one with the smallest consequences. The engine takes it when the player skipped the card (see "Skipped story cards"). Every story card needs exactly one, and it must have no `cost` and no `requires`; the content check enforces this. Other card kinds do not use it.
+
+```json
+{ "id": "scroll", "neutral": true, "label": "Пролистать", "outcomes": [{ "text": "Пост остался в ленте." }] }
+```
 
 ## Outcomes
 
@@ -187,6 +192,18 @@ A day counts as played if the player made at least one choice or used an item. A
 ```json
 { "day": 1, "title": "Приглашение", "gift": "gum", "teaser": "Утром: сообщение от мамы" }
 ```
+
+### Skipped story cards
+
+Author decision 3 in `docs/DECISIONS.md`: a skipped day does not break the story. When the clock ends a day (06:00) and the player has not ended it with sleep, every `story` card of that day that is still waiting is played automatically with its `neutral` choice:
+
+- Cards go in file order, and eligibility is re-checked after each one, so a neutral choice that sets a flag opens the later cards gated by that flag. Cards of every part of the day count, also a card left open on the screen.
+- The outcome is picked as usual (conditions, weights, the seeded roll), its effects apply and the card is marked as seen. A `closeDay` effect inside a neutral outcome is ignored, the clock closes the day.
+- Each card is written to the journal with the kind `auto`, under its own part of the day, and to `state.missed`. On the next visit the player sees «Пока тебя не было»: card titles and outcome texts grouped by day, one button «Понятно». The summary comes before the day cards and before «Продолжение следует».
+- It is not the player's decision: nothing goes to `history`, and the day does not become played. A fully skipped day still gives no reward, resets `streak` and worsens problems by `regress`. A partly played day keeps its reward, only the remaining cards are resolved.
+- Only `story` cards are auto-played. Actions (sleep included), events and chat forks are not. A `quest` step queued for a skipped day stays in the queue and comes first on the next visit.
+
+When writing a neutral choice, assume the player never saw the card: it must not spend coins, send a message to the crush or start a course on the player's behalf, and its outcome text must read well in the summary without the card text.
 
 When the written days run out (`balance.contentDays`), the game shows «Продолжение следует». On day 30 the verdict is rolled against the chance.
 
