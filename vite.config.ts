@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+import { configDefaults, defineConfig } from 'vitest/config';
 import preact from '@preact/preset-vite';
 import { viteSingleFile } from 'vite-plugin-singlefile';
 
@@ -7,4 +7,6 @@ import { viteSingleFile } from 'vite-plugin-singlefile';
 export default defineConfig({
   plugins: [preact(), viteSingleFile()],
   build: { target: 'es2022', assetsInlineLimit: 100_000_000, cssCodeSplit: false },
+  // session worktrees live in .claude/worktrees and carry their own copies of the tests
+  test: { exclude: [...configDefaults.exclude, '.claude/**'] },
 });
