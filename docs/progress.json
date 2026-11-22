@@ -4,15 +4,15 @@
   "verified": {
     "date": "2026-11-22",
     "typecheck": "pass",
-    "tests": "24/24",
-    "check_content": "pass: 17 cards (11 story, 6 action), 1 archetype, 1 crush",
+    "tests": "pending: merge of economy, demo end screen and Day 2",
+    "check_content": "pending",
     "economy": "demo economy in items.json, side-jobs.json, balance.json; see docs/DEMO_SCRIPT.md section 5a",
-    "build": "pass: dist/index.html 298 kB",
-    "playthrough": "game opens at 375x812 with no console errors; Day 1 not played through by hand in Claude Code yet"
+    "build": "pending",
+    "playthrough": "pending"
   },
   "demo_days": {
     "1": { "status": "in_game", "file": "content/cards/day1.json", "note": "outcome texts reviewed by the authors on 2026-11-22" },
-    "2": { "status": "todo" },
+    "2": { "status": "in_game", "file": "content/cards/day2.json", "note": "written 2026-11-22, texts not reviewed by the authors yet" },
     "3": { "status": "todo" },
     "4": { "status": "todo" },
     "5": { "status": "todo" },

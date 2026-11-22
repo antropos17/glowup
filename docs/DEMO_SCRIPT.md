@@ -1,6 +1,6 @@
 # 7-day demo — script
 
-Status: draft v1, 2026-11-22. The 7-day grid and the Day 1 design are done. Day 1 is already implemented in `content/cards/day1.json`. Days 2–7 are to be written directly in the engine format.
+Status: draft v1, 2026-11-22. The 7-day grid and the Day 1 design are done. Day 1 is implemented in `content/cards/day1.json`, Day 2 in `content/cards/day2.json`. Days 3–7 are to be written directly in the engine format.
 
 This file is the design-level description in English. Russian strings in «quotes» are in-game text: copy them verbatim into content.
 
@@ -184,6 +184,56 @@ Rules:
 - `cream_zina` has no shop price. The Day 5 pharmacy card sells it with `"cost": { "coins": 40 }` and `{ "item": "cream_zina", "add": 1 }`. The quest solution is cheaper and stronger than the premium cream, but slower.
 - A bought item sets the flag `bought_<id>`, so later cards can react («Новая оправа тебе идёт»).
 - Not done: a paid course does not pause while the player is away (proposed red line in `docs/DESIGN.md` section 12).
+
+## 5b. Day 2 design (implemented)
+
+The authoritative version is `content/cards/day2.json`. Written 2026-11-22; the texts are not reviewed by the authors yet. Story cards are listed in display order.
+
+| Card | Part | What happens | Condition | Flags set |
+|---|---|---|---|---|
+| K2-00 Overslept | morning | «Будильник звонил три раза». Get up or snooze; both lose the morning | `d1_late` | `d2_overslept` |
+| K2-01a Mum's number | morning | Mum found a dermatologist: polyclinic, third floor, tomorrow at 10:00 | not `d1_mom_dark`, not `d1_mom_pies` | `d2_derm_slot` = `morning` |
+| K2-01b Mum's number | morning | Same number plus «Пирожки доел?»; the honest answer depends on K1-04 | `d1_mom_pies` | `d2_derm_slot` = `morning` |
+| K2-01c Message from mum | morning | «Андрюша, вечером позвоню. Не пропадай» (keeps Day 1's teaser true) | `d1_mom_dark` | none |
+| K2-02a Mirror | morning | «Пирожки никуда не делись» | `d1_ate_pies` | none |
+| K2-02b Mirror | morning | «Понедельник наступил» | `d1_couch` | none |
+| K2-03 For bread | morning | Go to the shop or stay home. Going out in the morning without oversleeping shows Aunt Zina's note | none | `d2_saw_note` |
+| K2-04 Park or gym | day | Park run (4 energy, random) or gym pass (200 coins + 3 energy for the first workout; the same pass as the shop item `gym_pass`, section 5a: +2 energy and weight −1 every morning, 7 days, skipped days included), or decide later | none | `d2_park`, `d2_gym`; counter `useful` +1 |
+| K2-05a Feed: miracle tea | day | The saved post: order for 30 coins (energy −2 on days 3 and 4) or delete it | `d1_tea_saved` | `d2_tea` |
+| K2-05b Feed: miracle tea | day | The ad again: order or scroll | not `d1_tea_saved` | `d2_tea` |
+| K2-06 Mum calls back | evening | Same number, slot moved to 15:00 | `d1_mom_dark` | `d2_derm_slot` = `day` |
+| K2-07 Photo from «Зерно» | evening | Alina posts a coffee photo. Like, remember the place, write «Классное место!» (affinity −1 if Day 1 message is still unanswered), scroll | none | `d2_liked_photo`, `d2_zerno_known`, `d2_wrote_zerno` |
+| K2-08 Online | night | «Алина была в сети. Ответа нет», status line from `status_online_no_reply` | any message sent to Alina | none |
+| K2-09 Mum | night | Day ends on «Кабинет не перепутай, там их два». Asking which one gives the doctor's name and «в соседнем какие-то акции» | none | `d2_asked_office` |
+
+Plus actions on day 2 (day, evening, night): park run (4, counter `useful`), shower and fresh T-shirt (2, care −5, counter `useful`), brush teeth by the timer (1, teeth −1), lie on the sofa (0, conf +1). Sleep (night) closes the day; «Посидеть в телефоне до трёх» sets `d2_late` and −4 energy tomorrow.
+
+Neutral choice per story card (free, no requirements, smallest consequences), for the planned auto-resolve of a skipped day: K2-00 `up`, K2-01a `ok`, K2-01b `topic`, K2-01c `ok`, K2-02a `belly`, K2-02b `ignore`, K2-03 `home`, K2-04 `later`, K2-05a `delete`, K2-05b `scroll`, K2-06 `ok`, K2-07 `scroll`, K2-08 `ok`, K2-09 `ok`.
+
+Day 2 card: reward 50 gold and acne patches (`acne_patch`, skin −3 once). Line for tomorrow: «Завтра: поликлиника, третий этаж».
+
+Day 1 payoffs done on day 2: `d1_mom_knows` (K2-01a), `d1_mom_dark` (K2-01c, K2-06), `d1_mom_pies` (K2-01b), `d1_ate_pies` (K2-02a, K2-01b), `d1_couch` (K2-02b), `d1_tea_saved` (K2-05a), `d1_late` (K2-00, and no note in K2-03).
+
+### How Day 2 pays off later
+
+| Flag | Day | Payoff |
+|---|---|---|
+| `d2_overslept` | 2 | K2-03: Andrey rushes and misses Aunt Zina's note |
+| `d2_derm_slot` | 3 | `morning`: polyclinic at 10:00; `day`: at 15:00 (from `d1_mom_dark`) |
+| `d2_late` | 3 | With `d2_derm_slot` = `morning`, Andrey is late for the doctor |
+| `d2_asked_office` | 3 | Andrey knows the doctor's name and that the promo is next door, so office 12А looks suspicious |
+| counter `useful` | 3 | With `d1_run` and `d1_clean`, counts toward the two useful actions for the first like |
+| `d2_park`, `d2_gym` | 4 | The training choice; `d2_gym` also carries the gym pass modifier `gym` (same as the shop item, section 5a) |
+| `d2_tea` | 3–4 | Energy −2 each morning applies by itself; Day 7 can recall the tea |
+| `d2_saw_note` | 5 | Aunt Zina's cream: Andrey already knows the pharmacy on Sadovaya |
+| `d2_liked_photo` | 5 | Alina's first message can mention the like |
+| `d2_wrote_zerno` | 5 | Alina's first message can answer «Классное место!» |
+| `d2_zerno_known` | 7 | Andrey goes to «Зерно» knowing it is her place |
+
+Engine notes for days 3+:
+- The first like on day 3 needs "two useful actions over three days": `Cond` has no sum, so express it with `any`/`not`, for example `{ "counter": "useful", "gte": 2 }` or `not(any(not d1_run, counter useful < 1))`.
+- `smoke_free` is not advanced on day 2: there is no smoking card that day. Day 4 decides how quitting is counted.
+- The gym pass in K2-04 is the shop pass (section 5a): same price, same modifier `gym`. With `energyCap` 24 its +2 energy works on day 3 as well (20 + 2). On day 2 a player has about 150–180 coins, so the 200-coin pass is usually out of reach in K2-04 and can be bought in the shop later.
 
 ## 6. Sample phrase bank for Alina
 
