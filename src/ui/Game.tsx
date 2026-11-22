@@ -466,7 +466,13 @@ function Chat({ state }: { state: GameState }) {
         <div class="sticky">{content.tastes.find((t) => t.id === id)?.title}</div>
       ))}
       {!state.chat.length && <p class="empty">Переписки пока нет.</p>}
-      {state.chat.map((m) => <div class="bubble" data-from={m.from} data-quiet={m.status ? '' : undefined}>{m.text}</div>)}
+      {state.chat.map((m, i) => (
+        <>
+          {/* same day mark as the journal, so status lines of two evenings do not read as one */}
+          {m.day !== state.chat[i - 1]?.day && <div class="day-mark"><b>День {m.day}</b></div>}
+          <div class="bubble" data-from={m.from} data-quiet={m.status ? '' : undefined}>{m.text}</div>
+        </>
+      ))}
     </>
   );
 }
@@ -495,14 +501,16 @@ function Shop({ state, commit }: { state: GameState; commit: (s: GameState) => v
     const coins = it.price?.coins;
     // a running course: a second pass or cream would only restart it, so neither sell nor apply
     const active = courseActive(state, it);
+    // an owned item is counted and applied under «Твои вещи» only; the shop card just sells
+    const usable = !selling && have > 0 && !!it.onUse;
     return (
       <div class="item">
         <div class="item-head">
           <Icon name={it.icon} />
-          <div><b>{it.title}{have ? ` × ${have}` : ''}</b><small>{it.blurb}</small></div>
+          <div><b>{it.title}{have && !selling ? ` × ${have}` : ''}</b><small>{it.blurb}</small></div>
         </div>
         <div class="limits">{it.limits}</div>
-        {(selling || (have > 0 && it.onUse)) && (
+        {(selling || usable) && (
           <div class="item-actions">
             {selling && (soldOut(state, it)
               ? <button class="buy" disabled>Куплено</button>
@@ -511,7 +519,7 @@ function Shop({ state, commit }: { state: GameState; commit: (s: GameState) => v
               : coins !== undefined
               ? <button class="buy" disabled={state.coins < coins} onClick={() => commit(buy(content, state, it.id))}>Купить <Icon name="coin" size={16} />{coins}</button>
               : <button class="buy" disabled>За реальные деньги, в прототипе выключено</button>)}
-            {have > 0 && it.onUse && <button class="use" disabled={active} onClick={() => commit(useItem(content, state, it.id))}>Применить</button>}
+            {usable && <button class="use" disabled={active} onClick={() => commit(useItem(content, state, it.id))}>Применить</button>}
           </div>
         )}
       </div>
