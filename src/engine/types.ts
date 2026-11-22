@@ -248,7 +248,8 @@ export interface DaySummary {
   day: number;
   played: boolean;
   look: Look;
-  bars: { id: string; from: number; to: number }[];
+  /** percent solved at the start and at the end of the day; `drift` marks a level that moved while the percent stayed put */
+  bars: { id: string; from: number; to: number; drift?: 'worse' | 'better' }[];
   chance: number;
   picks: { title: string; label: string; delta: number }[];
   coins: number;

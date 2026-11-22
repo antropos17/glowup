@@ -201,6 +201,23 @@ describe('переход в следующий день', () => {
     expect(s.summaries[0].played).toBe(false);
     expect(s.log.at(-1)!.kind).toBe('miss');
   });
+  it('a skipped day card lists every bar that got worse, even when the percent stays at 0', () => {
+    // Day 1 skipped: every level rises above its start, so "percent solved" is 0 before and after
+    const d1 = syncClock(full, start(), at(33)).summaries[0];
+    expect(d1.bars.every((b) => b.from === 0 && b.to === 0)).toBe(true);
+    expect(d1.bars.filter((b) => b.drift === 'worse').map((b) => b.id)).toEqual(content.problems.filter((p) => p.regress > 0).map((p) => p.id));
+    // Day 2 skipped after a played Day 1: whatever really got worse is visible one way or the other
+    const before = syncClock(full, pick(day1({}, full), 'K1-09', 'sleep', full), at(33));
+    const after = syncClock(full, before, at(57));
+    const d2 = after.summaries[1];
+    for (const b of d2.bars) {
+      if (after.problems[b.id] > before.dayStart[b.id]) expect(b.to < b.from || b.drift === 'worse', b.id).toBe(true);
+      else expect(b.drift).not.toBe('worse');
+    }
+    expect(d2.bars.some((b) => b.to < b.from)).toBe(true);
+    // a played day with visible changes carries no drift marks
+    expect(before.summaries[0].bars.filter((b) => b.to !== b.from).every((b) => b.drift === undefined)).toBe(true);
+  });
   it('шанс растёт от решённых проблем и не доходит до 100', () => {
     const s = start();
     const low = chance(content, s);
@@ -407,5 +424,47 @@ describe('skipped story resolves itself', () => {
     expect(s.queue).toEqual([{ cardId: 'Q-test', day: 1 }]);
     expect(seen(s)).not.toContain('Q-test');
     expect(drawStory(quest, s).card?.id).toBe('Q-test');
+  });
+});
+
+describe('queued quest step', () => {
+  const quest: Content = {
+    ...full,
+    cards: [...full.cards, { id: 'Q-test', kind: 'quest', title: 'Q', text: '', choices: [{ id: 'ok', label: 'ok', outcomes: [{ text: 'done' }] }] }],
+  };
+  const queued = (): GameState => ({ ...start(), queue: [{ cardId: 'Q-test', day: 1 }] });
+
+  it('comes before the story, survives a reload while open, and is consumed by the choice', () => {
+    const open = drawStory(quest, queued());
+    expect(open.card?.id).toBe('Q-test');
+    expect(open.state.current).toBe('Q-test');
+    // reload: the saved state still shows the same card
+    expect(drawStory(quest, structuredClone(open.state)).card?.id).toBe('Q-test');
+    const done = pick(open.state, 'Q-test', 'ok', quest);
+    expect(done.queue).toEqual([]);
+    expect(drawStory(quest, done).card?.id).toBe('K1-01');
+  });
+  it('opened and left unanswered, it comes back after the part of the day changes', () => {
+    const open = drawStory(quest, queued());
+    const later = syncClock(quest, open.state, at(13));
+    expect(later.part).toBe('day');
+    expect(later.current).toBeUndefined();
+    expect(drawStory(quest, later).card?.id).toBe('Q-test');
+  });
+  it('opened and left unanswered, it comes back after a skipped day', () => {
+    const open = drawStory(quest, queued());
+    const next = syncClock(quest, open.state, at(33));
+    expect(next.day).toBe(2);
+    expect(next.queue).toEqual([{ cardId: 'Q-test', day: 1 }]);
+    expect(Object.keys(next.seen)).not.toContain('Q-test');
+    expect(drawStory(quest, next).card?.id).toBe('Q-test');
+  });
+  it('a step that queues itself again keeps only the new entry', () => {
+    const loop: Content = {
+      ...quest,
+      cards: quest.cards.map((c) => (c.id === 'Q-test' ? { ...c, choices: [{ id: 'ok', label: 'ok', outcomes: [{ text: 'done', effects: [{ queue: 'Q-test', inDays: 1 }] }] }] } : c)),
+    };
+    const done = pick(drawStory(loop, queued()).state, 'Q-test', 'ok', loop);
+    expect(done.queue).toEqual([{ cardId: 'Q-test', day: 2 }]);
   });
 });

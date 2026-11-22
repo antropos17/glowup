@@ -27,6 +27,11 @@ export const MISSED = {
   ok: 'Понятно',
 };
 
+/** Day card: a bar that moved although its percent did not (it is still at 0%). */
+export const DAY_CARD = {
+  drift: { worse: 'стало хуже', better: 'стало лучше' },
+};
+
 /** Demo end screen. */
 export const DEMO_END = {
   title: 'Продолжение следует',

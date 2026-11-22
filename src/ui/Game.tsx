@@ -10,7 +10,7 @@ import { DAY_PARTS, type Card, type Choice, type DaySummary, type GameState, typ
 import type { Look } from '../art/avatar';
 import { Body, Cost, Icon, Portrait } from './bits';
 import { timelapsePng } from './shareTimelapse';
-import { DEMO_END, duration, MISSED, PART_ICON, PART_NAME, PART_NEXT } from './ru';
+import { DAY_CARD, DEMO_END, duration, MISSED, PART_ICON, PART_NAME, PART_NEXT } from './ru';
 
 type Tab = 'journal' | 'mirror' | 'chat' | 'feed' | 'shop';
 type Sheet =
@@ -97,6 +97,16 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
   // what the story did on its own comes first: before the day cards and before the demo end screen
   const missed = state.missed?.length ? <Missed state={state} onClose={() => commit(markMissedSeen(state))} /> : null;
   if (state.demoOver && !endClosed && missed) return <div class="game">{missed}</div>;
+  const dayCard = unseen ? (
+    <div class="scrim">
+      <div class="sheet" role="dialog" aria-modal="true">
+        <div class="grip" />
+        <DayCard state={state} d={unseen} onClose={() => { commit(markSummarySeen(state, unseen.day)); setSheet(null); }} />
+      </div>
+    </div>
+  ) : null;
+  // then the day cards the player has not seen: the last day's card comes before the end screen, never after it
+  if (state.demoOver && !endClosed && dayCard) return <div class="game">{dayCard}</div>;
   if (state.demoOver && !endClosed) {
     return <DemoEnd state={state} onClose={() => { setSheet(null); setTab('journal'); setEndClosed(true); }} onRestart={() => restart(state.archetypeId)} />;
   }
@@ -198,14 +208,7 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
         {frozen ? <span /> : <NavBtn tab="shop" cur={tab} set={setTab} icon="bag" label="Вещи" />}
       </nav>
 
-      {missed ?? (unseen ? (
-        <div class="scrim">
-          <div class="sheet" role="dialog" aria-modal="true">
-            <div class="grip" />
-            <DayCard state={state} d={unseen} onClose={() => { commit(markSummarySeen(state, unseen.day)); setSheet(null); }} />
-          </div>
-        </div>
-      ) : sheet && (
+      {missed ?? (dayCard && !frozen ? dayCard : sheet && (
         <div class="scrim" onClick={(e) => { if (e.target === e.currentTarget) setSheet(null); }}>
           <div class="sheet" role="dialog" aria-modal="true">
             <div class="grip" />
@@ -340,7 +343,7 @@ function CardSheet({ state, card, onChoose, onClose }: { state: GameState; card:
 function DayCard({ state, d, onClose }: { state: GameState; d: DaySummary; onClose: () => void }) {
   const info = content.days.find((x) => x.day === d.day);
   const gift = d.gift ? content.items.find((i) => i.id === d.gift) : undefined;
-  const changed = d.bars.filter((b) => b.to !== b.from);
+  const changed = d.bars.filter((b) => b.to !== b.from || b.drift);
   return (
     <>
       <div class="sheet-head"><h2>День {d.day} закончен{info ? `: ${info.title.toLowerCase()}` : ''}</h2></div>
@@ -350,6 +353,14 @@ function DayCard({ state, d, onClose }: { state: GameState; d: DaySummary; onClo
           {changed.length === 0 && <p class="row-sub">Показатели за день не изменились.</p>}
           {changed.map((b) => {
             const def = content.problems.find((p) => p.id === b.id)!;
+            if (b.drift) {
+              return (
+                <div class="delta-row">
+                  <span>{def.bar}</span>
+                  <b class="num" data-dir={b.drift === 'better' ? 'up' : 'down'} style="grid-column: 2 / -1">{DAY_CARD.drift[b.drift]}</b>
+                </div>
+              );
+            }
             return (
               <div class="delta-row">
                 <span>{def.bar}</span>
