@@ -841,6 +841,10 @@
               },
               {
                 "hint": "derm_course"
+              },
+              {
+                "counter": "useful",
+                "add": 1
               }
             ]
           },
@@ -873,6 +877,10 @@
               },
               {
                 "hint": "derm_course"
+              },
+              {
+                "counter": "useful",
+                "add": 1
               }
             ]
           }
@@ -908,6 +916,10 @@
               },
               {
                 "hint": "derm_course"
+              },
+              {
+                "counter": "useful",
+                "add": 1
               }
             ]
           }

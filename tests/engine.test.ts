@@ -318,9 +318,9 @@ describe('день 3', () => {
     delete none.counters.useful;
     expect(requires.every((x) => check(content, none, x))).toBe(false);
   });
-  it('a useful action on day 3 itself counts, and the photo card arrives after it', () => {
-    let s = story(syncClock(content, story(morning3(), { 'K3-01': 'neat' }), at(67)));
-    expect(s.counters.useful).toBe(1);
+  it('the doctor visit counts as a useful action, and one more on day 3 brings the photo card', () => {
+    let s = story(syncClock(content, story(morning3(), { 'K3-01': 'asis' }), at(67)));
+    expect(s.counters.useful).toBe(1);                         // the visit to office 12 alone
     expect(drawStory(content, s).card).toBeNull();             // one action is not enough
     s = pick(s, 'A3-clean', 'go');
     expect(s.counters.useful).toBe(2);
