@@ -73,6 +73,12 @@
 .track { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
 .track span { height: 26px; border-radius: 8px; display: grid; place-items: center; background: rgba(255, 255, 255, .38); color: inherit; opacity: .55; }
 .track span[data-on='past'] { opacity: .9; background: rgba(255, 255, 255, .2); }
+/* sound toggle: a round button after the day-part track; ::before widens the touch area to 44px */
+.parts-row { display: flex; align-items: center; gap: 10px; }
+.parts-row .track { flex: 1; min-width: 0; }
+.game .snd { flex: none; position: relative; width: 28px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 255, 255, .38); color: inherit; }
+.snd::before { content: ''; position: absolute; inset: -9px -8px; }
+.snd[aria-pressed='false'] { opacity: .6; }
 .track span[data-on='now'] { opacity: 1; background: var(--paper); color: var(--ink); box-shadow: 0 2px 0 rgba(20, 35, 59, .15); }
 
 /* ---------- герой и шанс ---------- */

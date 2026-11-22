@@ -6,6 +6,8 @@ import { DeviceClock, msToNextPart } from '../engine/clock';
 import { LocalSave } from '../engine/save';
 import { Body, Icon, Portrait } from './bits';
 import { Game, type GameApi } from './Game';
+import { SOUND } from './ru';
+import { play, SOUNDS, type SoundName } from './sound';
 
 const clock = new DeviceClock();
 const store = new LocalSave();
@@ -105,6 +107,12 @@ export function Kit() {
           <h2>Иконки</h2>
           <p class="sub">Одна сетка 24 на 24, одна толщина линии. Имя под иконкой пишется в контенте как есть.</p>
           <div class="icons">{(Object.keys(ICONS) as IconName[]).map((n) => <div><Icon name={n} size={26} />{n}</div>)}</div>
+        </section>
+
+        <section>
+          <h2>Звуки</h2>
+          <p class="sub">По одному звуку на событие, все короче полутора секунд. Кнопка проигрывает звук так же, как игра; если звук в игре выключен, здесь тоже тихо.</p>
+          <div class="dev-row">{(Object.keys(SOUNDS) as SoundName[]).map((n) => <button class="dev-btn" onClick={() => play(n)}>{SOUND.names[n]}</button>)}</div>
         </section>
 
         <section>

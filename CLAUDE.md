@@ -43,7 +43,8 @@ npx tsc --noEmit       # typecheck
 | `content/` | Scenario as JSON. The engine reads it as is. Day 1 lives in `content/cards/day1.json` |
 | `src/engine/` | Headless core. `types.ts` (content and state schema), `validate.ts` (content rules), `game.ts` (cards, effects, chance, day end), `clock.ts` (day parts from local time), `save.ts` |
 | `src/art/` | Hero drawn in code from layers (`avatar.ts`, portrait and full body) and icons (`icons.ts`) |
-| `src/ui/` | `Game.tsx` (game screens), `Kit.tsx` (asset showcase, the page `main.tsx` renders), `ru.ts` (UI strings), `bits.tsx` |
+| `src/ui/` | `Game.tsx` (game screens), `Kit.tsx` (asset showcase, the page `main.tsx` renders), `ru.ts` (UI strings), `bits.tsx`, `sound.ts` (sound playback and the mute flag) |
+| `assets/sounds/` | Eight mp3 sound effects inlined into the build; `README.md` there has the earshot command for each |
 | `src/styles/` | `game.css`, `kit.css`, `fonts.css` |
 | `src/content/` | Loader that bundles `content/` |
 | `server/supabase/` | Supabase scaffold, not deployed |

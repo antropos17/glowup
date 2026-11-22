@@ -29,6 +29,7 @@
     "store purchase verification"
   ],
   "awaiting_authors": [
+    "listen to the eight sound effects on the showcase page (block «Звуки»): they were picked by measurements, nobody has heard them; see assets/sounds/README.md",
     "confirm demo assumptions (docs/DEMO_SCRIPT.md section 0); assumption 3 lists 5 problems with smoking, the engine has 6 (weight, skin, teeth, style, care, conf) and tracks smoking with flags",
     "heroine in the demo or Andrey only",
     "real payments in the demo or not",

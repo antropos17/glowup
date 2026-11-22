@@ -10,7 +10,8 @@ import { DAY_PARTS, type Card, type Choice, type DaySummary, type GameState, typ
 import type { Look } from '../art/avatar';
 import { Body, Cost, Icon, Portrait } from './bits';
 import { timelapsePng } from './shareTimelapse';
-import { DAY_CARD, DEMO_END, duration, MISSED, PART_ICON, PART_NAME, PART_NEXT } from './ru';
+import { DAY_CARD, DEMO_END, duration, MISSED, PART_ICON, PART_NAME, PART_NEXT, SOUND } from './ru';
+import { isMuted, play, setMuted, tap } from './sound';
 
 type Tab = 'journal' | 'mirror' | 'chat' | 'feed' | 'shop';
 type Sheet =
@@ -39,6 +40,7 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
   const [sheet, setSheet] = useState<Sheet>(null);
   const [chatSeen, setChatSeen] = useState(state.chat.length);
   const [endClosed, setEndClosed] = useState(false);
+  const [muted, setMutedShown] = useState(isMuted);
   const [, tick] = useState(0);
   const scroller = useRef<HTMLDivElement>(null);
 
@@ -50,13 +52,18 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
     api?.({ restart, refresh });
     const t = setInterval(refresh, 20_000);
     document.addEventListener('visibilitychange', refresh);
-    return () => { clearInterval(t); document.removeEventListener('visibilitychange', refresh); };
+    // every button of the game taps, unless its own handler has already played something more specific
+    const onTap = (e: Event) => { if ((e.target as Element | null)?.closest?.('.game button')) tap(); };
+    document.addEventListener('click', onTap);
+    return () => { clearInterval(t); document.removeEventListener('visibilitychange', refresh); document.removeEventListener('click', onTap); };
   }, []);
   useEffect(() => {
     if (!scroller.current) return;
     scroller.current.scrollTop = tab === 'journal' || tab === 'chat' ? scroller.current.scrollHeight : 0;
   }, [state.log.length, state.chat.length, tab]);
   useEffect(() => { if (tab === 'chat') setChatSeen(state.chat.length); }, [tab, state.chat.length]);
+  const away = !!state.missed?.length;
+  useEffect(() => { if (away) play('away'); }, [away]);
 
   const me = hero(content, state), her = crush(content, state);
   const look = useMemo(() => currentLook(content, state), [state]);
@@ -73,6 +80,7 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
   function onPlus() {
     const d = drawStory(content, state);
     if (d.state !== state) commit(d.state);
+    play('open');
     if (d.card) return setSheet({ kind: 'card', card: d.card });
     const s = d.state;
     setSheet(actionsFor(content, s).length || hasEvents(content, s) ? { kind: 'menu' } : { kind: 'rest' });
@@ -80,17 +88,24 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
   function onChoose(card: Card, choiceId: string) {
     const r = choose(content, state, card.id, choiceId);
     commit(r.state);
+    // one sound per choice, the most telling one: day closed, chance moved, a line from the crush, coins earned or spent
+    const fromCrush = (s: GameState) => s.chat.filter((m) => m.from === 'crush').length;
+    if (r.state.closedDay === r.state.day && state.closedDay !== state.day) play('dayend');
+    else if (r.chanceDelta !== 0 && (r.state.flags.chance_shown || r.state.day > 1)) play(r.chanceDelta > 0 ? 'up' : 'down');
+    else if (fromCrush(r.state) > fromCrush(state)) play('message');
+    else if (r.state.coins !== state.coins) play('coins');
     setSheet({ kind: 'result', title: fill(content, r.state, card.title), text: r.outcome.text, delta: r.chanceDelta, why: r.state.lastChange?.why });
   }
   function onAction(card: Card) {
     const shown = choicesFor(content, state, card);
     if (shown.length === 1) return onChoose(card, shown[0].choice.id);
+    play('open');
     setSheet({ kind: 'card', card });
   }
   function onEvent() {
     const d = drawEvent(content, state);
     if (d.state !== state) commit(d.state);
-    if (d.card) setSheet({ kind: 'card', card: d.card });
+    if (d.card) { play('open'); setSheet({ kind: 'card', card: d.card }); }
   }
 
   if (state.verdict) return <Verdict state={state} onRestart={() => restart(state.archetypeId)} />;
@@ -126,10 +141,15 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
             <span class="parts-name">{PART_NAME[state.part]}</span>
             {!frozen && <span class="parts-next">{PART_NEXT[state.part]} через {next}</span>}
           </div>
-          <div class="track" aria-hidden="true">
-            {DAY_PARTS.map((p, i) => (
-              <span data-on={i === partIdx ? 'now' : i < partIdx ? 'past' : 'next'}><Icon name={PART_ICON[p]} size={17} /></span>
-            ))}
+          <div class="parts-row">
+            <div class="track" aria-hidden="true">
+              {DAY_PARTS.map((p, i) => (
+                <span data-on={i === partIdx ? 'now' : i < partIdx ? 'past' : 'next'}><Icon name={PART_ICON[p]} size={17} /></span>
+              ))}
+            </div>
+            <button class="snd" aria-pressed={!muted} aria-label={muted ? SOUND.turnOn : SOUND.turnOff} onClick={() => { setMuted(!muted); setMutedShown(!muted); }}>
+              <Icon name={muted ? 'mute' : 'sound'} size={17} />
+            </button>
           </div>
         </div>
       </header>
@@ -528,7 +548,7 @@ function Shop({ state, commit }: { state: GameState; commit: (s: GameState) => v
               : active
               ? <button class="buy" disabled>Уже действует</button>
               : coins !== undefined
-              ? <button class="buy" disabled={state.coins < coins} onClick={() => commit(buy(content, state, it.id))}>Купить <Icon name="coin" size={16} />{coins}</button>
+              ? <button class="buy" disabled={state.coins < coins} onClick={() => { commit(buy(content, state, it.id)); play('coins'); }}>Купить <Icon name="coin" size={16} />{coins}</button>
               : <button class="buy" disabled>За реальные деньги, в прототипе выключено</button>)}
             {usable && <button class="use" disabled={active} onClick={() => commit(useItem(content, state, it.id))}>Применить</button>}
           </div>
