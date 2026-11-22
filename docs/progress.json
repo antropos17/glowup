@@ -1,6 +1,14 @@
 {
   "updated": "2026-11-22",
   "goal": "7-day demo: first 7 days of the 30-day game, full presentation",
+  "verified": {
+    "date": "2026-11-22",
+    "typecheck": "pass",
+    "tests": "20/20",
+    "check_content": "pass: 15 cards (10 story, 5 action), 1 archetype, 1 crush",
+    "build": "pass: dist/index.html 298 kB",
+    "playthrough": "game opens at 375x812 with no console errors; Day 1 not played through by hand in Claude Code yet"
+  },
   "demo_days": {
     "1": { "status": "in_game", "file": "content/cards/day1.json", "note": "outcome texts written by Production need author review" },
     "2": { "status": "todo" },
@@ -20,7 +28,8 @@
     "store purchase verification"
   ],
   "awaiting_authors": [
-    "confirm demo assumptions (docs/DEMO_SCRIPT.md section 0)",
+    "confirm demo assumptions (docs/DEMO_SCRIPT.md section 0); assumption 3 lists 5 problems with smoking, the engine has 6 (weight, skin, teeth, style, care, conf) and tracks smoking with flags",
+    "review Day 1 outcome texts",
     "heroine in the demo or Andrey only",
     "real payments in the demo or not",
     "skipped part of day: card waits or resolves neutrally",

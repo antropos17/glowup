@@ -14,24 +14,25 @@ Mobile life-sim in the spirit of BitLife. The player picks a hero with appearanc
 - Authors: Ruslan (developer, solo builder) and a friend (ideas, scenario). Both read Russian.
 - Current goal: a 7-day demo. It is the first 7 days of the full 30-day game, with full presentation and mechanics, ending on «Продолжение следует».
 - Status on 2026-11-22: Day 1 is playable in the prototype. Days 2–7 are not written yet.
-- Everything in this pack was assembled from three claude.ai chats ("Scenario", "Production", "Ad") and the project docs. The pack author did not see the repository itself, so treat every statement about code as a report to verify.
+- The docs were assembled from three claude.ai chats ("Scenario", "Production", "Ad") by a session that did not see the code. On 2026-11-22 this file and `docs/CONTENT_FORMAT.en.md` were checked against the code; other docs (`HANDOFF.md`, `DEMO_SCRIPT.md`, `DESIGN.md`) are still reports to verify.
 </context>
 
 <stack>
-Reported by the Production chat, verify against `package.json`:
-- TypeScript, Preact, Vite. Build output is a single `dist/index.html`.
-- Tests: Vitest. Content validation: `scripts/check-content.ts`.
-- Store wrapper: Capacitor (planned, not connected).
-- Thin server: Supabase scaffold in `server/` (time, save copy, purchase verification). Not deployed. Store receipt verification is not implemented and must stay disabled until it is.
+Checked against `package.json` on 2026-11-22:
+- TypeScript 7, Preact 11, Vite 8 with `vite-plugin-singlefile`. Build output is a single `dist/index.html`.
+- Tests: Vitest 5. Content validation: `scripts/check-content.ts`, run with `tsx`.
+- Fonts: Golos Text and Unbounded from `@fontsource-variable`.
+- Store wrapper: Capacitor (planned, not in `package.json`).
+- Thin server: Supabase scaffold in `server/supabase/` (edge functions `clock`, `sync`, `verify-purchase`, migration `0001_init.sql`). Not deployed. `verify-purchase` throws on store verification by design and must stay disabled until it is implemented.
 </stack>
 
 <commands>
 ```
 npm install
-npm run dev            # game + asset showcase in the browser
-npm test               # engine tests (20 reported passing)
+npm run dev            # asset showcase page with the game in a phone frame
+npm test               # engine tests (20/20 on 2026-11-22)
 npm run check:content  # scenario validation: broken refs, dead-end cards
-npm run build          # single-file dist/index.html
+npm run build          # typecheck, then single-file dist/index.html
 npx tsc --noEmit       # typecheck
 ```
 </commands>
@@ -40,23 +41,25 @@ npx tsc --noEmit       # typecheck
 | Path | Contents |
 |---|---|
 | `content/` | Scenario as JSON. The engine reads it as is. Day 1 lives in `content/cards/day1.json` |
-| `src/engine/` | Headless core: clock, energy, story, action menu, deck, flags, counters, "tomorrow" effects, day end, chance |
-| `src/art/` | Hero drawn in code from layers (portrait and full body) and icons |
-| `src/ui/` | Game screens and the asset showcase |
+| `src/engine/` | Headless core. `types.ts` (content and state schema), `validate.ts` (content rules), `game.ts` (cards, effects, chance, day end), `clock.ts` (day parts from local time), `save.ts` |
+| `src/art/` | Hero drawn in code from layers (`avatar.ts`, portrait and full body) and icons (`icons.ts`) |
+| `src/ui/` | `Game.tsx` (game screens), `Kit.tsx` (asset showcase, the page `main.tsx` renders), `ru.ts` (UI strings), `bits.tsx` |
+| `src/styles/` | `game.css`, `kit.css`, `fonts.css` |
 | `src/content/` | Loader that bundles `content/` |
-| `server/` | Supabase scaffold, not deployed |
-| `tests/` | Engine tests and a Day 1 playthrough |
+| `server/supabase/` | Supabase scaffold, not deployed |
+| `tests/engine.test.ts` | Engine tests: clock, content check, Day 1 flow, day transition, chance, verdict |
 | `scripts/check-content.ts` | Content checker |
-| `docs/` | Design, demo script, content format, handoff notes, progress |
+| `docs/` | Design, demo script, content format (`CONTENT_FORMAT.md` Russian original, `CONTENT_FORMAT.en.md` English guide), handoff notes, progress |
 </repo_map>
 
 <content_rules>
-- Source of truth for the content schema: `src/engine/types.ts` and `src/engine/validate.ts`. `docs/CONTENT_FORMAT.en.md` is a translated guide and can lag behind.
+- Source of truth for the content schema: `src/engine/types.ts` and `src/engine/validate.ts`, behaviour in `src/engine/game.ts`. `docs/CONTENT_FORMAT.en.md` was checked against them on 2026-11-22; update it when the schema changes.
+- Problems in the engine: `weight`, `skin`, `teeth`, `style`, `care`, `conf`. Smoking is not a problem; it lives in flags and counters.
 - Problem levels are inverted relative to the scenario docs: in the engine 100 = neglected, 0 = solved. The scenario docs use "higher is better". The mapping table is in `docs/DEMO_SCRIPT.md`.
-- Every card needs at least one choice with no cost and no requirements (no dead ends).
+- Every card except `action` needs at least one choice with no cost and no requirements (no dead ends).
 - Flags use Latin snake case: `d<day>_<what_happened>`, for example `d1_wrote_plain`.
 - "Chance to be liked" is computed by the engine and never set directly. Move it through solved problems, `affinity` and matched tastes.
-- Crush chat is fully scripted, no LLM at runtime. About 10 phrasing variants per situation in `content/chat.json`.
+- Crush chat is fully scripted, no LLM at runtime. About 10 phrasing variants per situation in `content/chat.json` (on 2026-11-22 it holds only `status_read` with one line).
 - Every shop item has a mandatory `limits` line shown before purchase.
 </content_rules>
 
