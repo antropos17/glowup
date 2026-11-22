@@ -10,7 +10,7 @@ import { DAY_PARTS, type Card, type Choice, type DaySummary, type GameState, typ
 import type { Look } from '../art/avatar';
 import { Body, Cost, Icon, Portrait } from './bits';
 import { timelapsePng } from './shareTimelapse';
-import { DEMO_END, duration, MISSED, PART_ICON, PART_NAME, PART_NEXT } from './ru';
+import { DAY_CARD, DEMO_END, duration, MISSED, PART_ICON, PART_NAME, PART_NEXT } from './ru';
 
 type Tab = 'journal' | 'mirror' | 'chat' | 'feed' | 'shop';
 type Sheet =
@@ -343,7 +343,7 @@ function CardSheet({ state, card, onChoose, onClose }: { state: GameState; card:
 function DayCard({ state, d, onClose }: { state: GameState; d: DaySummary; onClose: () => void }) {
   const info = content.days.find((x) => x.day === d.day);
   const gift = d.gift ? content.items.find((i) => i.id === d.gift) : undefined;
-  const changed = d.bars.filter((b) => b.to !== b.from);
+  const changed = d.bars.filter((b) => b.to !== b.from || b.drift);
   return (
     <>
       <div class="sheet-head"><h2>День {d.day} закончен{info ? `: ${info.title.toLowerCase()}` : ''}</h2></div>
@@ -353,6 +353,14 @@ function DayCard({ state, d, onClose }: { state: GameState; d: DaySummary; onClo
           {changed.length === 0 && <p class="row-sub">Показатели за день не изменились.</p>}
           {changed.map((b) => {
             const def = content.problems.find((p) => p.id === b.id)!;
+            if (b.drift) {
+              return (
+                <div class="delta-row">
+                  <span>{def.bar}</span>
+                  <b class="num" data-dir={b.drift === 'better' ? 'up' : 'down'} style="grid-column: 2 / -1">{DAY_CARD.drift[b.drift]}</b>
+                </div>
+              );
+            }
             return (
               <div class="delta-row">
                 <span>{def.bar}</span>

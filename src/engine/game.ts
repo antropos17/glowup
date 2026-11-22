@@ -260,7 +260,12 @@ function closeDay(c: Content, s: GameState) {
     .map((h) => ({ title: h.title, label: h.label, delta: h.chanceDelta }));
   const summary: DaySummary = {
     day: s.day, played, look: currentLook(c, s),
-    bars: Object.keys(s.startProblems).map((id) => ({ id, from: pct(s.startProblems[id], s.dayStart[id] ?? s.startProblems[id]), to: pct(s.startProblems[id], s.problems[id]) })),
+    bars: Object.keys(s.startProblems).map((id) => {
+      const start = s.startProblems[id], was = s.dayStart[id] ?? start, now = s.problems[id];
+      const from = pct(start, was), to = pct(start, now);
+      // "percent solved" stops at 0: a level above its start (a skipped day's regress) moves without moving the percent
+      return { id, from, to, ...(from === to && now !== was ? { drift: now > was ? 'worse' as const : 'better' as const } : {}) };
+    }),
     chance: chance(c, s), picks, coins, gift, seen: false,
   };
   s.summaries.push(summary);
