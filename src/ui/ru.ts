@@ -32,6 +32,16 @@ export const DAY_CARD = {
   drift: { worse: 'стало хуже', better: 'стало лучше' },
 };
 
+/** Sound toggle in the top bar and the sound list on the showcase page. */
+export const SOUND = {
+  turnOn: 'Включить звук',
+  turnOff: 'Выключить звук',
+  names: {
+    tap: 'Нажатие', open: 'Карточка открылась', up: 'Шанс вырос', down: 'Шанс упал',
+    coins: 'Монеты', message: 'Сообщение в чате', dayend: 'День закончен', away: '«Пока тебя не было»',
+  },
+};
+
 /** Demo end screen. */
 export const DEMO_END = {
   title: 'Продолжение следует',
