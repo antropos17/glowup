@@ -1,0 +1,864 @@
+[
+  {
+    "id": "K1-01",
+    "kind": "story",
+    "title": "Чат класса",
+    "when": {
+      "days": [
+        1,
+        1
+      ],
+      "parts": [
+        "morning"
+      ]
+    },
+    "text": "Чат «11-Б навсегда». Оксана: «Ребята, встреча выпускников ровно через 30 дней, кафе „Старый двор“. Кто идёт?» {crush}: «Я буду».",
+    "choices": [
+      {
+        "id": "coming",
+        "label": "Написать «Я приду»",
+        "outcomes": [
+          {
+            "text": "Витя: «Андрюха, живой!»",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "flag": "d1_said_coming"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "joke",
+        "label": "Пошутить «Приду, если пролезу в дверь»",
+        "outcomes": [
+          {
+            "weight": 3,
+            "hint": "смеются",
+            "text": "Чат смеётся.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -3
+              },
+              {
+                "flag": "d1_joked"
+              }
+            ]
+          },
+          {
+            "weight": 1,
+            "hint": "тишина",
+            "text": "В чате тишина. Шутка висит без ответа.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": 2
+              },
+              {
+                "flag": "d1_joked"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "lurk",
+        "label": "Промолчать и посмотреть, кто идёт",
+        "outcomes": [
+          {
+            "text": "{hero} молча листает список тех, кто отметился.",
+            "effects": [
+              {
+                "flag": "d1_lurked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K1-02",
+    "kind": "story",
+    "title": "Зеркало",
+    "when": {
+      "days": [
+        1,
+        1
+      ],
+      "parts": [
+        "morning"
+      ]
+    },
+    "text": "{hero} смотрит в зеркало. 30 дней. Список: живот, кожа, зубы, очки с изолентой, борода клочками, запах табака.",
+    "choices": [
+      {
+        "id": "ok",
+        "label": "Понятно",
+        "outcomes": [
+          {
+            "text": "Кадр «до» сохранён. Он лежит в зеркале.",
+            "effects": [
+              {
+                "flag": "d1_mirror"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K1-03",
+    "kind": "story",
+    "title": "Звонок мамы",
+    "speaker": "Мама",
+    "when": {
+      "days": [
+        1,
+        1
+      ],
+      "parts": [
+        "day"
+      ]
+    },
+    "text": "«Андрюша, ты кушал? Зина сказала, у вас встреча класса».",
+    "choices": [
+      {
+        "id": "tell",
+        "label": "Рассказать, что хочешь привести себя в порядок",
+        "outcomes": [
+          {
+            "text": "Мама обещает найти хорошего дерматолога.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "flag": "d1_mom_knows"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "fine",
+        "label": "Сказать «всё нормально»",
+        "outcomes": [
+          {
+            "text": "Мама говорит, что перезвонит завтра вечером.",
+            "effects": [
+              {
+                "flag": "d1_mom_dark"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "complain",
+        "label": "Пожаловаться на жизнь",
+        "outcomes": [
+          {
+            "text": "Мама говорит, что вечером приедет с пирожками.",
+            "effects": [
+              {
+                "flag": "d1_mom_pies"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K1-04",
+    "kind": "story",
+    "title": "Мама с пирожками",
+    "speaker": "Мама",
+    "when": {
+      "days": [
+        1,
+        1
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d1_mom_pies"
+        }
+      ]
+    },
+    "text": "Мама на пороге с кастрюлей. «Двадцать штук, с картошкой. Ешь, пока горячие».",
+    "choices": [
+      {
+        "id": "five",
+        "label": "Съесть пять",
+        "outcomes": [
+          {
+            "text": "Пять пирожков. Ремень стал теснее.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": 2
+              },
+              {
+                "flag": "d1_ate_pies"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "one",
+        "label": "Съесть один, остальные в холодильник",
+        "outcomes": [
+          {
+            "text": "Один пирожок. Остальные ждут в холодильнике.",
+            "effects": [
+              {
+                "flag": "d1_one_pie"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "refuse",
+        "label": "Вежливо отказаться",
+        "outcomes": [
+          {
+            "text": "Мама: «Ты заболел?»",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "flag": "d1_refused_pies"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K1-05",
+    "kind": "story",
+    "title": "Профиль Алины",
+    "when": {
+      "days": [
+        1,
+        1
+      ],
+      "parts": [
+        "evening"
+      ]
+    },
+    "text": "{crush}. Фото с моря. В сети 5 минут назад.",
+    "choices": [
+      {
+        "id": "plain",
+        "label": "Написать: «Привет! Сто лет не виделись. Идёшь на встречу?»",
+        "outcomes": [
+          {
+            "text": "Сообщение доставлено.",
+            "effects": [
+              {
+                "write": "Привет! Сто лет не виделись. Идёшь на встречу?"
+              },
+              {
+                "flag": "d1_wrote_plain"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "flirty",
+        "label": "Написать: «Алина, ты вообще не изменилась» и сердечко",
+        "outcomes": [
+          {
+            "text": "Сообщение доставлено.",
+            "why": "Сообщение с сердечком",
+            "effects": [
+              {
+                "write": "Алина, ты вообще не изменилась ❤"
+              },
+              {
+                "stat": "affinity",
+                "add": -2
+              },
+              {
+                "flag": "d1_wrote_flirty"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "like",
+        "label": "Лайкнуть фото и не писать",
+        "outcomes": [
+          {
+            "text": "Лайк поставлен.",
+            "effects": [
+              {
+                "flag": "d1_liked_only"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "close",
+        "label": "Закрыть профиль",
+        "outcomes": [
+          {
+            "text": "Профиль закрыт.",
+            "effects": [
+              {
+                "flag": "d1_no_contact"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K1-06",
+    "kind": "story",
+    "title": "Сигарета на балконе",
+    "when": {
+      "days": [
+        1,
+        1
+      ],
+      "parts": [
+        "evening"
+      ]
+    },
+    "text": "Рука сама тянется к пачке.",
+    "choices": [
+      {
+        "id": "smoke",
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "text": "Обычная сигарета. Футболка снова пахнет табаком.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "flag": "d1_smoked"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "half",
+        "label": "Выкурить половину",
+        "outcomes": [
+          {
+            "text": "Половина осталась в пепельнице.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "flag": "d1_half"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quit",
+        "label": "Убрать пачку, взять жвачку",
+        "cost": {
+          "energy": 1
+        },
+        "outcomes": [
+          {
+            "text": "Пачка в ящике, жвачка во рту. Ночью будет спаться хуже: завтра на одну энергию меньше.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 1
+              },
+              {
+                "tomorrow": [
+                  {
+                    "stat": "energy",
+                    "add": -1
+                  }
+                ]
+              },
+              {
+                "flag": "d1_no_smoke"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K1-07a",
+    "kind": "story",
+    "title": "Лента: чудо-чай",
+    "speaker": "Лента",
+    "when": {
+      "days": [
+        1,
+        1
+      ],
+      "parts": [
+        "night"
+      ]
+    },
+    "text": "«Чудо-чай: минус 5 кг за неделю».",
+    "choices": [
+      {
+        "id": "save",
+        "label": "Сохранить",
+        "outcomes": [
+          {
+            "text": "Пост сохранён. Завтра лента о нём напомнит. Дальше Витя выложил мангал.",
+            "effects": [
+              {
+                "rumor": "tea"
+              },
+              {
+                "rumor": "grill"
+              },
+              {
+                "flag": "d1_tea_saved"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "scroll",
+        "label": "Пролистать",
+        "outcomes": [
+          {
+            "text": "Дальше Витя выложил мангал.",
+            "effects": [
+              {
+                "rumor": "tea"
+              },
+              {
+                "rumor": "grill"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K1-07b",
+    "kind": "story",
+    "title": "Лента: сода с лимоном",
+    "speaker": "Лента",
+    "when": {
+      "days": [
+        1,
+        1
+      ],
+      "parts": [
+        "night"
+      ]
+    },
+    "text": "«Сода с лимоном отбеливают зубы за вечер».",
+    "choices": [
+      {
+        "id": "try",
+        "label": "Попробовать",
+        "outcomes": [
+          {
+            "text": "Зубы скрипят и ноют от холодной воды. Белее не стали.",
+            "effects": [
+              {
+                "rumor": "soda"
+              },
+              {
+                "problem": "teeth",
+                "add": 3
+              },
+              {
+                "flag": "d1_soda_teeth"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "scroll",
+        "label": "Пролистать",
+        "outcomes": [
+          {
+            "text": "Пост остался в ленте.",
+            "effects": [
+              {
+                "rumor": "soda"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K1-08",
+    "kind": "story",
+    "title": "Прочитано",
+    "when": {
+      "days": [
+        1,
+        1
+      ],
+      "parts": [
+        "night"
+      ],
+      "requires": [
+        {
+          "any": [
+            {
+              "flag": "d1_wrote_plain"
+            },
+            {
+              "flag": "d1_wrote_flirty"
+            },
+            {
+              "flag": "d1_liked_only"
+            }
+          ]
+        }
+      ]
+    },
+    "text": "{crush} была в сети в 23:41. Ответа нет.",
+    "choices": [
+      {
+        "id": "ok",
+        "label": "Отложить телефон",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d1_liked_only"
+              }
+            ],
+            "text": "Теперь видно, какой у тебя шанс ей понравиться.",
+            "effects": [
+              {
+                "flag": "chance_shown"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d1_liked_only",
+                "set": false
+              }
+            ],
+            "text": "Теперь видно, какой у тебя шанс ей понравиться.",
+            "effects": [
+              {
+                "chat": "status_read"
+              },
+              {
+                "flag": "chance_shown"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K1-08b",
+    "kind": "story",
+    "title": "Тишина",
+    "when": {
+      "days": [
+        1,
+        1
+      ],
+      "parts": [
+        "night"
+      ],
+      "requires": [
+        {
+          "flag": "d1_no_contact"
+        }
+      ]
+    },
+    "text": "Сегодня {hero} так и не написал.",
+    "choices": [
+      {
+        "id": "ok",
+        "label": "Отложить телефон",
+        "outcomes": [
+          {
+            "text": "Теперь видно, какой у тебя шанс ей понравиться.",
+            "effects": [
+              {
+                "flag": "chance_shown"
+              },
+              {
+                "flag": "chance_note",
+                "value": "Алина пока не знает, что ты существуешь"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A1-run",
+    "kind": "action",
+    "title": "Пробежка в парке",
+    "when": {
+      "days": [
+        1,
+        1
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Пробежка в парке",
+        "cost": {
+          "energy": 4
+        },
+        "outcomes": [
+          {
+            "weight": 3,
+            "hint": "получилось",
+            "text": "Пробежка удалась.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "flag": "d1_run"
+              }
+            ]
+          },
+          {
+            "weight": 1,
+            "hint": "закололо в боку",
+            "text": "Закололо в боку, вторую половину пришлось идти шагом.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -1
+              },
+              {
+                "flag": "d1_run"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A1-clean",
+    "kind": "action",
+    "title": "Душ, ногти, чистая футболка",
+    "when": {
+      "days": [
+        1,
+        1
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Душ, ногти, чистая футболка",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Чистый, с подстриженными ногтями, в свежей футболке.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -5
+              },
+              {
+                "flag": "d1_clean"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A1-dentist",
+    "kind": "action",
+    "title": "Записаться к стоматологу",
+    "when": {
+      "days": [
+        1,
+        1
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Записаться к стоматологу",
+        "cost": {
+          "energy": 1
+        },
+        "outcomes": [
+          {
+            "text": "Приём назначен на 5-й день.",
+            "effects": [
+              {
+                "flag": "d1_dentist_booked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A1-couch",
+    "kind": "action",
+    "title": "Лечь на диван «до понедельника»",
+    "when": {
+      "days": [
+        1,
+        1
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Лечь на диван «до понедельника»",
+        "outcomes": [
+          {
+            "text": "Диван оказался сильнее.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": 1
+              },
+              {
+                "flag": "d1_couch"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K1-09",
+    "kind": "action",
+    "title": "Сон",
+    "when": {
+      "days": [
+        1,
+        1
+      ],
+      "parts": [
+        "night"
+      ]
+    },
+    "text": "День почти закончился.",
+    "choices": [
+      {
+        "id": "sleep",
+        "label": "Лечь сейчас",
+        "outcomes": [
+          {
+            "text": "Свет выключен. Завтра полная энергия.",
+            "effects": [
+              {
+                "closeDay": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "late",
+        "label": "Посидеть в телефоне до трёх",
+        "outcomes": [
+          {
+            "text": "В три часа ночи лента всё ещё не кончилась. Завтра на четыре энергии меньше.",
+            "effects": [
+              {
+                "flag": "d1_late"
+              },
+              {
+                "tomorrow": [
+                  {
+                    "stat": "energy",
+                    "add": -4
+                  }
+                ]
+              },
+              {
+                "closeDay": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

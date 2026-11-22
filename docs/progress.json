@@ -1,0 +1,31 @@
+{
+  "updated": "2026-11-22",
+  "goal": "7-day demo: first 7 days of the 30-day game, full presentation",
+  "demo_days": {
+    "1": { "status": "in_game", "file": "content/cards/day1.json", "note": "outcome texts written by Production need author review" },
+    "2": { "status": "todo" },
+    "3": { "status": "todo" },
+    "4": { "status": "todo" },
+    "5": { "status": "todo" },
+    "6": { "status": "todo" },
+    "7": { "status": "todo" }
+  },
+  "engine_todo": [
+    "choice buttons inside the feed",
+    "demo end screen: referral link and notify button",
+    "hero selection screen",
+    "photos in chat",
+    "Capacitor wrapper",
+    "deploy thin server",
+    "store purchase verification"
+  ],
+  "awaiting_authors": [
+    "confirm demo assumptions (docs/DEMO_SCRIPT.md section 0)",
+    "heroine in the demo or Andrey only",
+    "real payments in the demo or not",
+    "skipped part of day: card waits or resolves neutrally",
+    "which events move the chance scale strongly and by how much",
+    "red lines in docs/DESIGN.md section 12",
+    "open questions in docs/DESIGN.md section 13"
+  ]
+}

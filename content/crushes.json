@@ -1,0 +1,33 @@
+[
+  {
+    "id": "alina",
+    "gender": "f",
+    "name": "Алина",
+    "blurb": "Одноклассница. Будет на встрече выпускников.",
+    "look": {
+      "gender": "f",
+      "skin": 1,
+      "weight": 50,
+      "acne": 0,
+      "hair": "bob",
+      "hairColor": "#25211F",
+      "hairCare": 100,
+      "glasses": "none",
+      "teeth": 100,
+      "facial": "none",
+      "posture": 100,
+      "mood": 80,
+      "tired": 0,
+      "neckline": "v",
+      "topColor": "#C2456B",
+      "clothesCare": 100,
+      "bottom": "skirt",
+      "bottomColor": "#2B3140",
+      "shoeColor": "#F4F6F8"
+    },
+    "tasteCount": 1,
+    "tastePool": [
+      "no_beard"
+    ]
+  }
+]

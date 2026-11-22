@@ -1,0 +1,31 @@
+[
+  {
+    "id": "andrey",
+    "gender": "m",
+    "name": "Андрей",
+    "age": 40,
+    "blurb": "Живот, очки с изолентой, борода клочками, запах табака.",
+    "look": {
+      "gender": "m",
+      "skin": 1,
+      "hair": "receding",
+      "hairColor": "#5B3B28",
+      "glasses": "taped",
+      "facial": "patchy",
+      "mood": 62,
+      "neckline": "wide",
+      "topColor": "#9AA3AE",
+      "bottom": "sweats",
+      "bottomColor": "#6C7480",
+      "shoeColor": "#B9BDC4"
+    },
+    "problems": {
+      "weight": 85,
+      "skin": 75,
+      "teeth": 70,
+      "style": 80,
+      "care": 65,
+      "conf": 80
+    }
+  }
+]

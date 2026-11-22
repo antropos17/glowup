@@ -1,0 +1,86 @@
+[
+  {
+    "id": "weight",
+    "title": "Лишний вес",
+    "bar": "Форма",
+    "icon": "dumbbell",
+    "regress": 2,
+    "look": [
+      {
+        "param": "weight",
+        "at0": 50,
+        "at100": 96
+      }
+    ]
+  },
+  {
+    "id": "skin",
+    "title": "Кожа",
+    "bar": "Кожа",
+    "icon": "drop",
+    "regress": 2,
+    "look": [
+      {
+        "param": "acne",
+        "at0": 0,
+        "at100": 100
+      }
+    ]
+  },
+  {
+    "id": "teeth",
+    "title": "Зубы",
+    "bar": "Зубы",
+    "icon": "tooth",
+    "regress": 1,
+    "look": [
+      {
+        "param": "teeth",
+        "at0": 100,
+        "at100": 8
+      }
+    ]
+  },
+  {
+    "id": "style",
+    "title": "Старые очки и одежда",
+    "bar": "Стиль",
+    "icon": "shirt",
+    "regress": 1,
+    "look": [
+      {
+        "param": "clothesCare",
+        "at0": 100,
+        "at100": 0
+      }
+    ]
+  },
+  {
+    "id": "care",
+    "title": "Уход и запах",
+    "bar": "Уход",
+    "icon": "tube",
+    "regress": 3,
+    "look": [
+      {
+        "param": "hairCare",
+        "at0": 100,
+        "at100": 0
+      }
+    ]
+  },
+  {
+    "id": "conf",
+    "title": "Неуверенность",
+    "bar": "Уверенность",
+    "icon": "spine",
+    "regress": 2,
+    "look": [
+      {
+        "param": "posture",
+        "at0": 100,
+        "at100": 0
+      }
+    ]
+  }
+]

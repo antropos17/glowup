@@ -1,0 +1,17 @@
+{
+  "days": 30,
+  "contentDays": 1,
+  "energyPerDay": 10,
+  "earlyBoost": {
+    "days": 3,
+    "factor": 2
+  },
+  "energyPerPart": 0,
+  "energyCap": 20,
+  "startCoins": 100,
+  "dayCoins": 50,
+  "chanceCap": 92,
+  "chanceFromProblems": 70,
+  "cardsPerPart": 3,
+  "chanceBase": 3
+}
