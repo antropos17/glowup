@@ -426,3 +426,45 @@ describe('skipped story resolves itself', () => {
     expect(drawStory(quest, s).card?.id).toBe('Q-test');
   });
 });
+
+describe('queued quest step', () => {
+  const quest: Content = {
+    ...full,
+    cards: [...full.cards, { id: 'Q-test', kind: 'quest', title: 'Q', text: '', choices: [{ id: 'ok', label: 'ok', outcomes: [{ text: 'done' }] }] }],
+  };
+  const queued = (): GameState => ({ ...start(), queue: [{ cardId: 'Q-test', day: 1 }] });
+
+  it('comes before the story, survives a reload while open, and is consumed by the choice', () => {
+    const open = drawStory(quest, queued());
+    expect(open.card?.id).toBe('Q-test');
+    expect(open.state.current).toBe('Q-test');
+    // reload: the saved state still shows the same card
+    expect(drawStory(quest, structuredClone(open.state)).card?.id).toBe('Q-test');
+    const done = pick(open.state, 'Q-test', 'ok', quest);
+    expect(done.queue).toEqual([]);
+    expect(drawStory(quest, done).card?.id).toBe('K1-01');
+  });
+  it('opened and left unanswered, it comes back after the part of the day changes', () => {
+    const open = drawStory(quest, queued());
+    const later = syncClock(quest, open.state, at(13));
+    expect(later.part).toBe('day');
+    expect(later.current).toBeUndefined();
+    expect(drawStory(quest, later).card?.id).toBe('Q-test');
+  });
+  it('opened and left unanswered, it comes back after a skipped day', () => {
+    const open = drawStory(quest, queued());
+    const next = syncClock(quest, open.state, at(33));
+    expect(next.day).toBe(2);
+    expect(next.queue).toEqual([{ cardId: 'Q-test', day: 1 }]);
+    expect(Object.keys(next.seen)).not.toContain('Q-test');
+    expect(drawStory(quest, next).card?.id).toBe('Q-test');
+  });
+  it('a step that queues itself again keeps only the new entry', () => {
+    const loop: Content = {
+      ...quest,
+      cards: quest.cards.map((c) => (c.id === 'Q-test' ? { ...c, choices: [{ id: 'ok', label: 'ok', outcomes: [{ text: 'done', effects: [{ queue: 'Q-test', inDays: 1 }] }] }] } : c)),
+    };
+    const done = pick(drawStory(loop, queued()).state, 'Q-test', 'ok', loop);
+    expect(done.queue).toEqual([{ cardId: 'Q-test', day: 2 }]);
+  });
+});

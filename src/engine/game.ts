@@ -306,6 +306,9 @@ function eligible(c: Content, s: GameState, card: Card): boolean {
   return all(c, s, w.requires);
 }
 
+/** A queued quest step whose time has come: its day and part, or any part once its day has passed. */
+const queueDue = (s: GameState, q: GameState['queue'][number]) => q.day <= s.day && (!q.part || q.part === s.part || q.day < s.day);
+
 const over = (s: GameState) => !!s.verdict || !!s.demoOver || s.closedDay === s.day;
 type Drawn = { state: GameState; card: Card | null };
 
@@ -323,12 +326,8 @@ export function drawStory(c: Content, state: GameState): Drawn {
   if (over(state)) return { state, card: null };
   if (state.current) return { state, card: byId(state.current) };
   const s = clone(state);
-  const qi = s.queue.findIndex((q) => q.day <= s.day && (!q.part || q.part === s.part || q.day < s.day));
-  let card: Card | null = null;
-  if (qi >= 0) {
-    card = byId(s.queue[qi].cardId);
-    s.queue.splice(qi, 1);
-  }
+  // a queued step stays in the queue while it is open: only the player's choice takes it out (see choose)
+  let card = byId(s.queue.find((q) => queueDue(s, q) && byId(q.cardId))?.cardId ?? '');
   if (!card) card = c.cards.find((x) => x.kind === 'story' && eligible(c, s, x)) ?? null;
   return card ? openCard(c, s, card) : { state, card: null };
 }
@@ -453,6 +452,10 @@ export function choose(c: Content, state: GameState, cardId: string, choiceId: s
   const ch = shown.choice;
   s.energy -= ch.cost?.energy ?? 0;
   s.coins -= ch.cost?.coins ?? 0;
+
+  // the queued step is answered: taken out before the effects, which may queue the same card again
+  const qi = s.queue.findIndex((q) => q.cardId === card.id && queueDue(s, q));
+  if (qi >= 0) s.queue.splice(qi, 1);
 
   const outcome = pickOutcome(c, s, ch);
   if (card.kind === 'chat') s.chat.push({ day: s.day, part: s.part, from: 'hero', text: ch.label });
