@@ -19,6 +19,14 @@ export function dayWord(n: number) {
   return d === 1 ? 'день' : d >= 2 && d <= 4 ? 'дня' : 'дней';
 }
 
+/** «Пока тебя не было»: story cards that resolved themselves while the player was away. */
+export const MISSED = {
+  title: 'Пока тебя не было',
+  lead: 'История шла своим ходом. Вот что случилось.',
+  day: (n: number) => `День ${n}`,
+  ok: 'Понятно',
+};
+
 /** Demo end screen. */
 export const DEMO_END = {
   title: 'Продолжение следует',

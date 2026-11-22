@@ -17,12 +17,13 @@ Write Day $ARGUMENTS of the demo.
 5. Every new crush situation in content/chat.json gets about 10 phrasing variants.
 6. Run npx tsc --noEmit, npm test and npm run check:content. Fix content errors until all three pass.
 7. Play the day at phone width (Playwright MCP if connected, otherwise npm run dev and describe the manual path).
-8. Update docs/progress.json and append the day's flag table to docs/DEMO_SCRIPT.md.
+8. Update docs/progress.json and append the day's flag table and its list of neutral choices to docs/DEMO_SCRIPT.md.
 </task>
 
 <constraints>
 - All player-facing text is Russian, in the tone of Day 1: light, short lines, «ёлочки» quotes. Reason and comment in English.
 - Every card has at least one choice with no cost and no requirements.
+- Every story card has exactly one choice marked `"neutral": true`: the calmest one, free, no requirements, smallest consequences. It is played automatically if the player skips the card, so it must not spend coins, write to the crush or start a course, and its outcome text must make sense in the «Пока тебя не было» summary. The check fails without it.
 - Every flag set on this day is either used on this day or listed with its planned payoff day.
 - Every earlier-day flag that the script pays off on this day is checked by a card.
 - The crush reacts indirectly and never names what the hero changed.
