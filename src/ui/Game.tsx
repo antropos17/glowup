@@ -9,7 +9,8 @@ import type { SaveStore } from '../engine/save';
 import { DAY_PARTS, type Card, type Choice, type DaySummary, type GameState, type LogEntry } from '../engine/types';
 import type { Look } from '../art/avatar';
 import { Body, Cost, Icon, Portrait } from './bits';
-import { duration, PART_ICON, PART_NAME, PART_NEXT } from './ru';
+import { timelapsePng } from './shareTimelapse';
+import { DEMO_END, duration, PART_ICON, PART_NAME, PART_NEXT } from './ru';
 
 type Tab = 'journal' | 'mirror' | 'chat' | 'feed' | 'shop';
 type Sheet =
@@ -26,6 +27,10 @@ export interface GameApi {
 
 const signed = (n: number) => (n > 0 ? `+${n}` : `−${Math.abs(n)}`);
 
+// TODO: replace with the real referral link once there is a backend.
+const REFERRAL_URL = 'https://example.com/30days-demo';
+const NOTIFY_KEY = 'glowup.notifyFull';
+
 export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; api?: (a: GameApi) => void }) {
   const fresh = (archetypeId = content.archetypes[0].id) =>
     newGame(content, { seed: (clock.now() % 2_147_483_647) | 0, now: clock.now(), tzOffsetMin: clock.tzOffsetMin(), archetypeId });
@@ -33,12 +38,13 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
   const [tab, setTab] = useState<Tab>('journal');
   const [sheet, setSheet] = useState<Sheet>(null);
   const [chatSeen, setChatSeen] = useState(state.chat.length);
+  const [endClosed, setEndClosed] = useState(false);
   const [, tick] = useState(0);
   const scroller = useRef<HTMLDivElement>(null);
 
   const commit = (s: GameState) => { store.save(s); setState(s); };
   const refresh = () => { setState((s) => { const n = syncClock(content, s, clock.now()); if (n !== s) store.save(n); return n; }); tick((n) => n + 1); };
-  const restart = (id?: string) => { store.clear(); commit(fresh(id)); setSheet(null); setTab('journal'); setChatSeen(0); };
+  const restart = (id?: string) => { store.clear(); commit(fresh(id)); setSheet(null); setTab('journal'); setChatSeen(0); setEndClosed(false); };
 
   useEffect(() => {
     api?.({ restart, refresh });
@@ -88,7 +94,11 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
   }
 
   if (state.verdict) return <Verdict state={state} onRestart={() => restart(state.archetypeId)} />;
-  if (state.demoOver) return <DemoEnd state={state} onRestart={() => restart(state.archetypeId)} />;
+  if (state.demoOver && !endClosed) {
+    return <DemoEnd state={state} onClose={() => { setSheet(null); setTab('journal'); setEndClosed(true); }} onRestart={() => restart(state.archetypeId)} />;
+  }
+  // after the demo end screen is closed the game stays open read-only
+  const frozen = !!state.demoOver;
 
   return (
     <div class="game">
@@ -101,7 +111,7 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
         <div class="parts" data-part={state.part}>
           <div class="parts-now">
             <span class="parts-name">{PART_NAME[state.part]}</span>
-            <span class="parts-next">{PART_NEXT[state.part]} через {next}</span>
+            {!frozen && <span class="parts-next">{PART_NEXT[state.part]} через {next}</span>}
           </div>
           <div class="track" aria-hidden="true">
             {DAY_PARTS.map((p, i) => (
@@ -166,14 +176,23 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
         </div>
       )}
 
+      {frozen && (
+        <div class="frozen" role="status">
+          <span>{DEMO_END.frozenNote}</span>
+          <button onClick={() => setEndClosed(false)}>{DEMO_END.restOpen}</button>
+        </div>
+      )}
+
       <nav class="nav">
         <NavBtn tab="mirror" cur={tab} set={setTab} icon="mirror" label="Зеркало" />
         <NavBtn tab="chat" cur={tab} set={setTab} icon="chat" label={her.name} dot={state.chat.length > chatSeen} />
-        <button class="plus" data-rest={dayClosed ? '' : undefined} onClick={() => { setTab('journal'); onPlus(); }} aria-label="Что дальше">
-          <Icon name="plus" size={30} stroke={2.8} />
-        </button>
+        {frozen
+          ? <button class="plus" data-rest="" disabled aria-label={DEMO_END.frozenNote}><Icon name="lock" size={26} stroke={2.4} /></button>
+          : <button class="plus" data-rest={dayClosed ? '' : undefined} onClick={() => { setTab('journal'); onPlus(); }} aria-label="Что дальше">
+              <Icon name="plus" size={30} stroke={2.8} />
+            </button>}
         <NavBtn tab="feed" cur={tab} set={setTab} icon="feed" label="Лента" />
-        <NavBtn tab="shop" cur={tab} set={setTab} icon="bag" label="Вещи" />
+        {frozen ? <span /> : <NavBtn tab="shop" cur={tab} set={setTab} icon="bag" label="Вещи" />}
       </nav>
 
       {unseen ? (
@@ -352,13 +371,16 @@ function Journal({ state }: { state: GameState }) {
   return <>{out}</>;
 }
 
-function Mirror({ state }: { state: GameState }) {
-  // кадры таймлапса: «до», конец каждого дня, сейчас
-  const frames: { label: string; look: Look }[] = [
+/** Timelapse frames: «до», the end of every played day and, optionally, now. */
+function timelapseFrames(state: GameState, withNow: boolean): { label: string; look: Look }[] {
+  return [
     { label: 'До', look: startLook(content, state) },
     ...state.summaries.map((d) => ({ label: `День ${d.day}`, look: d.look })),
-    { label: 'Сейчас', look: currentLook(content, state) },
+    ...(withNow ? [{ label: 'Сейчас', look: currentLook(content, state) }] : []),
   ];
+}
+
+function Timelapse({ frames }: { frames: { label: string; look: Look }[] }) {
   const [i, setI] = useState(frames.length - 1);
   const cur = frames[Math.min(i, frames.length - 1)];
   return (
@@ -367,6 +389,14 @@ function Mirror({ state }: { state: GameState }) {
         {frames.map((f, n) => <button aria-pressed={n === Math.min(i, frames.length - 1)} onClick={() => setI(n)}>{f.label}</button>)}
       </div>
       <div class="mirror-lg"><Body look={cur.look} title={cur.label} /></div>
+    </>
+  );
+}
+
+function Mirror({ state }: { state: GameState }) {
+  return (
+    <>
+      <Timelapse frames={timelapseFrames(state, true)} />
       <div class="rows">
         {Object.keys(state.startProblems).map((id) => {
           const def = content.problems.find((p) => p.id === id)!;
@@ -483,30 +513,80 @@ function Decisions({ state }: { state: GameState }) {
   );
 }
 
-function DemoEnd({ state, onRestart }: { state: GameState; onRestart: () => void }) {
-  const frames = [{ label: 'До', look: startLook(content, state) }, ...state.summaries.map((d) => ({ label: `День ${d.day}`, look: d.look }))];
+function readNotified() {
+  try { return localStorage.getItem(NOTIFY_KEY) === '1'; } catch { return false; }
+}
+
+function DemoEnd({ state, onClose, onRestart }: { state: GameState; onClose: () => void; onRestart: () => void }) {
+  const frames = timelapseFrames(state, false);
+  const [notified, setNotified] = useState(readNotified);
+  const [shareNote, setShareNote] = useState('');
   const last = state.summaries.at(-1);
   const gift = last?.gift ? content.items.find((i) => i.id === last.gift) : undefined;
+  const pct = chance(content, state);
+
+  function notify() {
+    try { localStorage.setItem(NOTIFY_KEY, '1'); } catch { /* storage unavailable: remember for this visit only */ }
+    setNotified(true);
+  }
+  async function share() {
+    if (typeof navigator.share === 'function') {
+      // attach the timelapse picture when the platform can share files, otherwise share the link alone
+      let files: File[] = [];
+      try {
+        const file = new File([await timelapsePng(frames)], 'timelapse.png', { type: 'image/png' });
+        if (navigator.canShare?.({ files: [file] })) files = [file];
+      } catch { /* no picture: share the link */ }
+      try { await navigator.share({ title: DEMO_END.shareTitle, text: DEMO_END.shareMessage, url: REFERRAL_URL, ...(files.length ? { files } : {}) }); }
+      catch { /* the player closed the share sheet */ }
+      return;
+    }
+    try { await navigator.clipboard.writeText(REFERRAL_URL); setShareNote(DEMO_END.shareCopied); }
+    catch { setShareNote(DEMO_END.shareFailed(REFERRAL_URL)); }
+  }
+
   return (
     <div class="game">
       <div class="screen verdict" style="padding-top:18px">
-        <h2>Продолжение следует</h2>
-        <p>Написан {content.balance.contentDays === 1 ? 'первый день' : `сценарий на ${content.balance.contentDays} дней`} из {content.balance.days}. Дальше игра пока не идёт.</p>
-        <div class="pair">
-          {frames.map((f) => <figure><Body look={f.look} title={f.label} /><figcaption>{f.label}</figcaption></figure>)}
-        </div>
+        <h2>{DEMO_END.title}</h2>
+        <p>{DEMO_END.written(content.balance.contentDays, content.balance.days)}</p>
+        <Timelapse frames={frames} />
+        <h3>{DEMO_END.heroHead}</h3>
         <div class="rows">
+          <div class="row"><Icon name="heart" /><div class="row-main">
+            <div class="row-title"><span>{DEMO_END.chance}</span><span class="num">{pct}%</span></div>
+            <div class="meter"><i style={{ width: `${pct}%` }} /></div>
+          </div></div>
           {Object.keys(state.startProblems).map((id) => {
             const def = content.problems.find((p) => p.id === id)!;
+            const from = Math.round(progress({ ...state, problems: state.startProblems }, id) * 100);
             const v = Math.round(progress(state, id) * 100);
-            return <div class="row"><Icon name={def.icon} /><div class="row-main"><div class="row-title"><span>{def.bar}</span><span class="num">{v}%</span></div><Line v={v} /></div></div>;
+            return (
+              <div class="row"><Icon name={def.icon} /><div class="row-main">
+                <div class="row-title"><span>{def.bar}</span><span class="num">{from}% → {v}%{v !== from ? ` (${signed(v - from)})` : ''}</span></div>
+                <Line v={v} />
+              </div></div>
+            );
           })}
         </div>
         {last && (last.played
           ? <div class="reward"><Icon name="coin" size={18} /><span>За день {last.day}: <b class="num">+{last.coins}</b> монет{gift ? ` и ${gift.title.toLowerCase()}` : ''}</span></div>
           : <div class="reward" data-miss>День {last.day} пропущен: награды нет.</div>)}
         <Decisions state={state} />
-        <button class="primary" onClick={onRestart}>Сыграть день заново</button>
+        <h3>{DEMO_END.shareHead}</h3>
+        <div class="share">
+          <p>{DEMO_END.shareText}</p>
+          <button class="quiet" onClick={share}>{DEMO_END.shareBtn}</button>
+          {shareNote && <p class="share-note" role="status">{shareNote}</p>}
+        </div>
+      </div>
+      <div class="end-foot">
+        {notified && <p class="end-note" role="status">{DEMO_END.notified}</p>}
+        <div class="end-actions">
+          <button onClick={notify}>{DEMO_END.notify}</button>
+          <button onClick={onClose}>{DEMO_END.close}</button>
+        </div>
+        <button class="end-restart" onClick={onRestart}>{DEMO_END.restart}</button>
       </div>
     </div>
   );
