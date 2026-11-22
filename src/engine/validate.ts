@@ -64,6 +64,15 @@ export function validateContent(c: Content): string[] {
     if (card.kind !== 'action' && !card.choices.some((ch) => !ch.requires?.length && !ch.cost?.energy && !ch.cost?.coins)) {
       err(w, 'нет бесплатного варианта без условий, игрок может упереться в стену');
     }
+    if (card.kind === 'story') {
+      // a skipped story card is resolved by its neutral choice, so there must be exactly one and it must always be available
+      const neutral = card.choices.filter((ch) => ch.neutral);
+      if (neutral.length !== 1) err(w, `story card needs exactly one choice with "neutral": true, found ${neutral.length}`);
+      for (const ch of neutral) {
+        if (ch.cost?.energy || ch.cost?.coins) err(`${w}, choice ${ch.id}`, 'the neutral choice must be free');
+        if (ch.requires?.length) err(`${w}, choice ${ch.id}`, 'the neutral choice must have no requirements');
+      }
+    }
     for (const ch of card.choices) {
       const wc = `${w}, вариант ${ch.id}`;
       ch.requires?.forEach((x) => cond(wc, x));

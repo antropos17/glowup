@@ -80,6 +80,12 @@ export interface Choice {
   cost?: { energy?: number; coins?: number };
   /** без выполнения условий вариант не показывается */
   requires?: Cond[];
+  /**
+   * The calmest option of a story card: free, no requirements, smallest consequences.
+   * The engine takes it when the player skipped the card and the day ended without them.
+   * Exactly one per story card.
+   */
+  neutral?: true;
   outcomes: Outcome[];
 }
 
@@ -222,7 +228,8 @@ export interface Content {
 export interface LogEntry {
   day: number;
   part: DayPart;
-  kind: 'story' | 'choice' | 'system' | 'miss';
+  /** auto: a story card the player skipped, resolved by its neutral choice */
+  kind: 'story' | 'choice' | 'system' | 'miss' | 'auto';
   title?: string;
   text: string;
 }
@@ -295,6 +302,8 @@ export interface GameState {
   /** уровни проблем на утро текущего дня, чтобы показать изменения за день */
   dayStart: Record<string, number>;
   summaries: DaySummary[];
+  /** story cards resolved without the player, grouped by day; shown once as «Пока тебя не было», then removed */
+  missed?: { day: number; items: { title: string; text: string }[] }[];
   /** день, который игрок уже закончил */
   closedDay?: number;
   /** последнее изменение шанса и его причина */

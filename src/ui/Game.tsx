@@ -3,14 +3,14 @@ import { content } from '../content';
 import { msToNextPart, type Clock } from '../engine/clock';
 import {
   actionsFor, buy, chance, choicesFor, choose, courseActive, crush, currentLook, dayEnergy, drawEvent, drawStory,
-  fill, hasEvents, hero, markSummarySeen, newGame, oddsFor, progress, soldOut, startLook, syncClock, useItem,
+  fill, hasEvents, hero, markMissedSeen, markSummarySeen, newGame, oddsFor, progress, soldOut, startLook, syncClock, useItem,
 } from '../engine/game';
 import type { SaveStore } from '../engine/save';
 import { DAY_PARTS, type Card, type Choice, type DaySummary, type GameState, type LogEntry } from '../engine/types';
 import type { Look } from '../art/avatar';
 import { Body, Cost, Icon, Portrait } from './bits';
 import { timelapsePng } from './shareTimelapse';
-import { DEMO_END, duration, PART_ICON, PART_NAME, PART_NEXT } from './ru';
+import { DEMO_END, duration, MISSED, PART_ICON, PART_NAME, PART_NEXT } from './ru';
 
 type Tab = 'journal' | 'mirror' | 'chat' | 'feed' | 'shop';
 type Sheet =
@@ -94,6 +94,9 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
   }
 
   if (state.verdict) return <Verdict state={state} onRestart={() => restart(state.archetypeId)} />;
+  // what the story did on its own comes first: before the day cards and before the demo end screen
+  const missed = state.missed?.length ? <Missed state={state} onClose={() => commit(markMissedSeen(state))} /> : null;
+  if (state.demoOver && !endClosed && missed) return <div class="game">{missed}</div>;
   if (state.demoOver && !endClosed) {
     return <DemoEnd state={state} onClose={() => { setSheet(null); setTab('journal'); setEndClosed(true); }} onRestart={() => restart(state.archetypeId)} />;
   }
@@ -195,7 +198,7 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
         {frozen ? <span /> : <NavBtn tab="shop" cur={tab} set={setTab} icon="bag" label="Вещи" />}
       </nav>
 
-      {unseen ? (
+      {missed ?? (unseen ? (
         <div class="scrim">
           <div class="sheet" role="dialog" aria-modal="true">
             <div class="grip" />
@@ -250,7 +253,31 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
             )}
           </div>
         </div>
-      )}
+      ))}
+    </div>
+  );
+}
+
+/** «Пока тебя не было»: skipped story cards and how each one resolved, grouped by day. Shown once. */
+function Missed({ state, onClose }: { state: GameState; onClose: () => void }) {
+  return (
+    <div class="scrim">
+      <div class="sheet" role="dialog" aria-modal="true">
+        <div class="grip" />
+        <div class="sheet-head"><h2>{MISSED.title}</h2></div>
+        <p class="row-sub">{MISSED.lead}</p>
+        {(state.missed ?? []).map((m) => (
+          <>
+            <div class="day-mark"><b>{MISSED.day(m.day)}</b></div>
+            <div class="rows">
+              {m.items.map((it) => (
+                <div class="row"><div class="row-main"><div class="row-title">{it.title}</div><div class="row-sub">{it.text}</div></div></div>
+              ))}
+            </div>
+          </>
+        ))}
+        <button class="primary" onClick={onClose}>{MISSED.ok}</button>
+      </div>
     </div>
   );
 }

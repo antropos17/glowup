@@ -4,10 +4,10 @@
   "verified": {
     "date": "2026-11-23",
     "typecheck": "pass",
-    "tests": "31/31",
+    "tests": "41/41",
     "check_content": "pass: 36 cards (25 story, 11 action), 1 archetype, 1 crush",
     "economy": "demo economy in items.json, side-jobs.json, balance.json; see docs/DEMO_SCRIPT.md section 5a",
-    "build": "pass: dist/index.html 325 kB",
+    "build": "pass: dist/index.html 327 kB",
     "playthrough": "merge of economy, demo end screen and Day 2 played in the in-app browser at 375x812 with the dev time-skip buttons: Day 1 to sleep, Day 2 with a plus action, the side job and a shop purchase, demo end screen, read-only mode, restart; end screen and one Day 2 card also at 320x568 and 390x844; no console errors, no horizontal overflow"
   },
   "demo_days": {
@@ -32,7 +32,6 @@
     "confirm demo assumptions (docs/DEMO_SCRIPT.md section 0); assumption 3 lists 5 problems with smoking, the engine has 6 (weight, skin, teeth, style, care, conf) and tracks smoking with flags",
     "heroine in the demo or Andrey only",
     "real payments in the demo or not",
-    "skipped part of day: card waits or resolves neutrally",
     "which events move the chance scale strongly and by how much",
     "red lines in docs/DESIGN.md section 12",
     "open questions in docs/DESIGN.md section 13"

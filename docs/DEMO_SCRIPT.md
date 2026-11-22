@@ -66,11 +66,23 @@ The chance scale: start 3%. It is computed from solved problems, `affinity` and 
 - Day ends on: mum writes «Кабинет не перепутай, там их два».
 
 ### Day 3. The wrong door («Не та дверь»)
+Design agreed with the author on 2026-11-23 (`DECISIONS.md` rows 9–12). "Decided" items are confirmed; "proposed" items came from the same discussion and are the default for `/write-day 3`.
+
 - Core: the polyclinic. An arrow with the number 12 on the floor by the lift. Two offices on the floor: 12 (the doctor) and 12А (a cosmetologist with a promo).
-- Fork: office 12 gives a 10-day care course, skin improves slowly and steadily. Office 12А gives a "promo cleaning" and skin is worse for two days.
-- Last day of doubled energy.
-- Alina: first like if two useful actions were done over three days. Otherwise silence.
-- Day ends on: the like notification, or meeting Aunt Zina in the stairwell.
+- When: the visit arrives in the morning if `d2_derm_slot` = `morning`, in the day part if it is `day`.
+- The door, step 1 (proposed): the wrong door is an honest temptation, not an attention quiz. Office 12 has a queue; 12А has a sign «Кожа. Без очереди». The choice of door is free.
+  - On time: Andrey gets into 12 almost at once.
+  - `d2_late` with the morning slot: he is late, the doctor took the next patient. Wait in the queue (costs energy, about 3) or walk into 12А now.
+  - `d2_asked_office`: the door of 12 shows the surname mum named, and the card text recalls «в соседнем какие-то акции», so 12А looks suspicious.
+- The door, step 2 (proposed): inside 12А the cosmetologist offers the "promo cleaning". The button carries honest odds in words (часто: раздражение на два дня, иногда: ничего). Andrey can stand up and leave; leaving costs time, the doctor is then reached only through the queue. No coins are taken for a harmful result without the odds shown.
+- Office 12 (decided): a 10-day care course, skin −3 each morning, as a modifier. If the acne patches from the Day 2 gift are on, the doctor says not to use them for now (proposed).
+- Office 12А: the promo cleaning makes skin worse for two days.
+- Skipped day (decided): if Day 3 is skipped entirely, Andrey went to office 12 and the course started. The neutral choice of the door card is "office 12".
+- Day 2 hangovers shown in the morning (proposed): `d2_tea` gives −2 energy with a line «Чай действует»; `d2_gym` gives +2 energy with a line.
+- Smoking (proposed): a craving card on the polyclinic porch while waiting. It closes the Day 2 gap: `smoke_free` advances or resets here, and a cigarette worsens `care`.
+- Alina (decided): the first like has a visible cause. With two or more useful actions over days 1–3 (`d1_run`, `d1_clean`, counter `useful`) an evening card offers to post a photo. Posted: the like arrives at night, `affinity` +5, reason line «+5: Алина лайкнула твоё фото». Vitya's comment under the photo can depend on `d1_said_coming`, `d1_joked`, `d1_lurked` (proposed).
+- Day ends on: the like notification, or, without a photo, meeting Aunt Zina in the stairwell (a different line with `d2_saw_note`).
+- Last day of doubled energy. The Day 3 day card says so in advance: «Завтра сил будет вдвое меньше» (proposed), so day 4 is not a surprise.
 
 ### Day 4. Normal energy («Обычная энергия»)
 - Core: energy is halved, the player has to prioritise.
@@ -118,6 +130,8 @@ The authoritative version is `content/cards/day1.json`. This section records int
 | K1-07 Feed | night | Miracle tea post (save), soda-and-lemon post (try) | `d1_tea_saved`, `d1_soda_teeth` |
 | K1-08 Read receipt | night | «Алина была в сети в 23:41. Ответа нет». The chance scale appears: 3% | none |
 | K1-09 Sleep | night | Sleep now, or phone until three | `d1_late` |
+
+Neutral choice per story card, taken when the card is skipped (free, no requirements, smallest consequences): K1-01 `lurk`, K1-02 `ok`, K1-03 `fine`, K1-04 `one`, K1-05 `close`, K1-06 `smoke`, K1-07a `scroll`, K1-07b `scroll`, K1-08 `ok`, K1-08c `ok`, K1-08b `ok`. A fully skipped Day 1 therefore runs K1-01, K1-02, K1-03, K1-05, K1-06, K1-07a, K1-07b, K1-08b and leaves `d1_lurked`, `d1_mirror`, `d1_mom_dark`, `d1_no_contact`, `d1_half`, `chance_shown`; Day 2 then goes through K2-01c and the evening call K2-06. K1-06 `half` (care +1) was chosen over `smoke` (care +2) by the builder; the authors may prefer `smoke` as "the usual".
 
 Day 1 card: hero frame, stat changes, 2–3 key decisions. Reward: 50 gold and gum (removes one cigarette craving once). Line for tomorrow: «Утром: сообщение от мамы».
 
@@ -208,7 +222,7 @@ The authoritative version is `content/cards/day2.json`. Written 2026-11-22; the 
 
 Plus actions on day 2 (day, evening, night): park run (4, counter `useful`), shower and fresh T-shirt (2, care −5, counter `useful`), brush teeth by the timer (1, teeth −1), lie on the sofa (0, conf +1). Sleep (night) closes the day; «Посидеть в телефоне до трёх» sets `d2_late` and −4 energy tomorrow.
 
-Neutral choice per story card (free, no requirements, smallest consequences), for the planned auto-resolve of a skipped day: K2-00 `up`, K2-01a `ok`, K2-01b `topic`, K2-01c `ok`, K2-02a `belly`, K2-02b `ignore`, K2-03 `home`, K2-04 `later`, K2-05a `delete`, K2-05b `scroll`, K2-06 `ok`, K2-07 `scroll`, K2-08 `ok`, K2-09 `ok`.
+Neutral choice per story card (free, no requirements, smallest consequences), taken by the auto-resolve of a skipped day (implemented 2026-11-23, marked `"neutral": true` in the file): K2-00 `up`, K2-01a `ok`, K2-01b `topic`, K2-01c `ok`, K2-02a `belly`, K2-02b `ignore`, K2-03 `home`, K2-04 `later`, K2-05a `delete`, K2-05b `scroll`, K2-06 `ok`, K2-07 `scroll`, K2-08 `ok`, K2-09 `ok`.
 
 Day 2 card: reward 50 gold and acne patches (`acne_patch`, skin −3 once). Line for tomorrow: «Завтра: поликлиника, третий этаж».
 
@@ -258,5 +272,5 @@ Banks of the same size are needed for: seen-no-reply, like, cold question, neutr
 1. Confirm or change the assumptions in section 0.
 2. Is a heroine needed in the demo from the start, or Andrey only?
 3. Should the demo include real payments?
-4. Skipped part of the day: the prototype makes the story card wait until the end of the day. Confirm or choose "resolve with a neutral option".
+4. Skipped part of the day: decided 2026-11-22 (`docs/DECISIONS.md` row 3) and built 2026-11-23. A story card waits until the end of its day, then resolves with its neutral option.
 5. The script says the chance scale "swings a lot"; the engine moves it by 1–2 points per action. Which events should move it strongly, and by how much?
