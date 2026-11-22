@@ -3,7 +3,7 @@ html, body { margin: 0; }
 body { background: #F4F7F8; color: #14233B; font-family: var(--body); font-size: 15px; line-height: 1.5; color-scheme: light; }
 .kit { max-width: 1180px; margin: 0 auto; padding: 22px 18px 60px; display: grid; grid-template-columns: 390px minmax(0, 1fr); gap: 34px; align-items: start; }
 .kit-left { position: sticky; top: 16px; display: flex; flex-direction: column; gap: 12px; }
-.phone { height: min(800px, calc(100vh - 150px)); min-height: 600px; border-radius: 34px; overflow: hidden; border: 8px solid #14233B; background: #14233B; }
+.phone { box-sizing: border-box; height: min(800px, calc(100vh - 150px)); min-height: 600px; border-radius: 34px; overflow: hidden; border: 8px solid #14233B; background: #14233B; }
 .phone > .game { border-radius: 26px; }
 .dev { background: #fff; border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
 .dev p { margin: 0; font-size: 13px; color: #55637B; }
@@ -62,4 +62,11 @@ body { background: #F4F7F8; color: #14233B; font-family: var(--body); font-size:
   .phone { height: 760px; max-height: 88vh; max-width: 420px; width: 100%; margin: 0 auto; }
   .lab { grid-template-columns: minmax(0, 1fr); }
   .files li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+}
+
+/* Phone widths: no decorative frame, the game takes the full screen width and height. */
+@media (max-width: 520px) {
+  .kit { padding-top: 0; }
+  .phone { width: auto; max-width: none; margin: 0 -16px; height: 100vh; height: 100svh; max-height: none; min-height: 0; border: 0; border-radius: 0; }
+  .phone > .game { border-radius: 0; }
 }
