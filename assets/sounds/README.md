@@ -1,8 +1,9 @@
 # Game sounds
 
 Eight short sounds, one per event. `src/ui/sound.ts` loads and plays them; `src/ui/Game.tsx` decides when.
-Nobody had listened to them when they were committed (2026-11-23): they were picked by numbers. Listen on the
-showcase page (`npm run dev`, block «Звуки») before trusting them.
+They were picked by numbers first; the author then listened to all of them on the showcase page
+(`npm run dev`, block «Звуки») on 2026-11-23, approved seven and replaced the card-open sound (a whoosh,
+`whoosh/sweep`) with the marimba note below, chosen by ear out of four candidates.
 
 | File | Event | Plays when |
 |---|---|---|
@@ -27,7 +28,7 @@ The same command with the same seed gives the same samples.
 
 ```
 earshot make "a very short soft neutral tap"            --sound tap/tone        --seed 2 --mono -o tap.wav
-earshot make "a soft short whoosh, a card sliding open" --sound whoosh/sweep    --seed 2 --mono -o open.wav
+earshot make "a soft warm single note"                   --sound notify/single   --theme soft --pitch C5 --seed 1 --mono -o open.wav
 earshot make "a soft gentle success"                    --sound success/fifth   --theme soft --seed 0 --mono -o up.wav
 earshot make "a soft gentle muted tone"                 --sound error/fall      --theme soft --pitch A4 --seed 0 --mono -o down.wav
 earshot make "a soft small coin"                        --sound coin/soft       --theme soft --seed 1 --mono -o coins.wav
@@ -42,7 +43,8 @@ Then, with ffmpeg and ffprobe on PATH and the Python of the earshot environment:
 python assets/sounds/finish.py <folder with the eight wav files>
 ```
 
-`finish.py` cuts each sound to its longest allowed length with an 80 ms fade out, brings it to −18 LUFS
+`finish.py` cuts each sound to its longest allowed length with an 80 ms fade out (the card-open note rings
+for 2 s as rendered and is cut to 0.45 s), brings it to −18 LUFS
 (momentary max, earshot's own meter) unless the peak would pass −3.6 dBFS, and writes mono mp3, 44.1 kHz,
 64 kbit/s. mp3 because it decodes in iOS Safari and Android Chrome alike.
 
@@ -51,7 +53,7 @@ python assets/sounds/finish.py <folder with the eight wav files>
 | File | earshot design | In its catalogue's words |
 |---|---|---|
 | `tap.mp3` | `tap/tone` | a soft rounded tactile tap, a key-like thock with a faint note in it |
-| `open.mp3` | `whoosh/sweep` | a straw broom swept once, soft and dark: a gentle swish of air |
+| `open.mp3` | `notify/single` | one clear ringing note (marimba, C5) |
 | `up.mp3` | `success/fifth` | two notes a fifth apart rising (marimba, C5) |
 | `down.mp3` | `error/fall` | two low notes falling by a minor third, a muted negative tone (marimba, A4) |
 | `coins.mp3` | `coin/soft` | one small high note with a faint octave above (marimba) |
@@ -61,16 +63,16 @@ python assets/sounds/finish.py <folder with the eight wav files>
 
 How they were chosen, without ears: three takes of two or three designs per event; a design had to keep most of
 its energy above 400 Hz (a phone speaker plays little below that, which ruled out the low finger thumps and
-`error/fall` at its default C4), then the take with the lowest crest factor (the softest attack) won. Two events
-never share a design shape: `up` rises, `down` and `dayend` fall but at different speeds, `coins` is one note,
-`message` and `away` are not marimba at all.
+`error/fall` at its default C4), then the take with the lowest crest factor (the softest attack) won. `up`
+rises, `down` and `dayend` fall but at different speeds, `message` and `away` are not marimba at all. `open` and
+`coins` are both a single marimba note; `open` is the plain C5, `coins` has an octave above it.
 
 ## Measured (the mp3 files, decoded again)
 
 | File | Length | Peak | Loudness (momentary max) | Size |
 |---|---|---|---|---|
 | `tap.mp3` | 0.11 s | −4.0 dBFS | −25.9 LUFS | 1 461 B |
-| `open.mp3` | 0.40 s | −5.7 dBFS | −18.4 LUFS | 3 760 B |
+| `open.mp3` | 0.45 s | −9.3 dBFS | −18.4 LUFS | 4 178 B |
 | `up.mp3` | 0.90 s | −7.0 dBFS | −18.4 LUFS | 7 731 B |
 | `down.mp3` | 0.39 s | −8.0 dBFS | −18.4 LUFS | 3 551 B |
 | `coins.mp3` | 0.70 s | −7.1 dBFS | −18.4 LUFS | 6 059 B |
@@ -78,7 +80,7 @@ never share a design shape: `up` rises, `down` and `dayend` fall but at differen
 | `dayend.mp3` | 1.28 s | −8.3 dBFS | −18.4 LUFS | 10 656 B |
 | `away.mp3` | 0.30 s | −4.0 dBFS | −18.9 LUFS | 2 924 B |
 
-Total 39 693 bytes; inlined as base64 they added 56 kB to `dist/index.html` (328 288 → 384 500 bytes).
+Total 40 111 bytes; inlined as base64 they take about 53.5 kB of `dist/index.html`.
 The tap reads 7 dB lower because the meter averages over 400 ms and the tap lasts 110 ms; its peak is held at
 the ceiling like the rest.
 

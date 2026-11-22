@@ -26,7 +26,7 @@ BITRATE = '64k'
 # name: (take file, longest length in seconds)
 SOUNDS = {
     'tap': ('tap.wav', 0.25),
-    'open': ('open.wav', 0.6),
+    'open': ('open.wav', 0.45),
     'up': ('up.wav', 0.9),
     'down': ('down.wav', 0.9),
     'coins': ('coins.wav', 0.7),
