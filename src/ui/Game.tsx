@@ -439,7 +439,13 @@ function Chat({ state }: { state: GameState }) {
         <div class="sticky">{content.tastes.find((t) => t.id === id)?.title}</div>
       ))}
       {!state.chat.length && <p class="empty">Переписки пока нет.</p>}
-      {state.chat.map((m) => <div class="bubble" data-from={m.from} data-quiet={m.status ? '' : undefined}>{m.text}</div>)}
+      {state.chat.map((m, i) => (
+        <>
+          {/* same day mark as the journal, so status lines of two evenings do not read as one */}
+          {m.day !== state.chat[i - 1]?.day && <div class="day-mark"><b>День {m.day}</b></div>}
+          <div class="bubble" data-from={m.from} data-quiet={m.status ? '' : undefined}>{m.text}</div>
+        </>
+      ))}
     </>
   );
 }
