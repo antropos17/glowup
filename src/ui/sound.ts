@@ -24,6 +24,7 @@ const files = new Map<SoundName, Promise<ArrayBuffer>>();
 const decoded = new Map<SoundName, Promise<AudioBuffer>>();
 let muted = readMuted();
 let lastAt = -Infinity;
+let asks = 0;
 
 function readMuted() {
   try { return localStorage.getItem(MUTE_KEY) === '1'; } catch { return false; }
@@ -65,6 +66,7 @@ function unlock() {
 export function play(name: SoundName) {
   // a muted or blocked sound still counts as this gesture's sound, so tap() does not stand in for it
   lastAt = performance.now();
+  asks += 1;
   const out = ctx;
   if (muted || !out || document.hidden) return;
   const asked = lastAt;
@@ -78,9 +80,12 @@ export function play(name: SoundName) {
   }).catch(() => { /* stays silent */ });
 }
 
-/** The plain tap, unless the same gesture has already played something more specific. */
-export function tap() {
-  if (performance.now() - lastAt > 60) play('tap');
+/** How many sounds have been asked for so far: a mark to compare against later. */
+export const played = () => asks;
+
+/** The plain tap, unless something more specific has been asked for since the mark taken when the gesture began. */
+export function tap(mark: number) {
+  if (asks === mark) play('tap');
 }
 
 if (typeof document !== 'undefined') {
