@@ -66,11 +66,23 @@ The chance scale: start 3%. It is computed from solved problems, `affinity` and 
 - Day ends on: mum writes «Кабинет не перепутай, там их два».
 
 ### Day 3. The wrong door («Не та дверь»)
+Design agreed with the author on 2026-11-23 (`DECISIONS.md` rows 9–12). "Decided" items are confirmed; "proposed" items came from the same discussion and are the default for `/write-day 3`.
+
 - Core: the polyclinic. An arrow with the number 12 on the floor by the lift. Two offices on the floor: 12 (the doctor) and 12А (a cosmetologist with a promo).
-- Fork: office 12 gives a 10-day care course, skin improves slowly and steadily. Office 12А gives a "promo cleaning" and skin is worse for two days.
-- Last day of doubled energy.
-- Alina: first like if two useful actions were done over three days. Otherwise silence.
-- Day ends on: the like notification, or meeting Aunt Zina in the stairwell.
+- When: the visit arrives in the morning if `d2_derm_slot` = `morning`, in the day part if it is `day`.
+- The door, step 1 (proposed): the wrong door is an honest temptation, not an attention quiz. Office 12 has a queue; 12А has a sign «Кожа. Без очереди». The choice of door is free.
+  - On time: Andrey gets into 12 almost at once.
+  - `d2_late` with the morning slot: he is late, the doctor took the next patient. Wait in the queue (costs energy, about 3) or walk into 12А now.
+  - `d2_asked_office`: the door of 12 shows the surname mum named, and the card text recalls «в соседнем какие-то акции», so 12А looks suspicious.
+- The door, step 2 (proposed): inside 12А the cosmetologist offers the "promo cleaning". The button carries honest odds in words (часто: раздражение на два дня, иногда: ничего). Andrey can stand up and leave; leaving costs time, the doctor is then reached only through the queue. No coins are taken for a harmful result without the odds shown.
+- Office 12 (decided): a 10-day care course, skin −3 each morning, as a modifier. If the acne patches from the Day 2 gift are on, the doctor says not to use them for now (proposed).
+- Office 12А: the promo cleaning makes skin worse for two days.
+- Skipped day (decided): if Day 3 is skipped entirely, Andrey went to office 12 and the course started. The neutral choice of the door card is "office 12".
+- Day 2 hangovers shown in the morning (proposed): `d2_tea` gives −2 energy with a line «Чай действует»; `d2_gym` gives +2 energy with a line.
+- Smoking (proposed): a craving card on the polyclinic porch while waiting. It closes the Day 2 gap: `smoke_free` advances or resets here, and a cigarette worsens `care`.
+- Alina (decided): the first like has a visible cause. With two or more useful actions over days 1–3 (`d1_run`, `d1_clean`, counter `useful`) an evening card offers to post a photo. Posted: the like arrives at night, `affinity` +5, reason line «+5: Алина лайкнула твоё фото». Vitya's comment under the photo can depend on `d1_said_coming`, `d1_joked`, `d1_lurked` (proposed).
+- Day ends on: the like notification, or, without a photo, meeting Aunt Zina in the stairwell (a different line with `d2_saw_note`).
+- Last day of doubled energy. The Day 3 day card says so in advance: «Завтра сил будет вдвое меньше» (proposed), so day 4 is not a surprise.
 
 ### Day 4. Normal energy («Обычная энергия»)
 - Core: energy is halved, the player has to prioritise.
