@@ -8,17 +8,11 @@ import coinsUrl from '../../assets/sounds/coins.mp3';
 import messageUrl from '../../assets/sounds/message.mp3';
 import dayendUrl from '../../assets/sounds/dayend.mp3';
 import awayUrl from '../../assets/sounds/away.mp3';
-// temporary: candidates for the card-open sound, heard on the showcase page only
-import open1Url from '../../assets/sounds/open-1.mp3';
-import open2Url from '../../assets/sounds/open-2.mp3';
-import open3Url from '../../assets/sounds/open-3.mp3';
-import open4Url from '../../assets/sounds/open-4.mp3';
 
 /** Sound name → file URL (a data URI in the single-file build). */
 export const SOUNDS = {
   tap: tapUrl, open: openUrl, up: upUrl, down: downUrl,
   coins: coinsUrl, message: messageUrl, dayend: dayendUrl, away: awayUrl,
-  open1: open1Url, open2: open2Url, open3: open3Url, open4: open4Url,
 } as const;
 export type SoundName = keyof typeof SOUNDS;
 

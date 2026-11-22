@@ -26,18 +26,13 @@ BITRATE = '64k'
 # name: (take file, longest length in seconds)
 SOUNDS = {
     'tap': ('tap.wav', 0.25),
-    'open': ('open.wav', 0.6),
+    'open': ('open.wav', 0.45),
     'up': ('up.wav', 0.9),
     'down': ('down.wav', 0.9),
     'coins': ('coins.wav', 0.7),
     'message': ('message.wav', 0.6),
     'dayend': ('dayend.wav', 1.45),
     'away': ('away.wav', 0.9),
-    # temporary: candidates for the card-open sound, until the author picks one
-    'open-1': ('open-1.wav', 0.45),
-    'open-2': ('open-2.wav', 0.45),
-    'open-3': ('open-3.wav', 0.45),
-    'open-4': ('open-4.wav', 0.45),
 }
 
 
