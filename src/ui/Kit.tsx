@@ -89,6 +89,8 @@ export function Kit() {
                 <select id="ctl-skin" value={look.skin} onChange={(e) => set('skin', +(e.target as HTMLSelectElement).value)}>{SKIN_TONES.map((_, i) => <option value={i}>{i + 1}</option>)}</select></label>
               <label class="ctl"><span>Цвет волос</span>
                 <select id="ctl-hairColor" value={look.hairColor} onChange={(e) => set('hairColor', (e.target as HTMLSelectElement).value)}>{Object.entries(HAIR_COLORS).map(([n, v]) => <option value={v}>{n}</option>)}</select></label>
+              <label class="ctl"><span>Раздражение после бритья</span>
+                <input id="ctl-razorBurn" type="checkbox" checked={look.razorBurn} onChange={(e) => set('razorBurn', (e.target as HTMLInputElement).checked)} /></label>
             </div>
           </div>
         </section>

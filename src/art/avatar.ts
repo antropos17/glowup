@@ -45,6 +45,8 @@ export interface Look {
   bottomColor: string;
   shoeColor: string;
   piercing?: boolean;
+  /** fresh shave without cream: a red flush over jaw, chin and upper lip */
+  razorBurn: boolean;
 }
 
 export const SKIN_TONES = ['#F7D6BE', '#EDBE98', '#D7A077', '#AD7650', '#74492F'];
@@ -57,7 +59,7 @@ export const DEFAULT_LOOK: Look = {
   gender: 'm', skin: 1, weight: 50, acne: 0, hair: 'short', hairColor: HAIR_COLORS.brown,
   hairCare: 100, glasses: 'none', teeth: 100, facial: 'none', posture: 100, mood: 70,
   tired: 0, neckline: 'crew', topColor: '#2F6FDE', clothesCare: 100,
-  bottom: 'jeans', bottomColor: '#33456B', shoeColor: '#F4F6F8',
+  bottom: 'jeans', bottomColor: '#33456B', shoeColor: '#F4F6F8', razorBurn: false,
 };
 
 // ---------- помощники ----------
@@ -260,11 +262,30 @@ function glasses(look: Look, g: Geo) {
     `<path d="M 95 101 Q 100 98 105 101 M 63 101 L ${earL} 98 M 137 101 L ${earR} 98" stroke="#6B7384" stroke-width="2" fill="none" stroke-linecap="round"/>`;
 }
 
+/** The zone a beard covers: jaw, chin and upper lip. Shared by facial hair and razor burn. */
+function jawPath(g: Geo) {
+  const { cw, jw, chinY } = g;
+  return `M ${100 - cw + 2} 124 C ${100 - cw + 2} 138 ${100 - jw - 4} 146 ${100 - jw + 1} 151 C ${100 - jw + 9} 161 ${100 - 17} ${chinY + 1} 100 ${chinY + 1} C ${100 + 17} ${chinY + 1} ${100 + jw - 9} 161 ${100 + jw - 1} 151 C ${100 + jw + 4} 146 ${100 + cw - 2} 138 ${100 + cw - 2} 124 C ${100 + cw - 12} 140 118 130 100 130 C 82 130 ${100 - cw + 12} 140 ${100 - cw + 2} 124 Z`;
+}
+
+const BURN = '#E35D7C', BURN_OPACITY = '.3', BURN_NICK = '#C2365C';
+
+/**
+ * Irritation after a dry shave: a flat pink flush over the shaved zone plus a few short nicks.
+ * Deliberately unlike acne (round orange-red spots on cheeks and forehead).
+ */
+function razorBurn(look: Look, g: Geo) {
+  if (!look.razorBurn || look.gender === 'f') return '';
+  const { jw, chinY } = g;
+  return `<path d="${jawPath(g)}" fill="${BURN}" opacity="${BURN_OPACITY}"/>` +
+    `<path d="M ${100 - jw + 5} 150 l 4 2.5 M ${100 + jw - 6} 147 l -3.5 3 M 91 ${chinY - 8} l 4 1.5 M 109 ${chinY - 5} l 3 -2" stroke="${BURN_NICK}" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".7"/>`;
+}
+
 function facial(look: Look, g: Geo) {
   if (look.facial === 'none' || look.gender === 'f') return '';
   const c = darker(look.hairColor, 0.1);
-  const { cw, jw, chinY } = g;
-  const jaw = `M ${100 - cw + 2} 124 C ${100 - cw + 2} 138 ${100 - jw - 4} 146 ${100 - jw + 1} 151 C ${100 - jw + 9} 161 ${100 - 17} ${chinY + 1} 100 ${chinY + 1} C ${100 + 17} ${chinY + 1} ${100 + jw - 9} 161 ${100 + jw - 1} 151 C ${100 + jw + 4} 146 ${100 + cw - 2} 138 ${100 + cw - 2} 124 C ${100 + cw - 12} 140 118 130 100 130 C 82 130 ${100 - cw + 12} 140 ${100 - cw + 2} 124 Z`;
+  const { jw, chinY } = g;
+  const jaw = jawPath(g);
   if (look.facial === 'beard') return `<path d="${jaw}" fill="${c}"/>`;
   if (look.facial === 'stubble') return `<path d="${jaw}" fill="${c}" opacity=".24"/>`;
   // patchy: клочки
@@ -299,7 +320,7 @@ function head(look: Look, g: Geo) {
   const nose = `<path d="M 98 110 Q 94.5 121 100 123 Q 103.5 124 105 121.5" stroke="${shade}" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
   return {
     back: h.back,
-    main: `${ears}<path d="${facePath(g)}" fill="${skin}"/>${chin2}${hollow}${blush}${acne}${facial(look, g)}` +
+    main: `${ears}<path d="${facePath(g)}" fill="${skin}"/>${chin2}${hollow}${blush}${acne}${razorBurn(look, g)}${facial(look, g)}` +
       `${eyes(look, skin, shade)}${nose}${mouth(look, shade)}${h.front}${glasses(look, g)}`,
     skin, shade,
   };
