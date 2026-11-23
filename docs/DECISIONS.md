@@ -2,6 +2,16 @@
 
 Decisions confirmed by Ruslan in the coordinator chat. They override "proposed" and "open" items in `DESIGN.md`, `DEMO_SCRIPT.md` and `HANDOFF.md`. Newest first.
 
+## 2026-11-23 — Day 5 «Соседка»
+
+| # | Question | Decision |
+|---|---|---|
+| 17 | What the cream from Sadovaya gives (closes row 12) | It is a shaving cream for problem skin, not a skin course. It does not treat acne. With it the Day 7 shave goes cleanly; without it shaving over acne leaves the face irritated before the meeting in «Зерно». The `cream_zina` item in `content/items.json` (today: skin −2 for 10 days) is rewritten when Day 5 is written. |
+| 18 | The dentist | The cleaning is free, by the insurance policy, and costs energy only. It is available only to the player who booked on Day 1. If Day 5 is skipped entirely, Andrey went to the cleaning himself, as he went to the doctor on a skipped Day 3. |
+| 19 | Alina's night message | One button, «Ответишь утром». There is no reply at night; the reply belongs to Day 6. |
+
+The full Day 5 design is in `DEMO_SCRIPT.md`, section 3. Items there marked "proposed" came from the same discussion and were not objected to; rows 17–19 were confirmed explicitly.
+
 ## 2026-11-23 — Day 4 «Обычная энергия»
 
 | # | Question | Decision |
@@ -20,7 +30,7 @@ The full Day 4 design is in `DEMO_SCRIPT.md`, section 3. Items there marked "pro
 | 9 | Alina's first like | It has a visible cause. With two or more useful actions over days 1–3 an evening card offers to post a photo; if Andrey posts, the like arrives at night and the reason line reads «+5: Алина лайкнула твоё фото». It never arrives by a hidden rule. |
 | 10 | Day 3 skipped entirely | Andrey went to office 12 by himself and the doctor's course started. The skip is already paid for by the regress of the problems. |
 | 11 | Strength of the doctor's course | Skin −3 each morning for 10 days (the demo sees 4 of them, −12 by day 7). |
-| 12 | Cream from Sadovaya (`cream_zina`, day 5) | It must give something other than a second skin course of the same kind. What exactly is open; decide when Day 5 is written. Its current effect in `content/items.json` (skin −2 for 10 days) is to be replaced then. |
+| 12 | Cream from Sadovaya (`cream_zina`, day 5) | It must give something other than a second skin course of the same kind. What exactly is open; decide when Day 5 is written. Its current effect in `content/items.json` (skin −2 for 10 days) is to be replaced then.  Closed by row 17. |
 
 The full Day 3 design is in `DEMO_SCRIPT.md`, section 3. Items there marked "proposed" came from the same discussion and were not objected to, but only rows 9–12 were confirmed explicitly.
 

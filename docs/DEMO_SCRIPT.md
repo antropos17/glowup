@@ -108,10 +108,24 @@ Design agreed with the author on 2026-11-23 (`DECISIONS.md` rows 13–16). "Deci
 - Day ends on: Vitya posts barbecue photos in the class chat.
 
 ### Day 5. The neighbour («Соседка»)
-- Core: Aunt Zina asks for help with bags or a shelf. If helped, she names the cream and the pharmacy on Sadovaya.
-- Pharmacy: the neighbour's cream (cheap, the real solution) and a premium cream (pricier, effect and cap stated).
-- Teeth: dental cleaning if booked on Day 1.
-- Alina: first cold message about the reunion.
+Design agreed with the author on 2026-11-23 (`DECISIONS.md` rows 17–19). "Decided" items are confirmed; "proposed" items came from the same discussion and are the default for `/write-day 5`.
+
+- Core: Aunt Zina asks for help with bags or a shelf. Kindness costs energy, as temptations did on Day 4 (proposed prices: bags 2, shelf 4; energy is 10 a day).
+- The cream from Sadovaya (decided): a shaving cream for problem skin. Aunt Zina used to buy it for her late husband («у него тоже всё лицо цвело»). It does not treat acne. Its payoff is on Day 7: with the cream the shave goes cleanly, without it shaving over acne leaves the face red before «Зерно». Honest `limits` line: «Прыщи не лечит. С ним бритьё не раздражает кожу». It is no longer a skin course; the doctor's course (Day 3) and the shop's «Сияние» remain the two skin treatments.
+- How Andrey gets the cream (proposed):
+  - Helped Aunt Zina: she gives him her spare tube for free and names the pharmacy.
+  - Did not help, but saw the note (`d2_saw_note`) or asked about it (`d3_asked_note`): he goes to the pharmacy himself and pays 40 coins. Attention pays off.
+  - Did not help and knows nothing: no cream today.
+  - `d1_refused_pies` or `d4_pies_held`: Aunt Zina greets him with «мать говорит, ты за себя взялся» and asks for the smaller favour.
+- Pharmacy: the shaving cream (40 coins) and the premium skin cream already sold in the shop (effect and cap stated). With `d3_course` the pharmacist knows the doctor's course is running and does not sell a second skin course on top.
+- Teeth (decided): the dental cleaning is free, by the insurance policy, and costs energy only. Only for the player who booked on Day 1 (`d1_dentist_booked`). With `d1_soda_teeth` the dentist grumbles («Содой тёрли? Не надо так») and the cleaning gives less. A player who did not book cannot fix teeth inside the demo except by brushing: an honest consequence of Day 1 (proposed: one line says so, without rubbing it in).
+- Alina (proposed structure): her first message is built from two parts, so the variants do not multiply.
+  - The opening depends on Day 1: `d1_wrote_plain` «Видела твоё сообщение, замоталась»; `d1_wrote_flirty` dry, no mention of it (it pays off on Day 6); `d1_liked_only` or `d1_no_contact` «Оксана просила узнать, ты идёшь?»; plus one line by the class chat: `d1_said_coming` «Видела, ты написал, что придёшь», `d1_lurked` «Ты один в чате не ответил».
+  - The question about the reunion comes from a bank of about 10 phrasings.
+  - Earlier likes and reactions (`d2_liked_photo`, `d3_alina_liked`, `d4_alina_reacted`) do not change the text: they were already paid through `affinity`, and she never names what changed. `d2_wrote_zerno` may add a short answer to «Классное место!».
+  - The first message gives `affinity` +6 to everyone (decision 4); the cause is visible: she wrote.
+- Night (decided): the message comes late and has one button, «Ответишь утром». The reply belongs to Day 6.
+- Skipped day (decided for the dentist, proposed for the rest): Andrey went to the cleaning himself if it was booked; he greeted Aunt Zina and did not help, so no cream; the message from Alina still arrives and waits.
 - Day ends on: her message waits for a reply until morning.
 
 ### Day 6. The first conversation («Первый разговор»)
@@ -122,7 +136,7 @@ Design agreed with the author on 2026-11-23 (`DECISIONS.md` rows 13–16). "Deci
 - Day ends on: «Ладно, мне пора. Увидимся на встрече, наверное».
 
 ### Day 7. The chance meeting («Случайная встреча»)
-- Morning: if the beard hint was received, the choice "shave or keep".
+- Morning: if the beard hint was received, the choice "shave or keep". With the shaving cream from Sadovaya (Day 5) the shave goes cleanly; without it the face is red and irritated for the meeting (decision 17).
 - Day: Andrey walks into the coffee shop «Зерно» and runs into Alina.
 - Scene: a look, a greeting, 2–3 choices. Flags from the whole week fire: smoked today, skin, beard, clothes, confidence, the barbecue, the first message.
 - Alina reacts indirectly: «Ты какой-то другой. Прикольно выглядишь».
@@ -204,7 +218,7 @@ Spending (total 720):
 |---|---|---|---|
 | `gym_pass` Абонемент в зал | 150 | +2 energy each morning and weight −1 each morning, 7 days | no |
 | `cream_premium` Крем «Сияние» | 220 | skin −3 each morning, 5 days (−15 total) | yes |
-| `cream_zina` Крем с Садовой | 40, paid in the Day 5 pharmacy card | skin −2 each morning, 10 days (−20 total) | not sold in the shop |
+| `cream_zina` Крем с Садовой | 40 in the Day 5 pharmacy card, or free from Aunt Zina | today in `items.json`: skin −2 each morning, 10 days. To be rewritten with Day 5 (decision 17): a shaving cream, no skin course, pays off in the Day 7 shave | not sold in the shop |
 | `frame` Новая оправа | 150 | style −12, conf −2, round glasses | yes |
 | `haircut` Стрижка у барбера | 70 + 2 energy | care −6, conf −2 | yes |
 | `shirt` Новая рубашка | 90 | style −6, blue shirt | yes |
