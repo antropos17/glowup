@@ -152,10 +152,17 @@ Design agreed with the author on 2026-11-23 (`DECISIONS.md` rows 17–19). "Deci
 
 ### Day 7. The chance meeting («Случайная встреча»)
 - Morning (decided, `DECISIONS.md` row 24): the choice "shave or keep" is open to everyone; the Day 6 beard hint (`d6_beard_hint`) only tells the player what Alina likes. With the shaving cream from Sadovaya (Day 5) the shave goes cleanly; without it the face is red and irritated for the meeting (decision 17).
-- Day: Andrey walks into the coffee shop «Зерно» and runs into Alina.
-- Scene: a look, a greeting, 2–3 choices. Flags from the whole week fire: smoked today, skin, beard, clothes, confidence, the barbecue, the first message.
-- Alina reacts indirectly: «Ты какой-то другой. Прикольно выглядишь».
-- Evening: her message in one of three tones. Then «Продолжение следует».
+- Morning, the shave card: three buttons. With `cream_zina`: clean shave, flag `shaved`, effect `look: { facial: "none" }`. Without the cream: `shaved` too, `look: { facial: "none", razorBurn: true }`, a flag for the red face, confidence slightly worse. Keep the stubble: the neutral choice, nothing changes. The card quotes «Борода вообще не моё» only for a player with `d6_beard_hint`. The cream is not sold this morning. `d6_late` puts «Проспал» before the shave.
+- Day, the craving at the door of «Зерно» (decided, row 30): it replaces the night balcony card of earlier days. Hold, gum, quarter (for the player on that path) or smoke; the result is the "smoked today" check of the scene.
+- Day, the meeting (decided, row 29): everyone meets Alina; nobody can skip it. The entrance text has two variants: he knew the place (`d2_zerno_known`, or he heard the Saturday line on Day 6) or he walked in by chance.
+- Scene, three choices:
+  1. The entrance. She sits at the window table. «Подойти и поздороваться» / «Кивнуть и встать в очередь» (neutral) / «Сделать вид, что не заметил» (minus).
+  2. Her line and his answer (decided, row 32). The line depends on the number of visible changes: 0–1 «О, привет. Ты тут какими судьбами?»; 2–3 «Ты какой-то другой»; 4 or more «Ты какой-то другой. Прикольно выглядишь». His answer: a short «Спасибо» with a question back (plus), a shrug (0, neutral), a long explanation about the doctor and the gym (minus). Thresholds are confirmed after the session counts the share of players per group on engine paths.
+  3. One thread from the week, by priority (decided, row 31): «Ты мне, кстати, странное писал» for `d1_wrote_flirty` with `d6_reply` = `dry` or `excuse` (answers as in K6-06f: own +3, again −5, shrug 0); «Петь не будешь?» for `d6_reply` = `joke`; «Видела вас у Вити» for `d4_went`; otherwise a neutral question about the class reunion.
+- Visible changes (she never names them): clean shave (`shaved` without razor burn), clothes (`bought_shirt` or `bought_frame`), teeth (`d5_cleaned`), skin (`d3_course`), no tobacco smell (did not smoke today). The trendy look (`d6_trend`) without a bought shirt is not counted; she glances at the jacket, no penalty.
+- Evening (decided, row 33): her message in one of three tones, warm, even or dry, chosen only by the scene (the entrance and the two answers). One button, no reply. Then «Продолжение следует».
+- Affinity range of the day: about −6 to +10 (`DECISIONS.md` row 4).
+- Skipped day (decided, row 34): the meeting happened by itself. Andrey did not shave, nodded, exchanged a few words; the even tone in the evening; no bonus, no penalty.
 - Demo end screen: 7-day timelapse, stats, good and bad decisions, a card, a referral link. Buttons «Сообщить о полной версии» and «Закрыть» are equal. No shop on this screen.
 
 ## 4. Day 1 design (implemented)

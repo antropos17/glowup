@@ -2,6 +2,19 @@
 
 Decisions confirmed by Ruslan in the coordinator chat. They override "proposed" and "open" items in `DESIGN.md`, `DEMO_SCRIPT.md` and `HANDOFF.md`. Newest first.
 
+## 2026-11-23 — Day 7 «Случайная встреча»
+
+| # | Question | Decision |
+|---|---|---|
+| 29 | Who meets Alina in «Зерно» | Everyone. Only the text of the entrance differs: Andrey knew it is her place on Saturdays (`d2_zerno_known`, or he heard «по субботам в «Зерне»» on Day 6) or he walked in by chance. There is no way to opt out of the meeting. |
+| 30 | The craving | It moves from the night balcony to the door of the coffee shop, in the day part, before the scene. "Smoked today" becomes a choice made a minute before the meeting. The gum from the Day 6 reward works here. |
+| 31 | The third choice of the scene | One thread from the week per player, by priority: 1) «Ты мне, кстати, странное писал» for the flirty opener who answered dryly or with the excuse on Day 6 (closes row 27), with the same three answers as K6-06f; 2) «Петь не будешь?» after the Day 6 joke; 3) the barbecue («Видела вас у Вити») for `d4_went`; 4) otherwise a neutral question about the class reunion. |
+| 32 | Alina's line in the scene | It depends on the number of visible changes: 0–1 a plain greeting, 2–3 «Ты какой-то другой», 4 or more «Ты какой-то другой. Прикольно выглядишь». The thresholds are confirmed after the Day 7 session reports, from engine paths, what share of players lands in each group (as the joke threshold in row 20). |
+| 33 | Her evening message | One of three tones (warm, even, dry), chosen only by the scene (the entrance and the two answers), not by the total chance. One button, no reply; then «Продолжение следует». |
+| 34 | Day 7 skipped entirely | The meeting happened by itself: Andrey did not shave, nodded, exchanged a few words. In the evening the even tone. No bonus and no penalty. |
+
+Visible changes counted for row 32 (proposed in the same discussion, not objected to): a clean shave (`shaved` without razor burn), clothes (`bought_shirt` or `bought_frame`), teeth (`d5_cleaned`), skin (`d3_course`), no smell of tobacco (did not smoke today). The trendy look (`d6_trend`) without a bought shirt is not a change: she glances at the jacket, no penalty. The morning shave has three buttons: with the cream (clean), without it (shaved, razor burn, slightly worse confidence), keep the stubble (neutral). The cream is not sold on the morning of Day 7. The shave is shown on the portrait by the `look` effect (`facial: "none"`, and `razorBurn: true` without the cream; drawing merged in 080a763). The day's affinity range is about −6 to +10 (row 4).
+
 ## 2026-11-23 — Day 6 «Первый разговор»
 
 | # | Question | Decision |
