@@ -34,6 +34,9 @@ export const DAY_CARD = {
   noReward: 'Награды за пропущенный день нет.',
 };
 
+/** Mirror: days without a cigarette. Shown only from 1 day on. */
+export const SMOKE_FREE = (n: number) => `Без сигарет: ${n} ${dayWord(n)}`;
+
 /** Sound toggle in the top bar and the sound list on the showcase page. */
 export const SOUND = {
   turnOn: 'Включить звук',

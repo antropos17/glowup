@@ -10,7 +10,7 @@ import { DAY_PARTS, type Card, type Choice, type DaySummary, type GameState, typ
 import type { Look } from '../art/avatar';
 import { Body, Cost, Icon, Portrait } from './bits';
 import { timelapsePng } from './shareTimelapse';
-import { DAY_CARD, DEMO_END, duration, MISSED, PART_ICON, PART_NAME, PART_NEXT, SOUND } from './ru';
+import { DAY_CARD, DEMO_END, duration, MISSED, PART_ICON, PART_NAME, PART_NEXT, SMOKE_FREE, SOUND } from './ru';
 import { isMuted, play, played, setMuted, tap } from './sound';
 
 type Tab = 'journal' | 'mirror' | 'chat' | 'feed' | 'shop';
@@ -462,10 +462,12 @@ function Timelapse({ frames }: { frames: { label: string; look: Look }[] }) {
 }
 
 function Mirror({ state }: { state: GameState }) {
+  const smokeFree = state.counters.smoke_free ?? 0;
   return (
     <>
       <Timelapse frames={timelapseFrames(state, true)} />
       <div class="rows">
+        {smokeFree >= 1 && <div class="row"><Icon name="check" /><div class="row-main"><div class="row-title">{SMOKE_FREE(smokeFree)}</div></div></div>}
         {Object.keys(state.startProblems).map((id) => {
           const def = content.problems.find((p) => p.id === id)!;
           const v = Math.round(progress(state, id) * 100);
