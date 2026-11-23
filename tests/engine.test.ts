@@ -468,7 +468,7 @@ describe('переход в следующий день', () => {
     expect(s.problems.care).toBeGreaterThan(65);
     expect(s.coins).toBe(100);
     expect(s.summaries[0].played).toBe(false);
-    expect(s.log.at(-1)!.kind).toBe('miss');
+    expect(s.log.at(-1)).toMatchObject({ kind: 'miss', text: 'Без тебя Андрей провёл день как раньше.' });
   });
   it('a skipped day card lists every bar that got worse, even when the percent stays at 0', () => {
     // Day 1 skipped: every level rises above its start, so "percent solved" is 0 before and after
