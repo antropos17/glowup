@@ -268,17 +268,18 @@ function jawPath(g: Geo) {
   return `M ${100 - cw + 2} 124 C ${100 - cw + 2} 138 ${100 - jw - 4} 146 ${100 - jw + 1} 151 C ${100 - jw + 9} 161 ${100 - 17} ${chinY + 1} 100 ${chinY + 1} C ${100 + 17} ${chinY + 1} ${100 + jw - 9} 161 ${100 + jw - 1} 151 C ${100 + jw + 4} 146 ${100 + cw - 2} 138 ${100 + cw - 2} 124 C ${100 + cw - 12} 140 118 130 100 130 C 82 130 ${100 - cw + 12} 140 ${100 - cw + 2} 124 Z`;
 }
 
-const BURN = '#E35D7C', BURN_OPACITY = '.3', BURN_NICK = '#C2365C';
-
 /**
- * Irritation after a dry shave: a flat pink flush over the shaved zone plus a few short nicks.
- * Deliberately unlike acne (round orange-red spots on cheeks and forehead).
+ * Irritation after a dry shave: skin-toned reddening over the shaved zone that fades out
+ * towards the cheeks, so it has no upper edge. Deliberately unlike acne (round spots).
+ * The gradient defs are identical for every look, so one shared id is safe on a page
+ * with several portraits.
  */
-function razorBurn(look: Look, g: Geo) {
+function razorBurn(look: Look, g: Geo, skin: string) {
   if (!look.razorBurn || look.gender === 'f') return '';
-  const { jw, chinY } = g;
-  return `<path d="${jawPath(g)}" fill="${BURN}" opacity="${BURN_OPACITY}"/>` +
-    `<path d="M ${100 - jw + 5} 150 l 4 2.5 M ${100 + jw - 6} 147 l -3.5 3 M 91 ${chinY - 8} l 4 1.5 M 109 ${chinY - 5} l 3 -2" stroke="${BURN_NICK}" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".7"/>`;
+  const c = mix(skin, '#C93F4C', 0.62);
+  return `<linearGradient id="razorBurnFade" x1="0" y1="0" x2="0" y2="1">` +
+    `<stop offset=".1" stop-color="${c}" stop-opacity="0"/><stop offset=".55" stop-color="${c}" stop-opacity=".45"/><stop offset="1" stop-color="${c}" stop-opacity=".7"/>` +
+    `</linearGradient><path d="${jawPath(g)}" fill="url(#razorBurnFade)"/>`;
 }
 
 function facial(look: Look, g: Geo) {
@@ -320,7 +321,7 @@ function head(look: Look, g: Geo) {
   const nose = `<path d="M 98 110 Q 94.5 121 100 123 Q 103.5 124 105 121.5" stroke="${shade}" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
   return {
     back: h.back,
-    main: `${ears}<path d="${facePath(g)}" fill="${skin}"/>${chin2}${hollow}${blush}${acne}${razorBurn(look, g)}${facial(look, g)}` +
+    main: `${ears}<path d="${facePath(g)}" fill="${skin}"/>${chin2}${hollow}${blush}${acne}${razorBurn(look, g, skin)}${facial(look, g)}` +
       `${eyes(look, skin, shade)}${nose}${mouth(look, shade)}${h.front}${glasses(look, g)}`,
     skin, shade,
   };
