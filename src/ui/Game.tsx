@@ -655,7 +655,7 @@ function DemoEnd({ state, onClose, onRestart }: { state: GameState; onClose: () 
         </div>
         {last && (last.played
           ? <div class="reward"><Icon name="coin" size={18} /><span>За день {last.day}: <b class="num">+{last.coins}</b> монет{gift ? ` и ${gift.title.toLowerCase()}` : ''}</span></div>
-          : <div class="reward" data-miss>День {last.day} пропущен: награды нет.</div>)}
+          : <div class="reward" data-miss="calm">День {last.day} пропущен: награды нет.</div>)}
         <Decisions state={state} />
         <h3>{DEMO_END.shareHead}</h3>
         <div class="share">

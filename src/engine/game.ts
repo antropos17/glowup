@@ -241,19 +241,12 @@ function closeDay(c: Content, s: GameState) {
     if (info?.gift) { gift = info.gift; s.items[gift] = (s.items[gift] ?? 0) + 1; }
   } else {
     s.streak = 0;
-    const worse: string[] = [];
     for (const def of c.problems) {
       if (s.problems[def.id] === undefined || def.regress <= 0) continue;
-      const before = s.problems[def.id];
-      s.problems[def.id] = clamp(before + def.regress, 0, 100);
-      if (s.problems[def.id] > before) worse.push(def.bar.toLowerCase());
+      s.problems[def.id] = clamp(s.problems[def.id] + def.regress, 0, 100);
     }
-    s.log.push({
-      day: s.day, part: 'night', kind: 'miss',
-      text: worse.length
-        ? `Без тебя ${hero(c, s).name} провёл день как раньше. Стало хуже: ${worse.join(', ')}.`
-        : `Без тебя ${hero(c, s).name} провёл день как раньше.`,
-    });
+    // one calm line: the day card and the bars already show what slipped
+    s.log.push({ day: s.day, part: 'night', kind: 'miss', text: `Без тебя ${hero(c, s).name} провёл день как раньше.` });
   }
   const picks = s.history.filter((h) => h.day === s.day)
     .sort((a, b) => Math.abs(b.chanceDelta) - Math.abs(a.chanceDelta)).slice(0, 3)
