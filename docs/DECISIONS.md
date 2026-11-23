@@ -2,6 +2,18 @@
 
 Decisions confirmed by Ruslan in the coordinator chat. They override "proposed" and "open" items in `DESIGN.md`, `DEMO_SCRIPT.md` and `HANDOFF.md`. Newest first.
 
+## 2026-11-23 — Day 6 «Первый разговор»
+
+| # | Question | Decision |
+|---|---|---|
+| 20 | The reply to Alina | Three buttons, each label is the exact message Andrey sends. Dry («Да, записывай.»): the chance does not move. Plain with a question back: +5. The third depends on confidence: with enough confidence a short joke, +8; with low confidence a long excuse, −5. There is no «не приду» and no evasive answer. The confidence threshold is chosen after the Day 6 session reports, from engine paths, what share of players has the joke open. |
+| 21 | When the conversation happens | It is stretched over the day. Andrey replies in the morning and sees «прочитано»; Alina answers in the evening, with a short live exchange that ends on «Ладно, мне пора. Увидимся на встрече, наверное». |
+| 22 | Day 6 skipped entirely | Andrey sent the dry reply himself; in the evening she writes «Ок, записала» and the goodbye. No bonus and no penalty. This is an exception to "a neutral choice does not write to the crush": a day of silence on a direct question would be worse than any reply. |
+| 23 | The "trendy look" trap | Free. Andrey puts the look together from his own wardrobe; nothing is bought, so the rule "the exact effect of a purchase is visible before paying" is not touched. |
+| 24 | The Day 7 shave | Open to everyone. The beard hint only tells the player what Alina likes; it does not gate the choice. |
+
+The full Day 6 design is in `DEMO_SCRIPT.md`, section 3. Items there marked "proposed" came from the same discussion and were not objected to; rows 20–24 were confirmed explicitly.
+
 ## 2026-11-23 — Day 5 «Соседка»
 
 | # | Question | Decision |

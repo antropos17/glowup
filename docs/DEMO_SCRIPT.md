@@ -129,14 +129,29 @@ Design agreed with the author on 2026-11-23 (`DECISIONS.md` rows 17–19). "Deci
 - Day ends on: her message waits for a reply until morning.
 
 ### Day 6. The first conversation («Первый разговор»)
-- Core: replying to Alina. Three options, the set depends on confidence. A 3–4 line dialogue.
-- Taste hint: Alina jokes about a bearded classmate: «Борода вообще не моё».
-- Style: the optician for a new frame, or the market with Vitya for a shirt.
-- Trap: a "trendy look" from the feed lowers style.
+- Core (decided, `DECISIONS.md` rows 20–21): replying to Alina's Day 5 question «Тебя записывать?». The conversation is stretched over the day.
+- Morning (decided): the reply. Three buttons, each label is the exact message.
+  - Dry, «Да, записывай.»: answers and closes the talk. `affinity` 0.
+  - Plain with a question back, for example «Да, записывай. Сама-то идёшь?»: `affinity` +5.
+  - The third depends on confidence: with enough confidence a short joke, `affinity` +8; with low confidence a long four-line excuse, `affinity` −5. The threshold is not fixed yet: the session reports what share of engine paths has the joke open and proposes a value.
+  - No «не приду», no «пока не знаю». After the reply the chat shows «прочитано».
+  - `d5_late` (proposed): he replies by noon instead of the morning; Alina adds «Долго ты» in the evening.
+- Day (from the grid): style. The optician for a new frame, or the market with Vitya for a shirt. `d4_meat_held` / `d4_feast` (proposed): Vitya recalls the skewers at the market.
+- Trap (decided, row 23): a "trendy look" from the feed lowers style and is free, put together from his own wardrobe. Nothing is bought.
+- Evening (decided): Alina answers and there is a short live exchange.
+  - After the dry reply: only «Ок, записала» and the goodbye, no second fork.
+  - After the plain reply or the joke: a second, smaller fork worth up to `affinity` +3. Good and bad together stay inside row 4 (good reply +5 to +8, bad −5 for the day).
+  - Taste hint for everyone, whatever the reply (proposed): she jokes about a bearded classmate, «Борода вообще не моё», for example under a photo in the class chat. Sets `d6_beard_hint`.
+  - `d1_wrote_flirty`: «Ты мне, кстати, странное писал». Owning it plainly repairs; another line of the same kind is the bad reply.
+  - `d2_wrote_zerno` (proposed): she mentions she is at «Зерно» on Saturdays, the bridge to Day 7.
+  - `d1_lurked` (proposed): Andrey can finally answer in the class chat.
+  - The four Day 5 openings set the tone of her evening lines: `d1_wrote_plain` warmest; `d1_wrote_flirty` dry until the "strange message" beat; from Oksana's list with no class-chat answer, business-like until he asks something back; with `d1_said_coming`, a confirmation.
+- Night: the craving (strength from `d5_smoked` / `d5_no_smoke` and counter `smoke_free`), sleep.
 - Day ends on: «Ладно, мне пора. Увидимся на встрече, наверное».
+- Skipped day (decided, row 22): Andrey sent the dry reply himself; in the evening «Ок, записала» and the goodbye. No bonus, no penalty. The neutral choice of the reply card is the dry one, although it writes to the crush.
 
 ### Day 7. The chance meeting («Случайная встреча»)
-- Morning: if the beard hint was received, the choice "shave or keep". With the shaving cream from Sadovaya (Day 5) the shave goes cleanly; without it the face is red and irritated for the meeting (decision 17).
+- Morning (decided, `DECISIONS.md` row 24): the choice "shave or keep" is open to everyone; the Day 6 beard hint (`d6_beard_hint`) only tells the player what Alina likes. With the shaving cream from Sadovaya (Day 5) the shave goes cleanly; without it the face is red and irritated for the meeting (decision 17).
 - Day: Andrey walks into the coffee shop «Зерно» and runs into Alina.
 - Scene: a look, a greeting, 2–3 choices. Flags from the whole week fire: smoked today, skin, beard, clothes, confidence, the barbecue, the first message.
 - Alina reacts indirectly: «Ты какой-то другой. Прикольно выглядишь».
