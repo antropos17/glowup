@@ -1,35 +1,43 @@
-# 30 дней
+# 30 Days (Glowup)
 
-Мобильная игра в духе BitLife: 30 реальных дней, герой с набором проблем,
-один краш со скрытыми вкусами. Веб-приложение на TypeScript и Preact,
-в сторы идёт через Capacitor.
+[Русская версия](README.ru.md)
 
-## Запуск
+A mobile game in the spirit of BitLife: 30 real days, a hero with a set of problems, and one crush with hidden tastes. It is a web app in TypeScript and Preact, meant to ship to the stores through Capacitor. The in-game text is in Russian.
 
-```
+![Day 1: the hero Andrey, energy and money](docs/screenshots/cover.jpg)
+
+**[Open the demo](https://antropos17.github.io/glowup/)**
+
+## Run
+
+```bash
 npm install
-npm run dev            # игра и витрина ассетов в браузере
-npm test               # проверки ядра
-npm run check:content  # проверка сценария
-npm run build          # один файл dist/index.html
+npm run dev            # the game and the asset showcase in the browser
+npm test               # engine tests
+npm run check:content  # scenario validation
+npm run build          # a single dist/index.html
 ```
 
-## Что где
+## Layout
 
-| Папка | Что в ней |
+| Folder | Contents |
 |---|---|
-| `content/` | Сценарий в JSON. Сейчас день 1 из демо |
-| `docs/CONTENT_FORMAT.md` | Как писать карточки, условия и эффекты |
-| `src/engine/` | Ядро без экрана и сети: время, энергия, колода, память, шанс, вердикт |
-| `src/art/` | Герой из слоёв (портрет и полный рост) и иконки, всё кодом |
-| `src/ui/` | Экраны игры и витрина ассетов |
-| `server/` | Заготовка тонкого сервера на Supabase. Не развёрнута |
-| `tests/` | Проверки ядра |
+| `content/` | The scenario as JSON; currently day 1 of the demo |
+| `docs/CONTENT_FORMAT.en.md` | How to write cards, conditions and effects |
+| `src/engine/` | Headless core: time, energy, deck, memory, chance, verdict |
+| `src/art/` | The layered hero (portrait and full body) and icons, all in code |
+| `src/ui/` | Game screens and the asset showcase |
+| `server/` | A draft of a thin Supabase server, not deployed |
+| `tests/` | Engine tests |
 
-## Что ещё не сделано
+## Not done yet
 
-- Дни 2–7 демо: сценарий ещё пишется, после дня 1 игра показывает «Продолжение следует».
-- Capacitor не подключён.
-- Сервер не развёрнут, игра пока сверяется с часами устройства.
-- Проверки покупок в Google Play и App Store нет.
-- Отправки фото в чат нет.
+- Demo days 2–7: after day 1 the game shows "to be continued".
+- Capacitor is not wired in.
+- The server is not deployed; the game uses the device clock.
+- No purchase verification for Google Play or the App Store.
+- No photo upload in chat.
+
+## Stack
+
+TypeScript, Preact, Vite (single-file build), Vitest.
