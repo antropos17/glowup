@@ -2,6 +2,12 @@
 
 Decisions confirmed by Ruslan in the coordinator chat. They override "proposed" and "open" items in `DESIGN.md`, `DEMO_SCRIPT.md` and `HANDOFF.md`. Newest first.
 
+## 2026-11-24 — Day 7 evening tone
+
+| # | Question | Decision |
+|---|---|---|
+| 40 | Dry threshold of her evening tone | Moved from −1 to −2: one minus answer in the scene no longer makes her evening message dry. Warm stays at +2 or more. Replaces the dry part of row 36. On 10,000 random engine runs of days 1–7: warm 15%, even 70%, dry 15% (was 15% / 47% / 38%); with skipped days 10% / 79% / 10% (was 10% / 64% / 26%). `DEMO_SCRIPT.md` section 5g. |
+
 ## 2026-11-23 — Day 7 «Случайная встреча»
 
 | # | Question | Decision |
