@@ -513,7 +513,7 @@ Smoking count: `smoke_free` arrives from Day 5 as 0, 1, 2, 3 or 5. Resisting or 
 
 Plus actions on day 6 (day, evening, night): park run (4, weight −3 or −1, counter `useful`), gym workout (4, weight −3, only while the pass is running), shower and clean T-shirt (2, care −5, counter `useful`), teeth by the timer (1, teeth −1), sofa (0, conf +1). Sleep (night) closes the day; «Посидеть в телефоне до трёх» sets `d6_late` and −4 energy on day 7.
 
-Neutral choice per story card (marked `"neutral": true`): K6-00 `up`, K6-01 `dry` (the agreed exception of decision 22: it writes to the crush), K6-02 `scroll`, K6-03a–c `home`, K6-04 `scroll`, K6-05x `read`, K6-06 `short`, K6-06f `shrug`, K6-07 `ok`, K6-08a/b `smoke`. A fully skipped Day 6 therefore runs K6-00 if it applies, K6-01, K6-02, K6-03x, K6-04, K6-05d, K6-07, K6-08x: Andrey sends «Да, записывай.», buys nothing, scrolls the class chat and still gets the beard hint, reads «Ок, записала.» (plus the «Долго ты» line after a late night) and the goodbye, smokes as usual. No coins are spent and `affinity` does not move. The same holds when Day 5 was skipped as well: her message arrived by itself with its +6, and his reply follows.
+Neutral choice per story card (marked `"neutral": true`): K6-00 `up`, K6-01 `dry` (the agreed exception of decision 22: it writes to the crush), K6-02 `scroll`, K6-03a–c and K6-03ao–co `home`, K6-04 `scroll`, K6-05x `read`, K6-06 `short`, K6-06f `shrug`, K6-07 `ok`, K6-08a/b `smoke`. A fully skipped Day 6 therefore runs K6-00 if it applies, K6-01, K6-02, K6-03x, K6-04, K6-05d, K6-07, K6-08x: Andrey sends «Да, записывай.», buys nothing, scrolls the class chat and still gets the beard hint, reads «Ок, записала.» (plus the «Долго ты» line after a late night) and the goodbye, smokes as usual. No coins are spent and `affinity` does not move. The same holds when Day 5 was skipped as well: her message arrived by itself with its +6, and his reply follows.
 
 Day 6 card: reward 50 gold and gum (`gum`). Line for tomorrow: «Завтра суббота. Кофейня «Зерно»».
 
@@ -546,6 +546,8 @@ Engine notes for day 7 (nothing in `src/` was changed):
 - One card cannot show different buttons by a number without two conditions, so the threshold is written twice in K6-01 (`lte` and its `not`).
 - The reason line and the day card attribute the chance change to the choice that made it, so the reply's `affinity` is applied in the morning, when the message is sent, not when she answers.
 - `fill()` has only the nominative name: texts avoid «от {crush}», «сообщение {hero}».
+- K6-03ao, K6-03bo, K6-03co (added 2026-11-23): the same call from Vitya for a player who already owns both the shirt and the frame. No prices in the text, two choices (`look` «Съездить за компанию», `home` neutral). K6-03a–c require that at least one of the two is not bought; the `o` variants require both and `not seen` of their selling card, so buying the second item on the card does not bring the call again.
+- K6-00 names no energy number in its outcome: with a gym pass the morning has 8 energy, not 6.
 - The market card buys the shop's shirt or frame by copying the item's `onUse` effects and setting `bought_<id>`; if `content/items.json` changes, K6-03a–c must change with it (a test compares the prices, not the effects).
 - The trendy look is not undone by a new shirt: `style` simply moves by both numbers.
 - On a 320×568 screen the market card with a disabled button fills the whole sheet; a longer text there would push the last button out of reach.

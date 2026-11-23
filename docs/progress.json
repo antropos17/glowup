@@ -5,7 +5,7 @@
     "date": "2026-11-23",
     "typecheck": "pass",
     "tests": "102/102",
-    "check_content": "pass: 132 cards (98 story, 34 action), 1 archetype, 1 crush",
+    "check_content": "pass: 135 cards (101 story, 34 action), 1 archetype, 1 crush",
     "economy": "demo economy in items.json, side-jobs.json, balance.json; see docs/DEMO_SCRIPT.md section 5a",
     "build": "pass: dist/index.html 541 kB",
     "playthrough": "Day 6 branch: engine tests over every reply at every confidence level, both sleep variants, the four Day 5 openings x plain and joke, both second forks, the trap, the market card by the three barbecue outcomes, the craving by the counter, Day 6 skipped after played days 1-5 and after a skipped Day 5; 600 random engine runs of Day 6 after random days 1-5 (Alina gives -5..+11, every choice taken); Playwright (headless Chrome, real pointer clicks) on the built dist/index.html at 375x812 from a clean save through days 1-6 to the demo end screen with seven timelapse frames (joke path), a second run with days 1-5 skipped and Day 6 played (excuse path, 100 coins), a third with all six days skipped; every Day 6 story card on those paths also at 320x568, the chat and feed tabs at both sizes; no horizontal overflow, no card sheet scrolls, no console errors"

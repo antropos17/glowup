@@ -1117,6 +1117,7 @@ describe('день 6', () => {
     expect(next(late)).toBe('K6-00');
     expect(next(pick(late, 'K6-00', 'up'))).toBe('K6-01');
     expect(pick(late, 'K6-00', 'up').energy).toBe(6);                  // the line charges nothing
+    expect(pick(late, 'K6-00', 'up').log.at(-1)!.text).not.toMatch(/Сил|d/);   // no energy number in the text: a gym pass changes it
     expect(d6(story(morning6(), { 'K6-01': 'dry' }))).toEqual(['K6-01']);
   });
   it('the reply: three buttons, each label is the message; the joke or the excuse by confidence, never both', () => {
@@ -1198,6 +1199,17 @@ describe('день 6', () => {
     expect([home.coins, home.problems]).toEqual([s.coins, s.problems]);
     // already bought in the shop: the card does not sell it twice
     expect(ids(patch(s, { on: { bought_shirt: true, bought_frame: true } }), 'K6-03c')).toEqual(['look', 'home']);
+    // both bought before the card: a variant without prices, and it never follows the selling card
+    const owned = day({ on: { bought_shirt: true, bought_frame: true } });
+    expect(next(owned)).toBe('K6-03co');
+    expect(next(day({ off: ['d4_home'], on: { d4_went: true, d4_meat_held: true, bought_shirt: true, bought_frame: true } }))).toBe('K6-03ao');
+    expect(next(day({ off: ['d4_home'], on: { d4_went: true, d4_feast: true, bought_shirt: true, bought_frame: true } }))).toBe('K6-03bo');
+    for (const id of ['K6-03ao', 'K6-03bo', 'K6-03co']) {
+      expect(card(id).text, id).not.toMatch(/монет|стиль +/);
+      expect(card(id).choices.map((ch) => ch.id), id).toEqual(['look', 'home']);
+    }
+    expect(next(pick(owned, 'K6-03co', 'home'))).toBeUndefined();
+    expect(next(pick(patch(s, { on: { bought_shirt: true } }), 'K6-03c', 'frame'))).toBeUndefined();
     // a poor player sees the price and a free way out
     expect(choicesFor(content, patch(s, { coins: 100 }), card('K6-03c')).map((x) => [x.choice.id, x.affordable])).toEqual([['shirt', true], ['frame', false], ['look', true], ['home', true]]);
     // Vitya sees the trendy look

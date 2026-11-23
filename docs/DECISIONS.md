@@ -11,8 +11,12 @@ Decisions confirmed by Ruslan in the coordinator chat. They override "proposed" 
 | 22 | Day 6 skipped entirely | Andrey sent the dry reply himself; in the evening she writes «Ок, записала» and the goodbye. No bonus and no penalty. This is an exception to "a neutral choice does not write to the crush": a day of silence on a direct question would be worse than any reply. |
 | 23 | The "trendy look" trap | Free. Andrey puts the look together from his own wardrobe; nothing is bought, so the rule "the exact effect of a purchase is visible before paying" is not touched. |
 | 24 | The Day 7 shave | Open to everyone. The beard hint only tells the player what Alina likes; it does not gate the choice. |
+| 25 | The joke threshold | `conf` ≤ 75 stays (K6-01, written twice: `lte` and its negation). |
+| 26 | The joke invents a past | Kept: Andrey sang at the graduation, badly and loudly. Day 7 and later days may refer to it. |
+| 27 | «Ты мне, кстати, странное писал» after the dry reply or the excuse | Not given on Day 6. Row 22 stands: only the short answer and the goodbye. The line moves to Day 7 for that player. |
+| 28 | Saturday at «Зерно» | Stays as written: only the player who reached the live exchange hears it. |
 
-The full Day 6 design is in `DEMO_SCRIPT.md`, section 3. Items there marked "proposed" came from the same discussion and were not objected to; rows 20–24 were confirmed explicitly.
+The full Day 6 design is in `DEMO_SCRIPT.md`, sections 3 and 5f. Rows 20–24 were confirmed before the day was written; rows 25–28 answer the questions of the session that wrote it.
 
 ## 2026-11-23 — Day 5 «Соседка»
 
