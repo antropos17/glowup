@@ -5,7 +5,7 @@
     "date": "2026-11-23",
     "typecheck": "pass",
     "tests": "89/89",
-    "check_content": "pass: 107 cards (79 story, 28 action), 1 archetype, 1 crush",
+    "check_content": "pass: 108 cards (80 story, 28 action), 1 archetype, 1 crush",
     "economy": "demo economy in items.json, side-jobs.json, balance.json; see docs/DEMO_SCRIPT.md section 5a",
     "build": "pass: dist/index.html 492 kB",
     "playthrough": "Day 5 branch: 20 scripted engine paths (the shelf and the free tube; the bags for 2 energy after refused pies; not helped, saw the note and bought the cream; asked about the note and left the cream; knows nothing, no cream; dentist booked without soda, with soda, with a strong craving; not booked; four message openings, each with d1_said_coming and with d1_lurked; the answer about «Зерно»; Day 5 skipped after played days 1-4, booked and not booked); Playwright (headless Chrome) on the built dist/index.html at 375x812 from a clean save through days 1-5 to the demo end screen with six timelapse frames, every Day 5 story card on that path also at 320x568, the chat and the bag tabs at both sizes; no horizontal overflow, no card sheet scrolls, no console errors"
