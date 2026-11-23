@@ -387,7 +387,7 @@ function DayCard({ state, d, onClose }: { state: GameState; d: DaySummary; onClo
               return (
                 <div class="delta-row">
                   <span>{def.bar}</span>
-                  <b class="num" data-dir={b.drift === 'better' ? 'up' : 'down'} style="grid-column: 2 / -1">{DAY_CARD.drift[b.drift]}</b>
+                  <b class="num drift" data-dir={b.drift === 'better' ? 'up' : 'down'}>{DAY_CARD.drift[b.drift]}</b>
                 </div>
               );
             }
