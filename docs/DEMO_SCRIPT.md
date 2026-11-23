@@ -1,6 +1,6 @@
 # 7-day demo — script
 
-Status: draft v1, 2026-11-22. The 7-day grid and the Day 1 design are done. Day 1 is implemented in `content/cards/day1.json`, Day 2 in `content/cards/day2.json`, Day 3 in `content/cards/day3.json`, Day 4 in `content/cards/day4.json`, Day 5 in `content/cards/day5.json`, Day 6 in `content/cards/day6.json`. Day 7 is to be written directly in the engine format.
+Status: draft v1, 2026-11-22. The 7-day grid and the Day 1 design are done. Day 1 is implemented in `content/cards/day1.json`, Day 2 in `content/cards/day2.json`, Day 3 in `content/cards/day3.json`, Day 4 in `content/cards/day4.json`, Day 5 in `content/cards/day5.json`, Day 6 in `content/cards/day6.json`, Day 7 in `content/cards/day7.json`.
 
 This file is the design-level description in English. Russian strings in «quotes» are in-game text: copy them verbatim into content.
 
@@ -537,7 +537,7 @@ Where the implementation differs from section 3, and why:
 | Flag | Day | Payoff |
 |---|---|---|
 | `d6_reply` | 6, 7 | Chooses her evening answer; in «Зерно» she can pick up the thread («Петь не будешь?» after the joke) |
-| `d6_talk` | 6, 7 | Chooses the goodbye outcome; the tone of her Day 7 evening message (`open` and `owned` warm, `repeat` cold) |
+| `d6_talk` | 6 | Chooses the goodbye outcome. It does not choose the tone of her Day 7 evening message: that comes from the scene only (`DECISIONS.md` row 33, section 5g) |
 | `d6_answered`, `d6_talked`, `d6_bye` | 6 | Order of the evening cards |
 | `d6_beard_hint` | 7 | The morning "shave or keep" card can quote her line; the choice itself is open to everyone (decision 24). The taste `no_beard` is already revealed in the chat tab |
 | `d6_trend` | 6, 7 | Vitya's line at the market; the clothes Andrey wears into «Зерно» (the look stays on unless a shirt was bought) |
@@ -558,6 +558,53 @@ Engine notes for day 7 (nothing in `src/` was changed):
 - The market card buys the shop's shirt or frame by copying the item's `onUse` effects and setting `bought_<id>`; if `content/items.json` changes, K6-03a–c must change with it (a test compares the prices, not the effects).
 - The trendy look is not undone by a new shirt: `style` simply moves by both numbers.
 - On a 320×568 screen the market card with a disabled button fills the whole sheet; a longer text there would push the last button out of reach.
+
+## 5g. Day 7 design (implemented)
+
+The authoritative version is `content/cards/day7.json`. Written 2026-11-23 from `DECISIONS.md` rows 29–34 and section 3; the texts are not reviewed by the authors yet. Story cards are listed in display order.
+
+| Card | Part | What happens | Condition | Flags set |
+|---|---|---|---|---|
+| K7-00 Overslept | morning | «Проспал», a line only, no energy number (the −4 came from Day 6's `tomorrow`) | `d6_late` | none |
+| K7-01a / K7-01b The razor | morning | Three buttons. With `cream_zina` in the bag: clean shave, `look: { facial: "none" }`, conf −1. Without it: shave with soap, `look: { facial: "none", razorBurn: true }`, conf +2. «Оставить щетину» is neutral and sets nothing. `a` quotes «Борода вообще не моё», `b` does not. The cream is not sold and not used up. No `affinity`: the taste `no_beard` already gives +8 chance for `shaved` | `a`: `d6_beard_hint`; `b`: without it | `shaved`, `d7_red` |
+| K7-02a / K7-02b At the door of «Зерно» | day | The craving of the balcony cards K6-08a/b moved to the coffee-shop door, with the same four choices, prices and effects: hold (2 energy / 3 energy), quarter with `d1_half` (1 energy), gum with the item, smoke (neutral). The text says the smell of tobacco goes inside with him | `a`: counter `smoke_free` 0; `b`: 1 or more | `d7_no_smoke`, `d7_quarter` or `d7_smoked`; counter `smoke_free` |
+| K7-03a / K7-03b The coffee shop | day | Everyone meets her. `a`: he knew it is her place; `b`: he came in for coffee. «Подойти и поздороваться» (+3), «Кивнуть и встать в очередь» (0, neutral; she turns to him herself), «Сделать вид, что не заметил» (−2; she calls him anyway). With `d6_trend` and no shirt bought, the outcome adds one line: her eyes stop on the shirt over the hoodie for a second. No penalty | `a`: `d2_zerno_known` or `d2_wrote_zerno` | `d7_met` = `hello`, `nod`, `ignore` |
+| K7-04a / b / c Alina at the window | day | Her line by the number of visible changes: `c` 4–5 «Ты какой-то другой. Прикольно выглядишь», `b` 2–3 «Ты какой-то другой», `a` 0–1 «О, привет. Ты тут какими судьбами?». His answer: short thanks with a question back (+4), «Пожать плечами» (0, neutral), a long explanation about the doctor and the gym (−2; on `a` a long explanation of how he got here) | see below | `d7_line` = `nice`, `other`, `plain` |
+| K7-05a–d One thread | day | The first that applies: `a` «Ты мне, кстати, странное писал» (own +3, «Писал. Бывает.» 0 neutral, «Почему странное? Ты правда не изменилась.» −5); `b` «Петь не будешь?» (a joke back +3, «Не буду.» 0, sing right now −2); `c` «Видела вас у Вити» (short story and a question +3, «Нормально посидели.» 0, complaints −2); `d` the class reunion (+3 / «Посмотрим.» 0 / «на таких встречах все только хвастаются» −2). Every outcome ends with her leaving: «Ладно, мне пора. Увидимся на встрече» or, after the minus, «Ладно, мне пора» | `a`: `d1_wrote_flirty` and `d6_reply` = `dry` or `excuse`; `b`: `d6_reply` = `joke`; `c`: `d4_went` | `d7_thread` = `strange`, `song`, `bbq`, `reunion` |
+| K7-06w / e / d Alina writes | evening | Her message from the bank `alina_d7_warm`, `alina_d7_even` or `alina_d7_dry` (10 phrasings each). One button «Отложить телефон», no reply | tone, see below | `d7_msg` = `warm`, `even`, `dry` |
+
+Visible changes (decision row 32): a clean shave (`shaved` without `d7_red`), clothes (`bought_shirt` or `bought_frame`), teeth (`d5_cleaned`), skin (`d3_course`), no tobacco today (neither `d7_smoked` nor `d7_quarter`). `d6_trend` without a bought shirt is not a change. She never names what changed.
+
+The evening tone (row 33). Each choice of the scene adds to the hidden counter `d7_scene`: +1 for the plus answer, −1 for the minus answer, 0 for the neutral one, so it runs from −3 to +3. Warm at +2 or more, dry at −1 or less, even between. The total chance and `d6_talk` do not take part.
+
+Where the thresholds live. The tone thresholds are one number each: `{ "counter": "d7_scene", "gte": 2 }` in K7-06w and `"lte": -1` in K7-06d. The thresholds of her line cannot be one number: the format has no "at least k of these conditions", so K7-04b ("2 of 5") and K7-04c ("4 of 5") write it out as an AND of `any` groups (every group of 5 − k + 1 changes must contain one that is true: 5 groups for k = 2, 10 for k = 4). The cards were generated by a script that has the two numbers at the top (`CHANGES_OTHER = 2`, `CHANGES_NICE = 4`); moving a threshold means regenerating those two cards. The smallest engine change that would put each threshold in one place: a condition `{ "count": Cond[], "gte"?: number, "lte"?: number }` in `types.ts`, `check()` and `validate.ts` (about ten lines), true when the number of true conditions in the list fits.
+
+Share per group, from engine runs of days 1–7 (`balance.contentDays` 7, policies as in the Day 6 runs):
+
+| Play style | Runs | 0–1 | 2–3 | 4–5 |
+|---|---|---|---|---|
+| all seven days skipped | 20 | 100% | 0% | 0% |
+| days 1–6 neutral and the sofa, Day 7 skipped | 400 | 100% | 0% | 0% |
+| neutral everywhere, sofa (lazy) | 20 | 100% | 0% | 0% |
+| random choices and actions | 400 | 9% | 71% | 21% |
+| random, each day skipped with p = 0.3 | 400 | 29% | 65% | 7% |
+| diligent, with or without the shop | 400 | 0% | 0% | 100% |
+
+By number of changes (random runs): 0: 0%, 1: 9%, 2: 33%, 3: 38%, 4: 18%, 5: 2%. Per change, random runs: skin 100%, no tobacco 62%, clothes 54%, clean shave 32%, teeth 25%. Skin is a change for every player: the doctor's course of Day 3 starts even on a skipped Day 3 (decision 10), so nobody has 0, and only 16 of the 32 combinations are reachable (1 of them in 0–1, 10 in 2–3, 5 in 4–5). The diligent runs land on exactly 4 (shave with the cream, clothes, skin, no tobacco): they never booked the dentist on Day 1, so no teeth. Realistic ways to 4–5: the cream from Aunt Zina or Sadovaya on Day 5 and a shave, the shirt or the frame on Day 6, no cigarette at the door (holding or the gum from the Day 6 reward), plus the course; 5 needs the dentist booked on Day 1 and the cleaning on Day 5.
+
+Chance budget (row 4): the scene gives between −9 and +10. +10 is hello +3, thanks +4, the good thread answer +3. −9 is only reachable on the «странное писал» thread (ignore −2, long −2, again −5, the −5 being the K6-06f size the brief asks for); on the other threads the floor is −6. Random runs: −9 … +10. The shave adds no `affinity`; with the taste `no_beard` it adds +8 chance.
+
+Skipped day (row 34). Neutral choices: K7-00 `up`, K7-01a/b `keep`, K7-02a/b `smoke`, K7-03a/b `nod`, K7-04x `shrug`, K7-05a `shrug`, K7-05b `no`, K7-05c `fine`, K7-05d `see`, K7-06x `ok`. A fully skipped Day 7: no shave, a cigarette at the door, the nod, the shrug, the neutral thread answer, the even tone; `affinity` does not move. Because the neutral craving choice is «smoke», a skipped Day 7 loses the "no tobacco" change: such a player has at most 4 changes, and with nothing else done on days 1–6 exactly 1 (skin), so she says «О, привет. Ты тут какими судьбами?».
+
+Plus actions (day, evening, night): A7-run, A7-gym, A7-clean, A7-teeth, A7-couch, copies of the Day 6 actions with new texts. K7-sleep has one button «Лечь спать»: no staying up, there is no Day 8; sleep closes the day and the clock shows «Продолжение следует». Day 7 has no gift in `days.json` (the reward would arrive after the demo end) and the teaser «До встречи выпускников 23 дня».
+
+Earlier flags paid off on day 7: `d6_late` (K7-00), `d6_beard_hint` (K7-01a), item `cream_zina` (the shave), `d1_half` (quarter), item `gum`, counter `smoke_free`, `d6_quarter` (the craving texts), `d2_zerno_known`, `d2_wrote_zerno` (the entrance), `bought_shirt`, `bought_frame`, `d5_cleaned`, `d3_course` (her line), `d6_trend` (her glance), `d1_wrote_flirty`, `d6_reply`, `d4_went` (the thread). Day 7 flags: `shaved`, `d7_red`, `d7_smoked`, `d7_no_smoke`, `d7_quarter`, `d7_met`, `d7_line`, `d7_thread`, `d7_msg`, counter `d7_scene`; all are read on Day 7 (card order and her line).
+
+Where the implementation differs from section 3, and why:
+- The tone is counted with a hidden counter instead of the three flags: the format cannot compare a sum of choices otherwise, and the counter keeps the tone in one condition per card.
+- «Почему странное? Ты правда не изменилась.» is said aloud in the coffee shop, so it has no heart; it still costs −5 as in K6-06f.
+- Her answers in `K7-04x` and `K7-05x` are in the card text and outcome texts, not in the chat: she says them face to face. Only the evening message goes to the chat.
+- `d6_talk` does not choose the evening tone (decision row 33); the Day 6 table is corrected.
 
 ## 6. Sample phrase bank for Alina
 
