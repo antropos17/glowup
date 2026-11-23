@@ -1,0 +1,2642 @@
+[
+  {
+    "id": "K7-00",
+    "kind": "story",
+    "title": "Проспал",
+    "when": {
+      "days": [
+        7,
+        7
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d6_late"
+        }
+      ]
+    },
+    "text": "Вчерашний разговор перечитан до трёх ночи. Суббота началась ближе к полудню, и сил сегодня меньше обычного.",
+    "choices": [
+      {
+        "id": "up",
+        "neutral": true,
+        "label": "Встать",
+        "outcomes": [
+          {
+            "text": "Встал к одиннадцати. Суббота уже шла без него."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K7-01a",
+    "kind": "story",
+    "title": "Бритва",
+    "when": {
+      "days": [
+        7,
+        7
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d6_beard_hint"
+        }
+      ]
+    },
+    "text": "Суббота, зеркало. Щетина клочками, седьмой день. В голове вчерашнее: «Борода вообще не моё». Бритва лежит на полке. Без крема для проблемной кожи лицо после неё будет красным.",
+    "choices": [
+      {
+        "id": "cream",
+        "label": "Побриться с кремом с Садовой",
+        "requires": [
+          {
+            "item": "cream_zina"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Крем тёти Зины пахнет аптекой и мятой. Бритва прошла как по маслу: ни пореза, ни красноты. Из зеркала смотрит кто-то помоложе.",
+            "why": "Побрился",
+            "effects": [
+              {
+                "flag": "shaved"
+              },
+              {
+                "look": {
+                  "facial": "none"
+                }
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "bare",
+        "label": "Побриться без крема",
+        "requires": [
+          {
+            "not": {
+              "item": "cream_zina"
+            }
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "В ход пошло обычное мыло. Щетины больше нет, зато щёки и шея горят: бритва прошлась по прыщам. Само пройдёт, но не сегодня.",
+            "why": "Побрился",
+            "effects": [
+              {
+                "flag": "shaved"
+              },
+              {
+                "flag": "d7_red"
+              },
+              {
+                "look": {
+                  "facial": "none",
+                  "razorBurn": true
+                }
+              },
+              {
+                "problem": "conf",
+                "add": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "keep",
+        "neutral": true,
+        "label": "Оставить щетину",
+        "outcomes": [
+          {
+            "text": "Щетина осталась. Бритва так и лежит на полке."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K7-01b",
+    "kind": "story",
+    "title": "Бритва",
+    "when": {
+      "days": [
+        7,
+        7
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d6_beard_hint",
+          "set": false
+        }
+      ]
+    },
+    "text": "Суббота, зеркало. Щетина клочками, седьмой день. Бритва лежит на полке. Без крема для проблемной кожи лицо после неё будет красным.",
+    "choices": [
+      {
+        "id": "cream",
+        "label": "Побриться с кремом с Садовой",
+        "requires": [
+          {
+            "item": "cream_zina"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Крем тёти Зины пахнет аптекой и мятой. Бритва прошла как по маслу: ни пореза, ни красноты. Из зеркала смотрит кто-то помоложе.",
+            "why": "Побрился",
+            "effects": [
+              {
+                "flag": "shaved"
+              },
+              {
+                "look": {
+                  "facial": "none"
+                }
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "bare",
+        "label": "Побриться без крема",
+        "requires": [
+          {
+            "not": {
+              "item": "cream_zina"
+            }
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "В ход пошло обычное мыло. Щетины больше нет, зато щёки и шея горят: бритва прошлась по прыщам. Само пройдёт, но не сегодня.",
+            "why": "Побрился",
+            "effects": [
+              {
+                "flag": "shaved"
+              },
+              {
+                "flag": "d7_red"
+              },
+              {
+                "look": {
+                  "facial": "none",
+                  "razorBurn": true
+                }
+              },
+              {
+                "problem": "conf",
+                "add": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "keep",
+        "neutral": true,
+        "label": "Оставить щетину",
+        "outcomes": [
+          {
+            "text": "Щетина осталась. Бритва так и лежит на полке."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K7-02a",
+    "kind": "story",
+    "title": "У двери «Зерна»",
+    "when": {
+      "days": [
+        7,
+        7
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d7_smoked",
+          "set": false
+        },
+        {
+          "flag": "d7_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d7_quarter",
+          "set": false
+        },
+        {
+          "counter": "smoke_free",
+          "lte": 0
+        }
+      ]
+    },
+    "text": "Суббота, угол у парка. До двери кофейни «Зерно» десять шагов, а рука уже нашла в кармане пачку. Кто войдёт с запахом табака, с ним и будет стоять в очереди.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Не открывать пачку",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d6_quarter"
+              }
+            ],
+            "text": "Вчера была четверть, сегодня ни одной. Пачка осталась в кармане. Первый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d7_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d6_quarter",
+                "set": false
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял у двери просто так и вошёл. Первый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d7_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "cost": {
+          "energy": 1
+        },
+        "outcomes": [
+          {
+            "text": "Четыре затяжки за углом, остальное в урну. Дни без сигарет считаются с нуля: четверть тоже сигарета.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d7_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. В кофейню {hero} вошёл с запахом мяты.",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d7_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d6_quarter"
+              }
+            ],
+            "text": "Вчера была четверть, сегодня целая, у самой двери кофейни. Счёт дней без табака так и стоит на нуле.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d7_smoked"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d6_quarter",
+                "set": false
+              }
+            ],
+            "text": "Обычная сигарета у двери кофейни. Как вчера и позавчера.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d7_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K7-02b",
+    "kind": "story",
+    "title": "У двери «Зерна»",
+    "when": {
+      "days": [
+        7,
+        7
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d7_smoked",
+          "set": false
+        },
+        {
+          "flag": "d7_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d7_quarter",
+          "set": false
+        },
+        {
+          "counter": "smoke_free",
+          "gte": 1
+        }
+      ]
+    },
+    "text": "Суббота, угол у парка. {hero} держится не первый день, но у двери кофейни «Зерно» рука сама нашла в кармане пачку. Кто войдёт с запахом табака, с ним и будет стоять в очереди.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Не открывать пачку",
+        "cost": {
+          "energy": 3
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 1
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял у двери просто так и вошёл. Второй день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d7_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 2
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял у двери просто так и вошёл. Третий день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d7_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 3
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял у двери просто так и вошёл. Четвёртый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d7_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 4
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял у двери просто так и вошёл. Пятый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d7_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 5
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял у двери просто так и вошёл. Шестой день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d7_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 6
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял у двери просто так и вошёл. Седьмой день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d7_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "not": {
+                  "any": [
+                    {
+                      "counter": "smoke_free",
+                      "eq": 1
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 2
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 3
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 4
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 5
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 6
+                    }
+                  ]
+                }
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял у двери просто так и вошёл. Ещё один день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d7_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "cost": {
+          "energy": 1
+        },
+        "outcomes": [
+          {
+            "text": "Четыре затяжки за углом, остальное в урну. Дни без сигарет считаются с нуля: четверть тоже сигарета.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d7_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. В кофейню {hero} вошёл с запахом мяты.",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d7_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "text": "Сигарета у двери кофейни. Вчера удержался, сегодня нет: счёт дней без табака снова с нуля.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d7_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K7-03a",
+    "kind": "story",
+    "title": "Кофейня «Зерно»",
+    "when": {
+      "days": [
+        7,
+        7
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "any": [
+            {
+              "flag": "d2_zerno_known"
+            },
+            {
+              "flag": "d2_wrote_zerno"
+            }
+          ]
+        },
+        {
+          "flag": "d7_met",
+          "set": false
+        }
+      ]
+    },
+    "text": "Внутри пахнет кофе и корицей. {hero} знал, что это её место, и всё равно оказался не готов: {crush} сидит у окна, перед ней стакан и книга. Она его пока не видит.",
+    "choices": [
+      {
+        "id": "hello",
+        "label": "Подойти и поздороваться",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d6_trend"
+              },
+              {
+                "flag": "bought_shirt",
+                "set": false
+              }
+            ],
+            "text": "{hero} подошёл: «Привет». {crush} подняла глаза от книги. Её взгляд на секунду задержался на рубашке поверх худи и вернулся к лицу. Узнала не сразу, но улыбнулась.",
+            "why": "Подошёл и поздоровался",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": 3
+              },
+              {
+                "counter": "d7_scene",
+                "add": 1
+              },
+              {
+                "flag": "d7_met",
+                "value": "hello"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "any": [
+                  {
+                    "flag": "d6_trend",
+                    "set": false
+                  },
+                  {
+                    "flag": "bought_shirt"
+                  }
+                ]
+              }
+            ],
+            "text": "{hero} подошёл: «Привет». {crush} подняла глаза от книги. Узнала не сразу, но улыбнулась.",
+            "why": "Подошёл и поздоровался",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": 3
+              },
+              {
+                "counter": "d7_scene",
+                "add": 1
+              },
+              {
+                "flag": "d7_met",
+                "value": "hello"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "nod",
+        "neutral": true,
+        "label": "Кивнуть и встать в очередь",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d6_trend"
+              },
+              {
+                "flag": "bought_shirt",
+                "set": false
+              }
+            ],
+            "text": "{hero} кивнул и встал в очередь. {crush} кивнула в ответ. Когда он забрал свой кофе, она сама повернулась к нему. Её взгляд на секунду задержался на рубашке поверх худи и вернулся к лицу.",
+            "effects": [
+              {
+                "flag": "d7_met",
+                "value": "nod"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "any": [
+                  {
+                    "flag": "d6_trend",
+                    "set": false
+                  },
+                  {
+                    "flag": "bought_shirt"
+                  }
+                ]
+              }
+            ],
+            "text": "{hero} кивнул и встал в очередь. {crush} кивнула в ответ. Когда он забрал свой кофе, она сама повернулась к нему.",
+            "effects": [
+              {
+                "flag": "d7_met",
+                "value": "nod"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ignore",
+        "label": "Сделать вид, что не заметил",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d6_trend"
+              },
+              {
+                "flag": "bought_shirt",
+                "set": false
+              }
+            ],
+            "text": "{hero} уставился в меню, как в учебник. Не помогло: «{hero}?» Пришлось обернуться и изобразить удивление. Вышло так себе. Её взгляд на секунду задержался на рубашке поверх худи и вернулся к лицу.",
+            "why": "Сделал вид, что не заметил",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": -2
+              },
+              {
+                "counter": "d7_scene",
+                "add": -1
+              },
+              {
+                "flag": "d7_met",
+                "value": "ignore"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "any": [
+                  {
+                    "flag": "d6_trend",
+                    "set": false
+                  },
+                  {
+                    "flag": "bought_shirt"
+                  }
+                ]
+              }
+            ],
+            "text": "{hero} уставился в меню, как в учебник. Не помогло: «{hero}?» Пришлось обернуться и изобразить удивление. Вышло так себе.",
+            "why": "Сделал вид, что не заметил",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": -2
+              },
+              {
+                "counter": "d7_scene",
+                "add": -1
+              },
+              {
+                "flag": "d7_met",
+                "value": "ignore"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K7-03b",
+    "kind": "story",
+    "title": "Кофейня «Зерно»",
+    "when": {
+      "days": [
+        7,
+        7
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "not": {
+            "any": [
+              {
+                "flag": "d2_zerno_known"
+              },
+              {
+                "flag": "d2_wrote_zerno"
+              }
+            ]
+          }
+        },
+        {
+          "flag": "d7_met",
+          "set": false
+        }
+      ]
+    },
+    "text": "{hero} зашёл за кофе: суббота, почему бы и нет. Внутри пахнет корицей, очередь в три человека. А у окна, со стаканом и книгой, сидит {crush}. Она его пока не видит.",
+    "choices": [
+      {
+        "id": "hello",
+        "label": "Подойти и поздороваться",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d6_trend"
+              },
+              {
+                "flag": "bought_shirt",
+                "set": false
+              }
+            ],
+            "text": "{hero} подошёл: «Привет». {crush} подняла глаза от книги. Её взгляд на секунду задержался на рубашке поверх худи и вернулся к лицу. Узнала не сразу, но улыбнулась.",
+            "why": "Подошёл и поздоровался",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": 3
+              },
+              {
+                "counter": "d7_scene",
+                "add": 1
+              },
+              {
+                "flag": "d7_met",
+                "value": "hello"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "any": [
+                  {
+                    "flag": "d6_trend",
+                    "set": false
+                  },
+                  {
+                    "flag": "bought_shirt"
+                  }
+                ]
+              }
+            ],
+            "text": "{hero} подошёл: «Привет». {crush} подняла глаза от книги. Узнала не сразу, но улыбнулась.",
+            "why": "Подошёл и поздоровался",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": 3
+              },
+              {
+                "counter": "d7_scene",
+                "add": 1
+              },
+              {
+                "flag": "d7_met",
+                "value": "hello"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "nod",
+        "neutral": true,
+        "label": "Кивнуть и встать в очередь",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d6_trend"
+              },
+              {
+                "flag": "bought_shirt",
+                "set": false
+              }
+            ],
+            "text": "{hero} кивнул и встал в очередь. {crush} кивнула в ответ. Когда он забрал свой кофе, она сама повернулась к нему. Её взгляд на секунду задержался на рубашке поверх худи и вернулся к лицу.",
+            "effects": [
+              {
+                "flag": "d7_met",
+                "value": "nod"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "any": [
+                  {
+                    "flag": "d6_trend",
+                    "set": false
+                  },
+                  {
+                    "flag": "bought_shirt"
+                  }
+                ]
+              }
+            ],
+            "text": "{hero} кивнул и встал в очередь. {crush} кивнула в ответ. Когда он забрал свой кофе, она сама повернулась к нему.",
+            "effects": [
+              {
+                "flag": "d7_met",
+                "value": "nod"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ignore",
+        "label": "Сделать вид, что не заметил",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d6_trend"
+              },
+              {
+                "flag": "bought_shirt",
+                "set": false
+              }
+            ],
+            "text": "{hero} уставился в меню, как в учебник. Не помогло: «{hero}?» Пришлось обернуться и изобразить удивление. Вышло так себе. Её взгляд на секунду задержался на рубашке поверх худи и вернулся к лицу.",
+            "why": "Сделал вид, что не заметил",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": -2
+              },
+              {
+                "counter": "d7_scene",
+                "add": -1
+              },
+              {
+                "flag": "d7_met",
+                "value": "ignore"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "any": [
+                  {
+                    "flag": "d6_trend",
+                    "set": false
+                  },
+                  {
+                    "flag": "bought_shirt"
+                  }
+                ]
+              }
+            ],
+            "text": "{hero} уставился в меню, как в учебник. Не помогло: «{hero}?» Пришлось обернуться и изобразить удивление. Вышло так себе.",
+            "why": "Сделал вид, что не заметил",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": -2
+              },
+              {
+                "counter": "d7_scene",
+                "add": -1
+              },
+              {
+                "flag": "d7_met",
+                "value": "ignore"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K7-04c",
+    "kind": "story",
+    "title": "{crush} у окна",
+    "speaker": "crush",
+    "when": {
+      "days": [
+        7,
+        7
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d7_met"
+        },
+        {
+          "flag": "d7_line",
+          "set": false
+        },
+        {
+          "any": [
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "shaved",
+                    "set": false
+                  },
+                  {
+                    "flag": "d7_red"
+                  }
+                ]
+              }
+            },
+            {
+              "any": [
+                {
+                  "flag": "bought_shirt"
+                },
+                {
+                  "flag": "bought_frame"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "shaved",
+                    "set": false
+                  },
+                  {
+                    "flag": "d7_red"
+                  }
+                ]
+              }
+            },
+            {
+              "flag": "d5_cleaned"
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "shaved",
+                    "set": false
+                  },
+                  {
+                    "flag": "d7_red"
+                  }
+                ]
+              }
+            },
+            {
+              "flag": "d3_course"
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "shaved",
+                    "set": false
+                  },
+                  {
+                    "flag": "d7_red"
+                  }
+                ]
+              }
+            },
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "d7_smoked"
+                  },
+                  {
+                    "flag": "d7_quarter"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "any": [
+                {
+                  "flag": "bought_shirt"
+                },
+                {
+                  "flag": "bought_frame"
+                }
+              ]
+            },
+            {
+              "flag": "d5_cleaned"
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "any": [
+                {
+                  "flag": "bought_shirt"
+                },
+                {
+                  "flag": "bought_frame"
+                }
+              ]
+            },
+            {
+              "flag": "d3_course"
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "any": [
+                {
+                  "flag": "bought_shirt"
+                },
+                {
+                  "flag": "bought_frame"
+                }
+              ]
+            },
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "d7_smoked"
+                  },
+                  {
+                    "flag": "d7_quarter"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "flag": "d5_cleaned"
+            },
+            {
+              "flag": "d3_course"
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "flag": "d5_cleaned"
+            },
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "d7_smoked"
+                  },
+                  {
+                    "flag": "d7_quarter"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "flag": "d3_course"
+            },
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "d7_smoked"
+                  },
+                  {
+                    "flag": "d7_quarter"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "text": "{crush} закрыла книгу и посмотрела внимательнее. «Ты какой-то другой. Прикольно выглядишь».",
+    "choices": [
+      {
+        "id": "good",
+        "label": "Спасибо. А что тут берут, кроме кофе?",
+        "outcomes": [
+          {
+            "text": "{crush}: «Сырники. Бери, пока не разобрали». И подвинула книгу, чтобы на столике хватило места.",
+            "why": "Сказал спасибо и спросил в ответ",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": 4
+              },
+              {
+                "counter": "d7_scene",
+                "add": 1
+              },
+              {
+                "flag": "d7_line",
+                "value": "nice"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "shrug",
+        "neutral": true,
+        "label": "Пожать плечами",
+        "outcomes": [
+          {
+            "text": "{crush} сказала, что он какой-то другой и прикольно выглядит. {hero} пожал плечами: «Да вроде тот же». {crush}: «Ну-ну».",
+            "effects": [
+              {
+                "flag": "d7_line",
+                "value": "nice"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "long",
+        "label": "Рассказать про врача и про зал",
+        "outcomes": [
+          {
+            "text": "{hero} начал с поликлиники, перешёл к спорту и где-то на втором круге по парку понял, что говорит уже минуту. {crush} слушала вежливо. Кофе у неё остыл.",
+            "why": "Длинное объяснение",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": -2
+              },
+              {
+                "counter": "d7_scene",
+                "add": -1
+              },
+              {
+                "flag": "d7_line",
+                "value": "nice"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K7-04b",
+    "kind": "story",
+    "title": "{crush} у окна",
+    "speaker": "crush",
+    "when": {
+      "days": [
+        7,
+        7
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d7_met"
+        },
+        {
+          "flag": "d7_line",
+          "set": false
+        },
+        {
+          "any": [
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "shaved",
+                    "set": false
+                  },
+                  {
+                    "flag": "d7_red"
+                  }
+                ]
+              }
+            },
+            {
+              "any": [
+                {
+                  "flag": "bought_shirt"
+                },
+                {
+                  "flag": "bought_frame"
+                }
+              ]
+            },
+            {
+              "flag": "d5_cleaned"
+            },
+            {
+              "flag": "d3_course"
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "shaved",
+                    "set": false
+                  },
+                  {
+                    "flag": "d7_red"
+                  }
+                ]
+              }
+            },
+            {
+              "any": [
+                {
+                  "flag": "bought_shirt"
+                },
+                {
+                  "flag": "bought_frame"
+                }
+              ]
+            },
+            {
+              "flag": "d5_cleaned"
+            },
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "d7_smoked"
+                  },
+                  {
+                    "flag": "d7_quarter"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "shaved",
+                    "set": false
+                  },
+                  {
+                    "flag": "d7_red"
+                  }
+                ]
+              }
+            },
+            {
+              "any": [
+                {
+                  "flag": "bought_shirt"
+                },
+                {
+                  "flag": "bought_frame"
+                }
+              ]
+            },
+            {
+              "flag": "d3_course"
+            },
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "d7_smoked"
+                  },
+                  {
+                    "flag": "d7_quarter"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "shaved",
+                    "set": false
+                  },
+                  {
+                    "flag": "d7_red"
+                  }
+                ]
+              }
+            },
+            {
+              "flag": "d5_cleaned"
+            },
+            {
+              "flag": "d3_course"
+            },
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "d7_smoked"
+                  },
+                  {
+                    "flag": "d7_quarter"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "any": [
+                {
+                  "flag": "bought_shirt"
+                },
+                {
+                  "flag": "bought_frame"
+                }
+              ]
+            },
+            {
+              "flag": "d5_cleaned"
+            },
+            {
+              "flag": "d3_course"
+            },
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "d7_smoked"
+                  },
+                  {
+                    "flag": "d7_quarter"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "text": "{crush} закрыла книгу и посмотрела внимательнее. «Ты какой-то другой».",
+    "choices": [
+      {
+        "id": "good",
+        "label": "Спасибо, наверное. А что тут берут, кроме кофе?",
+        "outcomes": [
+          {
+            "text": "{crush}: «Сырники. Бери, пока не разобрали». И подвинула книгу, чтобы на столике хватило места.",
+            "why": "Сказал спасибо и спросил в ответ",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": 4
+              },
+              {
+                "counter": "d7_scene",
+                "add": 1
+              },
+              {
+                "flag": "d7_line",
+                "value": "other"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "shrug",
+        "neutral": true,
+        "label": "Пожать плечами",
+        "outcomes": [
+          {
+            "text": "{crush} сказала, что он какой-то другой. {hero} пожал плечами: «Да вроде тот же». {crush}: «Ну-ну».",
+            "effects": [
+              {
+                "flag": "d7_line",
+                "value": "other"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "long",
+        "label": "Рассказать про врача и про зал",
+        "outcomes": [
+          {
+            "text": "{hero} начал с поликлиники, перешёл к спорту и где-то на втором круге по парку понял, что говорит уже минуту. {crush} слушала вежливо. Кофе у неё остыл.",
+            "why": "Длинное объяснение",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": -2
+              },
+              {
+                "counter": "d7_scene",
+                "add": -1
+              },
+              {
+                "flag": "d7_line",
+                "value": "other"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K7-04a",
+    "kind": "story",
+    "title": "{crush} у окна",
+    "speaker": "crush",
+    "when": {
+      "days": [
+        7,
+        7
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d7_met"
+        },
+        {
+          "flag": "d7_line",
+          "set": false
+        }
+      ]
+    },
+    "text": "{crush} заложила книгу пальцем. «О, привет. Ты тут какими судьбами?»",
+    "choices": [
+      {
+        "id": "good",
+        "label": "За кофе. А что тут берут, кроме него?",
+        "outcomes": [
+          {
+            "text": "{crush}: «Сырники. Бери, пока не разобрали». И подвинула книгу, чтобы на столике хватило места.",
+            "why": "Ответил коротко и спросил в ответ",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": 4
+              },
+              {
+                "counter": "d7_scene",
+                "add": 1
+              },
+              {
+                "flag": "d7_line",
+                "value": "plain"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "shrug",
+        "neutral": true,
+        "label": "Пожать плечами",
+        "outcomes": [
+          {
+            "text": "{crush} спросила, какими он тут судьбами. {hero} пожал плечами: «Да так, мимо шёл». {crush}: «Понятно».",
+            "effects": [
+              {
+                "flag": "d7_line",
+                "value": "plain"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "long",
+        "label": "Объяснить подробно, как он сюда попал",
+        "outcomes": [
+          {
+            "text": "{hero} объяснил, что шёл мимо, то есть не совсем мимо, а за кофе, хотя кофе он пьёт редко, но суббота. {crush} слушала вежливо. Кофе у неё остыл.",
+            "why": "Длинное объяснение",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": -2
+              },
+              {
+                "counter": "d7_scene",
+                "add": -1
+              },
+              {
+                "flag": "d7_line",
+                "value": "plain"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K7-05a",
+    "kind": "story",
+    "title": "{crush} вспомнила",
+    "speaker": "crush",
+    "when": {
+      "days": [
+        7,
+        7
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d7_line"
+        },
+        {
+          "flag": "d7_thread",
+          "set": false
+        },
+        {
+          "flag": "d1_wrote_flirty"
+        },
+        {
+          "any": [
+            {
+              "flag": "d6_reply",
+              "eq": "dry"
+            },
+            {
+              "flag": "d6_reply",
+              "eq": "excuse"
+            }
+          ]
+        }
+      ]
+    },
+    "text": "{crush} покрутила стакан в руках. «Ты мне, кстати, странное писал».",
+    "choices": [
+      {
+        "id": "own",
+        "label": "Было дело. Хотел сказать приятное, вышло с сердечком. Проехали?",
+        "outcomes": [
+          {
+            "text": "{crush}: «Проехали. Но сердечки пока придержи». У неё звякнул телефон. «Ладно, мне пора. Увидимся на встрече».",
+            "why": "Признал неловкое сообщение",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": 3
+              },
+              {
+                "counter": "d7_scene",
+                "add": 1
+              },
+              {
+                "flag": "d7_thread",
+                "value": "strange"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "again",
+        "label": "Почему странное? Ты правда не изменилась.",
+        "outcomes": [
+          {
+            "text": "{crush}: «Ясно». И больше ничего. «Ладно, мне пора». Книга уже в сумке.",
+            "why": "Повторил то же самое вслух",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": -5
+              },
+              {
+                "counter": "d7_scene",
+                "add": -1
+              },
+              {
+                "flag": "d7_thread",
+                "value": "strange"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "shrug",
+        "neutral": true,
+        "label": "Писал. Бывает.",
+        "outcomes": [
+          {
+            "text": "{crush} вспомнила странное сообщение с первого дня. {hero}: «Писал. Бывает». {crush}: «Бывает». У неё звякнул телефон. «Ладно, мне пора. Увидимся на встрече».",
+            "effects": [
+              {
+                "flag": "d7_thread",
+                "value": "strange"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K7-05b",
+    "kind": "story",
+    "title": "Про выпускной",
+    "speaker": "crush",
+    "when": {
+      "days": [
+        7,
+        7
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d7_line"
+        },
+        {
+          "flag": "d7_thread",
+          "set": false
+        },
+        {
+          "flag": "d6_reply",
+          "eq": "joke"
+        }
+      ]
+    },
+    "text": "Из колонки под потолком кто-то старательно поёт. {crush} кивнула наверх. «Петь не будешь?»",
+    "choices": [
+      {
+        "id": "wit",
+        "label": "Только на выпускных. Раз в двадцать лет.",
+        "outcomes": [
+          {
+            "text": "{crush} засмеялась, по-настоящему, на всё «Зерно». «Значит, на встрече споёшь». У неё звякнул телефон. «Ладно, мне пора. Увидимся на встрече».",
+            "why": "Рассмешил",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": 3
+              },
+              {
+                "counter": "d7_scene",
+                "add": 1
+              },
+              {
+                "flag": "d7_thread",
+                "value": "song"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sing",
+        "label": "Спеть прямо сейчас",
+        "outcomes": [
+          {
+            "text": "{hero} взял первую ноту. Вторую брать не стал: обернулись бариста, очередь и чья-то собака. {crush} прикрылась книгой. «Ладно, мне пора». Книга уже в сумке.",
+            "why": "Запел в кофейне",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": -2
+              },
+              {
+                "counter": "d7_scene",
+                "add": -1
+              },
+              {
+                "flag": "d7_thread",
+                "value": "song"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "no",
+        "neutral": true,
+        "label": "Не буду.",
+        "outcomes": [
+          {
+            "text": "{crush} спросила, не будет ли он петь. {hero}: «Не буду». {crush}: «И правильно». У неё звякнул телефон. «Ладно, мне пора. Увидимся на встрече».",
+            "effects": [
+              {
+                "flag": "d7_thread",
+                "value": "song"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K7-05c",
+    "kind": "story",
+    "title": "Про шашлыки",
+    "speaker": "crush",
+    "when": {
+      "days": [
+        7,
+        7
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d7_line"
+        },
+        {
+          "flag": "d7_thread",
+          "set": false
+        },
+        {
+          "flag": "d4_went"
+        }
+      ]
+    },
+    "text": "{crush} отпила из стакана. «Видела вас у Вити, на фото в чате. Весело было?»",
+    "choices": [
+      {
+        "id": "fun",
+        "label": "Весело. Витя до сих пор уверен, что жарит лучше всех. А ты чего не пришла?",
+        "outcomes": [
+          {
+            "text": "{crush}: «Работала. Но фото посмотрела все». У неё звякнул телефон. «Ладно, мне пора. Увидимся на встрече».",
+            "why": "Рассказал коротко и спросил в ответ",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": 3
+              },
+              {
+                "counter": "d7_scene",
+                "add": 1
+              },
+              {
+                "flag": "d7_thread",
+                "value": "bbq"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "moan",
+        "label": "Пожаловаться на мясо, комаров и Витю",
+        "outcomes": [
+          {
+            "text": "{hero} рассказал, что мясо было жёсткое, комары с кулак, а Витя шумный. {crush}: «А на фото все довольные». «Ладно, мне пора». Книга уже в сумке.",
+            "why": "Нажаловался на шашлыки",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": -2
+              },
+              {
+                "counter": "d7_scene",
+                "add": -1
+              },
+              {
+                "flag": "d7_thread",
+                "value": "bbq"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "fine",
+        "neutral": true,
+        "label": "Нормально посидели.",
+        "outcomes": [
+          {
+            "text": "{crush} сказала, что видела их у Вити на фото. {hero}: «Нормально посидели». {crush}: «По фото так и выглядело». У неё звякнул телефон. «Ладно, мне пора. Увидимся на встрече».",
+            "effects": [
+              {
+                "flag": "d7_thread",
+                "value": "bbq"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K7-05d",
+    "kind": "story",
+    "title": "Про встречу",
+    "speaker": "crush",
+    "when": {
+      "days": [
+        7,
+        7
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d7_line"
+        },
+        {
+          "flag": "d7_thread",
+          "set": false
+        }
+      ]
+    },
+    "text": "{crush} отпила из стакана. «Оксана говорит, на встречу собрались почти все. Ты хоть кого-нибудь узнаешь?»",
+    "choices": [
+      {
+        "id": "wit",
+        "label": "Тебя вот узнал. Остальных буду угадывать по голосу.",
+        "outcomes": [
+          {
+            "text": "{crush} улыбнулась в стакан: «Громова угадаешь по бороде». У неё звякнул телефон. «Ладно, мне пора. Увидимся на встрече».",
+            "why": "Хороший ответ про встречу",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": 3
+              },
+              {
+                "counter": "d7_scene",
+                "add": 1
+              },
+              {
+                "flag": "d7_thread",
+                "value": "reunion"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "moan",
+        "label": "Сказать, что на таких встречах все только хвастаются",
+        "outcomes": [
+          {
+            "text": "{hero} объяснил, что на таких встречах все только хвастаются. {crush}: «Я, вообще-то, помогаю Оксане её собирать». «Ладно, мне пора». Книга уже в сумке.",
+            "why": "Обругал встречу",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": -2
+              },
+              {
+                "counter": "d7_scene",
+                "add": -1
+              },
+              {
+                "flag": "d7_thread",
+                "value": "reunion"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "see",
+        "neutral": true,
+        "label": "Посмотрим.",
+        "outcomes": [
+          {
+            "text": "{crush} спросила, узнает ли он кого-нибудь на встрече. {hero}: «Посмотрим». {crush}: «Посмотрим». У неё звякнул телефон. «Ладно, мне пора. Увидимся на встрече».",
+            "effects": [
+              {
+                "flag": "d7_thread",
+                "value": "reunion"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K7-06w",
+    "kind": "story",
+    "title": "{crush} пишет",
+    "says": "alina_d7_warm",
+    "speaker": "crush",
+    "when": {
+      "days": [
+        7,
+        7
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d7_thread"
+        },
+        {
+          "flag": "d7_msg",
+          "set": false
+        },
+        {
+          "counter": "d7_scene",
+          "gte": 2
+        }
+      ]
+    },
+    "text": "{crush} пишет.",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Отложить телефон",
+        "outcomes": [
+          {
+            "text": "Вечером {crush} написала сама, и тепло. Отвечать не нужно. {hero} всё равно перечитал трижды.",
+            "effects": [
+              {
+                "flag": "d7_msg",
+                "value": "warm"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K7-06d",
+    "kind": "story",
+    "title": "{crush} пишет",
+    "says": "alina_d7_dry",
+    "speaker": "crush",
+    "when": {
+      "days": [
+        7,
+        7
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d7_thread"
+        },
+        {
+          "flag": "d7_msg",
+          "set": false
+        },
+        {
+          "counter": "d7_scene",
+          "lte": -1
+        }
+      ]
+    },
+    "text": "{crush} пишет.",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Отложить телефон",
+        "outcomes": [
+          {
+            "text": "Вечером {crush} написала: коротко и только по делу. Отвечать не нужно. До встречи ещё три недели: есть время всё поправить.",
+            "effects": [
+              {
+                "flag": "d7_msg",
+                "value": "dry"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K7-06e",
+    "kind": "story",
+    "title": "{crush} пишет",
+    "says": "alina_d7_even",
+    "speaker": "crush",
+    "when": {
+      "days": [
+        7,
+        7
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d7_thread"
+        },
+        {
+          "flag": "d7_msg",
+          "set": false
+        }
+      ]
+    },
+    "text": "{crush} пишет.",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Отложить телефон",
+        "outcomes": [
+          {
+            "text": "Вечером {crush} написала пару ровных строк. Отвечать не нужно. До встречи выпускников ещё три недели.",
+            "effects": [
+              {
+                "flag": "d7_msg",
+                "value": "even"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A7-run",
+    "kind": "action",
+    "title": "Пробежка в парке",
+    "when": {
+      "days": [
+        7,
+        7
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Пробежка в парке",
+        "cost": {
+          "energy": 4
+        },
+        "outcomes": [
+          {
+            "weight": 3,
+            "hint": "получилось",
+            "text": "Три круга по парку. Такса сегодня полкруга бежала рядом.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          },
+          {
+            "weight": 1,
+            "hint": "закололо в боку",
+            "text": "На втором круге закололо в боку. Собачник сделал вид, что не заметил.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -1
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A7-gym",
+    "kind": "action",
+    "title": "Тренировка в зале",
+    "when": {
+      "days": [
+        7,
+        7
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ],
+      "requires": [
+        {
+          "any": [
+            {
+              "flag": "d2_gym"
+            },
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "bought_gym_pass",
+                    "set": false
+                  },
+                  {
+                    "item": "gym_pass"
+                  },
+                  {
+                    "flagAge": "bought_gym_pass",
+                    "lte": 0
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Тренировка в зале по абонементу",
+        "cost": {
+          "energy": 4
+        },
+        "outcomes": [
+          {
+            "text": "Сорок минут на тренажёрах. Тренер кивнул, не дожидаясь вопроса.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A7-clean",
+    "kind": "action",
+    "title": "Душ и чистая футболка",
+    "when": {
+      "days": [
+        7,
+        7
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Душ и чистая футболка",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Душ и чистая футболка. Суббота пахнет порошком.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -5
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A7-teeth",
+    "kind": "action",
+    "title": "Почистить зубы по таймеру",
+    "when": {
+      "days": [
+        7,
+        7
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Почистить зубы две минуты по таймеру",
+        "cost": {
+          "energy": 1
+        },
+        "outcomes": [
+          {
+            "text": "Две минуты по таймеру. Зеркало не возражает.",
+            "effects": [
+              {
+                "problem": "teeth",
+                "add": -1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A7-couch",
+    "kind": "action",
+    "title": "Полежать на диване",
+    "when": {
+      "days": [
+        7,
+        7
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Полежать на диване",
+        "outcomes": [
+          {
+            "text": "Полчаса на диване. Суббота всё-таки.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K7-sleep",
+    "kind": "action",
+    "title": "Сон",
+    "when": {
+      "days": [
+        7,
+        7
+      ],
+      "parts": [
+        "night"
+      ]
+    },
+    "text": "Суббота почти закончилась.",
+    "choices": [
+      {
+        "id": "sleep",
+        "label": "Лечь спать",
+        "outcomes": [
+          {
+            "text": "Свет выключен. Неделя позади. До встречи выпускников ещё двадцать три дня.",
+            "effects": [
+              {
+                "closeDay": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
