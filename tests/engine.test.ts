@@ -1011,7 +1011,7 @@ describe('день 5', () => {
     }
     expect(content.cards.filter((c) => c.id.startsWith('K5-')).some((c) => c.kind === 'chat' || c.choices.some((ch) => ch.outcomes.some((o) => o.effects?.some((e) => 'write' in e))))).toBe(false);
   });
-  it('plus actions and sleep: the gym needs the pass, staying up costs four, and the demo ends after day 5 with five frames', () => {
+  it('plus actions and sleep: the gym needs the pass, staying up costs four, and day 6 follows with five frames', () => {
     const night = story(toNight(morning5()));
     expect(actionsFor(content, night).map((c) => c.id)).toEqual(['A5-run', 'A5-clean', 'A5-teeth', 'A5-couch', 'K5-sleep']);
     const day = toDay(morning5());
@@ -1021,10 +1021,9 @@ describe('день 5', () => {
     const late = syncClock(full, pick(night, 'K5-sleep', 'late', full), at(129));
     expect(late.flags.d5_late).toBeDefined();
     expect([late.day, late.energy]).toEqual([6, 10 - 4]);
-    expect(content.balance.contentDays).toBe(5);
     const end = syncClock(content, pick(night, 'K5-sleep', 'sleep'), at(129));
-    expect(end.demoOver).toBe(true);
-    expect(end.day).toBe(5);
+    expect(end.demoOver).toBeUndefined();
+    expect(end.day).toBe(6);
     expect(end.summaries.map((d) => [d.day, d.played])).toEqual([[1, true], [2, true], [3, true], [4, true], [5, true]]);
     expect(end.summaries[4].gift).toBe('floss');
     expect(content.days.find((d) => d.day === 5)).toMatchObject({ title: 'Соседка', teaser: 'Утром: ответить Алине' });
@@ -1064,6 +1063,391 @@ describe('день 5', () => {
       ]);
       expect(missed.items.at(-1)!.text, where).toContain('ответит утром');
     }
+  });
+});
+
+describe('день 6', () => {
+  const d6 = (s: GameState) => Object.keys(s.seen).filter((id) => id.startsWith('K6-'));
+  const card = (id: string) => content.cards.find((c) => c.id === id)!;
+  const ids = (s: GameState, id: string) => choicesFor(content, s, card(id)).map((x) => x.choice.id);
+  const next = (s: GameState) => drawStory(content, s).card?.id;
+  const Q2 = { 'K2-04': 'later', 'K2-05a': 'delete', 'K2-09': 'ok' };
+  const Q3 = { 'K3-01': 'asis', 'K3-02': 'smoke' };
+  const Q4 = { 'K4-02': 'home', 'K4-06': 'calm', 'K4-07a': 'smoke', 'K4-08c': 'ok' };
+  const Q5 = { 'K5-02b': 'hello', 'K5-03': 'skip', 'K5-06c': 'calm', 'K5-07a': 'smoke' };
+  /** free and quiet choices of Day 6: no trap, nothing bought, a cigarette */
+  const Q6: Record<string, string> = { 'K6-00': 'up', 'K6-02': 'scroll', 'K6-03a': 'home', 'K6-03b': 'home', 'K6-03c': 'home', 'K6-04': 'scroll', 'K6-08a': 'smoke', 'K6-08b': 'smoke' };
+  type Patch = { on?: Record<string, string | boolean>; off?: string[]; counters?: Record<string, number>; items?: Record<string, number>; energy?: number; coins?: number; conf?: number };
+  /** the same state with flags of earlier days switched, so one played week covers every branch */
+  const patch = (s: GameState, p: Patch): GameState => {
+    const flags = { ...s.flags };
+    for (const f of p.off ?? []) delete flags[f];
+    for (const [k, value] of Object.entries(p.on ?? {})) flags[k] = { value, day: Number(k[1]) };
+    return {
+      ...s, flags, counters: { ...s.counters, ...p.counters }, items: { ...s.items, ...p.items }, energy: p.energy ?? s.energy, coins: p.coins ?? s.coins,
+      problems: p.conf === undefined ? s.problems : { ...s.problems, conf: p.conf },
+    };
+  };
+  /** the night of day 5 on the quiet path: said «Я приду», wrote plainly on Day 1, stayed home on Day 4, smokes */
+  let cache: GameState | undefined;
+  const night5 = () => (cache ??= [105, 109, 115, 119.5].reduce((s, h) => story(syncClock(content, s, at(h)), Q5), pick(day4({}, Q2, Q3, Q4), 'K4-sleep', 'sleep')));
+  const morning6 = (p: Patch = {}, sleep5 = 'sleep') => patch(syncClock(content, pick(night5(), 'K5-sleep', sleep5), at(129)), p);
+  const D1 = ['d1_wrote_plain', 'd1_wrote_flirty', 'd1_liked_only', 'd1_no_contact', 'd1_said_coming', 'd1_lurked', 'd1_joked'];
+  const with1 = (s: GameState, ...on: string[]) => patch(s, { off: D1, on: Object.fromEntries(on.map((f) => [f, true])) });
+  /** the confidence the reply needs: the joke is open at 75 and below */
+  const CONF: Record<string, number> = { dry: 80, plain: 80, excuse: 80, joke: 70 };
+  /** reply in the morning, a quiet day, then the evening begins */
+  const evening = (s: GameState, reply: string, p: Record<string, string> = {}) => {
+    const picks = { ...Q6, 'K6-01': reply, ...p };
+    const day = syncClock(content, story(patch(s, { conf: CONF[reply] }), picks), at(133));
+    return syncClock(content, story(day, picks), at(139));
+  };
+  const said = (s: GameState) => s.chat.filter((m) => m.day === 6);
+  const hers = (s: GameState) => said(s).filter((m) => m.from === 'crush' && !m.status).map((m) => m.text);
+  const bank = (key: string) => content.chat[key];
+  const BYE = 'Ладно, мне пора. Увидимся на встрече, наверное.';
+
+  it('the morning starts from her question; after a late night «Проспал» comes first and the reply waits', () => {
+    const s = morning6();
+    expect([s.day, s.part, s.energy]).toEqual([6, 'morning', 10]);
+    expect(s.flags.d5_alina_wrote).toBeDefined();
+    expect(next(s)).toBe('K6-01');
+    const late = morning6({}, 'late');
+    expect(late.energy).toBe(6);
+    expect(next(late)).toBe('K6-00');
+    expect(next(pick(late, 'K6-00', 'up'))).toBe('K6-01');
+    expect(pick(late, 'K6-00', 'up').energy).toBe(6);                  // the line charges nothing
+    expect(d6(story(morning6(), { 'K6-01': 'dry' }))).toEqual(['K6-01']);
+  });
+  it('the reply: three buttons, each label is the message; the joke or the excuse by confidence, never both', () => {
+    const reply = card('K6-01');
+    for (let conf = 0; conf <= 100; conf++) {
+      const shown = ids(morning6({ conf }), 'K6-01');
+      expect(shown, `conf ${conf}`).toEqual(conf <= 75 ? ['plain', 'joke', 'dry'] : ['plain', 'excuse', 'dry']);
+    }
+    // the threshold lives in one card: the joke asks for conf <= N and the excuse is its negation
+    const need = (id: string) => reply.choices.find((ch) => ch.id === id)!.requires;
+    expect(need('joke')).toEqual([{ problem: 'conf', lte: 75 }]);
+    expect(need('excuse')).toEqual([{ not: { problem: 'conf', lte: 75 } }]);
+    expect(reply.choices.find((ch) => ch.neutral)!.id).toBe('dry');
+    expect(reply.choices.map((ch) => ch.label).join(' ')).not.toMatch(/не приду|не знаю/i);
+    const WANT: [string, number, string | undefined][] = [['dry', 0, undefined], ['plain', 5, 'Ответил и спросил в ответ'], ['joke', 8, 'Шутка про выпускной'], ['excuse', -5, 'Длинное оправдание']];
+    for (const [id, add, why] of WANT) for (const sleep5 of ['sleep', 'late']) {
+      const where = `${id} ${sleep5}`;
+      const before = morning6({ conf: CONF[id] }, sleep5);
+      const start6 = sleep5 === 'late' ? pick(before, 'K6-00', 'up') : before;
+      const r = choose(content, start6, 'K6-01', id);
+      const label = reply.choices.find((ch) => ch.id === id)!.label;
+      expect(said(r.state).map((m) => [m.from, !!m.status]), where).toEqual([['hero', false], ['crush', true]]);
+      expect(said(r.state)[0].text, where).toBe(label);                 // what the button says is what is sent
+      expect(bank(sleep5 === 'late' ? 'status_reply_read_noon' : 'status_reply_read'), where).toContain(said(r.state)[1].text);
+      expect(r.state.affinity - start6.affinity, where).toBe(add);
+      expect(r.chanceDelta, where).toBe(add);
+      if (why) expect(r.state.lastChange, where).toEqual({ delta: add, why });
+      expect(r.state.flags.d6_reply.value, where).toBe(id);
+      expect(next(r.state), where).toBeUndefined();                     // nothing more until the day part
+    }
+    expect(bank('status_reply_read')).toHaveLength(10);
+    expect(bank('status_reply_read_noon')).toHaveLength(10);
+    expect(pick(morning6({}, 'late'), 'K6-00', 'up').log.at(-1)!.text).toContain('Встал к одиннадцати');
+    expect(choose(content, pick(morning6({}, 'late'), 'K6-00', 'up'), 'K6-01', 'dry').outcome.text).toContain('ближе к полудню');
+  });
+  it('the trendy look from the feed is free, buys nothing and makes style worse', () => {
+    const day = syncClock(content, pick(morning6(), 'K6-01', 'dry'), at(133));
+    expect(next(day)).toBe('K6-02');
+    expect(card('K6-02').choices.every((ch) => !ch.cost)).toBe(true);
+    const worn = pick(day, 'K6-02', 'wear');
+    expect(worn.problems.style - day.problems.style).toBe(4);
+    expect([worn.coins, worn.items]).toEqual([day.coins, day.items]);
+    expect(worn.flags.d6_trend).toBeDefined();
+    const kept = pick(day, 'K6-02', 'scroll');
+    expect(kept.problems).toEqual(day.problems);
+    expect(kept.flags.d6_trend).toBeUndefined();
+  });
+  it('the market with Vitya or the optician: shop prices, one purchase, Vitya recalls the skewers', () => {
+    const day = (p: Patch = {}) => pick(syncClock(content, pick(morning6(p), 'K6-01', 'dry'), at(133)), 'K6-02', 'scroll');
+    expect(next(day())).toBe('K6-03c');                                 // stayed home on Day 4
+    expect(next(day({ off: ['d4_home'], on: { d4_went: true, d4_meat_held: true } }))).toBe('K6-03a');
+    expect(next(day({ off: ['d4_home'], on: { d4_went: true, d4_feast: true } }))).toBe('K6-03b');
+    expect(card('K6-03a').text).toContain('один шампур');
+    expect(card('K6-03b').text).toContain('пяти шампуров');
+    expect(card('K6-03c').text).toContain('На шашлыки не пришёл');
+    const price = (id: string) => content.items.find((i) => i.id === id)!.price!.coins;
+    for (const id of ['K6-03a', 'K6-03b', 'K6-03c']) {
+      const cost = (ch: string) => card(id).choices.find((x) => x.id === ch)!.cost;
+      expect(cost('shirt'), id).toEqual({ coins: price('shirt') });
+      expect(cost('frame'), id).toEqual({ coins: price('frame') });
+      expect(card(id).text, id).toContain('Рубашка: 90 монет, стиль +6');
+      expect(card(id).text, id).toContain('Оправа в оптике: 150 монет, стиль +12, уверенность +2');
+      expect(card(id).choices.map((ch) => ch.id), id).toEqual(['shirt', 'frame', 'look', 'home']);
+    }
+    const s = day();
+    expect(s.coins).toBeGreaterThanOrEqual(150);
+    const shirt = pick(s, 'K6-03c', 'shirt');
+    expect([shirt.coins - s.coins, shirt.problems.style - s.problems.style]).toEqual([-90, -6]);
+    expect(soldOut(shirt, content.items.find((i) => i.id === 'shirt')!)).toBe(true);
+    expect(currentLook(content, shirt).topColor).toBe('#4A6FA5');
+    const frame = pick(s, 'K6-03c', 'frame');
+    expect([frame.coins - s.coins, frame.problems.style - s.problems.style, frame.problems.conf - s.problems.conf]).toEqual([-150, -12, -2]);
+    expect(soldOut(frame, content.items.find((i) => i.id === 'frame')!)).toBe(true);
+    expect(currentLook(content, frame).glasses).toBe('round');
+    expect(next(shirt)).toBeUndefined();                                // one purchase on the card; the other stays in the shop
+    const look = pick(s, 'K6-03c', 'look');
+    expect([look.coins, look.problems.conf - s.problems.conf]).toEqual([s.coins, -1]);
+    const home = pick(s, 'K6-03c', 'home');
+    expect([home.coins, home.problems]).toEqual([s.coins, s.problems]);
+    // already bought in the shop: the card does not sell it twice
+    expect(ids(patch(s, { on: { bought_shirt: true, bought_frame: true } }), 'K6-03c')).toEqual(['look', 'home']);
+    // a poor player sees the price and a free way out
+    expect(choicesFor(content, patch(s, { coins: 100 }), card('K6-03c')).map((x) => [x.choice.id, x.affordable])).toEqual([['shirt', true], ['frame', false], ['look', true], ['home', true]]);
+    // Vitya sees the trendy look
+    const trendy = pick(syncClock(content, pick(morning6(), 'K6-01', 'dry'), at(133)), 'K6-02', 'wear');
+    expect(choose(content, trendy, 'K6-03c', 'shirt').outcome.text).toContain('Это что, так модно?');
+    expect(choose(content, s, 'K6-03c', 'shirt').outcome.text).not.toContain('модно');
+  });
+  it('the class chat in the evening: the beard hint reaches everyone, and the silent one can finally answer', () => {
+    for (const reply of ['dry', 'plain', 'joke', 'excuse']) {
+      const day = syncClock(content, story(patch(morning6(), { conf: CONF[reply] }), { ...Q6, 'K6-01': reply }), at(133));
+      const e = syncClock(content, story(day, { 'K6-02': 'scroll', 'K6-03c': 'home' }), at(139));
+      expect(next(e), reply).toBe('K6-04');                             // she jokes in the class chat before she answers him
+      expect(ids(e, 'K6-04'), reply).toEqual(['smile', 'scroll']);
+      for (const id of ['smile', 'scroll']) {
+        const s = pick(e, 'K6-04', id);
+        expect(s.flags.d6_beard_hint, `${reply} ${id}`).toBeDefined();
+        expect(s.revealed, `${reply} ${id}`).toEqual(['no_beard']);
+        expect(s.hints, `${reply} ${id}`).toContain('alina_beard');
+        expect(s.affinity, `${reply} ${id}`).toBe(e.affinity);
+      }
+    }
+    expect(card('K6-04').text).toContain('Борода вообще не моё');
+    const day = syncClock(content, story(with1(morning6(), 'd1_no_contact', 'd1_lurked'), { ...Q6, 'K6-01': 'dry' }), at(133));
+    const lurker = syncClock(content, story(day, Q6), at(139));
+    expect(ids(lurker, 'K6-04')).toEqual(['speak', 'smile', 'scroll']);
+    const spoke = pick(lurker, 'K6-04', 'speak');
+    expect(spoke.problems.conf - lurker.problems.conf).toBe(-2);
+    expect(spoke.flags.d6_chat_spoke).toBeDefined();
+    expect(spoke.flags.d6_beard_hint).toBeDefined();
+  });
+  it('after the dry reply: «Ок, записала» and the goodbye, no fork; after the excuse a cool answer and the goodbye', () => {
+    for (const [reply, id, line] of [['dry', 'K6-05d', 'Ок, записала.'], ['excuse', 'K6-05e', 'Поняла. Записала.']]) for (const sleep5 of ['sleep', 'late']) for (const f of ['d1_wrote_plain', 'd1_wrote_flirty', 'd1_no_contact']) {
+      const where = `${reply} ${sleep5} ${f}`;
+      const e = pick(evening(with1(morning6({ on: { d2_wrote_zerno: true } }, sleep5), f, 'd1_joked'), reply), 'K6-04', 'scroll');
+      const a = drawStory(content, e);
+      expect(a.card?.id, where).toBe(id);
+      expect(hers(a.state), where).toEqual([line]);
+      expect(ids(a.state, id), where).toEqual(['read']);
+      const read = pick(a.state, id, 'read');
+      if (sleep5 === 'late') expect(bank('alina_long'), where).toContain(hers(read).at(-1));
+      expect(hers(read), where).toHaveLength(sleep5 === 'late' ? 2 : 1);
+      const bye = drawStory(content, read);
+      expect(bye.card?.id, where).toBe('K6-07');                        // no second fork
+      expect(bank('alina_goodbye'), where).toContain(hers(bye.state).at(-1));
+      const end = pick(bye.state, 'K6-07', 'ok');
+      expect(end.affinity, where).toBe(e.affinity);                     // the evening itself moves nothing
+      expect(next(end), where).toBeUndefined();                         // the evening ends on the goodbye
+      expect(said(end).filter((m) => m.from === 'hero'), where).toHaveLength(1);
+    }
+    expect(bank('alina_goodbye')).toHaveLength(10);
+    expect(bank('alina_goodbye')[0]).toBe(BYE);
+    expect(bank('alina_goodbye').every((x) => x.endsWith('наверное.') && /пора|побежала|убегаю/.test(x))).toBe(true);
+    expect(bank('alina_long')).toHaveLength(10);
+  });
+  it('after the plain reply or the joke: her tone follows the Day 5 opening, then a smaller fork, then the goodbye', () => {
+    const TONE: [string, string[], string, string | undefined, string | undefined][] = [
+      ['warm', ['d1_wrote_plain', 'd1_joked'], '', 'bank:alina_tone_warm', 'bank:alina_tone_warm'],
+      ['list', ['d1_liked_only', 'd1_said_coming'], '', 'Ты и в чате писал, что придёшь. Теперь официально.', 'Ты и в чате писал, что придёшь. Теперь официально.'],
+      ['oksana', ['d1_no_contact', 'd1_lurked'], '', 'А я думала, ответишь одним словом.', 'Оксане передам, что ты в списке.'],
+      ['flirty', ['d1_wrote_flirty', 'd1_joked'], 'f', undefined, undefined],
+    ];
+    const FIRST: Record<string, string> = { p: 'Записала. Почти все наши, даже Громов обещал.', j: 'Записала. А жаль: пел ты ужасно, зато громко.', pf: 'Записала. Почти все.', jf: 'Записала. Не пой.' };
+    for (const [tone, flags, suffix, afterPlain, afterJoke] of TONE) for (const reply of ['plain', 'joke']) for (const sleep5 of ['sleep', 'late']) {
+      const where = `${tone} ${reply} ${sleep5}`;
+      const key = reply[0] + suffix;
+      const e = pick(evening(with1(morning6({}, sleep5), ...flags), reply), 'K6-04', 'scroll');
+      const a = drawStory(content, e);
+      expect(a.card?.id, where).toBe(`K6-05${key}`);
+      expect(hers(a.state), where).toEqual([FIRST[key]]);
+      const read = choose(content, a.state, `K6-05${key}`, 'read');
+      expect(read.chanceDelta, where).toBe(0);
+      const rest = hers(read.state).slice(1);
+      const want = reply === 'plain' ? afterPlain : afterJoke;
+      expect(rest, where).toHaveLength((want ? 1 : 0) + (sleep5 === 'late' ? 1 : 0));
+      if (sleep5 === 'late') expect(bank('alina_long'), where).toContain(rest.at(-1));
+      if (want?.startsWith('bank:')) expect(bank(want.slice(5)), where).toContain(rest[0]);
+      else if (want) expect(rest[0], where).toBe(want);
+      const fork = drawStory(content, read.state);
+      expect(fork.card?.id, where).toBe(tone === 'flirty' ? 'K6-06f' : 'K6-06');
+      if (tone === 'flirty') expect(hers(fork.state).at(-1), where).toBe('Ты мне, кстати, странное писал.');
+      else expect(bank('alina_live_question'), where).toContain(hers(fork.state).at(-1));
+    }
+    expect(bank('alina_tone_warm')).toHaveLength(10);
+    expect(bank('alina_live_question')).toHaveLength(10);
+    // she never names what he changed
+    expect(Object.entries(content.chat).filter(([k]) => /^alina_(ok|answer|long|tone|live|zerno|strange|goodbye)/.test(k)).flatMap(([, v]) => v).join(' ')).not.toMatch(/похуде|кож|зуб|очк|рубашк|побри|бород|курил|выгляд/i);
+  });
+  it('the live fork gives +3, +1 or 0; the «странное писал» fork repairs with +3 or costs −5; «Зерно» on Saturdays for the one who wrote', () => {
+    const at6 = (flags: string[], reply: string, p: Patch = {}) => {
+      const e = pick(evening(with1(morning6(p), ...flags), reply), 'K6-04', 'scroll');
+      const a = drawStory(content, e);
+      return drawStory(content, pick(a.state, a.card!.id, 'read')).state;
+    };
+    const LIVE: [string, number, string, string][] = [['open', 3, 'open', 'Звучит серьёзно. Я нормально: работа, кот, по выходным кофе.'], ['work', 1, 'work', 'Тоже работаю. Нормально.'], ['short', 0, 'short', 'Ну и хорошо.']];
+    const live = at6(['d1_wrote_plain', 'd1_said_coming'], 'plain');
+    expect(ids(live, 'K6-06')).toEqual(['open', 'work', 'short']);
+    expect(card('K6-06').choices.find((ch) => ch.neutral)!.id).toBe('short');
+    for (const [id, add, value, line] of LIVE) for (const zerno of [false, true]) {
+      const where = `${id} zerno ${zerno}`;
+      const s = at6(['d1_wrote_plain', 'd1_said_coming'], 'joke', zerno ? { on: { d2_wrote_zerno: true } } : {});
+      const r = choose(content, s, 'K6-06', id);
+      expect(r.state.affinity - s.affinity, where).toBe(add);
+      expect(r.state.flags.d6_talk.value, where).toBe(value);
+      const tail = said(r.state).slice(said(s).length);
+      expect(tail.map((m) => m.from), where).toEqual(['hero', 'crush', ...(zerno ? ['crush'] : [])]);
+      expect(tail[0].text, where).toBe(card('K6-06').choices.find((ch) => ch.id === id)!.label);
+      expect(tail[1].text, where).toBe(line);
+      if (zerno) expect(tail[2].text, where).toBe('Я, кстати, по субботам в «Зерне». Раз уж тебе место понравилось.');
+      const bye = drawStory(content, r.state);
+      expect(bye.card?.id, where).toBe('K6-07');
+      expect(bank('alina_goodbye'), where).toContain(hers(bye.state).at(-1));
+      const end = choose(content, bye.state, 'K6-07', 'ok');
+      expect(end.outcome.text, where).toContain('Первый разговор за много лет');
+      expect(next(end.state), where).toBeUndefined();
+    }
+    const STRANGE: [string, number, string, string][] = [['own', 3, 'owned', 'Проехали. Но сердечки пока придержи.'], ['shrug', 0, 'shrug', 'Бывает.'], ['again', -5, 'repeat', 'Ясно.']];
+    const strange = at6(['d1_wrote_flirty', 'd1_lurked'], 'plain');
+    expect(ids(strange, 'K6-06f')).toEqual(['own', 'again', 'shrug']);
+    expect(card('K6-06f').choices.find((ch) => ch.neutral)!.id).toBe('shrug');
+    for (const [id, add, value, line] of STRANGE) {
+      const s = at6(['d1_wrote_flirty', 'd1_lurked'], 'joke', { on: { d2_wrote_zerno: true } });
+      const r = choose(content, s, 'K6-06f', id);
+      expect(r.state.affinity - s.affinity, id).toBe(add);
+      expect(r.state.flags.d6_talk.value, id).toBe(value);
+      const tail = said(r.state).slice(said(s).length).map((m) => m.text);
+      expect(tail.slice(0, 2), id).toEqual([card('K6-06f').choices.find((ch) => ch.id === id)!.label, line]);
+      expect(tail.length, id).toBe(id === 'again' ? 2 : 3);             // no «Зерно» after a second heart
+      expect(next(r.state), id).toBe('K6-07');
+      const end = choose(content, drawStory(content, r.state).state, 'K6-07', 'ok');
+      if (id === 'again') expect(end.outcome.text).toContain('После второго сердечка');
+    }
+    expect(choose(content, strange, 'K6-06f', 'own').state.lastChange).toEqual({ delta: 3, why: 'Признал неловкое сообщение' });
+  });
+  it('over the whole day Alina moves the chance between −5 and +11', () => {
+    const totals: number[] = [];
+    for (const flags of [['d1_wrote_plain', 'd1_said_coming'], ['d1_wrote_flirty', 'd1_joked'], ['d1_no_contact', 'd1_lurked'], ['d1_liked_only', 'd1_said_coming']]) {
+      for (const reply of ['dry', 'plain', 'joke', 'excuse']) for (const second of ['open', 'work', 'short', 'own', 'again', 'shrug']) {
+        const m = with1(morning6({ on: { d2_wrote_zerno: true } }), ...flags);
+        let s = pick(evening(m, reply), 'K6-04', 'smile');
+        for (let i = 0; i < 4; i++) {
+          const d = drawStory(content, s);
+          if (!d.card) break;
+          const shown = ids(d.state, d.card.id);
+          s = pick(d.state, d.card.id, shown.includes(second) ? second : shown.find((x) => x === 'read' || x === 'ok') ?? shown.at(-1)!);
+        }
+        expect(s.flags.d6_bye, `${flags} ${reply} ${second}`).toBeDefined();
+        totals.push(s.affinity - m.affinity);
+      }
+    }
+    expect([Math.min(...totals), Math.max(...totals)]).toEqual([-5, 11]);
+  });
+  it('the night craving follows the counter, and yesterday’s quarter is remembered', () => {
+    const night = (p: Patch = {}) => {
+      let s = pick(evening(morning6(p), 'dry'), 'K6-04', 'scroll');
+      s = story(s, {});                                                 // «Ок, записала» and the goodbye
+      return syncClock(content, s, at(143.5));
+    };
+    const a = night();
+    expect(next(a)).toBe('K6-08a');
+    expect(ids(patch(a, { items: { gum: 0 } }), 'K6-08a')).toEqual(['hold', 'smoke']);   // the quarter needs Day 1's half, the gum needs a gum
+    const held = choose(content, a, 'K6-08a', 'hold');
+    expect([held.state.energy - a.energy, held.state.counters.smoke_free, held.state.problems.care - a.problems.care, held.state.problems.conf - a.problems.conf]).toEqual([-2, 1, -2, -1]);
+    expect(held.state.flags.d6_no_smoke).toBeDefined();
+    expect(next(held.state)).toBeUndefined();                           // the strong card is not offered once the counter moved
+    const q = night({ on: { d1_half: true, d5_quarter: true }, off: ['d5_smoked'], items: { gum: 1 } });
+    expect(ids(q, 'K6-08a')).toEqual(['hold', 'quarter', 'gum', 'smoke']);
+    expect(choose(content, q, 'K6-08a', 'hold').outcome.text).toContain('Вчера была четверть, сегодня ни одной');
+    expect(choose(content, q, 'K6-08a', 'smoke').outcome.text).toContain('Вчера была четверть, сегодня целая');
+    expect(choose(content, a, 'K6-08a', 'smoke').outcome.text).toContain('Как вчера и позавчера');
+    const quarter = pick(q, 'K6-08a', 'quarter');
+    expect([quarter.energy - q.energy, quarter.counters.smoke_free, quarter.problems.care - q.problems.care]).toEqual([-1, 0, 1]);
+    const gum = pick(q, 'K6-08a', 'gum');
+    expect([gum.items.gum, gum.counters.smoke_free, gum.energy]).toEqual([0, 1, q.energy]);
+    for (const [free, word] of [[1, 'Второй'], [2, 'Третий'], [3, 'Четвёртый'], [5, 'Шестой']] as [number, string][]) {
+      const b = night({ counters: { smoke_free: free }, off: ['d5_smoked'], on: { d5_no_smoke: true } });
+      expect(next(b), word).toBe('K6-08b');
+      const r = choose(content, b, 'K6-08b', 'hold');
+      expect(r.outcome.text, word).toContain(`${word} день без табака`);
+      expect([r.state.energy - b.energy, r.state.counters.smoke_free, r.state.problems.conf - b.problems.conf], word).toEqual([-3, free + 1, -2]);
+      const smoked = pick(b, 'K6-08b', 'smoke');
+      expect([smoked.counters.smoke_free, smoked.problems.care - b.problems.care], word).toEqual([0, 2]);
+      expect(smoked.flags.d6_smoked, word).toBeDefined();
+      expect(next(smoked), word).toBeUndefined();
+    }
+  });
+  it('plus actions and sleep: staying up costs four, and the demo ends after day 6 with six frames', () => {
+    let night = pick(evening(morning6(), 'dry'), 'K6-04', 'scroll');
+    night = story(syncClock(content, story(night, {}), at(143.5)), Q6);
+    expect(actionsFor(content, night).map((c) => c.id)).toEqual(['A6-run', 'A6-clean', 'A6-teeth', 'A6-couch', 'K6-sleep']);
+    const day = syncClock(content, pick(morning6(), 'K6-01', 'dry'), at(133));
+    expect(actionsFor(content, day).map((c) => c.id)).toEqual(['A-job', 'A6-run', 'A6-clean', 'A6-teeth', 'A6-couch'].sort((x, y) => content.cards.findIndex((c) => c.id === x) - content.cards.findIndex((c) => c.id === y)));
+    expect(actionsFor(content, patch(day, { on: { d2_gym: true } })).map((c) => c.id)).toContain('A6-gym');
+    expect(oddsFor(content, day, card('A6-run').choices[0]).map((o) => o.word)).toEqual(['часто', 'иногда']);
+    const late = syncClock(full, pick(night, 'K6-sleep', 'late', full), at(153));
+    expect(late.flags.d6_late).toBeDefined();
+    expect([late.day, late.energy]).toEqual([7, 10 - 4]);
+    expect(content.balance.contentDays).toBe(6);
+    const end = syncClock(content, pick(night, 'K6-sleep', 'sleep'), at(153));
+    expect(end.demoOver).toBe(true);
+    expect(end.day).toBe(6);
+    expect(end.summaries.map((d) => [d.day, d.played])).toEqual([[1, true], [2, true], [3, true], [4, true], [5, true], [6, true]]);
+    expect(end.summaries[5].gift).toBe('gum');
+    expect(content.days.find((d) => d.day === 6)).toMatchObject({ title: 'Первый разговор', teaser: 'Завтра суббота. Кофейня «Зерно»' });
+    for (const part of ['morning', 'day', 'evening', 'night']) expect(content.cards.some((c) => c.id.startsWith('K6-') && c.kind === 'story' && c.when!.parts!.includes(part as 'day')), part).toBe(true);
+  });
+  it('a fully skipped Day 6: the dry reply went by itself, «Ок, записала», the goodbye, the beard hint, and the chance did not move', () => {
+    const TITLES = ['Её вопрос ждёт', 'Образ из ленты', 'Рынок или оптика', 'Чат класса', 'Алина ответила', 'Алина прощается', 'Балкон'];
+    for (const sleep5 of ['sleep', 'late']) {
+      const before = pick(night5(), 'K5-sleep', sleep5, full);
+      const s = syncClock(full, before, at(153));
+      expect(s.day, sleep5).toBe(7);
+      expect(d6(s), sleep5).toEqual([...(sleep5 === 'late' ? ['K6-00'] : []), 'K6-01', 'K6-02', 'K6-03c', 'K6-04', 'K6-05d', 'K6-07', 'K6-08a']);
+      expect(s.affinity, sleep5).toBe(before.affinity);
+      expect(s.coins, sleep5).toBe(before.coins);
+      expect(s.flags.d6_reply.value, sleep5).toBe('dry');
+      expect(s.flags.d6_beard_hint, sleep5).toBeDefined();
+      expect(s.flags.d6_bye, sleep5).toBeDefined();
+      expect(s.flags.d6_trend, sleep5).toBeUndefined();
+      expect(s.problems.style, sleep5).toBe(before.problems.style + content.problems.find((p) => p.id === 'style')!.regress);
+      const msgs = said(s);
+      expect(msgs.map((m) => [m.from, !!m.status]), sleep5).toEqual([['hero', false], ['crush', true], ['crush', false], ...(sleep5 === 'late' ? [['crush', false]] : []), ['crush', false]]);
+      expect(msgs[0].text, sleep5).toBe('Да, записывай.');
+      expect(msgs[2].text, sleep5).toBe('Ок, записала.');
+      if (sleep5 === 'late') expect(bank('alina_long'), sleep5).toContain(msgs[3].text);
+      expect(bank('alina_goodbye'), sleep5).toContain(msgs.at(-1)!.text);
+      expect(s.summaries[5], sleep5).toMatchObject({ day: 6, played: false, coins: 0 });
+      expect(s.history.some((h) => h.day === 6), sleep5).toBe(false);
+      const missed = s.missed!.at(-1)!;
+      expect(missed.day, sleep5).toBe(6);
+      expect(missed.items.map((i) => i.title), sleep5).toEqual([...(sleep5 === 'late' ? ['Проспал'] : []), ...TITLES]);
+      expect(missed.items.find((i) => i.title === 'Её вопрос ждёт')!.text, sleep5).toContain('ответил коротко');
+      expect(missed.items.find((i) => i.title === 'Чат класса')!.text, sleep5).toContain('Борода вообще не моё');
+    }
+    // days 5 and 6 both skipped: her message arrived by itself, and so did his reply
+    const before = pick(day4({}, Q2, Q3, Q4), 'K4-sleep', 'sleep', full);
+    const s = syncClock(full, before, at(153));
+    expect(s.day).toBe(7);
+    expect(s.flags.d5_alina_wrote).toBeDefined();
+    expect(d6(s)).toEqual(['K6-01', 'K6-02', 'K6-03c', 'K6-04', 'K6-05d', 'K6-07', 'K6-08a']);
+    expect(s.affinity).toBe(before.affinity + 6);                       // the Day 5 message only
+    expect(said(s).filter((m) => !m.status).map((m) => m.from)).toEqual(['hero', 'crush', 'crush']);
+    expect(s.flags.d6_beard_hint).toBeDefined();
+    expect(s.missed!.map((m) => m.day)).toEqual([5, 6]);
+    expect(s.missed!.at(-1)!.items.map((i) => i.title)).toEqual(TITLES);
+  });
+  it('every flag set on Day 6 is read on Day 6 or is on the Day 7 list', () => {
+    const day7 = ['d6_reply', 'd6_talk', 'd6_trend', 'd6_shirt', 'd6_frame', 'bought_shirt', 'bought_frame', 'd6_beard_hint', 'd6_chat_spoke', 'd6_smoked', 'd6_no_smoke', 'd6_quarter', 'd6_late', 'd6_bye', 'd6_answered', 'd6_talked'];
+    const mine = content.cards.filter((c) => /^[KA]6-/.test(c.id));
+    const set = new Set(mine.flatMap((c) => c.choices.flatMap((ch) => ch.outcomes.flatMap((o) => (o.effects ?? []).flatMap((e) => ('flag' in e ? [e.flag] : []))))));
+    expect([...set].filter((f) => !day7.includes(f))).toEqual([]);
   });
 });
 

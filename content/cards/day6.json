@@ -1,0 +1,2968 @@
+[
+  {
+    "id": "K6-00",
+    "kind": "story",
+    "title": "Проспал",
+    "when": {
+      "days": [
+        6,
+        6
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d5_late"
+        }
+      ]
+    },
+    "text": "Её сообщение перечитано до трёх ночи, а ответа всё нет. Сегодня на 4 энергии меньше, и ответит {hero} не утром, а ближе к полудню.",
+    "choices": [
+      {
+        "id": "up",
+        "neutral": true,
+        "label": "Встать",
+        "outcomes": [
+          {
+            "text": "Встал к одиннадцати. Сил шесть, её вопрос всё ещё ждёт."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K6-01",
+    "kind": "story",
+    "title": "Её вопрос ждёт",
+    "when": {
+      "days": [
+        6,
+        6
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d5_alina_wrote"
+        },
+        {
+          "flag": "d6_reply",
+          "set": false
+        }
+      ]
+    },
+    "text": "Вчерашний вопрос про список на встречу ждёт ответа. {crush} в сети. Что нажмёшь, то и уйдёт, слово в слово.",
+    "choices": [
+      {
+        "id": "plain",
+        "label": "Да, записывай. А кто ещё из наших будет?",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d5_late",
+                "set": false
+              }
+            ],
+            "text": "Отправлено. Под сообщением «Прочитано». Теперь ждать.",
+            "why": "Ответил и спросил в ответ",
+            "effects": [
+              {
+                "write": "Да, записывай. А кто ещё из наших будет?"
+              },
+              {
+                "chat": "status_reply_read"
+              },
+              {
+                "stat": "affinity",
+                "add": 5
+              },
+              {
+                "flag": "d6_reply",
+                "value": "plain"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d5_late"
+              }
+            ],
+            "text": "Отправлено ближе к полудню. Под сообщением «Прочитано». Теперь ждать.",
+            "why": "Ответил и спросил в ответ",
+            "effects": [
+              {
+                "write": "Да, записывай. А кто ещё из наших будет?"
+              },
+              {
+                "chat": "status_reply_read_noon"
+              },
+              {
+                "stat": "affinity",
+                "add": 5
+              },
+              {
+                "flag": "d6_reply",
+                "value": "plain"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "joke",
+        "label": "Записывай. Обещаю не петь, как на выпускном.",
+        "requires": [
+          {
+            "problem": "conf",
+            "lte": 75
+          }
+        ],
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d5_late",
+                "set": false
+              }
+            ],
+            "text": "Отправлено. {hero} перечитал: не слишком ли? Под сообщением «Прочитано». Теперь ждать.",
+            "why": "Шутка про выпускной",
+            "effects": [
+              {
+                "write": "Записывай. Обещаю не петь, как на выпускном."
+              },
+              {
+                "chat": "status_reply_read"
+              },
+              {
+                "stat": "affinity",
+                "add": 8
+              },
+              {
+                "flag": "d6_reply",
+                "value": "joke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d5_late"
+              }
+            ],
+            "text": "Отправлено ближе к полудню. {hero} перечитал: не слишком ли? Под сообщением «Прочитано». Теперь ждать.",
+            "why": "Шутка про выпускной",
+            "effects": [
+              {
+                "write": "Записывай. Обещаю не петь, как на выпускном."
+              },
+              {
+                "chat": "status_reply_read_noon"
+              },
+              {
+                "stat": "affinity",
+                "add": 8
+              },
+              {
+                "flag": "d6_reply",
+                "value": "joke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "excuse",
+        "label": "Привет! Да, записывай, конечно. Извини, что не сразу: телефон сел, потом работа, потом уснул. Я вообще обычно быстро отвечаю. В общем, да, записывай!",
+        "requires": [
+          {
+            "not": {
+              "problem": "conf",
+              "lte": 75
+            }
+          }
+        ],
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d5_late",
+                "set": false
+              }
+            ],
+            "text": "Отправлено. Четыре строки вместо двух слов. Под сообщением «Прочитано». Про «обычно быстро отвечаю» {hero} уже жалеет.",
+            "why": "Длинное оправдание",
+            "effects": [
+              {
+                "write": "Привет! Да, записывай, конечно. Извини, что не сразу: телефон сел, потом работа, потом уснул. Я вообще обычно быстро отвечаю. В общем, да, записывай!"
+              },
+              {
+                "chat": "status_reply_read"
+              },
+              {
+                "stat": "affinity",
+                "add": -5
+              },
+              {
+                "flag": "d6_reply",
+                "value": "excuse"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d5_late"
+              }
+            ],
+            "text": "Отправлено ближе к полудню. Четыре строки вместо двух слов. Под сообщением «Прочитано». Про «обычно быстро отвечаю» {hero} уже жалеет.",
+            "why": "Длинное оправдание",
+            "effects": [
+              {
+                "write": "Привет! Да, записывай, конечно. Извини, что не сразу: телефон сел, потом работа, потом уснул. Я вообще обычно быстро отвечаю. В общем, да, записывай!"
+              },
+              {
+                "chat": "status_reply_read_noon"
+              },
+              {
+                "stat": "affinity",
+                "add": -5
+              },
+              {
+                "flag": "d6_reply",
+                "value": "excuse"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "dry",
+        "label": "Да, записывай.",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d5_late",
+                "set": false
+              }
+            ],
+            "text": "{hero} ответил коротко: «Да, записывай». Под сообщением «Прочитано».",
+            "effects": [
+              {
+                "write": "Да, записывай."
+              },
+              {
+                "chat": "status_reply_read"
+              },
+              {
+                "flag": "d6_reply",
+                "value": "dry"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d5_late"
+              }
+            ],
+            "text": "{hero} ответил коротко, ближе к полудню: «Да, записывай». Под сообщением «Прочитано».",
+            "effects": [
+              {
+                "write": "Да, записывай."
+              },
+              {
+                "chat": "status_reply_read_noon"
+              },
+              {
+                "flag": "d6_reply",
+                "value": "dry"
+              }
+            ]
+          }
+        ],
+        "neutral": true
+      }
+    ]
+  },
+  {
+    "id": "K6-02",
+    "kind": "story",
+    "title": "Образ из ленты",
+    "speaker": "Лента",
+    "when": {
+      "days": [
+        6,
+        6
+      ],
+      "parts": [
+        "day"
+      ]
+    },
+    "text": "В ленте стилист с миллионом подписчиков: «Главный образ осени: рубашка поверх худи, штаны подвернуть, носки напоказ. Всё это уже есть у вас в шкафу». В шкафу и правда всё это есть.",
+    "choices": [
+      {
+        "id": "wear",
+        "label": "Собрать образ из своего шкафа",
+        "outcomes": [
+          {
+            "text": "Рубашка поверх худи, штаны подвёрнуты, носки напоказ. В зеркале не стилист с миллионом подписчиков, а {hero} в двух слоях не того размера. Но так он и пошёл.",
+            "effects": [
+              {
+                "problem": "style",
+                "add": 4
+              },
+              {
+                "rumor": "trend_look"
+              },
+              {
+                "flag": "d6_trend"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "scroll",
+        "neutral": true,
+        "label": "Пролистать",
+        "outcomes": [
+          {
+            "text": "Пост остался в ленте. Шкаф не тронут.",
+            "effects": [
+              {
+                "rumor": "trend_look"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K6-03a",
+    "kind": "story",
+    "title": "Рынок или оптика",
+    "speaker": "Витя",
+    "when": {
+      "days": [
+        6,
+        6
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d4_meat_held"
+        }
+      ]
+    },
+    "text": "«Еду на рынок за курткой, давай со мной. Ты у мангала один шампур съел, заслужил рубашку по размеру». Рубашка: 90 монет, стиль +6. Оправа в оптике: 150 монет, стиль +12, уверенность +2. Успеть можно одно.",
+    "choices": [
+      {
+        "id": "shirt",
+        "label": "Рубашка на рынке",
+        "requires": [
+          {
+            "flag": "bought_shirt",
+            "set": false
+          }
+        ],
+        "cost": {
+          "coins": 90
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d6_trend"
+              }
+            ],
+            "text": "Витя оглядел рубашку поверх худи: «Это что, так модно? Снимай, пока наши не видели». Третья палатка, вторая примерка: синяя рубашка села по размеру. Витя: «Ну вот. Человек».",
+            "effects": [
+              {
+                "problem": "style",
+                "add": -6
+              },
+              {
+                "look": {
+                  "topColor": "#4A6FA5",
+                  "neckline": "v"
+                }
+              },
+              {
+                "flag": "bought_shirt"
+              },
+              {
+                "flag": "d6_shirt"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d6_trend",
+                "set": false
+              }
+            ],
+            "text": "Третья палатка, вторая примерка: синяя рубашка села по размеру. Витя: «Ну вот. Человек». Куртку себе он так и не выбрал.",
+            "effects": [
+              {
+                "problem": "style",
+                "add": -6
+              },
+              {
+                "look": {
+                  "topColor": "#4A6FA5",
+                  "neckline": "v"
+                }
+              },
+              {
+                "flag": "bought_shirt"
+              },
+              {
+                "flag": "d6_shirt"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "frame",
+        "label": "Оправа в оптике",
+        "requires": [
+          {
+            "flag": "bought_frame",
+            "set": false
+          }
+        ],
+        "cost": {
+          "coins": 150
+        },
+        "outcomes": [
+          {
+            "text": "Мастер снял старые очки двумя пальцами, как улику. Через полчаса на носу круглая оправа, а изолента осталась в оптике.",
+            "effects": [
+              {
+                "problem": "style",
+                "add": -12
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "look": {
+                  "glasses": "round"
+                }
+              },
+              {
+                "flag": "bought_frame"
+              },
+              {
+                "flag": "d6_frame"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "look",
+        "label": "Съездить и ничего не купить",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d6_trend"
+              }
+            ],
+            "text": "Витя оглядел рубашку поверх худи: «Это что, так модно?» {hero} помог ему выбрать куртку. Себе ничего не взял, но три рубашки примерил и размер теперь знает.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d6_trend",
+                "set": false
+              }
+            ],
+            "text": "{hero} помог Вите выбрать куртку. Себе ничего не взял, но три рубашки примерил и размер теперь знает.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "home",
+        "neutral": true,
+        "label": "Остаться дома",
+        "outcomes": [
+          {
+            "text": "{hero} остался дома. Витя съездил на рынок один и прислал фото куртки."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K6-03b",
+    "kind": "story",
+    "title": "Рынок или оптика",
+    "speaker": "Витя",
+    "when": {
+      "days": [
+        6,
+        6
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d4_meat_held",
+          "set": false
+        },
+        {
+          "flag": "d4_feast"
+        }
+      ]
+    },
+    "text": "«Еду на рынок за курткой, давай со мной. После пяти шампуров старая рубашка на тебе не сойдётся». Рубашка: 90 монет, стиль +6. Оправа в оптике: 150 монет, стиль +12, уверенность +2. Успеть можно одно.",
+    "choices": [
+      {
+        "id": "shirt",
+        "label": "Рубашка на рынке",
+        "requires": [
+          {
+            "flag": "bought_shirt",
+            "set": false
+          }
+        ],
+        "cost": {
+          "coins": 90
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d6_trend"
+              }
+            ],
+            "text": "Витя оглядел рубашку поверх худи: «Это что, так модно? Снимай, пока наши не видели». Третья палатка, вторая примерка: синяя рубашка села по размеру. Витя: «Ну вот. Человек».",
+            "effects": [
+              {
+                "problem": "style",
+                "add": -6
+              },
+              {
+                "look": {
+                  "topColor": "#4A6FA5",
+                  "neckline": "v"
+                }
+              },
+              {
+                "flag": "bought_shirt"
+              },
+              {
+                "flag": "d6_shirt"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d6_trend",
+                "set": false
+              }
+            ],
+            "text": "Третья палатка, вторая примерка: синяя рубашка села по размеру. Витя: «Ну вот. Человек». Куртку себе он так и не выбрал.",
+            "effects": [
+              {
+                "problem": "style",
+                "add": -6
+              },
+              {
+                "look": {
+                  "topColor": "#4A6FA5",
+                  "neckline": "v"
+                }
+              },
+              {
+                "flag": "bought_shirt"
+              },
+              {
+                "flag": "d6_shirt"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "frame",
+        "label": "Оправа в оптике",
+        "requires": [
+          {
+            "flag": "bought_frame",
+            "set": false
+          }
+        ],
+        "cost": {
+          "coins": 150
+        },
+        "outcomes": [
+          {
+            "text": "Мастер снял старые очки двумя пальцами, как улику. Через полчаса на носу круглая оправа, а изолента осталась в оптике.",
+            "effects": [
+              {
+                "problem": "style",
+                "add": -12
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "look": {
+                  "glasses": "round"
+                }
+              },
+              {
+                "flag": "bought_frame"
+              },
+              {
+                "flag": "d6_frame"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "look",
+        "label": "Съездить и ничего не купить",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d6_trend"
+              }
+            ],
+            "text": "Витя оглядел рубашку поверх худи: «Это что, так модно?» {hero} помог ему выбрать куртку. Себе ничего не взял, но три рубашки примерил и размер теперь знает.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d6_trend",
+                "set": false
+              }
+            ],
+            "text": "{hero} помог Вите выбрать куртку. Себе ничего не взял, но три рубашки примерил и размер теперь знает.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "home",
+        "neutral": true,
+        "label": "Остаться дома",
+        "outcomes": [
+          {
+            "text": "{hero} остался дома. Витя съездил на рынок один и прислал фото куртки."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K6-03c",
+    "kind": "story",
+    "title": "Рынок или оптика",
+    "speaker": "Витя",
+    "when": {
+      "days": [
+        6,
+        6
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d4_meat_held",
+          "set": false
+        },
+        {
+          "flag": "d4_feast",
+          "set": false
+        }
+      ]
+    },
+    "text": "«Еду на рынок за курткой, давай со мной. На шашлыки не пришёл, так хоть на рынок съезди». Рубашка: 90 монет, стиль +6. Оправа в оптике: 150 монет, стиль +12, уверенность +2. Успеть можно одно.",
+    "choices": [
+      {
+        "id": "shirt",
+        "label": "Рубашка на рынке",
+        "requires": [
+          {
+            "flag": "bought_shirt",
+            "set": false
+          }
+        ],
+        "cost": {
+          "coins": 90
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d6_trend"
+              }
+            ],
+            "text": "Витя оглядел рубашку поверх худи: «Это что, так модно? Снимай, пока наши не видели». Третья палатка, вторая примерка: синяя рубашка села по размеру. Витя: «Ну вот. Человек».",
+            "effects": [
+              {
+                "problem": "style",
+                "add": -6
+              },
+              {
+                "look": {
+                  "topColor": "#4A6FA5",
+                  "neckline": "v"
+                }
+              },
+              {
+                "flag": "bought_shirt"
+              },
+              {
+                "flag": "d6_shirt"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d6_trend",
+                "set": false
+              }
+            ],
+            "text": "Третья палатка, вторая примерка: синяя рубашка села по размеру. Витя: «Ну вот. Человек». Куртку себе он так и не выбрал.",
+            "effects": [
+              {
+                "problem": "style",
+                "add": -6
+              },
+              {
+                "look": {
+                  "topColor": "#4A6FA5",
+                  "neckline": "v"
+                }
+              },
+              {
+                "flag": "bought_shirt"
+              },
+              {
+                "flag": "d6_shirt"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "frame",
+        "label": "Оправа в оптике",
+        "requires": [
+          {
+            "flag": "bought_frame",
+            "set": false
+          }
+        ],
+        "cost": {
+          "coins": 150
+        },
+        "outcomes": [
+          {
+            "text": "Мастер снял старые очки двумя пальцами, как улику. Через полчаса на носу круглая оправа, а изолента осталась в оптике.",
+            "effects": [
+              {
+                "problem": "style",
+                "add": -12
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "look": {
+                  "glasses": "round"
+                }
+              },
+              {
+                "flag": "bought_frame"
+              },
+              {
+                "flag": "d6_frame"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "look",
+        "label": "Съездить и ничего не купить",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d6_trend"
+              }
+            ],
+            "text": "Витя оглядел рубашку поверх худи: «Это что, так модно?» {hero} помог ему выбрать куртку. Себе ничего не взял, но три рубашки примерил и размер теперь знает.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d6_trend",
+                "set": false
+              }
+            ],
+            "text": "{hero} помог Вите выбрать куртку. Себе ничего не взял, но три рубашки примерил и размер теперь знает.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "home",
+        "neutral": true,
+        "label": "Остаться дома",
+        "outcomes": [
+          {
+            "text": "{hero} остался дома. Витя съездил на рынок один и прислал фото куртки."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K6-04",
+    "kind": "story",
+    "title": "Чат класса",
+    "when": {
+      "days": [
+        6,
+        6
+      ],
+      "parts": [
+        "evening"
+      ]
+    },
+    "text": "Чат «11-Б навсегда». Оксана выложила фото: «Угадайте, кто это». На фото Громов с бородой до груди. {crush}: «Громов, это ты или геолог? Борода вообще не моё». Она в сети и шутит в чате. В личке пока тишина.",
+    "choices": [
+      {
+        "id": "speak",
+        "label": "Написать в чат: «Я тоже буду, уже в списке»",
+        "requires": [
+          {
+            "flag": "d1_lurked"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "{hero} впервые за неделю написал в чат класса. Витя: «О, заговорил!» Оксана поставила плюс. А про бороду {hero} запомнил и потрогал подбородок.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "flag": "d6_chat_spoke"
+              },
+              {
+                "rumor": "gromov_beard"
+              },
+              {
+                "hint": "alina_beard"
+              },
+              {
+                "reveal": "no_beard"
+              },
+              {
+                "flag": "d6_beard_hint"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smile",
+        "label": "Поставить смайлик под фото",
+        "outcomes": [
+          {
+            "text": "Смайлик под бородой Громова, четырнадцатый по счёту. {hero} потрогал подбородок: «Борода вообще не моё».",
+            "effects": [
+              {
+                "rumor": "gromov_beard"
+              },
+              {
+                "hint": "alina_beard"
+              },
+              {
+                "reveal": "no_beard"
+              },
+              {
+                "flag": "d6_beard_hint"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "scroll",
+        "neutral": true,
+        "label": "Пролистать",
+        "outcomes": [
+          {
+            "text": "{hero} пролистал чат класса. Под фото бородатого Громова {crush} написала: «Борода вообще не моё». {hero} потрогал подбородок.",
+            "effects": [
+              {
+                "rumor": "gromov_beard"
+              },
+              {
+                "hint": "alina_beard"
+              },
+              {
+                "reveal": "no_beard"
+              },
+              {
+                "flag": "d6_beard_hint"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K6-05d",
+    "kind": "story",
+    "title": "{crush} ответила",
+    "speaker": "crush",
+    "says": "alina_ok_listed",
+    "when": {
+      "days": [
+        6,
+        6
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d6_reply",
+          "eq": "dry"
+        },
+        {
+          "flag": "d6_answered",
+          "set": false
+        }
+      ]
+    },
+    "text": "{crush} ответила.",
+    "choices": [
+      {
+        "id": "read",
+        "neutral": true,
+        "label": "Читать дальше",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d5_late",
+                "set": false
+              }
+            ],
+            "text": "{crush} ответила: «Ок, записала». Коротко и по делу, как и его ответ.",
+            "effects": [
+              {
+                "flag": "d6_answered"
+              },
+              {
+                "flag": "d6_talked"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d5_late"
+              }
+            ],
+            "text": "{crush} ответила: «Ок, записала». Коротко и по делу, как и его ответ. И ещё одно: про то, что отвечал он долго. Справедливо.",
+            "effects": [
+              {
+                "chat": "alina_long"
+              },
+              {
+                "flag": "d6_answered"
+              },
+              {
+                "flag": "d6_talked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K6-05e",
+    "kind": "story",
+    "title": "{crush} ответила",
+    "speaker": "crush",
+    "says": "alina_ok_cool",
+    "when": {
+      "days": [
+        6,
+        6
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d6_reply",
+          "eq": "excuse"
+        },
+        {
+          "flag": "d6_answered",
+          "set": false
+        }
+      ]
+    },
+    "text": "{crush} ответила.",
+    "choices": [
+      {
+        "id": "read",
+        "neutral": true,
+        "label": "Читать дальше",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d5_late",
+                "set": false
+              }
+            ],
+            "text": "Два слова на его четыре строки. {hero} в списке, и на этом всё.",
+            "effects": [
+              {
+                "flag": "d6_answered"
+              },
+              {
+                "flag": "d6_talked"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d5_late"
+              }
+            ],
+            "text": "Два слова на его четыре строки. {hero} в списке, и на этом всё. И ещё одно: про то, что отвечал он долго. Справедливо.",
+            "effects": [
+              {
+                "chat": "alina_long"
+              },
+              {
+                "flag": "d6_answered"
+              },
+              {
+                "flag": "d6_talked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K6-05p",
+    "kind": "story",
+    "title": "{crush} ответила",
+    "speaker": "crush",
+    "says": "alina_answer_plain",
+    "when": {
+      "days": [
+        6,
+        6
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d6_reply",
+          "eq": "plain"
+        },
+        {
+          "flag": "d6_answered",
+          "set": false
+        },
+        {
+          "flag": "d1_wrote_flirty",
+          "set": false
+        }
+      ]
+    },
+    "text": "{crush} ответила.",
+    "choices": [
+      {
+        "id": "read",
+        "neutral": true,
+        "label": "Читать дальше",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d1_wrote_plain"
+              },
+              {
+                "flag": "d5_late",
+                "set": false
+              }
+            ],
+            "text": "Следом ещё одно, тёплое: она рада, что он будет.",
+            "effects": [
+              {
+                "chat": "alina_tone_warm"
+              },
+              {
+                "flag": "d6_answered"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d1_wrote_plain"
+              },
+              {
+                "flag": "d5_late"
+              }
+            ],
+            "text": "Следом ещё одно, тёплое: она рада, что он будет. И ещё одно: про то, что отвечал он долго. Справедливо.",
+            "effects": [
+              {
+                "chat": "alina_tone_warm"
+              },
+              {
+                "chat": "alina_long"
+              },
+              {
+                "flag": "d6_answered"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d1_wrote_plain",
+                "set": false
+              },
+              {
+                "flag": "d1_said_coming"
+              },
+              {
+                "flag": "d5_late",
+                "set": false
+              }
+            ],
+            "text": "Следом: «Ты и в чате писал, что придёшь. Теперь официально».",
+            "effects": [
+              {
+                "chat": "alina_tone_list"
+              },
+              {
+                "flag": "d6_answered"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d1_wrote_plain",
+                "set": false
+              },
+              {
+                "flag": "d1_said_coming"
+              },
+              {
+                "flag": "d5_late"
+              }
+            ],
+            "text": "Следом: «Ты и в чате писал, что придёшь. Теперь официально». И ещё одно: про то, что отвечал он долго. Справедливо.",
+            "effects": [
+              {
+                "chat": "alina_tone_list"
+              },
+              {
+                "chat": "alina_long"
+              },
+              {
+                "flag": "d6_answered"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d1_wrote_plain",
+                "set": false
+              },
+              {
+                "flag": "d1_said_coming",
+                "set": false
+              },
+              {
+                "flag": "d5_late",
+                "set": false
+              }
+            ],
+            "text": "Следом: «А я думала, ответишь одним словом».",
+            "effects": [
+              {
+                "chat": "alina_tone_asked"
+              },
+              {
+                "flag": "d6_answered"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d1_wrote_plain",
+                "set": false
+              },
+              {
+                "flag": "d1_said_coming",
+                "set": false
+              },
+              {
+                "flag": "d5_late"
+              }
+            ],
+            "text": "Следом: «А я думала, ответишь одним словом». И ещё одно: про то, что отвечал он долго. Справедливо.",
+            "effects": [
+              {
+                "chat": "alina_tone_asked"
+              },
+              {
+                "chat": "alina_long"
+              },
+              {
+                "flag": "d6_answered"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K6-05j",
+    "kind": "story",
+    "title": "{crush} ответила",
+    "speaker": "crush",
+    "says": "alina_answer_joke",
+    "when": {
+      "days": [
+        6,
+        6
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d6_reply",
+          "eq": "joke"
+        },
+        {
+          "flag": "d6_answered",
+          "set": false
+        },
+        {
+          "flag": "d1_wrote_flirty",
+          "set": false
+        }
+      ]
+    },
+    "text": "{crush} ответила.",
+    "choices": [
+      {
+        "id": "read",
+        "neutral": true,
+        "label": "Читать дальше",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d1_wrote_plain"
+              },
+              {
+                "flag": "d5_late",
+                "set": false
+              }
+            ],
+            "text": "Следом ещё одно, тёплое: она рада, что он будет.",
+            "effects": [
+              {
+                "chat": "alina_tone_warm"
+              },
+              {
+                "flag": "d6_answered"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d1_wrote_plain"
+              },
+              {
+                "flag": "d5_late"
+              }
+            ],
+            "text": "Следом ещё одно, тёплое: она рада, что он будет. И ещё одно: про то, что отвечал он долго. Справедливо.",
+            "effects": [
+              {
+                "chat": "alina_tone_warm"
+              },
+              {
+                "chat": "alina_long"
+              },
+              {
+                "flag": "d6_answered"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d1_wrote_plain",
+                "set": false
+              },
+              {
+                "flag": "d1_said_coming"
+              },
+              {
+                "flag": "d5_late",
+                "set": false
+              }
+            ],
+            "text": "Следом: «Ты и в чате писал, что придёшь. Теперь официально».",
+            "effects": [
+              {
+                "chat": "alina_tone_list"
+              },
+              {
+                "flag": "d6_answered"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d1_wrote_plain",
+                "set": false
+              },
+              {
+                "flag": "d1_said_coming"
+              },
+              {
+                "flag": "d5_late"
+              }
+            ],
+            "text": "Следом: «Ты и в чате писал, что придёшь. Теперь официально». И ещё одно: про то, что отвечал он долго. Справедливо.",
+            "effects": [
+              {
+                "chat": "alina_tone_list"
+              },
+              {
+                "chat": "alina_long"
+              },
+              {
+                "flag": "d6_answered"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d1_wrote_plain",
+                "set": false
+              },
+              {
+                "flag": "d1_said_coming",
+                "set": false
+              },
+              {
+                "flag": "d5_late",
+                "set": false
+              }
+            ],
+            "text": "Следом, уже по-деловому: «Оксане передам, что ты в списке».",
+            "effects": [
+              {
+                "chat": "alina_tone_business"
+              },
+              {
+                "flag": "d6_answered"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d1_wrote_plain",
+                "set": false
+              },
+              {
+                "flag": "d1_said_coming",
+                "set": false
+              },
+              {
+                "flag": "d5_late"
+              }
+            ],
+            "text": "Следом, уже по-деловому: «Оксане передам, что ты в списке». И ещё одно: про то, что отвечал он долго. Справедливо.",
+            "effects": [
+              {
+                "chat": "alina_tone_business"
+              },
+              {
+                "chat": "alina_long"
+              },
+              {
+                "flag": "d6_answered"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K6-05pf",
+    "kind": "story",
+    "title": "{crush} ответила",
+    "speaker": "crush",
+    "says": "alina_answer_plain_dry",
+    "when": {
+      "days": [
+        6,
+        6
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d6_reply",
+          "eq": "plain"
+        },
+        {
+          "flag": "d6_answered",
+          "set": false
+        },
+        {
+          "flag": "d1_wrote_flirty"
+        }
+      ]
+    },
+    "text": "{crush} ответила.",
+    "choices": [
+      {
+        "id": "read",
+        "neutral": true,
+        "label": "Читать дальше",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d5_late",
+                "set": false
+              }
+            ],
+            "text": "Ответ на вопрос уместился в два слова. Суховато.",
+            "effects": [
+              {
+                "flag": "d6_answered"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d5_late"
+              }
+            ],
+            "text": "Ответ на вопрос уместился в два слова. Суховато. И ещё одно: про то, что отвечал он долго. Справедливо.",
+            "effects": [
+              {
+                "chat": "alina_long"
+              },
+              {
+                "flag": "d6_answered"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K6-05jf",
+    "kind": "story",
+    "title": "{crush} ответила",
+    "speaker": "crush",
+    "says": "alina_answer_joke_dry",
+    "when": {
+      "days": [
+        6,
+        6
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d6_reply",
+          "eq": "joke"
+        },
+        {
+          "flag": "d6_answered",
+          "set": false
+        },
+        {
+          "flag": "d1_wrote_flirty"
+        }
+      ]
+    },
+    "text": "{crush} ответила.",
+    "choices": [
+      {
+        "id": "read",
+        "neutral": true,
+        "label": "Читать дальше",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d5_late",
+                "set": false
+              }
+            ],
+            "text": "На шутку она ответила двумя словами. Суховато, но ответила.",
+            "effects": [
+              {
+                "flag": "d6_answered"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d5_late"
+              }
+            ],
+            "text": "На шутку она ответила двумя словами. Суховато, но ответила. И ещё одно: про то, что отвечал он долго. Справедливо.",
+            "effects": [
+              {
+                "chat": "alina_long"
+              },
+              {
+                "flag": "d6_answered"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K6-06",
+    "kind": "story",
+    "title": "{crush} спрашивает",
+    "speaker": "crush",
+    "says": "alina_live_question",
+    "when": {
+      "days": [
+        6,
+        6
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "any": [
+            {
+              "flag": "d6_reply",
+              "eq": "plain"
+            },
+            {
+              "flag": "d6_reply",
+              "eq": "joke"
+            }
+          ]
+        },
+        {
+          "flag": "d6_answered"
+        },
+        {
+          "flag": "d6_talked",
+          "set": false
+        },
+        {
+          "flag": "d1_wrote_flirty",
+          "set": false
+        }
+      ]
+    },
+    "text": "{crush} спрашивает, как дела.",
+    "choices": [
+      {
+        "id": "open",
+        "label": "Потихоньку. Решил к встрече привести себя в порядок. Ты как?",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d2_wrote_zerno"
+              }
+            ],
+            "text": "{crush}: «Звучит серьёзно. Я нормально: работа, кот, по выходным кофе». И следом: «Я, кстати, по субботам в „Зерне“. Раз уж тебе место понравилось».",
+            "why": "{crush} разговорилась",
+            "effects": [
+              {
+                "write": "Потихоньку. Решил к встрече привести себя в порядок. Ты как?"
+              },
+              {
+                "stat": "affinity",
+                "add": 3
+              },
+              {
+                "chat": "alina_live_open"
+              },
+              {
+                "chat": "alina_zerno_saturday"
+              },
+              {
+                "flag": "d6_talk",
+                "value": "open"
+              },
+              {
+                "flag": "d6_talked"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d2_wrote_zerno",
+                "set": false
+              }
+            ],
+            "text": "{crush}: «Звучит серьёзно. Я нормально: работа, кот, по выходным кофе».",
+            "why": "{crush} разговорилась",
+            "effects": [
+              {
+                "write": "Потихоньку. Решил к встрече привести себя в порядок. Ты как?"
+              },
+              {
+                "stat": "affinity",
+                "add": 3
+              },
+              {
+                "chat": "alina_live_open"
+              },
+              {
+                "flag": "d6_talk",
+                "value": "open"
+              },
+              {
+                "flag": "d6_talked"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "work",
+        "label": "Нормально, работаю. Ты как?",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d2_wrote_zerno"
+              }
+            ],
+            "text": "{crush}: «Тоже работаю. Нормально». И следом: «Я, кстати, по субботам в „Зерне“. Раз уж тебе место понравилось».",
+            "why": "Короткий разговор",
+            "effects": [
+              {
+                "write": "Нормально, работаю. Ты как?"
+              },
+              {
+                "stat": "affinity",
+                "add": 1
+              },
+              {
+                "chat": "alina_live_work"
+              },
+              {
+                "chat": "alina_zerno_saturday"
+              },
+              {
+                "flag": "d6_talk",
+                "value": "work"
+              },
+              {
+                "flag": "d6_talked"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d2_wrote_zerno",
+                "set": false
+              }
+            ],
+            "text": "{crush}: «Тоже работаю. Нормально».",
+            "why": "Короткий разговор",
+            "effects": [
+              {
+                "write": "Нормально, работаю. Ты как?"
+              },
+              {
+                "stat": "affinity",
+                "add": 1
+              },
+              {
+                "chat": "alina_live_work"
+              },
+              {
+                "flag": "d6_talk",
+                "value": "work"
+              },
+              {
+                "flag": "d6_talked"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "short",
+        "neutral": true,
+        "label": "Нормально.",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d2_wrote_zerno"
+              }
+            ],
+            "text": "{hero} ответил одним словом: «Нормально». {crush}: «Ну и хорошо». И следом: «Я, кстати, по субботам в „Зерне“. Раз уж тебе место понравилось».",
+            "effects": [
+              {
+                "write": "Нормально."
+              },
+              {
+                "chat": "alina_live_short"
+              },
+              {
+                "chat": "alina_zerno_saturday"
+              },
+              {
+                "flag": "d6_talk",
+                "value": "short"
+              },
+              {
+                "flag": "d6_talked"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d2_wrote_zerno",
+                "set": false
+              }
+            ],
+            "text": "{hero} ответил одним словом: «Нормально». {crush}: «Ну и хорошо».",
+            "effects": [
+              {
+                "write": "Нормально."
+              },
+              {
+                "chat": "alina_live_short"
+              },
+              {
+                "flag": "d6_talk",
+                "value": "short"
+              },
+              {
+                "flag": "d6_talked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K6-06f",
+    "kind": "story",
+    "title": "{crush} вспомнила",
+    "speaker": "crush",
+    "says": "alina_strange",
+    "when": {
+      "days": [
+        6,
+        6
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "any": [
+            {
+              "flag": "d6_reply",
+              "eq": "plain"
+            },
+            {
+              "flag": "d6_reply",
+              "eq": "joke"
+            }
+          ]
+        },
+        {
+          "flag": "d6_answered"
+        },
+        {
+          "flag": "d6_talked",
+          "set": false
+        },
+        {
+          "flag": "d1_wrote_flirty"
+        }
+      ]
+    },
+    "text": "{crush} вспомнила сообщение с первого дня.",
+    "choices": [
+      {
+        "id": "own",
+        "label": "Было дело. Хотел сказать приятное, вышло с сердечком. Проехали?",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d2_wrote_zerno"
+              }
+            ],
+            "text": "{crush}: «Проехали. Но сердечки пока придержи». И следом: «Я, кстати, по субботам в „Зерне“. Раз уж тебе место понравилось».",
+            "why": "Признал неловкое сообщение",
+            "effects": [
+              {
+                "write": "Было дело. Хотел сказать приятное, вышло с сердечком. Проехали?"
+              },
+              {
+                "stat": "affinity",
+                "add": 3
+              },
+              {
+                "chat": "alina_strange_ok"
+              },
+              {
+                "chat": "alina_zerno_saturday"
+              },
+              {
+                "flag": "d6_talk",
+                "value": "owned"
+              },
+              {
+                "flag": "d6_talked"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d2_wrote_zerno",
+                "set": false
+              }
+            ],
+            "text": "{crush}: «Проехали. Но сердечки пока придержи».",
+            "why": "Признал неловкое сообщение",
+            "effects": [
+              {
+                "write": "Было дело. Хотел сказать приятное, вышло с сердечком. Проехали?"
+              },
+              {
+                "stat": "affinity",
+                "add": 3
+              },
+              {
+                "chat": "alina_strange_ok"
+              },
+              {
+                "flag": "d6_talk",
+                "value": "owned"
+              },
+              {
+                "flag": "d6_talked"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "again",
+        "label": "Почему странное? Ты правда не изменилась ❤",
+        "outcomes": [
+          {
+            "text": "{crush}: «Ясно». И больше ничего.",
+            "why": "Второе сообщение с сердечком",
+            "effects": [
+              {
+                "write": "Почему странное? Ты правда не изменилась ❤"
+              },
+              {
+                "stat": "affinity",
+                "add": -5
+              },
+              {
+                "chat": "alina_strange_cold"
+              },
+              {
+                "flag": "d6_talk",
+                "value": "repeat"
+              },
+              {
+                "flag": "d6_talked"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "shrug",
+        "neutral": true,
+        "label": "Писал. Бывает.",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d2_wrote_zerno"
+              }
+            ],
+            "text": "{hero} ответил: «Писал. Бывает». {crush}: «Бывает». И следом: «Я, кстати, по субботам в „Зерне“. Раз уж тебе место понравилось».",
+            "effects": [
+              {
+                "write": "Писал. Бывает."
+              },
+              {
+                "chat": "alina_strange_meh"
+              },
+              {
+                "chat": "alina_zerno_saturday"
+              },
+              {
+                "flag": "d6_talk",
+                "value": "shrug"
+              },
+              {
+                "flag": "d6_talked"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d2_wrote_zerno",
+                "set": false
+              }
+            ],
+            "text": "{hero} ответил: «Писал. Бывает». {crush}: «Бывает».",
+            "effects": [
+              {
+                "write": "Писал. Бывает."
+              },
+              {
+                "chat": "alina_strange_meh"
+              },
+              {
+                "flag": "d6_talk",
+                "value": "shrug"
+              },
+              {
+                "flag": "d6_talked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K6-07",
+    "kind": "story",
+    "title": "{crush} прощается",
+    "speaker": "crush",
+    "says": "alina_goodbye",
+    "when": {
+      "days": [
+        6,
+        6
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d6_talked"
+        },
+        {
+          "flag": "d6_bye",
+          "set": false
+        }
+      ]
+    },
+    "text": "{crush} прощается.",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Отложить телефон",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d6_reply",
+                "eq": "dry"
+              }
+            ],
+            "text": "{crush} попрощалась. Вопрос закрыт: {hero} в списке. Весь разговор уместился на одном экране.",
+            "effects": [
+              {
+                "flag": "d6_bye"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d6_reply",
+                "eq": "excuse"
+              }
+            ],
+            "text": "{crush} попрощалась. {hero} в списке. В следующий раз он ответит короче.",
+            "effects": [
+              {
+                "flag": "d6_bye"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d6_talk",
+                "eq": "repeat"
+              }
+            ],
+            "text": "{crush} попрощалась. После второго сердечка разговор кончился быстро. Но в списке {hero} есть.",
+            "effects": [
+              {
+                "flag": "d6_bye"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "not": {
+                  "any": [
+                    {
+                      "flag": "d6_reply",
+                      "eq": "dry"
+                    },
+                    {
+                      "flag": "d6_reply",
+                      "eq": "excuse"
+                    },
+                    {
+                      "flag": "d6_talk",
+                      "eq": "repeat"
+                    }
+                  ]
+                }
+              }
+            ],
+            "text": "{crush} попрощалась. Первый разговор за много лет. {hero} перечитал его дважды, прежде чем отложить телефон.",
+            "effects": [
+              {
+                "flag": "d6_bye"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K6-08a",
+    "kind": "story",
+    "title": "Балкон",
+    "when": {
+      "days": [
+        6,
+        6
+      ],
+      "parts": [
+        "night"
+      ],
+      "requires": [
+        {
+          "flag": "d6_smoked",
+          "set": false
+        },
+        {
+          "flag": "d6_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d6_quarter",
+          "set": false
+        },
+        {
+          "counter": "smoke_free",
+          "lte": 0
+        }
+      ]
+    },
+    "text": "Ночь, балкон. Разговор окончен, а руки ещё не знают, куда себя деть. Пачка на подоконнике.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Не открывать пачку",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d5_quarter"
+              }
+            ],
+            "text": "Вчера была четверть, сегодня ни одной. Пачка осталась закрытой. Первый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d6_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d5_quarter",
+                "set": false
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так, оказывается, можно. Первый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d6_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Четыре затяжки, остальное в пепельницу. Дни без сигарет считаются с нуля: четверть тоже сигарета.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d6_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. Пачка осталась лежать, где лежала.",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d6_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d5_quarter"
+              }
+            ],
+            "text": "Вчера была четверть, сегодня целая. Счёт дней без табака так и стоит на нуле.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d6_smoked"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d5_quarter",
+                "set": false
+              }
+            ],
+            "text": "Обычная сигарета на балконе. Как вчера и позавчера.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d6_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K6-08b",
+    "kind": "story",
+    "title": "Балкон",
+    "when": {
+      "days": [
+        6,
+        6
+      ],
+      "parts": [
+        "night"
+      ],
+      "requires": [
+        {
+          "flag": "d6_smoked",
+          "set": false
+        },
+        {
+          "flag": "d6_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d6_quarter",
+          "set": false
+        },
+        {
+          "counter": "smoke_free",
+          "gte": 1
+        }
+      ]
+    },
+    "text": "Ночь, балкон. {hero} держится не первый день, но после такого вечера тянет сильнее обычного. Пачка на подоконнике.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Не открывать пачку",
+        "cost": {
+          "energy": 3
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 1
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Второй день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d6_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 2
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Третий день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d6_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 3
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Четвёртый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d6_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 4
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Пятый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d6_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 5
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Шестой день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d6_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "not": {
+                  "any": [
+                    {
+                      "counter": "smoke_free",
+                      "eq": 1
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 2
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 3
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 4
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 5
+                    }
+                  ]
+                }
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Ещё один день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d6_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Четыре затяжки, остальное в пепельницу. Дни без сигарет считаются с нуля: четверть тоже сигарета.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d6_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. Пачка осталась лежать, где лежала.",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d6_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "text": "Сигарета на балконе. Вчера удержался, сегодня нет: счёт дней без табака снова с нуля.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d6_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A6-run",
+    "kind": "action",
+    "title": "Пробежка в парке",
+    "when": {
+      "days": [
+        6,
+        6
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Пробежка в парке",
+        "cost": {
+          "energy": 4
+        },
+        "outcomes": [
+          {
+            "weight": 3,
+            "hint": "получилось",
+            "text": "Три круга по парку. Собачник с таксой уже здоровается.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          },
+          {
+            "weight": 1,
+            "hint": "закололо в боку",
+            "text": "На втором круге закололо в боку. Такса смотрела с сочувствием.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -1
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A6-gym",
+    "kind": "action",
+    "title": "Тренировка в зале",
+    "when": {
+      "days": [
+        6,
+        6
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ],
+      "requires": [
+        {
+          "any": [
+            {
+              "flag": "d2_gym"
+            },
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "bought_gym_pass",
+                    "set": false
+                  },
+                  {
+                    "item": "gym_pass"
+                  },
+                  {
+                    "flagAge": "bought_gym_pass",
+                    "lte": 0
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Тренировка в зале по абонементу",
+        "cost": {
+          "energy": 4
+        },
+        "outcomes": [
+          {
+            "text": "Сорок минут на тренажёрах. Тренер впервые сказал «нормально».",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A6-clean",
+    "kind": "action",
+    "title": "Душ и чистая футболка",
+    "when": {
+      "days": [
+        6,
+        6
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Душ и чистая футболка",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Душ и чистая футболка. Стирка наконец запущена.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -5
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A6-teeth",
+    "kind": "action",
+    "title": "Почистить зубы по таймеру",
+    "when": {
+      "days": [
+        6,
+        6
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Почистить зубы две минуты по таймеру",
+        "cost": {
+          "energy": 1
+        },
+        "outcomes": [
+          {
+            "text": "Две минуты по таймеру. Щётка уже знает дорогу сама.",
+            "effects": [
+              {
+                "problem": "teeth",
+                "add": -1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A6-couch",
+    "kind": "action",
+    "title": "Полежать на диване",
+    "when": {
+      "days": [
+        6,
+        6
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Полежать на диване",
+        "outcomes": [
+          {
+            "text": "Полчаса на диване. Телефон лежит рядом, экраном вверх.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K6-sleep",
+    "kind": "action",
+    "title": "Сон",
+    "when": {
+      "days": [
+        6,
+        6
+      ],
+      "parts": [
+        "night"
+      ]
+    },
+    "text": "День почти закончился.",
+    "choices": [
+      {
+        "id": "sleep",
+        "label": "Лечь сейчас",
+        "outcomes": [
+          {
+            "text": "Свет выключен. «Увидимся на встрече, наверное». Наверное.",
+            "effects": [
+              {
+                "closeDay": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "late",
+        "label": "Посидеть в телефоне до трёх",
+        "outcomes": [
+          {
+            "text": "К трём часам ночи переписка перечитана от первого слова до последнего. Завтра на четыре энергии меньше.",
+            "effects": [
+              {
+                "flag": "d6_late"
+              },
+              {
+                "tomorrow": [
+                  {
+                    "stat": "energy",
+                    "add": -4
+                  }
+                ]
+              },
+              {
+                "closeDay": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
