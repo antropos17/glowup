@@ -1,6 +1,6 @@
 # 7-day demo — script
 
-Status: draft v1, 2026-11-22. The 7-day grid and the Day 1 design are done. Day 1 is implemented in `content/cards/day1.json`, Day 2 in `content/cards/day2.json`, Day 3 in `content/cards/day3.json`. Days 4–7 are to be written directly in the engine format.
+Status: draft v1, 2026-11-22. The 7-day grid and the Day 1 design are done. Day 1 is implemented in `content/cards/day1.json`, Day 2 in `content/cards/day2.json`, Day 3 in `content/cards/day3.json`, Day 4 in `content/cards/day4.json`. Days 5–7 are to be written directly in the engine format.
 
 This file is the design-level description in English. Russian strings in «quotes» are in-game text: copy them verbatim into content.
 
@@ -322,6 +322,67 @@ Engine notes for days 4+ (nothing in `src/` was changed):
 - The doctor's «не клеить» about the patches is a line only: nothing stops the player from applying them, and nothing reacts if they do.
 - A neutral choice cannot have `cost`, so the queue price on the late door card is an effect and is written into the button label instead of the cost badge.
 - The reason line shows the chance delta. The like is `affinity` +5, which is +5 on the scale except at the 1% floor.
+
+## 5d. Day 4 design (implemented)
+
+The authoritative version is `content/cards/day4.json`. Written 2026-11-23 from `DECISIONS.md` rows 13–16 and section 3; the texts are not reviewed by the authors yet. Story cards are listed in display order.
+
+"Ordinary" below means the counter `smoke_free` is 0 on the evening of day 4, "strong" means it is 1 or more. "Pass running" is the same inference as K3-00b: `d2_gym`, or the shop pass bought on an earlier day and no longer in the bag.
+
+| Card | Part | What happens | Condition | Flags set |
+|---|---|---|---|---|
+| K4-00 Normal energy | morning | One line: energy is halved, 10 a day, and resisting a temptation costs energy with the price on the button | none | none |
+| K4-00a Tea works | morning | «Чудо-чай действует последний день»: −2 energy, already taken by Day 2's `tomorrow` chain. A line only | `d2_tea` | none |
+| K4-00b Overslept | morning | «Проспал»: −4 energy, already taken by Day 3's `tomorrow` effect. A line only | `d3_late` | none |
+| K4-00c Gym pass works | morning | +2 energy. A line only | pass running | none |
+| K4-01a Mirror | morning | The first morning of the doctor's course: «Мазь щиплет, значит работает» | `d3_course`, `d3_cleaning` not `bad` | none |
+| K4-01b Mirror | morning | The same, plus the second day of red cheeks from office 12А | `d3_course`, `d3_cleaning` = `bad` | none |
+| K4-02 Barbecue at Vitya's | day | Vitya invites; the card warns that there will be a lot of meat and everyone smokes. «Буду» (conf −1) or «Не сегодня» | none | `d4_went` or `d4_home` |
+| K4-03a At the grill | evening | Vitya: «Модель наша пришла!» Then the meat: one skewer and vegetables (2 energy, conf −1) or eat like everyone (weight +2) | `d4_went`, `d3_posted` | `d4_meat_held` or `d4_feast` |
+| K4-03b At the grill | evening | Vitya: «Ну что, в дверь пролез?» Same choices | `d4_went`, no `d3_posted`, `d1_joked` | same |
+| K4-03c At the grill | evening | Vitya: «Андрюха! А я думал, не придёшь». Same choices | `d4_went`, neither flag | same |
+| K4-04a Cigarette at the grill | evening | Ordinary craving. Resist (2 energy), the quarter (1 energy, only with `d1_half`), gum (uses the item), or smoke | `d4_went`, ordinary | `d4_no_smoke`, `d4_quarter` or `d4_smoked`; counter `smoke_free` |
+| K4-04b Cigarette at the grill | evening | Strong craving. Resisting costs 3 energy and gives twice the confidence | `d4_went`, strong | same |
+| K4-05 Pies in the fridge | evening | Mum's pies from Day 1. Close the fridge (2 energy, conf −1) or finish them (weight +2) | `d4_home`, `d1_one_pie` | `d4_pies_held` or `d4_ate_pies` |
+| K4-06 Mum calls | evening | The quiet evening of `DECISIONS.md` row 15: «Ты чего дома? Витя же звал. Мазь мажешь?» Tell her about the day (conf −1) or answer «Мажу, мам». Nothing gets worse | `d4_home`, no `d1_one_pie` | `d4_mom_talked` |
+| K4-07a Balcony | evening | The craving at home, ordinary. Same four choices as K4-04a | `d4_home`, ordinary | as K4-04a |
+| K4-07b Balcony | evening | The craving at home, strong | `d4_home`, strong | as K4-04a |
+| K4-08a Class chat | night | Vitya posts the barbecue photos; Andrey is in the third one with one skewer. «Алина отметила фото»: `affinity` +3, reason «Алина отметила фото с шашлыков», a status line in the chat (`status_bbq_photo`). With `d3_alina_liked` the outcome says it is the second in two days | `d4_went`, `d4_meat_held` | `d4_alina_reacted` |
+| K4-08b Class chat | night | Vitya's caption: «Андрюха и его пять шампуров. Шестой в кадр не влез». The chat laughs, Alina is online and silent. Answer with a smiley (conf −1) or put the phone down | `d4_went`, no `d4_meat_held` | none |
+| K4-08c Class chat | night | The photos without Andrey; Alina puts a fire under Vitya's first photo. Like Vitya's post or put the phone down. No `affinity` change | no `d4_went` | none |
+
+Energy prices (decision 13: no dice, the price is on the button, giving in is free): park run 4, gym workout 4, side job 4 (`A-job`), one skewer instead of five 2, closing the fridge 2, not smoking 2 (ordinary) or 3 (strong), the quarter 1, shower 2, teeth 1. A "clean" barbecue day — run, side job, the meat and the cigarette — costs 12 with an ordinary craving and 13 with a strong one, against 10 energy (12 with the gym pass, 8, 6 or 4 with the Day 2 tea and a late Day 3 night). A choice the player cannot afford is shown disabled with «Не хватает энергии»; every temptation card keeps the free "give in" choice, and the gum from the Day 1 gift is a free way to resist once.
+
+Smoking count: `smoke_free` stays "days without a cigarette". It arrives from Day 3 as 0 (smoked), 1 (first smoke-free day) or 3 (smoke-free since Day 1). On Day 4: resisting or the gum adds 1 (so 1, 2 or 4) and gives care −2; a cigarette sets it to 0 and gives care +2; the quarter also sets it to 0 (a quarter is still a cigarette, and the visible «Без сигарет: N дней» line must not lie) with care +1. Resisting gives conf −1 on the ordinary card and conf −2 on the strong one; the gum gives no confidence. Each craving card is closed by its own flags (`d4_smoked`, `d4_no_smoke`, `d4_quarter`), otherwise the other strength would be offered as soon as the counter moved.
+
+Alina (decision 16): she reacts only to the photo. +3 is below the +5 of the first like. Smoking at the grill does not change her reaction; the meat does, because it is what the photo shows.
+
+Plus actions on day 4 (day, evening, night): park run (4, weight −3 or −1, counter `useful`; the text recalls `d2_park`), gym workout (4, weight −3, no random outcome, counter `useful`; only while the pass is running), shower and clean T-shirt (2, care −5, counter `useful`), teeth by the timer (1, teeth −1), sofa (0, conf +1). Sleep (night) closes the day; «Посидеть в телефоне до трёх» sets `d4_late` and −4 energy on day 5.
+
+Neutral choice per story card (marked `"neutral": true`): K4-00 `ok`, K4-00a `ok`, K4-00b `up`, K4-00c `ok`, K4-01a `ok`, K4-01b `ok`, K4-02 `home`, K4-03a–c `feast`, K4-04a/b `smoke`, K4-05 `eat`, K4-06 `calm`, K4-07a/b `smoke`, K4-08a `ok`, K4-08b `ok`, K4-08c `ok`. A fully skipped Day 4 therefore runs K4-00, the hangover lines that apply, the mirror, K4-02, K4-05 or K4-06, K4-07a or K4-07b, K4-08c: Andrey stays home, finishes the pies if there are any, smokes as usual (`smoke_free` 0), is not in the photo; nothing is posted, no coins are spent, nothing is written to Alina and `affinity` does not move.
+
+Day 4 card: reward 50 gold and gum (`gum`, the same item as the Day 1 gift). Line for tomorrow: «Завтра: соседка тётя Зина просит помочь».
+
+Earlier flags paid off on day 4: `d1_one_pie` (K4-05), `d1_joked` (K4-03b), `d1_half` (the quarter), `d1_no_smoke` (the "fourth day" line of the strong card), `d1_smoked` (the «всё как обычно» line of the ordinary card), `d2_tea` (K4-00a), `d2_gym` (K4-00c, `A4-gym`), `d2_park` (`A4-run`), `d3_late` (K4-00b), `d3_course` and `d3_cleaning` (mirror), `d3_posted` (K4-03a), `d3_alina_liked` (K4-08a), `d3_smoked` / `d3_no_smoke` through the counter `smoke_free`, the Day 1 gift `gum`. No Day 4 payoff was moved. One change of meaning against section 5: the strength of the craving follows the counter, not the Day 1 flag, so a player who quit on Day 1 and smoked on Day 3 gets the ordinary craving.
+
+### How Day 4 pays off later
+
+| Flag | Day | Payoff |
+|---|---|---|
+| `d4_went`, `d4_home` | 4, 7 | Open the evening and the night cards; the Day 7 scene can recall the barbecue |
+| `d4_meat_held`, `d4_feast` | 4, 6 | Choose the night chat card; Vitya at the market can recall the skewers (proposed) |
+| `d4_alina_reacted` | 5 | Alina's first message can follow from the photo she marked |
+| `d4_smoked`, `d4_no_smoke`, `d4_quarter`, counter `smoke_free` | 5–7 | The next craving and the Day 7 "smoked today" check; the quarter can become a cheaper step toward quitting (proposed) |
+| `d4_ate_pies`, `d4_pies_held` | 5 | Mum asks about the pies when she talks to Aunt Zina; the Day 5 mirror can mention them (proposed) |
+| `d4_mom_talked` | 5 | Mum tells Aunt Zina her son is on a course, so the neighbour knows about the doctor (proposed) |
+| `d4_late` | 5 | Morning «Проспал» on a 10-energy day |
+
+Engine notes for days 5+ (nothing in `src/` was changed):
+- A card's text is fixed, so every text variant is a separate card: three «У мангала», four craving cards, three «Чат класса». Their choices are copies and must be edited together.
+- The halved energy needs no content: `balance.json` has `energyPerDay` 10 and `earlyBoost` for days 1–3. The tea's second day is the nested `tomorrow` from K2-05; Day 4 only shows the line.
+- `Cond` cannot ask whether a modifier is active, so K4-00c and `A4-gym` infer the gym pass from flags and the bag, with the K3-00b limit: a pass bought on day 3 and applied on the morning of day 4 before the card is read shows the line (and the gym action) a day early.
+- A choice cannot show its effect anywhere except its label, so the quarter's label carries it: «Выкурить четверть: вреда вдвое меньше».
+- `fill()` only inserts the nominative name, so texts avoid «от {crush}» and «{hero} нет».
 
 ## 6. Sample phrase bank for Alina
 

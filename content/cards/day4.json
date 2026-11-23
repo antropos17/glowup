@@ -1,0 +1,1879 @@
+[
+  {
+    "id": "K4-00",
+    "kind": "story",
+    "title": "Обычная энергия",
+    "when": {
+      "days": [
+        4,
+        4
+      ],
+      "parts": [
+        "morning"
+      ]
+    },
+    "text": "Лёгкие дни кончились: сил теперь вдвое меньше, 10 на день. На всё не хватит. Удержаться от соблазна тоже стоит сил: цена написана на кнопке.",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Понятно",
+        "outcomes": [
+          {
+            "text": "Сил теперь 10 на день. Придётся выбирать, на что их тратить."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K4-00a",
+    "kind": "story",
+    "title": "Чай действует",
+    "when": {
+      "days": [
+        4,
+        4
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d2_tea"
+        }
+      ]
+    },
+    "text": "Чудо-чай действует последний день: сегодня ещё на 2 энергии меньше. Завтра отпустит.",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Выбросить коробку",
+        "outcomes": [
+          {
+            "text": "Коробка с чаем уехала в мусорное ведро."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K4-00b",
+    "kind": "story",
+    "title": "Проспал",
+    "when": {
+      "days": [
+        4,
+        4
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d3_late"
+        }
+      ]
+    },
+    "text": "Телефон до трёх ночи даром не прошёл. Будильник сдался после третьего раза: сегодня ещё на 4 энергии меньше.",
+    "choices": [
+      {
+        "id": "up",
+        "neutral": true,
+        "label": "Встать",
+        "outcomes": [
+          {
+            "text": "Встал ближе к одиннадцати. Кофе помог наполовину."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K4-00c",
+    "kind": "story",
+    "title": "Абонемент работает",
+    "when": {
+      "days": [
+        4,
+        4
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "any": [
+            {
+              "flag": "d2_gym"
+            },
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "bought_gym_pass",
+                    "set": false
+                  },
+                  {
+                    "item": "gym_pass"
+                  },
+                  {
+                    "flagAge": "bought_gym_pass",
+                    "lte": 0
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "text": "Абонемент в зал работает: с утра +2 энергии. Сегодня это заметнее, чем вчера.",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Размять плечи",
+        "outcomes": [
+          {
+            "text": "Плечи хрустнули. Плюс два к утру."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K4-01a",
+    "kind": "story",
+    "title": "Зеркало",
+    "when": {
+      "days": [
+        4,
+        4
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d3_course"
+        },
+        {
+          "not": {
+            "flag": "d3_cleaning",
+            "eq": "bad"
+          }
+        }
+      ]
+    },
+    "text": "Утро, зеркало. Первое утро курса Галины Петровны. Мазь щиплет, значит работает.",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Кивнуть зеркалу",
+        "outcomes": [
+          {
+            "text": "Первое утро курса. Кожа чуть спокойнее, {hero} тоже."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K4-01b",
+    "kind": "story",
+    "title": "Зеркало",
+    "when": {
+      "days": [
+        4,
+        4
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d3_course"
+        },
+        {
+          "flag": "d3_cleaning",
+          "eq": "bad"
+        }
+      ]
+    },
+    "text": "Утро, зеркало. Щёки красные второй день: привет из кабинета 12А. Завтра сойдёт. Мазь Галины Петровны щиплет, значит работает.",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Кивнуть зеркалу",
+        "outcomes": [
+          {
+            "text": "Щёки красные второй день, завтра сойдёт. Курс идёт."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K4-02",
+    "kind": "story",
+    "title": "Шашлыки у Вити",
+    "speaker": "Витя",
+    "when": {
+      "days": [
+        4,
+        4
+      ],
+      "parts": [
+        "day"
+      ]
+    },
+    "text": "«Андрюха, вечером шашлыки у меня на даче. Наши будут. Приходи, мясо на мне». Мяса там будет гора, и курят у мангала все: чтобы держаться, понадобятся силы.",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Написать «Буду»",
+        "outcomes": [
+          {
+            "text": "Витя: «Вот это разговор. К семи». Вечером шашлыки.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "flag": "d4_went"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "home",
+        "neutral": true,
+        "label": "Написать «Не сегодня»",
+        "outcomes": [
+          {
+            "text": "«Не сегодня», — написал {hero}. Витя: «Ну смотри. Фотки пришлю».",
+            "effects": [
+              {
+                "flag": "d4_home"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K4-03a",
+    "kind": "story",
+    "title": "У мангала",
+    "speaker": "Витя",
+    "when": {
+      "days": [
+        4,
+        4
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d4_went"
+        },
+        {
+          "flag": "d4_meat_held",
+          "set": false
+        },
+        {
+          "flag": "d4_feast",
+          "set": false
+        },
+        {
+          "flag": "d3_posted"
+        }
+      ]
+    },
+    "text": "Дача Вити, дым столбом. Витя машет шампуром: «Модель наша пришла!» На мангале гора мяса, все берут по второму кругу.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Взять один шампур и овощи",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Один шампур, помидоры и лук. Витя посмотрел с уважением. Или с жалостью, в дыму не разобрать.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "flag": "d4_meat_held"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "feast",
+        "neutral": true,
+        "label": "Есть как все",
+        "outcomes": [
+          {
+            "text": "Пять шампуров. Шестой Витя вложил в руку сам.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": 2
+              },
+              {
+                "flag": "d4_feast"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K4-03b",
+    "kind": "story",
+    "title": "У мангала",
+    "speaker": "Витя",
+    "when": {
+      "days": [
+        4,
+        4
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d4_went"
+        },
+        {
+          "flag": "d4_meat_held",
+          "set": false
+        },
+        {
+          "flag": "d4_feast",
+          "set": false
+        },
+        {
+          "flag": "d3_posted",
+          "set": false
+        },
+        {
+          "flag": "d1_joked"
+        }
+      ]
+    },
+    "text": "Дача Вити, дым столбом. Витя машет шампуром: «Ну что, в дверь пролез?» На мангале гора мяса, все берут по второму кругу.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Взять один шампур и овощи",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Один шампур, помидоры и лук. Витя посмотрел с уважением. Или с жалостью, в дыму не разобрать.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "flag": "d4_meat_held"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "feast",
+        "neutral": true,
+        "label": "Есть как все",
+        "outcomes": [
+          {
+            "text": "Пять шампуров. Шестой Витя вложил в руку сам.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": 2
+              },
+              {
+                "flag": "d4_feast"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K4-03c",
+    "kind": "story",
+    "title": "У мангала",
+    "speaker": "Витя",
+    "when": {
+      "days": [
+        4,
+        4
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d4_went"
+        },
+        {
+          "flag": "d4_meat_held",
+          "set": false
+        },
+        {
+          "flag": "d4_feast",
+          "set": false
+        },
+        {
+          "flag": "d3_posted",
+          "set": false
+        },
+        {
+          "flag": "d1_joked",
+          "set": false
+        }
+      ]
+    },
+    "text": "Дача Вити, дым столбом. Витя машет шампуром: «Андрюха! А я думал, не придёшь». На мангале гора мяса, все берут по второму кругу.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Взять один шампур и овощи",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Один шампур, помидоры и лук. Витя посмотрел с уважением. Или с жалостью, в дыму не разобрать.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "flag": "d4_meat_held"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "feast",
+        "neutral": true,
+        "label": "Есть как все",
+        "outcomes": [
+          {
+            "text": "Пять шампуров. Шестой Витя вложил в руку сам.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": 2
+              },
+              {
+                "flag": "d4_feast"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K4-04a",
+    "kind": "story",
+    "title": "Сигарета у мангала",
+    "when": {
+      "days": [
+        4,
+        4
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d4_went"
+        },
+        {
+          "flag": "d4_smoked",
+          "set": false
+        },
+        {
+          "flag": "d4_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d4_quarter",
+          "set": false
+        },
+        {
+          "counter": "smoke_free",
+          "lte": 0
+        }
+      ]
+    },
+    "text": "После мяса у мангала закуривают все. Витя протягивает пачку: «Будешь?» Рука сама тянется.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Сказать «Не, я бросаю»",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "«Не, я бросаю». Витя: «Ого. Ну держись». И убрал пачку. Первый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d4_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Четыре затяжки, остальное в мангал. Витя: «Ты чего добро переводишь?» Дни без сигарет считаются с нуля: четверть тоже сигарета.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d4_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. Витя: «Мятная? Дай одну».",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d4_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d1_smoked"
+              }
+            ],
+            "text": "Сигарета у мангала, как у всех. Четвёртый день всё как обычно.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d4_smoked"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d1_smoked",
+                "set": false
+              }
+            ],
+            "text": "Сигарета у мангала, как у всех. Куртка теперь пахнет и дымом, и табаком.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d4_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K4-04b",
+    "kind": "story",
+    "title": "Сигарета у мангала",
+    "when": {
+      "days": [
+        4,
+        4
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d4_went"
+        },
+        {
+          "flag": "d4_smoked",
+          "set": false
+        },
+        {
+          "flag": "d4_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d4_quarter",
+          "set": false
+        },
+        {
+          "counter": "smoke_free",
+          "gte": 1
+        }
+      ]
+    },
+    "text": "После мяса у мангала закуривают все, дым стоит стеной. Витя протягивает пачку: «Будешь?» {hero} держится не первый день, и тянет сильнее, чем вчера.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Сказать «Не, я бросаю»",
+        "cost": {
+          "energy": 3
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d1_no_smoke"
+              }
+            ],
+            "text": "«Не, я бросаю». Витя: «Ого. Ну держись». И убрал пачку. Четвёртый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d4_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d1_no_smoke",
+                "set": false
+              }
+            ],
+            "text": "«Не, я бросаю». Витя: «Ого. Ну держись». И убрал пачку. Второй день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d4_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Четыре затяжки, остальное в мангал. Витя: «Ты чего добро переводишь?» Дни без сигарет считаются с нуля: четверть тоже сигарета.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d4_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. Витя: «Мятная? Дай одну».",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d4_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "text": "Сигарета у мангала, как у всех. Счёт дней без табака снова с нуля.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d4_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K4-05",
+    "kind": "story",
+    "title": "Пирожки в холодильнике",
+    "when": {
+      "days": [
+        4,
+        4
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d4_home"
+        },
+        {
+          "flag": "d1_one_pie"
+        }
+      ]
+    },
+    "text": "Вечер, дома тихо, в животе пусто. В холодильнике мамины пирожки с картошкой: лежат с первого дня, а пахнут как в первый.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Закрыть холодильник",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Холодильник закрыт. На ужин салат из огурца и упрямства.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "flag": "d4_pies_held"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "eat",
+        "neutral": true,
+        "label": "Доесть пирожки",
+        "outcomes": [
+          {
+            "text": "Пирожки кончились. Холодные тоже вкусные.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": 2
+              },
+              {
+                "flag": "d4_ate_pies"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K4-06",
+    "kind": "story",
+    "title": "Звонок мамы",
+    "speaker": "Мама",
+    "when": {
+      "days": [
+        4,
+        4
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d4_home"
+        },
+        {
+          "flag": "d1_one_pie",
+          "set": false
+        }
+      ]
+    },
+    "text": "«Андрюша, ты чего дома? Витя же звал. Ну ладно. Мазь мажешь?»",
+    "choices": [
+      {
+        "id": "talk",
+        "label": "Рассказать, как прошёл день",
+        "outcomes": [
+          {
+            "text": "Десять минут про мазь, очередь и Галину Петровну. Мама слушала и почти не перебивала.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "flag": "d4_mom_talked"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "calm",
+        "neutral": true,
+        "label": "Ответить «Мажу, мам»",
+        "outcomes": [
+          {
+            "text": "«Мажу, мам». Мама: «Вот и умница. Ложись пораньше»."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K4-07a",
+    "kind": "story",
+    "title": "Балкон",
+    "when": {
+      "days": [
+        4,
+        4
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d4_home"
+        },
+        {
+          "flag": "d4_smoked",
+          "set": false
+        },
+        {
+          "flag": "d4_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d4_quarter",
+          "set": false
+        },
+        {
+          "counter": "smoke_free",
+          "lte": 0
+        }
+      ]
+    },
+    "text": "Вечер, балкон, пачка на подоконнике. Рука сама тянется.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Не открывать пачку",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Пачка осталась закрытой. Десять минут на балконе просто так, с чаем. Первый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d4_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Четыре затяжки, остальное в пепельницу. Дни без сигарет считаются с нуля: четверть тоже сигарета.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d4_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. Балкон пахнет мятой.",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d4_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d1_smoked"
+              }
+            ],
+            "text": "Обычная сигарета на балконе. Четвёртый день всё как обычно.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d4_smoked"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d1_smoked",
+                "set": false
+              }
+            ],
+            "text": "Обычная сигарета на балконе. Футболка снова пахнет табаком.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d4_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K4-07b",
+    "kind": "story",
+    "title": "Балкон",
+    "when": {
+      "days": [
+        4,
+        4
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d4_home"
+        },
+        {
+          "flag": "d4_smoked",
+          "set": false
+        },
+        {
+          "flag": "d4_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d4_quarter",
+          "set": false
+        },
+        {
+          "counter": "smoke_free",
+          "gte": 1
+        }
+      ]
+    },
+    "text": "Вечер, балкон, пачка на подоконнике. {hero} держится не первый день, и тянет сильнее, чем вчера.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Не открывать пачку",
+        "cost": {
+          "energy": 3
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d1_no_smoke"
+              }
+            ],
+            "text": "Пачка осталась закрытой. Десять минут на балконе просто так, с чаем. Четвёртый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d4_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d1_no_smoke",
+                "set": false
+              }
+            ],
+            "text": "Пачка осталась закрытой. Десять минут на балконе просто так, с чаем. Второй день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d4_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Четыре затяжки, остальное в пепельницу. Дни без сигарет считаются с нуля: четверть тоже сигарета.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d4_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. Балкон пахнет мятой.",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d4_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "text": "Сигарета на балконе. Счёт дней без табака снова с нуля.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d4_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K4-08a",
+    "kind": "story",
+    "title": "Чат класса",
+    "when": {
+      "days": [
+        4,
+        4
+      ],
+      "parts": [
+        "night"
+      ],
+      "requires": [
+        {
+          "flag": "d4_went"
+        },
+        {
+          "flag": "d4_meat_held"
+        }
+      ]
+    },
+    "text": "Чат «11-Б навсегда». Витя выложил фото с шашлыков: «Наши у мангала». На третьем {hero} с одним шампуром и помидором. Телефон звякнул: «{crush} отметила фото».",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Посмотреть ещё раз и отложить телефон",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d3_alina_liked"
+              }
+            ],
+            "text": "{crush} поставила сердечко под фото с шашлыков. Второе за два дня. {hero} не считает. Ну, почти.",
+            "why": "{crush} отметила фото с шашлыков",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": 3
+              },
+              {
+                "chat": "status_bbq_photo"
+              },
+              {
+                "rumor": "bbq_held"
+              },
+              {
+                "flag": "d4_alina_reacted"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d3_alina_liked",
+                "set": false
+              }
+            ],
+            "text": "{crush} поставила сердечко под фото с шашлыков. {hero} проверил дважды: да, под тем самым.",
+            "why": "{crush} отметила фото с шашлыков",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": 3
+              },
+              {
+                "chat": "status_bbq_photo"
+              },
+              {
+                "rumor": "bbq_held"
+              },
+              {
+                "flag": "d4_alina_reacted"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K4-08b",
+    "kind": "story",
+    "title": "Чат класса",
+    "when": {
+      "days": [
+        4,
+        4
+      ],
+      "parts": [
+        "night"
+      ],
+      "requires": [
+        {
+          "flag": "d4_went"
+        },
+        {
+          "flag": "d4_meat_held",
+          "set": false
+        }
+      ]
+    },
+    "text": "Чат «11-Б навсегда». Витя выложил фото с шашлыков. Подпись: «Андрюха и его пять шампуров. Шестой в кадр не влез». Чат смеётся. {crush} в сети, но молчит.",
+    "choices": [
+      {
+        "id": "smile",
+        "label": "Ответить Вите смайликом",
+        "outcomes": [
+          {
+            "text": "{hero} поставил смайлик. Смеяться над собой оказалось проще, чем казалось.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "rumor": "bbq_feast"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Отложить телефон",
+        "outcomes": [
+          {
+            "text": "Витя подписал фото: «Андрюха и его пять шампуров». Оксана поставила три смайлика. {crush} промолчала.",
+            "effects": [
+              {
+                "rumor": "bbq_feast"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K4-08c",
+    "kind": "story",
+    "title": "Чат класса",
+    "when": {
+      "days": [
+        4,
+        4
+      ],
+      "parts": [
+        "night"
+      ],
+      "requires": [
+        {
+          "flag": "d4_went",
+          "set": false
+        }
+      ]
+    },
+    "text": "Чат «11-Б навсегда». Витя выложил фото с шашлыков: дым, мангал, все наши. {hero} в кадр не попал: его там не было. {crush} поставила под первым фото огонёк.",
+    "choices": [
+      {
+        "id": "like",
+        "label": "Поставить Вите лайк",
+        "outcomes": [
+          {
+            "text": "Лайк поставлен. Витя: «В следующий раз без отмазок».",
+            "effects": [
+              {
+                "rumor": "bbq_away"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Отложить телефон",
+        "outcomes": [
+          {
+            "text": "Витя выложил фото с шашлыков, {crush} поставила под ними огонёк. {hero} в кадр не попал.",
+            "effects": [
+              {
+                "rumor": "bbq_away"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A4-run",
+    "kind": "action",
+    "title": "Пробежка в парке",
+    "when": {
+      "days": [
+        4,
+        4
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Пробежка в парке",
+        "cost": {
+          "energy": 4
+        },
+        "outcomes": [
+          {
+            "weight": 3,
+            "if": [
+              {
+                "flag": "d2_park"
+              }
+            ],
+            "hint": "получилось",
+            "text": "Знакомые три круга. Парк уже как свой, только сил на него теперь почти половина дня.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          },
+          {
+            "weight": 1,
+            "if": [
+              {
+                "flag": "d2_park"
+              }
+            ],
+            "hint": "закололо в боку",
+            "text": "На знакомом втором круге закололо в боку. Дошёл шагом.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -1
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          },
+          {
+            "weight": 3,
+            "if": [
+              {
+                "flag": "d2_park",
+                "set": false
+              }
+            ],
+            "hint": "получилось",
+            "text": "Три круга по парку. Почти половина сил за день, зато ноги довольны.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          },
+          {
+            "weight": 1,
+            "if": [
+              {
+                "flag": "d2_park",
+                "set": false
+              }
+            ],
+            "hint": "закололо в боку",
+            "text": "На втором круге закололо в боку. Дошёл шагом.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -1
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A4-gym",
+    "kind": "action",
+    "title": "Тренировка в зале",
+    "when": {
+      "days": [
+        4,
+        4
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ],
+      "requires": [
+        {
+          "any": [
+            {
+              "flag": "d2_gym"
+            },
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "bought_gym_pass",
+                    "set": false
+                  },
+                  {
+                    "item": "gym_pass"
+                  },
+                  {
+                    "flagAge": "bought_gym_pass",
+                    "lte": 0
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Тренировка в зале по абонементу",
+        "cost": {
+          "energy": 4
+        },
+        "outcomes": [
+          {
+            "text": "Тренер кивнул как старому знакомому. Сорок минут на тренажёрах, и в боку не закололо.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A4-clean",
+    "kind": "action",
+    "title": "Душ и чистая футболка",
+    "when": {
+      "days": [
+        4,
+        4
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Душ и чистая футболка",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Душ смыл день. Чистых футболок в шкафу осталось две.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -5
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A4-teeth",
+    "kind": "action",
+    "title": "Почистить зубы по таймеру",
+    "when": {
+      "days": [
+        4,
+        4
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Почистить зубы две минуты по таймеру",
+        "cost": {
+          "energy": 1
+        },
+        "outcomes": [
+          {
+            "text": "Две минуты по таймеру. Уже почти привычка.",
+            "effects": [
+              {
+                "problem": "teeth",
+                "add": -1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A4-couch",
+    "kind": "action",
+    "title": "Полежать на диване",
+    "when": {
+      "days": [
+        4,
+        4
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Полежать на диване",
+        "outcomes": [
+          {
+            "text": "Диван вопросов не задавал. Сил он не вернул.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K4-sleep",
+    "kind": "action",
+    "title": "Сон",
+    "when": {
+      "days": [
+        4,
+        4
+      ],
+      "parts": [
+        "night"
+      ]
+    },
+    "text": "День почти закончился.",
+    "choices": [
+      {
+        "id": "sleep",
+        "label": "Лечь сейчас",
+        "outcomes": [
+          {
+            "text": "Свет выключен. Завтра сил снова десять.",
+            "effects": [
+              {
+                "closeDay": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "late",
+        "label": "Посидеть в телефоне до трёх",
+        "outcomes": [
+          {
+            "text": "В три часа ночи лента всё ещё не кончилась. Завтра на четыре энергии меньше, а их и так десять.",
+            "effects": [
+              {
+                "flag": "d4_late"
+              },
+              {
+                "tomorrow": [
+                  {
+                    "stat": "energy",
+                    "add": -4
+                  }
+                ]
+              },
+              {
+                "closeDay": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
