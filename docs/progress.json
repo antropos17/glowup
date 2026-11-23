@@ -4,11 +4,11 @@
   "verified": {
     "date": "2026-11-23",
     "typecheck": "pass",
-    "tests": "89/89",
-    "check_content": "pass: 108 cards (80 story, 28 action), 1 archetype, 1 crush",
+    "tests": "102/102",
+    "check_content": "pass: 132 cards (98 story, 34 action), 1 archetype, 1 crush",
     "economy": "demo economy in items.json, side-jobs.json, balance.json; see docs/DEMO_SCRIPT.md section 5a",
-    "build": "pass: dist/index.html 492 kB",
-    "playthrough": "Day 5 branch: 20 scripted engine paths (the shelf and the free tube; the bags for 2 energy after refused pies; not helped, saw the note and bought the cream; asked about the note and left the cream; knows nothing, no cream; dentist booked without soda, with soda, with a strong craving; not booked; four message openings, each with d1_said_coming and with d1_lurked; the answer about «Зерно»; Day 5 skipped after played days 1-4, booked and not booked); Playwright (headless Chrome) on the built dist/index.html at 375x812 from a clean save through days 1-5 to the demo end screen with six timelapse frames, every Day 5 story card on that path also at 320x568, the chat and the bag tabs at both sizes; no horizontal overflow, no card sheet scrolls, no console errors"
+    "build": "pass: dist/index.html 541 kB",
+    "playthrough": "Day 6 branch: engine tests over every reply at every confidence level, both sleep variants, the four Day 5 openings x plain and joke, both second forks, the trap, the market card by the three barbecue outcomes, the craving by the counter, Day 6 skipped after played days 1-5 and after a skipped Day 5; 600 random engine runs of Day 6 after random days 1-5 (Alina gives -5..+11, every choice taken); Playwright (headless Chrome, real pointer clicks) on the built dist/index.html at 375x812 from a clean save through days 1-6 to the demo end screen with seven timelapse frames (joke path), a second run with days 1-5 skipped and Day 6 played (excuse path, 100 coins), a third with all six days skipped; every Day 6 story card on those paths also at 320x568, the chat and feed tabs at both sizes; no horizontal overflow, no card sheet scrolls, no console errors"
   },
   "demo_days": {
     "1": { "status": "in_game", "file": "content/cards/day1.json", "note": "outcome texts reviewed by the authors on 2026-11-22" },
@@ -16,7 +16,7 @@
     "3": { "status": "in_game", "file": "content/cards/day3.json", "note": "written 2026-11-23, texts not reviewed by the authors yet" },
     "4": { "status": "in_game", "file": "content/cards/day4.json", "note": "written 2026-11-23, texts not reviewed by the authors yet" },
     "5": { "status": "in_game", "file": "content/cards/day5.json", "note": "written 2026-11-23, texts not reviewed by the authors yet" },
-    "6": { "status": "todo" },
+    "6": { "status": "in_game", "file": "content/cards/day6.json", "note": "written 2026-11-23, texts not reviewed by the authors yet; the joke threshold conf <= 75 in K6-01 awaits the authors (docs/DEMO_SCRIPT.md section 5f)" },
     "7": { "status": "todo" }
   },
   "engine_todo": [
@@ -29,6 +29,7 @@
     "store purchase verification"
   ],
   "awaiting_authors": [
+    "Day 6: confirm the confidence threshold for the joke (conf <= 75: half of random engine paths, all diligent ones, none of the lazy ones) and review every Alina line of the day (docs/DEMO_SCRIPT.md section 5f)",
     "listen to the eight sound effects on the showcase page (block «Звуки»): they were picked by measurements, nobody has heard them; see assets/sounds/README.md",
     "confirm demo assumptions (docs/DEMO_SCRIPT.md section 0); assumption 3 lists 5 problems with smoking, the engine has 6 (weight, skin, teeth, style, care, conf) and tracks smoking with flags",
     "heroine in the demo or Andrey only",

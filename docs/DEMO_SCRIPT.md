@@ -1,6 +1,6 @@
 # 7-day demo — script
 
-Status: draft v1, 2026-11-22. The 7-day grid and the Day 1 design are done. Day 1 is implemented in `content/cards/day1.json`, Day 2 in `content/cards/day2.json`, Day 3 in `content/cards/day3.json`, Day 4 in `content/cards/day4.json`, Day 5 in `content/cards/day5.json`. Days 6–7 are to be written directly in the engine format.
+Status: draft v1, 2026-11-22. The 7-day grid and the Day 1 design are done. Day 1 is implemented in `content/cards/day1.json`, Day 2 in `content/cards/day2.json`, Day 3 in `content/cards/day3.json`, Day 4 in `content/cards/day4.json`, Day 5 in `content/cards/day5.json`, Day 6 in `content/cards/day6.json`. Day 7 is to be written directly in the engine format.
 
 This file is the design-level description in English. Russian strings in «quotes» are in-game text: copy them verbatim into content.
 
@@ -478,6 +478,77 @@ Engine notes for days 6+ (nothing in `src/` was changed):
 - A neutral choice cannot have `cost`, so the cleaning's energy is an effect and is written into the button label («−3 энергии») instead of the cost badge. With less than 3 energy it takes what is left.
 - `useItem()` would consume an item without `onUse` and do nothing; the UI never offers it (the «Применить» button needs `onUse`), so the tube stays in the bag until Day 7.
 - The chat bubbles of Day 5 carry no time stamps; "late" is said by the night part only.
+
+## 5f. Day 6 design (implemented)
+
+The authoritative version is `content/cards/day6.json`. Written 2026-11-23 from `DECISIONS.md` rows 20–24 and section 3; the texts are not reviewed by the authors yet. Story cards are listed in display order.
+
+"Tone" below is the Day 5 opening: warm (`d1_wrote_plain`), flirty (`d1_wrote_flirty`), list (no Day 1 message, `d1_said_coming`), oksana (no Day 1 message, no `d1_said_coming`). "Ordinary" means the counter `smoke_free` is 0 when the craving card arrives, "strong" means it is 1 or more.
+
+| Card | Part | What happens | Condition | Flags set |
+|---|---|---|---|---|
+| K6-00 Overslept | morning | «Проспал»: −4 energy, already taken by Day 5's `tomorrow` effect, and the reply goes out by noon. A line only | `d5_late` | none |
+| K6-01 Her question waits | morning | The reply. Each label is the exact message, sent with `write`. Dry «Да, записывай.» (0, neutral). Plain «Да, записывай. А кто ещё из наших будет?» (+5). Third button by confidence: the joke «Записывай. Обещаю не петь, как на выпускном.» (+8) or the four-line excuse (−5). After the reply the chat shows a status line «Алина прочитала сообщение в 09:12.»; with `d5_late` the time is around noon | `d5_alina_wrote` | `d6_reply` = `dry`, `plain`, `joke` or `excuse` |
+| K6-02 A look from the feed | day | The trap (decision 23): a stylist's post, «рубашка поверх худи, штаны подвернуть, носки напоказ». Put it together from his own wardrobe (free, style +4) or scroll | none | `d6_trend` |
+| K6-03a–c Market or optician | day | Vitya calls and recalls the barbecue: `a` one skewer (`d4_meat_held`), `b` five skewers (`d4_feast`), `c` «На шашлыки не пришёл». The shirt at the market for 90 coins (style −6, the blue shirt) or the frame at the optician for 150 (style −12, conf −2, round glasses): the shop's items at the shop's prices, one purchase on the card. Free: go along and buy nothing (conf −1). With `d6_trend` Vitya comments on the look | none | `bought_shirt` + `d6_shirt`, or `bought_frame` + `d6_frame` |
+| K6-04 Class chat | evening | Oksana posts a photo of bearded Gromov; Alina: «Громов, это ты или геолог? Борода вообще не моё». She is online and jokes in the class chat while the private chat is silent. Every choice gives the hint: the notebook line, the revealed taste `no_beard`, the feed post. With `d1_lurked` Andrey can at last write in the class chat (conf −2) | none | `d6_beard_hint`, `d6_chat_spoke` |
+| K6-05d Alina answered | evening | After the dry reply: «Ок, записала.» One button. No fork | `d6_reply` = `dry` | `d6_answered`, `d6_talked` |
+| K6-05e Alina answered | evening | After the excuse: «Поняла. Записала.» One button. No fork | `d6_reply` = `excuse` | `d6_answered`, `d6_talked` |
+| K6-05p Alina answered | evening | After the plain reply: «Записала. Почти все наши, даже Громов обещал.» The button sends her tone line: warm, from the bank `alina_tone_warm`; list, «Ты и в чате писал, что придёшь. Теперь официально.»; oksana, «А я думала, ответишь одним словом.» | `d6_reply` = `plain`, not flirty | `d6_answered` |
+| K6-05j Alina answered | evening | After the joke: «Записала. А жаль: пел ты ужасно, зато громко.» Tone lines as above, except oksana stays business-like because he asked nothing back: «Оксане передам, что ты в списке.» | `d6_reply` = `joke`, not flirty | `d6_answered` |
+| K6-05pf, K6-05jf Alina answered | evening | Flirty tone, dry: «Записала. Почти все.» / «Записала. Не пой.» No tone line | `d6_reply` = `plain` / `joke`, `d1_wrote_flirty` | `d6_answered` |
+| K6-06 Alina asks | evening | The second fork: «А сам как? Сто лет тебя не слышала.» (bank of 10). Open answer with a question back +3, short answer with a question back +1, «Нормально.» 0 (neutral). With `d2_wrote_zerno` she adds «Я, кстати, по субботам в «Зерне». Раз уж тебе место понравилось.» | `d6_reply` = `plain` or `joke`, not flirty | `d6_talk` = `open`, `work` or `short`; `d6_talked` |
+| K6-06f Alina remembered | evening | The second fork for the flirty tone: «Ты мне, кстати, странное писал.» Owning it +3 («Проехали. Но сердечки пока придержи.»), «Писал. Бывает.» 0 (neutral), one more heart −5 («Ясно.»). The Saturday line follows the first two | `d6_reply` = `plain` or `joke`, `d1_wrote_flirty` | `d6_talk` = `owned`, `shrug` or `repeat`; `d6_talked` |
+| K6-07 Alina says goodbye | evening | «Ладно, мне пора. Увидимся на встрече, наверное.» (bank of 10 close phrasings). One button. The evening ends here | `d6_talked` | `d6_bye` |
+| K6-08a Balcony | night | The craving, ordinary. Resist (2 energy), the quarter (1 energy, only with `d1_half`), gum (uses the item), or smoke. With `d5_quarter` the texts remember yesterday's quarter | ordinary | `d6_no_smoke`, `d6_quarter` or `d6_smoked`; counter `smoke_free` |
+| K6-08b Balcony | night | The same, strong: resisting costs 3 energy and gives twice the confidence | strong | same |
+
+Chance budget (decision 4): the reply moves `affinity` when it is sent (0, +5, +8 or −5, with its reason line), the second fork when it is answered (up to +3; −5 only for the second heart). Over the whole day Alina gives between −5 and +11: −5 the excuse; 0 dry, or plain with the second heart; +3 the joke with the second heart; +5, +6, +8 plain; +8, +9, +11 the joke. Measured on 600 random engine runs of Day 6 after random days 1–5: minimum −5, maximum +11, every choice of the day taken at least once. Her lines never name what Andrey changed.
+
+The confidence threshold. The joke is open at `conf` ≤ 75 (5 points better than the start, 6% on the «Уверенность» bar), the excuse above it. The value sits in one card, K6-01: the joke's `requires` is `{ "problem": "conf", "lte": 75 }` and the excuse's is the `not` of the same condition; change both numbers together. `conf` on the morning of Day 6, from engine runs of days 1–5 (start 80): all five days skipped 90; neutral choices and the sofa every day 85; random choices and actions (400 runs) 68–84, median 76; random with each day skipped at 30% median 80; a diligent player 66–67, 62–63 with the haircut and the frame from the shop. Share with the joke open at 75: skipped and lazy 0%, random 50%, random with skips 16%, diligent 100%. One step either way: at 74 the random share is 39%, at 76 it is 63%.
+
+Prices. Coins when the market card opens, from 600 runs: minimum 90, 10th percentile 200, median 310, 90th percentile 390; 100% can pay for the shirt (90), 98% for the frame (150), 74% could pay for both (240). The card sells one of them; the other stays in the shop. A player who skipped all five days has 100 coins: the shirt is on offer, the frame is shown disabled with «Не хватает монет». The trap costs nothing and gives nothing (decision 23).
+
+Smoking count: `smoke_free` arrives from Day 5 as 0, 1, 2, 3 or 5. Resisting or the gum adds 1 and gives care −2; a cigarette sets it to 0 with care +2; the quarter sets it to 0 with care +1. Resisting gives conf −1 on the ordinary card and conf −2 on the strong one. One craving card, at night, closed by its own flags.
+
+Plus actions on day 6 (day, evening, night): park run (4, weight −3 or −1, counter `useful`), gym workout (4, weight −3, only while the pass is running), shower and clean T-shirt (2, care −5, counter `useful`), teeth by the timer (1, teeth −1), sofa (0, conf +1). Sleep (night) closes the day; «Посидеть в телефоне до трёх» sets `d6_late` and −4 energy on day 7.
+
+Neutral choice per story card (marked `"neutral": true`): K6-00 `up`, K6-01 `dry` (the agreed exception of decision 22: it writes to the crush), K6-02 `scroll`, K6-03a–c `home`, K6-04 `scroll`, K6-05x `read`, K6-06 `short`, K6-06f `shrug`, K6-07 `ok`, K6-08a/b `smoke`. A fully skipped Day 6 therefore runs K6-00 if it applies, K6-01, K6-02, K6-03x, K6-04, K6-05d, K6-07, K6-08x: Andrey sends «Да, записывай.», buys nothing, scrolls the class chat and still gets the beard hint, reads «Ок, записала.» (plus the «Долго ты» line after a late night) and the goodbye, smokes as usual. No coins are spent and `affinity` does not move. The same holds when Day 5 was skipped as well: her message arrived by itself with its +6, and his reply follows.
+
+Day 6 card: reward 50 gold and gum (`gum`). Line for tomorrow: «Завтра суббота. Кофейня «Зерно»».
+
+Earlier flags paid off on day 6: `d5_alina_wrote` (K6-01), `d5_late` (K6-00, the noon read receipt, her «Долго ты» line from the bank `alina_long`), `d1_wrote_plain`, `d1_said_coming`, `d1_liked_only`, `d1_no_contact` (her tone), `d1_wrote_flirty` (dry answers and the «странное писал» fork), `d2_wrote_zerno` (Saturdays at «Зерно»), `d1_lurked` (the class chat), `d4_meat_held`, `d4_feast` (Vitya), `d5_quarter`, `d5_smoked`, `d5_no_smoke` through the counter `smoke_free` (the balcony), `d1_half` (the quarter), `d2_gym` (`A6-gym`).
+
+Where the implementation differs from section 3, and why:
+- The plain reply asks «А кто ещё из наших будет?» instead of the grid's example «Сама-то идёшь?»: Alina wrote «Я буду» in the class chat on Day 1 (K1-01).
+- The «странное писал» beat and the Saturday line exist only in the live exchange (after the plain reply or the joke). After the dry reply or the excuse there is no fork (section 3, decision 22), so a flirty player who answers dryly gets only her dry tone on Day 6; the callback is left for Day 7 (table below).
+- «Долго ты» comes after her answer, not before it: a card with `says` opens on the answer.
+- The joke invents a detail of the past: Andrey sang at the graduation party, badly and loudly.
+
+### How Day 6 pays off later
+
+| Flag | Day | Payoff |
+|---|---|---|
+| `d6_reply` | 6, 7 | Chooses her evening answer; in «Зерно» she can pick up the thread («Петь не будешь?» after the joke) |
+| `d6_talk` | 6, 7 | Chooses the goodbye outcome; the tone of her Day 7 evening message (`open` and `owned` warm, `repeat` cold) |
+| `d6_answered`, `d6_talked`, `d6_bye` | 6 | Order of the evening cards |
+| `d6_beard_hint` | 7 | The morning "shave or keep" card can quote her line; the choice itself is open to everyone (decision 24). The taste `no_beard` is already revealed in the chat tab |
+| `d6_trend` | 6, 7 | Vitya's line at the market; the clothes Andrey wears into «Зерно» (the look stays on unless a shirt was bought) |
+| `d6_shirt`, `d6_frame`, `bought_shirt`, `bought_frame` | 7 | The "clothes" check of the «Зерно» scene; the shop no longer sells the item |
+| `d6_chat_spoke` | 7 | The class chat is no longer silent about him: Oksana or Vitya can tag him under the next post (proposed) |
+| `d6_smoked`, `d6_no_smoke`, `d6_quarter`, counter `smoke_free` | 7 | The "smoked today" check of the meeting |
+| `d6_late` | 7 | Morning «Проспал» before the shave |
+| `d1_wrote_flirty` with `d6_reply` = `dry` or `excuse` | 7 | The «странное писал» callback this player has not had yet (proposed) |
+
+Engine notes for day 7 (nothing in `src/` was changed):
+- A story card cannot be a `chat` card (those are drawn from the random deck), so what Andrey sends is a `write` effect with the same string as the label. The two must be edited together; a test compares them.
+- A card with `says` shows only that phrase, and a card's text is fixed. So her evening takes three cards on the live path (answer, question, goodbye) and two on the dry one, each opening on one bubble; the tone line and the «Долго ты» line go into the chat from the first button and are only retold in the outcome text when they come from a bank.
+- One card cannot show different buttons by a number without two conditions, so the threshold is written twice in K6-01 (`lte` and its `not`).
+- The reason line and the day card attribute the chance change to the choice that made it, so the reply's `affinity` is applied in the morning, when the message is sent, not when she answers.
+- `fill()` has only the nominative name: texts avoid «от {crush}», «сообщение {hero}».
+- The market card buys the shop's shirt or frame by copying the item's `onUse` effects and setting `bought_<id>`; if `content/items.json` changes, K6-03a–c must change with it (a test compares the prices, not the effects).
+- The trendy look is not undone by a new shirt: `style` simply moves by both numbers.
+- On a 320×568 screen the market card with a disabled button fills the whole sheet; a longer text there would push the last button out of reach.
 
 ## 6. Sample phrase bank for Alina
 

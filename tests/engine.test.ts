@@ -1171,14 +1171,14 @@ describe('день 6', () => {
     expect(next(day({ off: ['d4_home'], on: { d4_went: true, d4_feast: true } }))).toBe('K6-03b');
     expect(card('K6-03a').text).toContain('один шампур');
     expect(card('K6-03b').text).toContain('пяти шампуров');
-    expect(card('K6-03c').text).toContain('На шашлыки ты не пришёл');
+    expect(card('K6-03c').text).toContain('На шашлыки не пришёл');
     const price = (id: string) => content.items.find((i) => i.id === id)!.price!.coins;
     for (const id of ['K6-03a', 'K6-03b', 'K6-03c']) {
       const cost = (ch: string) => card(id).choices.find((x) => x.id === ch)!.cost;
       expect(cost('shirt'), id).toEqual({ coins: price('shirt') });
       expect(cost('frame'), id).toEqual({ coins: price('frame') });
-      expect(card(id).text, id).toContain('Рубашка на рынке 90 монет: стиль +6');
-      expect(card(id).text, id).toContain('Оправа в оптике 150 монет: стиль +12, уверенность +2');
+      expect(card(id).text, id).toContain('Рубашка: 90 монет, стиль +6');
+      expect(card(id).text, id).toContain('Оправа в оптике: 150 монет, стиль +12, уверенность +2');
       expect(card(id).choices.map((ch) => ch.id), id).toEqual(['shirt', 'frame', 'look', 'home']);
     }
     const s = day();
