@@ -139,6 +139,7 @@ Used in `when.requires`, `choice.requires`, `outcome.if` and in tastes. Numbers 
 | `{ "taste": "glasses", "revealed": true }` | The crush has this taste and the player already knows it. Without `revealed` only "has the taste" is checked |
 | `{ "seen": "c01_reply" }` | Card has been played |
 | `{ "any": [ ... ] }` | One of the conditions is enough |
+| `{ "count": [ ... ], "gte": 2 }` | How many of the listed conditions hold: at least `gte`, at most `lte` (one or both). The list must not be empty; the checker also checks every condition inside |
 | `{ "not": { ... } }` | Condition does not hold |
 
 ## Effects

@@ -71,10 +71,6 @@
                 "look": {
                   "facial": "none"
                 }
-              },
-              {
-                "problem": "conf",
-                "add": -1
               }
             ]
           }
@@ -168,10 +164,6 @@
                 "look": {
                   "facial": "none"
                 }
-              },
-              {
-                "problem": "conf",
-                "add": -1
               }
             ]
           }
@@ -1206,7 +1198,7 @@
           "set": false
         },
         {
-          "any": [
+          "count": [
             {
               "not": {
                 "any": [
@@ -1229,169 +1221,10 @@
                   "flag": "bought_frame"
                 }
               ]
-            }
-          ]
-        },
-        {
-          "any": [
-            {
-              "not": {
-                "any": [
-                  {
-                    "flag": "shaved",
-                    "set": false
-                  },
-                  {
-                    "flag": "d7_red"
-                  }
-                ]
-              }
             },
             {
               "flag": "d5_cleaned"
-            }
-          ]
-        },
-        {
-          "any": [
-            {
-              "not": {
-                "any": [
-                  {
-                    "flag": "shaved",
-                    "set": false
-                  },
-                  {
-                    "flag": "d7_red"
-                  }
-                ]
-              }
             },
-            {
-              "flag": "d3_course"
-            }
-          ]
-        },
-        {
-          "any": [
-            {
-              "not": {
-                "any": [
-                  {
-                    "flag": "shaved",
-                    "set": false
-                  },
-                  {
-                    "flag": "d7_red"
-                  }
-                ]
-              }
-            },
-            {
-              "not": {
-                "any": [
-                  {
-                    "flag": "d7_smoked"
-                  },
-                  {
-                    "flag": "d7_quarter"
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "any": [
-            {
-              "any": [
-                {
-                  "flag": "bought_shirt"
-                },
-                {
-                  "flag": "bought_frame"
-                }
-              ]
-            },
-            {
-              "flag": "d5_cleaned"
-            }
-          ]
-        },
-        {
-          "any": [
-            {
-              "any": [
-                {
-                  "flag": "bought_shirt"
-                },
-                {
-                  "flag": "bought_frame"
-                }
-              ]
-            },
-            {
-              "flag": "d3_course"
-            }
-          ]
-        },
-        {
-          "any": [
-            {
-              "any": [
-                {
-                  "flag": "bought_shirt"
-                },
-                {
-                  "flag": "bought_frame"
-                }
-              ]
-            },
-            {
-              "not": {
-                "any": [
-                  {
-                    "flag": "d7_smoked"
-                  },
-                  {
-                    "flag": "d7_quarter"
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "any": [
-            {
-              "flag": "d5_cleaned"
-            },
-            {
-              "flag": "d3_course"
-            }
-          ]
-        },
-        {
-          "any": [
-            {
-              "flag": "d5_cleaned"
-            },
-            {
-              "not": {
-                "any": [
-                  {
-                    "flag": "d7_smoked"
-                  },
-                  {
-                    "flag": "d7_quarter"
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "any": [
             {
               "flag": "d3_course"
             },
@@ -1407,7 +1240,8 @@
                 ]
               }
             }
-          ]
+          ],
+          "gte": 4
         }
       ]
     },
@@ -1501,7 +1335,7 @@
           "set": false
         },
         {
-          "any": [
+          "count": [
             {
               "not": {
                 "any": [
@@ -1530,36 +1364,6 @@
             },
             {
               "flag": "d3_course"
-            }
-          ]
-        },
-        {
-          "any": [
-            {
-              "not": {
-                "any": [
-                  {
-                    "flag": "shaved",
-                    "set": false
-                  },
-                  {
-                    "flag": "d7_red"
-                  }
-                ]
-              }
-            },
-            {
-              "any": [
-                {
-                  "flag": "bought_shirt"
-                },
-                {
-                  "flag": "bought_frame"
-                }
-              ]
-            },
-            {
-              "flag": "d5_cleaned"
             },
             {
               "not": {
@@ -1573,116 +1377,8 @@
                 ]
               }
             }
-          ]
-        },
-        {
-          "any": [
-            {
-              "not": {
-                "any": [
-                  {
-                    "flag": "shaved",
-                    "set": false
-                  },
-                  {
-                    "flag": "d7_red"
-                  }
-                ]
-              }
-            },
-            {
-              "any": [
-                {
-                  "flag": "bought_shirt"
-                },
-                {
-                  "flag": "bought_frame"
-                }
-              ]
-            },
-            {
-              "flag": "d3_course"
-            },
-            {
-              "not": {
-                "any": [
-                  {
-                    "flag": "d7_smoked"
-                  },
-                  {
-                    "flag": "d7_quarter"
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "any": [
-            {
-              "not": {
-                "any": [
-                  {
-                    "flag": "shaved",
-                    "set": false
-                  },
-                  {
-                    "flag": "d7_red"
-                  }
-                ]
-              }
-            },
-            {
-              "flag": "d5_cleaned"
-            },
-            {
-              "flag": "d3_course"
-            },
-            {
-              "not": {
-                "any": [
-                  {
-                    "flag": "d7_smoked"
-                  },
-                  {
-                    "flag": "d7_quarter"
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "any": [
-            {
-              "any": [
-                {
-                  "flag": "bought_shirt"
-                },
-                {
-                  "flag": "bought_frame"
-                }
-              ]
-            },
-            {
-              "flag": "d5_cleaned"
-            },
-            {
-              "flag": "d3_course"
-            },
-            {
-              "not": {
-                "any": [
-                  {
-                    "flag": "d7_smoked"
-                  },
-                  {
-                    "flag": "d7_quarter"
-                  }
-                ]
-              }
-            }
-          ]
+          ],
+          "gte": 2
         }
       ]
     },
@@ -1919,7 +1615,7 @@
             "effects": [
               {
                 "stat": "affinity",
-                "add": -5
+                "add": -2
               },
               {
                 "counter": "d7_scene",

@@ -26,6 +26,7 @@ export type Cond =
   | { taste: string; revealed?: boolean }            // вкус краша: есть ли он и раскрыт ли игроку
   | { seen: string }                                 // карточка уже была сыграна
   | { any: Cond[] }                                  // хотя бы одно из
+  | { count: Cond[]; gte?: number; lte?: number }    // how many of the conditions hold: at least gte, at most lte
   | { not: Cond };
 
 // ---------- эффекты ----------

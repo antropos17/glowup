@@ -58,6 +58,28 @@ describe('контент', () => {
   it('проходит проверку', () => expect(validateContent(content)).toEqual([]));
 });
 
+describe('the count condition', () => {
+  const s = { ...start(), flags: { a: { value: true, day: 1 }, b: { value: true, day: 1 } } };
+  const three = [{ flag: 'a' }, { flag: 'b' }, { flag: 'c' }];            // two of three hold
+  const n = (x: object) => check(content, s, x as never);
+  it('counts the conditions that hold, below, at and above each bound', () => {
+    expect([1, 2, 3].map((k) => n({ count: three, gte: k }))).toEqual([true, true, false]);
+    expect([1, 2, 3].map((k) => n({ count: three, lte: k }))).toEqual([false, true, true]);
+    expect([n({ count: three, gte: 2, lte: 2 }), n({ count: three, gte: 1, lte: 1 }), n({ count: three, gte: 3, lte: 3 })]).toEqual([true, false, false]);
+  });
+  it('works with nested conditions', () => {
+    const nested = [{ any: [{ flag: 'c' }, { flag: 'a' }] }, { not: { flag: 'b' } }, { count: three, gte: 2 }];   // true, false, true
+    expect([n({ count: nested, gte: 2 }), n({ count: nested, gte: 3 }), n({ not: { count: nested, lte: 1 } })]).toEqual([true, false, true]);
+  });
+  it('the checker wants a non-empty list, a bound, and valid conditions inside', () => {
+    const withCond = (x: object) => validateContent({ ...content, tastes: [{ id: 'no_beard', title: 'x', bonus: 0, wants: [x as never] }] });
+    expect(withCond({ count: [{ flag: 'a' }], gte: 1 })).toEqual([]);
+    expect(withCond({ count: [], gte: 1 }).join()).toContain('empty list');
+    expect(withCond({ count: [{ flag: 'a' }] }).join()).toContain('needs gte or lte');
+    expect(withCond({ count: [{ problem: 'nope' }], gte: 1 }).join()).toContain('nope');
+  });
+});
+
 describe('день 1', () => {
   it('стартует как в сценарии: 20 энергии, 100 монет, шесть показателей', () => {
     const s = start();
@@ -1488,6 +1510,7 @@ describe('день 6', () => {
       expect(ids(morning7({ items: { cream_zina: 0 } }), 'K7-01a')).toEqual(['bare', 'keep']);
       const clean = pick(morning7({ items: { cream_zina: 1 } }), 'K7-01a', 'cream');
       expect([!!clean.flags.shaved, !!clean.flags.d7_red, clean.lookPatch.facial, clean.lookPatch.razorBurn]).toEqual([true, false, 'none', undefined]);
+      expect([clean.problems.conf, clean.items.cream_zina]).toEqual([morning7({ items: { cream_zina: 1 } }).problems.conf, 1]);   // no confidence from the cream, and the tube stays
       const s0 = morning7({ items: { cream_zina: 0 } });
       const red = pick(s0, 'K7-01a', 'bare');
       expect([!!red.flags.shaved, !!red.flags.d7_red, red.lookPatch.facial, red.lookPatch.razorBurn]).toEqual([true, true, 'none', true]);
@@ -1549,7 +1572,7 @@ describe('день 6', () => {
       let s = pick(door(flirty), 'K7-02a', 'smoke');
       s = pick(pick(s, 'K7-03b', 'nod'), 'K7-04a', 'shrug');
       expect(next(s)).toBe('K7-05a');
-      expect(['own', 'shrug', 'again'].map((id) => pick(s, 'K7-05a', id).affinity - s.affinity)).toEqual([3, 0, -5]);
+      expect(['own', 'shrug', 'again'].map((id) => pick(s, 'K7-05a', id).affinity - s.affinity)).toEqual([3, 0, -2]);
     });
     it('the evening message: three tones chosen only by the scene, one button, about ten phrasings each', () => {
       const tone = (p: Record<string, string>, s0 = morning7()) => {
@@ -1568,11 +1591,24 @@ describe('день 6', () => {
       for (const key of ['alina_d7_warm', 'alina_d7_even', 'alina_d7_dry']) expect(bank(key)).toHaveLength(10);
       for (const id of ['K7-06w', 'K7-06e', 'K7-06d']) expect(card(id).choices.map((c) => c.id)).toEqual(['ok']);
     });
-    it('over the scene Alina moves the chance between −9 and +10, and sleep ends the demo with seven frames', () => {
-      const s0 = morning7({ on: { d1_wrote_flirty: true, d6_reply: 'dry' } });
-      const best = play7(s0, { 'K7-03b': 'hello', 'K7-04a': 'good', 'K7-05a': 'own' });
-      const worst = play7(s0, { 'K7-03b': 'ignore', 'K7-04a': 'long', 'K7-05a': 'again' });
-      expect([best.affinity - s0.affinity, worst.affinity - s0.affinity]).toEqual([10, -9]);
+    it('over the scene Alina moves the chance between −6 and +10 on every thread, by every path, and sleep ends the demo with seven frames', () => {
+      // every entrance × answer × thread answer; the three line cards K7-04a/b/c carry the same +4 / 0 / −2
+      const THREADS: [string, Patch][] = [['K7-05a', { on: { d1_wrote_flirty: true, d6_reply: 'dry' } }], ['K7-05b', { on: { d6_reply: 'joke' } }], ['K7-05c', { on: { d4_went: true } }], ['K7-05d', {}]];
+      const range: Record<string, number[]> = {};
+      let best: GameState | undefined;
+      for (const [th, p] of THREADS) {
+        const s0 = morning7(p);
+        const deltas: number[] = [];
+        for (const a of ids(s0, 'K7-03b')) for (const b of card('K7-04a').choices.map((c) => c.id)) for (const c of card(th).choices.map((x) => x.id)) {
+          const s = play7(s0, { 'K7-03b': a, 'K7-04a': b, [th]: c });
+          expect(th in s.seen, th).toBe(true);
+          deltas.push(s.affinity - s0.affinity);
+          if (s.affinity - s0.affinity === 10) best = s;
+        }
+        range[th] = [Math.min(...deltas), Math.max(...deltas), deltas.length];
+      }
+      expect(range).toEqual({ 'K7-05a': [-6, 10, 27], 'K7-05b': [-6, 10, 27], 'K7-05c': [-6, 10, 27], 'K7-05d': [-6, 10, 27] });
+      best = best!;
       expect(actionsFor(content, best).map((c) => c.id)).toEqual(['A7-run', 'A7-clean', 'A7-teeth', 'A7-couch', 'K7-sleep']);
       expect(card('K7-sleep').choices.map((c) => c.id)).toEqual(['sleep']);
       const end = syncClock(content, pick(best, 'K7-sleep', 'sleep'), at(177));

@@ -24,6 +24,11 @@ export function validateContent(c: Content): string[] {
 
   const cond = (where: string, x: Cond) => {
     if ('any' in x) return x.any.forEach((y) => cond(where, y));
+    if ('count' in x) {
+      if (!x.count.length) err(where, 'count: empty list of conditions');
+      if (x.gte === undefined && x.lte === undefined) err(where, 'count: needs gte or lte');
+      return x.count.forEach((y) => cond(where, y));
+    }
     if ('not' in x) return cond(where, x.not);
     if ('problem' in x && !problems.has(x.problem)) err(where, `нет проблемы «${x.problem}»`);
     if ('item' in x && !items.has(x.item)) err(where, `нет предмета «${x.item}»`);
