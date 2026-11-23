@@ -1633,8 +1633,14 @@ describe('день 6', () => {
       };
       const [w, wl] = tone({ 'K7-03b': 'hello', 'K7-04a': 'good', 'K7-05d': 'wit' });
       const [e, el] = tone({});
-      const [d, dl] = tone({ 'K7-03b': 'ignore' });
+      const [d, dl] = tone({ 'K7-03b': 'ignore', 'K7-04a': 'long' });
       expect([w, e, d]).toEqual(['warm', 'even', 'dry']);
+      // the dry boundary is −2: one minus answer (−1) still gives the even tone, two give the dry one
+      expect(tone({ 'K7-03b': 'ignore' })[0]).toBe('even');
+      expect(tone({ 'K7-05d': 'moan' })[0]).toBe('even');
+      expect(tone({ 'K7-04a': 'long', 'K7-05d': 'moan' })[0]).toBe('dry');
+      expect(tone({ 'K7-03b': 'ignore', 'K7-04a': 'long', 'K7-05d': 'moan' })[0]).toBe('dry');
+      expect(tone({ 'K7-03b': 'hello', 'K7-04a': 'long' })[0]).toBe('even');
       expect(bank('alina_d7_warm')).toContain(wl);
       expect(bank('alina_d7_even')).toContain(el);
       expect(bank('alina_d7_dry')).toContain(dl);
