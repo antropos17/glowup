@@ -2,6 +2,17 @@
 
 Decisions confirmed by Ruslan in the coordinator chat. They override "proposed" and "open" items in `DESIGN.md`, `DEMO_SCRIPT.md` and `HANDOFF.md`. Newest first.
 
+## 2026-11-23 — Day 4 «Обычная энергия»
+
+| # | Question | Decision |
+|---|---|---|
+| 13 | Mistakes at zero energy | No error chance and no dice. Resisting a temptation costs energy, the price is written on the button, and giving in is free. This replaces the grid line "at zero energy actions carry an error chance". The free "give in" choice is also the neutral choice for a skipped day. |
+| 14 | Energy floor | None. Hangovers stack honestly (miracle tea −2, late night −4 can leave 4 energy for the day); every card keeps a free choice. |
+| 15 | Stayed home, no pies in the fridge | That player gets a quiet evening scene: a call from mum. The evening must not be empty. |
+| 16 | Alina on Day 4 | She reacts to Vitya's barbecue photo in the class chat, a visible cause, not a hidden "good day" rule. |
+
+The full Day 4 design is in `DEMO_SCRIPT.md`, section 3. Items there marked "proposed" came from the same discussion and were not objected to; rows 13–16 were confirmed explicitly.
+
 ## 2026-11-23 — Day 3 «Не та дверь»
 
 | # | Question | Decision |

@@ -85,11 +85,26 @@ Design agreed with the author on 2026-11-23 (`DECISIONS.md` rows 9–12). "Decid
 - Last day of doubled energy. The Day 3 day card says so in advance: «Завтра сил будет вдвое меньше» (proposed), so day 4 is not a surprise.
 
 ### Day 4. Normal energy («Обычная энергия»)
-- Core: energy is halved, the player has to prioritise.
-- Event: Vitya invites Andrey to a barbecue. Go and eat everything, go and hold back, or stay home.
-- Smoking: first strong craving if Andrey is quitting.
-- At zero energy actions carry an error chance, and the chance is shown.
-- Alina: likes on a good day, silent on a bad one.
+Design agreed with the author on 2026-11-23 (`DECISIONS.md` rows 13–16). "Decided" items are confirmed; "proposed" items came from the same discussion and are the default for `/write-day 4`.
+
+- Core: energy is halved (10 instead of 20) and the player cannot do everything. This is the theme of the day.
+- Willpower costs energy (decided): there is no error chance at zero energy. Resisting a temptation is a choice with an energy cost written on the button; giving in is free and is the neutral choice of its card. Rough budget (proposed): run 4, side job 4, not overeating 2, not smoking 2–3, so a full "clean" day does not fit into 10.
+- No energy floor (decided): `d2_tea` (−2, its second day) and `d3_late` (−4) stack; a player can start the day with 4 energy. Every card keeps a free choice.
+- Morning (proposed): the first card explains the halved energy in one line. Lines that explain the hangovers: «Чай действует» for the tea, «Проспал» for `d3_late`, the gym pass +2. The doctor's course worked its first morning: a mirror line such as «Мазь щиплет, значит работает». With `d3_cleaning` = `bad` the mirror shows the second day of red cheeks.
+- Event: Vitya invites Andrey to a barbecue in the evening. Staying home must not be the "right" answer (proposed): both ways cost something.
+  - Went: two temptations in a row, the meat and the cigarette by the grill where everyone smokes. Passing both cleanly costs about 5 energy. Andrey gets into the photo.
+  - Stayed home: fewer temptations and no photo. With `d1_one_pie` the pies in the fridge call in the evening. Without pies (decided): a quiet scene, a call from mum, so the evening is not empty.
+  - Vitya's lines pay off `d1_joked` («Ну что, в дверь пролез?») and `d3_posted` («Модель наша пришла»).
+- Smoking (proposed): the first strong craving, its strength follows the counter `smoke_free`.
+  - Not quitting (`d3_smoked`): an ordinary craving, cheap to resist, small reward.
+  - Second or third smoke-free day: a strong craving, resisting costs 3 energy and doubles the confidence gain.
+  - `d1_half`: a third option «выкурить четверть», a half-measure for 1 energy.
+  - A cigarette worsens `care` and resets `smoke_free`; resisting improves `care` and advances it.
+- Alina (decided): she reacts to Vitya's barbecue photo in the class chat.
+  - Andrey is in the frame and held back: her reaction under the photo, `affinity` +2 or +3, reason line «Алина отметила фото с шашлыков».
+  - Andrey is in the frame with five skewers: Vitya's caption jokes, Alina is silent.
+  - Andrey is not there: she puts a fire emoji under Vitya's photo. A light sting, nothing more.
+- Skipped day: Andrey stayed home, smoked as usual, and the pies (if any) were eaten; nothing is posted and nothing is sent to Alina.
 - Day ends on: Vitya posts barbecue photos in the class chat.
 
 ### Day 5. The neighbour («Соседка»)
