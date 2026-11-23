@@ -50,6 +50,7 @@ function cmp(v: number | string | boolean | undefined, c: { eq?: unknown; gte?: 
 
 export function check(c: Content, s: GameState, cond: Cond): boolean {
   if ('any' in cond) return cond.any.some((x) => check(c, s, x));
+  if ('count' in cond) return cmp(cond.count.filter((x) => check(c, s, x)).length, cond);
   if ('not' in cond) return !check(c, s, cond.not);
   if ('flagAge' in cond) {
     const f = s.flags[cond.flagAge];
