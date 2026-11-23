@@ -1501,7 +1501,7 @@ describe('день 6', () => {
     const door = (p: Patch = {}) => syncClock(content, story(morning7(p), Q7), at(157));
 
     it('the morning: «Проспал» after a late night, then the razor; the cream gives a clean shave, without it the face is red', () => {
-      expect(next(morning7({}, 'late'))).toBe('K7-00');
+      expect(next(morning7({}, 'late'))).toBe('K7-00b');
       expect(next(morning7())).toBe('K7-01a');
       expect(next(morning7({ off: ['d6_beard_hint'] }))).toBe('K7-01b');
       expect(card('K7-01a').text).toContain('«Борода вообще не моё»');
@@ -1519,6 +1519,58 @@ describe('день 6', () => {
       expect(chance(content, red)).toBeGreaterThan(chance(content, s0));
       const kept = pick(s0, 'K7-01a', 'keep');
       expect([kept.flags.shaved, kept.lookPatch.facial]).toEqual([undefined, undefined]);
+    });
+    it('split texts: the cream by where it came from, the long talk by training, «Проспал» by the Day 6 talk', () => {
+      const fits = (s: GameState, cardId: string, choiceId: string) =>
+        card(cardId).choices.find((c) => c.id === choiceId)!.outcomes.filter((o) => (o.if ?? []).every((x) => check(content, s, x)));
+      const text = (s: GameState, cardId: string, choiceId: string) => choose(content, s, cardId, choiceId).outcome.text;
+      // the cream: from Aunt Zina or from the pharmacy, same effects
+      const zina = morning7({ items: { cream_zina: 1 }, on: { d5_helped_zina: true } });
+      const shop = morning7({ items: { cream_zina: 1 }, off: ['d5_helped_zina'] });
+      for (const id of ['K7-01a', 'K7-01b']) {
+        expect(text(zina, id, 'cream'), id).toMatch(/^Крем тёти Зины пахнет аптекой и мятой\./);
+        expect(text(shop, id, 'cream'), id).toMatch(/^Крем с Садовой пахнет аптекой и мятой\./);
+        const [a, b] = card(id).choices.find((c) => c.id === 'cream')!.outcomes;
+        expect(a.effects, id).toEqual(b.effects);
+        expect(a.why, id).toBe(b.why);
+        for (const s of [zina, shop]) expect(fits(s, id, 'cream'), id).toHaveLength(1);
+      }
+      expect([pick(zina, 'K7-01a', 'cream').lookPatch, pick(shop, 'K7-01a', 'cream').lookPatch]).toEqual([{ facial: 'none' }, { facial: 'none' }]);
+      // the long talk: the park only for a player who trained
+      const TRAIN_FLAGS = ['d1_run', 'd2_park', 'd2_gym'];
+      const TRAIN_CARDS = ['A4-run', 'A5-run', 'A6-run', 'A4-gym', 'A5-gym', 'A6-gym'];
+      const lazy = (() => { const s = morning7({ off: TRAIN_FLAGS }); const seen = { ...s.seen }; for (const id of TRAIN_CARDS) delete seen[id]; return { ...s, seen }; })();
+      const trained = [...TRAIN_FLAGS.map((f) => morning7({ off: TRAIN_FLAGS, on: { [f]: true } })), ...TRAIN_CARDS.map((id) => ({ ...lazy, seen: { ...lazy.seen, [id]: 5 } }))];
+      for (const id of ['K7-04b', 'K7-04c']) {
+        const long = card(id).choices.find((c) => c.id === 'long')!;
+        expect(long.label, id).toBe('Рассказать про врача и про всё остальное');
+        expect(long.outcomes[0].effects, id).toEqual(long.outcomes[1].effects);
+        expect(text(lazy, id, 'long'), id).toMatch(/перешёл к планам на жизнь и где-то на третьем пункте/);
+        for (const s of trained) expect(text(s, id, 'long'), id).toMatch(/перешёл к спорту и где-то на втором круге по парку/);
+        // every combination of the nine training marks gives exactly one outcome
+        for (let m = 0; m < 512; m++) {
+          const flags = { ...lazy.flags }, seen = { ...lazy.seen };
+          TRAIN_FLAGS.forEach((f, i) => { if (m & (1 << i)) flags[f] = { value: true, day: 2 }; });
+          TRAIN_CARDS.forEach((c, i) => { if (m & (1 << (i + 3))) seen[c] = 5; });
+          expect(fits({ ...lazy, flags, seen }, id, 'long'), `${id} ${m}`).toHaveLength(1);
+        }
+      }
+      // «Проспал»: the talk (d6_talk, any value) or only her short «Записала»; never both, nothing without d6_late
+      const late = morning7({}, 'late');
+      expect(late.flags.d6_talk).toBeUndefined();                    // the quiet path: dry reply, «Ок, записала.»
+      expect(next(late)).toBe('K7-00b');
+      expect(card('K7-00b').text).toBe('Вчера до трёх ночи перечитывал её «Записала», как будто там было что-то ещё. Суббота началась ближе к полудню, и сил сегодня меньше обычного.');
+      expect(card('K7-00a').text).toBe('Вчерашний разговор перечитан до трёх ночи. Суббота началась ближе к полудню, и сил сегодня меньше обычного.');
+      const eligible7 = (s: GameState) => ['K7-00a', 'K7-00b'].filter((id) => card(id).when!.requires!.every((x) => check(content, s, x)));
+      for (const talk of ['open', 'work', 'short', 'owned', 'repeat', 'shrug']) {
+        const s = morning7({ on: { d6_talk: talk } }, 'late');
+        expect(next(s), talk).toBe('K7-00a');
+        expect(eligible7(s), talk).toEqual(['K7-00a']);
+        expect(eligible7(morning7({ on: { d6_talk: talk } })), talk).toEqual([]);
+      }
+      expect(eligible7(late)).toEqual(['K7-00b']);
+      expect(eligible7(morning7())).toEqual([]);
+      expect(JSON.stringify(card('K7-00a').choices)).toBe(JSON.stringify(card('K7-00b').choices));
     });
     it('the craving moves to the door of «Зерно» and keeps the prices of the balcony', () => {
       expect(next(door())).toBe('K7-02a');
@@ -1621,7 +1673,7 @@ describe('день 6', () => {
         const before = syncClock(content, pick(night6(), 'K6-sleep', sleep6), at(153));
         const s = syncClock(content, before, at(177));
         expect(s.demoOver, sleep6).toBe(true);
-        expect(d7(s), sleep6).toEqual([...(sleep6 === 'late' ? ['K7-00'] : []), 'K7-01a', 'K7-02a', 'K7-03b', 'K7-04a', 'K7-05d', 'K7-06e']);
+        expect(d7(s), sleep6).toEqual([...(sleep6 === 'late' ? ['K7-00b'] : []), 'K7-01a', 'K7-02a', 'K7-03b', 'K7-04a', 'K7-05d', 'K7-06e']);
         expect(s.affinity, sleep6).toBe(before.affinity);
         expect(s.flags.shaved, sleep6).toBeUndefined();
         expect([s.flags.d7_met.value, s.flags.d7_msg.value], sleep6).toEqual(['nod', 'even']);
