@@ -27,9 +27,11 @@ export const MISSED = {
   ok: 'Понятно',
 };
 
-/** Day card: a bar that moved although its percent did not (it is still at 0%). */
+/** Day card: a bar that moved although its percent did not (it is still at 0%); the calm lines of a skipped day. */
 export const DAY_CARD = {
   drift: { worse: 'стало хуже', better: 'стало лучше' },
+  skipped: 'День прошёл без тебя. Шкалы немного просели — пара дней, и вернёшь.',
+  noReward: 'Награды за пропущенный день нет.',
 };
 
 /** Sound toggle in the top bar and the sound list on the showcase page. */

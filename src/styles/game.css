@@ -280,6 +280,7 @@
 .reward { display: flex; gap: 8px; align-items: flex-start; background: #FFF6DA; border-radius: var(--r-card); padding: 10px 12px; font-size: 14px; }
 .reward .ico { color: #B78300; margin-top: 1px; }
 .reward[data-miss] { background: #FBEAEA; }
+.reward[data-miss='calm'] { background: var(--tile); color: var(--ink-soft); }
 .pair { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
 @media (prefers-reduced-motion: reduce) { .energy-line i { transition: none; } }
 

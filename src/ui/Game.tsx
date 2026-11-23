@@ -372,6 +372,8 @@ function DayCard({ state, d, onClose }: { state: GameState; d: DaySummary; onClo
   const info = content.days.find((x) => x.day === d.day);
   const gift = d.gift ? content.items.find((i) => i.id === d.gift) : undefined;
   const changed = d.bars.filter((b) => b.to !== b.from || b.drift);
+  // a skipped day gets one calm line instead of a list of bars that all went down
+  const slipped = !d.played && changed.some((b) => b.to < b.from || b.drift === 'worse');
   return (
     <>
       <div class="sheet-head"><h2>День {d.day} закончен{info ? `: ${info.title.toLowerCase()}` : ''}</h2></div>
@@ -379,7 +381,7 @@ function DayCard({ state, d, onClose }: { state: GameState; d: DaySummary; onClo
         <div class="frame"><Portrait look={d.look} title={`Кадр дня ${d.day}`} /></div>
         <div class="rows">
           {changed.length === 0 && <p class="row-sub">Показатели за день не изменились.</p>}
-          {changed.map((b) => {
+          {slipped ? <p class="row-sub">{DAY_CARD.skipped}</p> : changed.map((b) => {
             const def = content.problems.find((p) => p.id === b.id)!;
             if (b.drift) {
               return (
@@ -408,7 +410,7 @@ function DayCard({ state, d, onClose }: { state: GameState; d: DaySummary; onClo
       )}
       {d.played
         ? <div class="reward"><Icon name="coin" size={18} /><span><b class="num">+{d.coins}</b> монет{gift ? ` и ${gift.title.toLowerCase()}: ${gift.blurb.charAt(0).toLowerCase()}${gift.blurb.slice(1)}` : ''}</span></div>
-        : <div class="reward" data-miss>День пропущен: награды нет, {hero(content, state).name} откатился назад.</div>}
+        : <div class="reward" data-miss="calm">{DAY_CARD.noReward}</div>}
       {info?.teaser && <p class="row-sub">{info.teaser}</p>}
       <button class="primary" onClick={onClose}>Понятно</button>
     </>
