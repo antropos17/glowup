@@ -281,6 +281,8 @@
 .reward .ico { color: #B78300; margin-top: 1px; }
 .reward[data-miss] { background: #FBEAEA; }
 .reward[data-miss='calm'] { background: var(--tile); color: var(--ink-soft); }
+/* on the tiled end screen the calm plaque is a white card like the rows above it */
+.verdict .reward[data-miss='calm'] { background: var(--paper); }
 .pair { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
 @media (prefers-reduced-motion: reduce) { .energy-line i { transition: none; } }
 
