@@ -1438,6 +1438,22 @@ describe('день 6', () => {
     expect(content.days.find((d) => d.day === 6)).toMatchObject({ title: 'Первый разговор', teaser: 'Завтра суббота. Кофейня «Зерно»' });
     for (const part of ['morning', 'day', 'evening', 'night']) expect(content.cards.some((c) => c.id.startsWith('K6-') && c.kind === 'story' && c.when!.parts!.includes(part as 'day')), part).toBe(true);
   });
+  it('staying up rereads the talk (d6_talk) or only her short «Записала»; both close the day the same way', () => {
+    let night = pick(evening(morning6(), 'dry'), 'K6-04', 'scroll');
+    night = story(syncClock(content, story(night, {}), at(143.5)), Q6);
+    const late = card('K6-sleep').choices.find((c) => c.id === 'late')!;
+    expect(late.outcomes[0].effects).toEqual(late.outcomes[1].effects);
+    const quiet = choose(content, night, 'K6-sleep', 'late');
+    expect(night.flags.d6_talk).toBeUndefined();                     // the dry reply: no K6-06, no d6_talk
+    expect(quiet.outcome.text).toBe('К трём часам ночи её «Записала» перечитано раз сорок. Новых букв там не прибавилось. Завтра на четыре энергии меньше.');
+    for (const talk of ['open', 'work', 'short', 'owned', 'repeat', 'shrug']) {
+      const r = choose(content, patch(night, { on: { d6_talk: talk } }), 'K6-sleep', 'late');
+      expect(r.outcome.text, talk).toBe('К трём часам ночи переписка перечитана от первого слова до последнего. Завтра на четыре энергии меньше.');
+      expect([syncClock(full, r.state, at(153)).day, r.state.flags.d6_late !== undefined], talk).toEqual([7, true]);
+    }
+    expect(syncClock(full, quiet.state, at(153)).day).toBe(7);
+    expect(quiet.state.flags.d6_late).toBeDefined();
+  });
   it('a fully skipped Day 6: the dry reply went by itself, «Ок, записала», the goodbye, the beard hint, and the chance did not move', () => {
     const TITLES = ['Её вопрос ждёт', 'Образ из ленты', 'Рынок или оптика', 'Чат класса', 'Алина ответила', 'Алина прощается', 'Балкон'];
     for (const sleep5 of ['sleep', 'late']) {
