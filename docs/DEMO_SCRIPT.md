@@ -419,6 +419,7 @@ The authoritative version is `content/cards/day5.json`. Written 2026-11-23 from 
 | K5-07a Balcony | evening | The craving at home for those without a cleaning, ordinary. Same four choices, no teeth effect | no `d5_cleaned`, ordinary | as K5-05a |
 | K5-07b Balcony | evening | The same, strong | no `d5_cleaned`, strong | as K5-05a |
 | K5-08a Alina writes | night | Her first message opens the card: «Привет. Видела твоё сообщение, замоталась.» One button, «Читать дальше»: the class-chat line and the answer about «Зерно» follow into the chat | `d1_wrote_plain` | `d5_alina_wrote` |
+| K5-08d Alina writes | night | No message from Andrey on Day 1 but `d1_said_coming`: the opening is «Привет. Оксана собирает список на встречу.» instead of «…ты идёшь?», so she does not ask what she already saw in the class chat (added 2026-11-23) | `d1_said_coming`, no Day 1 message | `d5_alina_wrote` |
 | K5-08b Alina writes | night | Dry opening with no mention of his message: «Привет, Андрей.» | `d1_wrote_flirty` | `d5_alina_wrote` |
 | K5-08c Alina writes | night | «Привет. Оксана просила узнать, ты идёшь?» | neither Day 1 message (`d1_liked_only`, `d1_no_contact`) | `d5_alina_wrote` |
 | K5-09 The question | night | The question about the reunion from the bank `alina_reunion_question` (10 phrasings). One button, «Ответишь утром» (decision 19): `affinity` +6 for everyone, reason «Алина написала первой». The day ends here | `d5_alina_wrote` | none |
@@ -451,6 +452,7 @@ Earlier flags paid off on day 5: `d1_refused_pies` and `d4_pies_held` (the small
 | `d5_helped_zina`, `d5_no_help` | 5, 6 | Choose mum's call and the pharmacy card; Aunt Zina can greet him differently on the stairs later (proposed) |
 | `d5_cleaned` | 7 | The smile in «Зерно»: `full` or `soda`; the Day 7 scene counts clean teeth |
 | `d5_dentist_later` | 12 | The cleaning he booked on Day 5, outside the demo |
+| `d5_dentist_moved` | 12, outside the demo | Booked players may put the cleaning off (choice `move` on K5-04, added 2026-11-23 on the author's word): no energy spent, teeth unchanged, the evening craving comes on the balcony instead of the porch |
 | `d5_smoked`, `d5_no_smoke`, `d5_quarter`, counter `smoke_free` | 6, 7 | The next craving and the Day 7 "smoked today" check |
 | `d5_late` | 6 | Morning «Проспал»: he reread her message until three |
 

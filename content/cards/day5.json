@@ -1446,6 +1446,20 @@
             ]
           }
         ]
+      },
+      {
+        "id": "move",
+        "label": "Позвонить и перенести",
+        "outcomes": [
+          {
+            "text": "Чистку перенесли на следующую неделю. Зубы подождут, силы целы.",
+            "effects": [
+              {
+                "flag": "d5_dentist_moved"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -3033,6 +3047,10 @@
         {
           "flag": "d1_wrote_flirty",
           "set": false
+        },
+        {
+          "flag": "d1_said_coming",
+          "set": false
         }
       ]
     },
@@ -3043,48 +3061,6 @@
         "neutral": true,
         "label": "Читать дальше",
         "outcomes": [
-          {
-            "if": [
-              {
-                "flag": "d1_said_coming"
-              },
-              {
-                "flag": "d2_wrote_zerno"
-              }
-            ],
-            "text": "{crush} написала сама, впервые за пять дней. Следом второе: «Видела, ты написал, что придёшь». И про кофейню: «Про „Зерно“: да, место хорошее». Она печатает ещё.",
-            "effects": [
-              {
-                "chat": "alina_first_coming"
-              },
-              {
-                "chat": "alina_first_zerno"
-              },
-              {
-                "flag": "d5_alina_wrote"
-              }
-            ]
-          },
-          {
-            "if": [
-              {
-                "flag": "d1_said_coming"
-              },
-              {
-                "flag": "d2_wrote_zerno",
-                "set": false
-              }
-            ],
-            "text": "{crush} написала сама, впервые за пять дней. Следом второе: «Видела, ты написал, что придёшь». Она печатает ещё.",
-            "effects": [
-              {
-                "chat": "alina_first_coming"
-              },
-              {
-                "flag": "d5_alina_wrote"
-              }
-            ]
-          },
           {
             "if": [
               {
@@ -3176,6 +3152,91 @@
             ],
             "text": "{crush} написала сама, впервые за пять дней. Она печатает ещё.",
             "effects": [
+              {
+                "flag": "d5_alina_wrote"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K5-08d",
+    "kind": "story",
+    "title": "{crush} пишет",
+    "speaker": "crush",
+    "says": "alina_first_list",
+    "when": {
+      "days": [
+        5,
+        5
+      ],
+      "parts": [
+        "night"
+      ],
+      "requires": [
+        {
+          "flag": "d5_alina_wrote",
+          "set": false
+        },
+        {
+          "flag": "d1_wrote_plain",
+          "set": false
+        },
+        {
+          "flag": "d1_wrote_flirty",
+          "set": false
+        },
+        {
+          "flag": "d1_said_coming"
+        }
+      ]
+    },
+    "text": "Телефон звякнул. {crush} написала первой.",
+    "choices": [
+      {
+        "id": "read",
+        "neutral": true,
+        "label": "Читать дальше",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d1_said_coming"
+              },
+              {
+                "flag": "d2_wrote_zerno"
+              }
+            ],
+            "text": "{crush} написала сама, впервые за пять дней. Следом второе: «Видела, ты написал, что придёшь». И про кофейню: «Про „Зерно“: да, место хорошее». Она печатает ещё.",
+            "effects": [
+              {
+                "chat": "alina_first_coming"
+              },
+              {
+                "chat": "alina_first_zerno"
+              },
+              {
+                "flag": "d5_alina_wrote"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d1_said_coming"
+              },
+              {
+                "flag": "d2_wrote_zerno",
+                "set": false
+              }
+            ],
+            "text": "{crush} написала сама, впервые за пять дней. Следом второе: «Видела, ты написал, что придёшь». Она печатает ещё.",
+            "effects": [
+              {
+                "chat": "alina_first_coming"
+              },
               {
                 "flag": "d5_alina_wrote"
               }

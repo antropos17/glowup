@@ -872,7 +872,7 @@ describe('день 5', () => {
     expect(next(booked)).toBe('K5-03');                                // the pharmacy first: the base path knows the note
     const chair = pick(booked, 'K5-03', 'skip');
     expect(next(chair)).toBe('K5-04');
-    expect(ids(chair, 'K5-04')).toEqual(['go']);
+    expect(ids(chair, 'K5-04')).toEqual(['go', 'move']);
     expect(card('K5-04').choices[0]).toMatchObject({ neutral: true });
     expect(card('K5-04').choices[0].cost).toBeUndefined();
     const clean = choose(content, chair, 'K5-04', 'go');
@@ -881,6 +881,12 @@ describe('день 5', () => {
     expect(clean.outcome.text).toContain('Два часа не курить');
     // an empty tank does not close the door: the energy is an effect, not a cost
     expect(pick({ ...chair, energy: 1 }, 'K5-04', 'go').energy).toBe(0);
+    // the cleaning can be put off: no energy spent, teeth as they were, and the evening craving comes at home
+    const moved = pick(chair, 'K5-04', 'move');
+    expect([moved.problems.teeth, moved.energy, moved.coins]).toEqual([chair.problems.teeth, chair.energy, chair.coins]);
+    expect(moved.flags.d5_dentist_moved).toBeDefined();
+    expect(moved.flags.d5_cleaned).toBeUndefined();
+    expect(next(moved) ?? '').not.toMatch(/^K5-05/);   // no porch craving without the cleaning
     // the soda from Day 1: the dentist grumbles and the cleaning gives less
     const soda = choose(content, patch(chair, { on: { d1_soda_teeth: true } }), 'K5-04', 'go');
     expect(soda.outcome.text).toContain('Содой тёрли? Не надо так');
@@ -958,7 +964,11 @@ describe('день 5', () => {
       ['d1_no_contact', 'K5-08c', 'Привет. Оксана просила узнать, ты идёшь?'],
     ];
     const CLASS: [string, string | undefined][] = [['d1_said_coming', 'Видела, ты написал, что придёшь.'], ['d1_lurked', 'Ты один в чате не ответил.'], ['d1_joked', undefined]];
-    for (const [f1, id, opening] of OPENING) for (const [f2, line] of CLASS) {
+    for (const [f1, id0, opening0] of OPENING) for (const [f2, line] of CLASS) {
+      // no message from Andrey, but «Я приду» in the class chat: she does not ask what she already knows
+      const listed = id0 === 'K5-08c' && f2 === 'd1_said_coming';
+      const id = listed ? 'K5-08d' : id0;
+      const opening = listed ? 'Привет. Оксана собирает список на встречу.' : opening0;
       const where = `${f1} + ${f2}`;
       const d = drawStory(content, with1(f1, f2));
       expect(d.card?.id, where).toBe(id);
