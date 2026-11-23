@@ -277,15 +277,13 @@
 .delta-row b.drift { grid-column: 2 / -1; }
 .delta-row b[data-dir='up'] { color: var(--good); }
 .delta-row b[data-dir='down'] { color: var(--bad); }
-/* narrow phones: «Уверенность 16% → 19% +3» needs ~222px, the bars column has ~176px, so the
-   "from → to" value moves under the bar name and the frame gets smaller */
+/* narrow phones: the frame gets smaller so a bar row stays on one line — the widest one,
+   «Уверенность 100% → 10% −90», takes ~197px with 6px gaps, the bars column has 202px at 320px;
+   two-line rows made a day with 5–6 changed bars scroll «Понятно» off a 320×568 screen */
 @media (max-width: 359px) {
   .daycard { grid-template-columns: 72px minmax(0, 1fr); gap: 10px; }
   .frame svg { width: 72px; }
-  .delta-row { grid-template-columns: minmax(0, 1fr) 34px; row-gap: 0; line-height: 1.2; padding: 1px 0; }
-  .delta-row > span.num { grid-column: 1; grid-row: 2; }
-  .delta-row > b.num { grid-column: 2; grid-row: 1; }
-  .delta-row > b.drift { grid-column: 1 / -1; grid-row: 2; text-align: left; }
+  .delta-row { gap: 6px; line-height: 1.2; padding: 1px 0; }
 }
 /* short phones: the day card fits the sheet without scrolling, so «Понятно» stays on screen */
 @media (max-height: 600px) {
