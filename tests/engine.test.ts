@@ -7,6 +7,7 @@ import {
 } from '../src/engine/game';
 import { validateContent } from '../src/engine/validate';
 import type { Content, GameState } from '../src/engine/types';
+import { portraitSvg, type Look } from '../src/art/avatar';
 
 const H = 3_600_000;
 // 1 июня 2026, 09:00 по Баку (UTC+4)
@@ -1512,6 +1513,23 @@ describe('переход в следующий день', () => {
     s.problems.skin = 0;
     expect(currentLook(content, s).acne).toBe(0);
     expect(startLook(content, s).acne).toBe(75);
+  });
+  it('a look effect can set razor burn, and only then the portrait changes', () => {
+    const shaved: Content = {
+      ...content,
+      cards: content.cards.map((c) => (c.id === 'K1-01'
+        ? { ...c, choices: c.choices.map((ch) => ({ ...ch, outcomes: [{ text: 'x', effects: [{ look: { facial: 'none' as const, razorBurn: true } }] }] })) }
+        : c)),
+    };
+    const s0 = drawStory(shaved, start()).state;
+    const card = shaved.cards.find((c) => c.id === 'K1-01')!;
+    const s = pick(s0, 'K1-01', choicesFor(shaved, s0, card).find((x) => x.affordable)!.choice.id, shaved);
+    expect(currentLook(shaved, s)).toMatchObject({ razorBurn: true, facial: 'none' });
+    expect(startLook(shaved, s)).toMatchObject({ razorBurn: false, facial: 'patchy' });
+
+    const { razorBurn: _, ...bare } = currentLook(content, start());
+    expect(portraitSvg({ ...bare, razorBurn: false })).toBe(portraitSvg(bare as Look));
+    expect(portraitSvg({ ...bare, razorBurn: true })).not.toBe(portraitSvg(bare as Look));
   });
   it('на 30-й день выносится вердикт', () => {
     const s = syncClock(full, start(), START + 31 * 24 * H);
