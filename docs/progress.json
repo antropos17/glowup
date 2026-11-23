@@ -1,8 +1,8 @@
 {
-  "updated": "2026-11-23",
+  "updated": "2026-11-24",
   "goal": "7-day demo: first 7 days of the 30-day game, full presentation",
   "verified": {
-    "date": "2026-11-23",
+    "date": "2026-11-24",
     "typecheck": "pass",
     "tests": "115/115",
     "check_content": "pass: 158 cards (118 story, 40 action), 1 archetype, 1 crush",
@@ -57,6 +57,8 @@
     "store purchase verification"
   ],
   "awaiting_authors": [
+    "read the texts of days 2–7, Alina's lines first",
+    "evening tone shares (dry about 40%, warm 12–15% of random players): confirm or move the dry threshold",
     "Day 7: review every Alina line of the day (docs/DEMO_SCRIPT.md section 5g)",
     "Day 6: confirm the confidence threshold for the joke (conf <= 75: half of random engine paths, all diligent ones, none of the lazy ones) and review every Alina line of the day (docs/DEMO_SCRIPT.md section 5f)",
     "listen to the eight sound effects on the showcase page (block «Звуки»): they were picked by measurements, nobody has heard them; see assets/sounds/README.md",
