@@ -4,18 +4,18 @@
   "verified": {
     "date": "2026-11-23",
     "typecheck": "pass",
-    "tests": "77/77",
-    "check_content": "pass: 79 cards (57 story, 22 action), 1 archetype, 1 crush",
+    "tests": "89/89",
+    "check_content": "pass: 107 cards (79 story, 28 action), 1 archetype, 1 crush",
     "economy": "demo economy in items.json, side-jobs.json, balance.json; see docs/DEMO_SCRIPT.md section 5a",
-    "build": "pass: dist/index.html 433 kB",
-    "playthrough": "Day 4 branch: 8 scripted engine paths (went and resisted both; went, ate and smoked; went with smoke_free 3 and the strong craving; d1_half and the quarter; home with pies; home without pies and mum's call; a 4-energy morning with free choices only; Day 4 skipped after played days 1-3); Playwright (headless Chrome) at 375x812 from a clean save through days 1-4 to the demo end screen with five timelapse frames, every Day 4 story card on that path also at 320x568; no horizontal overflow, no card sheet scrolls; the only console error is the dev server's missing /favicon.ico"
+    "build": "pass: dist/index.html 492 kB",
+    "playthrough": "Day 5 branch: 20 scripted engine paths (the shelf and the free tube; the bags for 2 energy after refused pies; not helped, saw the note and bought the cream; asked about the note and left the cream; knows nothing, no cream; dentist booked without soda, with soda, with a strong craving; not booked; four message openings, each with d1_said_coming and with d1_lurked; the answer about «Зерно»; Day 5 skipped after played days 1-4, booked and not booked); Playwright (headless Chrome) on the built dist/index.html at 375x812 from a clean save through days 1-5 to the demo end screen with six timelapse frames, every Day 5 story card on that path also at 320x568, the chat and the bag tabs at both sizes; no horizontal overflow, no card sheet scrolls, no console errors"
   },
   "demo_days": {
     "1": { "status": "in_game", "file": "content/cards/day1.json", "note": "outcome texts reviewed by the authors on 2026-11-22" },
     "2": { "status": "in_game", "file": "content/cards/day2.json", "note": "written 2026-11-22, texts not reviewed by the authors yet" },
     "3": { "status": "in_game", "file": "content/cards/day3.json", "note": "written 2026-11-23, texts not reviewed by the authors yet" },
     "4": { "status": "in_game", "file": "content/cards/day4.json", "note": "written 2026-11-23, texts not reviewed by the authors yet" },
-    "5": { "status": "todo" },
+    "5": { "status": "in_game", "file": "content/cards/day5.json", "note": "written 2026-11-23, texts not reviewed by the authors yet" },
     "6": { "status": "todo" },
     "7": { "status": "todo" }
   },

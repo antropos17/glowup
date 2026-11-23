@@ -1,6 +1,6 @@
 {
   "days": 30,
-  "contentDays": 4,
+  "contentDays": 5,
   "energyPerDay": 10,
   "earlyBoost": {
     "days": 3,

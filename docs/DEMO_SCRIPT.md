@@ -1,6 +1,6 @@
 # 7-day demo — script
 
-Status: draft v1, 2026-11-22. The 7-day grid and the Day 1 design are done. Day 1 is implemented in `content/cards/day1.json`, Day 2 in `content/cards/day2.json`, Day 3 in `content/cards/day3.json`, Day 4 in `content/cards/day4.json`. Days 5–7 are to be written directly in the engine format.
+Status: draft v1, 2026-11-22. The 7-day grid and the Day 1 design are done. Day 1 is implemented in `content/cards/day1.json`, Day 2 in `content/cards/day2.json`, Day 3 in `content/cards/day3.json`, Day 4 in `content/cards/day4.json`, Day 5 in `content/cards/day5.json`. Days 6–7 are to be written directly in the engine format.
 
 This file is the design-level description in English. Russian strings in «quotes» are in-game text: copy them verbatim into content.
 
@@ -218,13 +218,13 @@ Spending (total 720):
 |---|---|---|---|
 | `gym_pass` Абонемент в зал | 150 | +2 energy each morning and weight −1 each morning, 7 days | no |
 | `cream_premium` Крем «Сияние» | 220 | skin −3 each morning, 5 days (−15 total) | yes |
-| `cream_zina` Крем с Садовой | 40 in the Day 5 pharmacy card, or free from Aunt Zina | today in `items.json`: skin −2 each morning, 10 days. To be rewritten with Day 5 (decision 17): a shaving cream, no skin course, pays off in the Day 7 shave | not sold in the shop |
+| `cream_zina` Крем с Садовой | 40 in the Day 5 pharmacy card (K5-03), or free from Aunt Zina (K5-02) | none by itself: a shaving cream for problem skin, no `onUse`, no course (decision 17). With it in the bag the Day 7 shave goes cleanly; without it the face is red before «Зерно» | not sold in the shop; at most one tube |
 | `frame` Новая оправа | 150 | style −12, conf −2, round glasses | yes |
 | `haircut` Стрижка у барбера | 70 + 2 energy | care −6, conf −2 | yes |
 | `shirt` Новая рубашка | 90 | style −6, blue shirt | yes |
 
 Rules:
-- `cream_zina` has no shop price. The Day 5 pharmacy card sells it with `"cost": { "coins": 40 }` and `{ "item": "cream_zina", "add": 1 }`. The quest solution is cheaper and stronger than the premium cream, but slower.
+- `cream_zina` has no shop price. The Day 5 pharmacy card sells it with `"cost": { "coins": 40 }` and `{ "item": "cream_zina", "add": 1 }`; Aunt Zina gives the same tube for help. It is not a skin treatment: the doctor's course (free) and «Сияние» (220) are the two skin treatments. The bag shows it without «Применить», because it has no `onUse`.
 - A bought item sets the flag `bought_<id>`, so later cards can react («Новая оправа тебе идёт»).
 - Not done: a paid course does not pause while the player is away (proposed red line in `docs/DESIGN.md` section 12).
 
@@ -397,6 +397,70 @@ Engine notes for days 5+ (nothing in `src/` was changed):
 - `Cond` cannot ask whether a modifier is active, so K4-00c and `A4-gym` infer the gym pass from flags and the bag, with the K3-00b limit: a pass bought on day 3 and applied on the morning of day 4 before the card is read shows the line (and the gym action) a day early.
 - A choice cannot show its effect anywhere except its label, so the quarter's label carries it: «Выкурить четверть: вреда вдвое меньше».
 - `fill()` only inserts the nominative name, so texts avoid «от {crush}» and «{hero} нет».
+
+## 5e. Day 5 design (implemented)
+
+The authoritative version is `content/cards/day5.json`. Written 2026-11-23 from `DECISIONS.md` rows 17–19 and section 3; the texts are not reviewed by the authors yet. Story cards are listed in display order.
+
+"Kind" below means `d1_refused_pies` or `d4_pies_held`. "Knows the note" means `d2_saw_note` or `d3_asked_note`. "Ordinary" means the counter `smoke_free` is 0 when the craving card arrives, "strong" means it is 1 or more.
+
+| Card | Part | What happens | Condition | Flags set |
+|---|---|---|---|---|
+| K5-00 Overslept | morning | «Проспал»: −4 energy, already taken by Day 4's `tomorrow` effect. A line only | `d4_late` | none |
+| K5-01 Mirror | morning | The second morning of the doctor's course (the course started on Day 3, so Day 5 is its second morning, not the third). With `d3_cleaning` = `bad` the outcome says the red cheeks are gone | `d3_course` | none |
+| K5-02a–c Aunt Zina | morning | She asks to fix the shelf: 4 energy. Three openings: `a` she promised to tell about the note (`d3_asked_note`), `b` met on the stairs on Day 3 (`d3_met_zina`), `c` neither. Help: the spare tube for free, she names the pharmacy and says what the cream is for; her line repeats what mum told her (`d4_mom_talked`, `d4_ate_pies`). Hello: no help | not kind | `d5_helped_zina` = `shelf`, `d5_cream` = `gift`; or `d5_no_help` |
+| K5-02d–f Aunt Zina | morning | «Мать говорит, ты за себя взялся»: she asks only to carry the bags, 2 energy. Same three openings, same reward | kind | `d5_helped_zina` = `bags`, `d5_cream` = `gift`; or `d5_no_help` |
+| K5-03 Pharmacy on Sadovaya | day | The pharmacist names the cream, its price and what it does not do. Buy for 40 coins or leave. With `d3_course` she adds that she sells no second acne cream on top of the doctor's course (a line, not a mechanic) | `d5_no_help`, knows the note, no tube in the bag | `d5_cream` = `bought` |
+| K5-04 Dentist | day | The free cleaning by the insurance policy. One choice; the 3 energy are an effect, so it is always open. Teeth −15; with `d1_soda_teeth` the dentist grumbles and it is −10. «Два часа не курить и не есть» | `d1_dentist_booked` | `d5_cleaned` = `full` or `soda` |
+| K5-04n Dentist | day | A tooth aches from cold water; the nearest free slot is in a week. One light line, one button | no `d1_dentist_booked` | `d5_dentist_later` |
+| K5-05a Dentist's porch | day | The craving right after the cleaning, ordinary. Resist (2 energy), the quarter (1 energy, only with `d1_half`), gum (uses the item), or smoke. Smoking here also takes back part of the cleaning: teeth +2 (the quarter +1), said in the card text | `d5_cleaned`, ordinary | `d5_no_smoke`, `d5_quarter` or `d5_smoked`; counter `smoke_free` |
+| K5-05b Dentist's porch | day | The same, strong: resisting costs 3 energy and gives twice the confidence | `d5_cleaned`, strong | same |
+| K5-06a–c Mum calls | evening | Aunt Zina phoned her: `a` he fixed the shelf, `b` he carried the bags, `c` «здороваешься и бежишь». Tell about the day (conf −1) or «Всё хорошо, мам»; the calm answer brings up the pies (`d4_ate_pies`, `d4_pies_held`). Nothing gets worse | `d5_helped_zina` = `shelf` / `bags`, or `d5_no_help` | none |
+| K5-07a Balcony | evening | The craving at home for those without a cleaning, ordinary. Same four choices, no teeth effect | no `d5_cleaned`, ordinary | as K5-05a |
+| K5-07b Balcony | evening | The same, strong | no `d5_cleaned`, strong | as K5-05a |
+| K5-08a Alina writes | night | Her first message opens the card: «Привет. Видела твоё сообщение, замоталась.» One button, «Читать дальше»: the class-chat line and the answer about «Зерно» follow into the chat | `d1_wrote_plain` | `d5_alina_wrote` |
+| K5-08b Alina writes | night | Dry opening with no mention of his message: «Привет, Андрей.» | `d1_wrote_flirty` | `d5_alina_wrote` |
+| K5-08c Alina writes | night | «Привет. Оксана просила узнать, ты идёшь?» | neither Day 1 message (`d1_liked_only`, `d1_no_contact`) | `d5_alina_wrote` |
+| K5-09 The question | night | The question about the reunion from the bank `alina_reunion_question` (10 phrasings). One button, «Ответишь утром» (decision 19): `affinity` +6 for everyone, reason «Алина написала первой». The day ends here | `d5_alina_wrote` | none |
+
+Her message is built from parts in `content/chat.json`, each a separate chat bubble: the opening (`alina_first_plain`, `alina_first_dry`, `alina_first_oksana`, one phrasing each), then the class-chat line (`alina_first_coming` «Видела, ты написал, что придёшь.» with `d1_said_coming`, `alina_first_lurked` «Ты один в чате не ответил.» with `d1_lurked`, nothing after the door joke), then `alina_first_zerno` «Про «Зерно»: да, место хорошее.» with `d2_wrote_zerno`, then the question. `d2_liked_photo`, `d3_alina_liked` and `d4_alina_reacted` change nothing in her text. Nothing is written to her on Day 5: no `write` effect and no `chat` card.
+
+Energy prices (decision 13 rules, as on Day 4): the shelf 4, the bags 2, the cleaning 3 (an effect on a free choice), not smoking 2 (ordinary) or 3 (strong), the quarter 1, park run 4, gym workout 4, side job 4, shower 2, teeth 1. A "clean" booked day — the shelf, the cleaning, a strong craving, a run and the side job — costs 18 against 10 energy (12 with the gym pass, 6 after a late Day 4 night). Every card keeps a free choice; the gum is a free way to resist once.
+
+The cream (decision 17): `cream_zina` has no `onUse`, no modifier and no price; the bag lists it without «Применить». A player holds at most one tube: K5-03 needs `d5_no_help` and an empty slot, and a helper never sees the pharmacy card. A player who neither helped nor knows the note gets no pharmacy card and no line that teases the cream. Day 7 reads the item, `{ "item": "cream_zina" }` (and may take it with `{ "item": "cream_zina", "add": -1 }` when the shave happens); `d5_cream` only says how he got it (`gift` or `bought`), for texts.
+
+Smoking count: `smoke_free` arrives from Day 4 as 0, 1, 2 or 4. Resisting or the gum adds 1 (1, 2, 3 or 5) and gives care −2; a cigarette sets it to 0 with care +2; the quarter sets it to 0 with care +1. Resisting gives conf −1 on the ordinary card and conf −2 on the strong one. The Day 4 strength rule is reused unchanged. One craving card a day: on the porch for a player who had the cleaning, on the balcony for everyone else; each is closed by its own flags.
+
+Plus actions on day 5 (day, evening, night): park run (4, weight −3 or −1, counter `useful`), gym workout (4, weight −3, only while the pass is running), shower and clean T-shirt (2, care −5, counter `useful`), teeth by the timer (1, teeth −1), sofa (0, conf +1). Sleep (night) closes the day; «Посидеть в телефоне до трёх» sets `d5_late` and −4 energy on day 6.
+
+Neutral choice per story card (marked `"neutral": true`): K5-00 `up`, K5-01 `ok`, K5-02a–f `hello`, K5-03 `skip`, K5-04 `go` (the agreed exception of decision 18: it takes 3 energy as an effect and improves teeth), K5-04n `book`, K5-05a/b `smoke`, K5-06a–c `calm`, K5-07a/b `smoke`, K5-08a–c `read`, K5-09 `morning`. A fully skipped Day 5 therefore runs K5-00 if it applies, K5-01, K5-02x, K5-03 if he knows the note, K5-04 and K5-05x (booked) or K5-04n, K5-06c, K5-07x (not booked), K5-08x, K5-09: Andrey says hello and does not help, buys nothing, goes to the cleaning if it was booked, smokes as usual (`smoke_free` 0), and Alina's message arrives and waits with its +6. No coins are spent and nothing is sent to Alina.
+
+Day 5 card: reward 50 gold and dental floss (`floss`, the same item as the Day 3 gift). Line for tomorrow: «Утром: ответить Алине».
+
+Longest morning chain: three cards (K5-00, K5-01, K5-02x), against five on Day 4. The gym pass has no morning line on Day 5: it was explained on days 3 and 4.
+
+Earlier flags paid off on day 5: `d1_refused_pies` and `d4_pies_held` (the smaller favour), `d3_met_zina` and `d3_asked_note` (her opening), `d2_saw_note` and `d3_asked_note` (the pharmacy), `d3_course` (the mirror, the pharmacist), `d3_cleaning` (the mirror), `d1_dentist_booked` and `d1_soda_teeth` (the dentist), `d1_half` (the quarter), `d4_late` (K5-00), `d4_mom_talked` and `d4_ate_pies` (Aunt Zina's line), `d4_ate_pies` and `d4_pies_held` (mum's call), `d2_gym` (`A5-gym`), counter `smoke_free`, `d1_wrote_plain`, `d1_wrote_flirty` (its Day 5 half: the dry opening; «Ты мне, кстати, странное писал» stays on Day 6), `d1_liked_only`, `d1_no_contact`, `d1_said_coming`, `d1_lurked`, `d2_wrote_zerno`. Not paid on purpose: `d2_liked_photo`, `d3_alina_liked`, `d4_alina_reacted` (section 3: they were paid through `affinity`). No Day 5 payoff was moved.
+
+### How Day 5 pays off later
+
+| Flag | Day | Payoff |
+|---|---|---|
+| `d5_alina_wrote` | 6 | Opens the reply: the Day 6 morning starts from her question; the last line in the chat is the phrase to answer |
+| item `cream_zina` | 7 | The shave: with the tube in the bag it goes cleanly, without it the face is red before «Зерно» (decision 17). Day 7 checks `{ "item": "cream_zina" }` |
+| `d5_cream` | 7 | `gift` or `bought`: one word in the shave text («тёти-Зинин крем» / «крем с Садовой») |
+| `d5_helped_zina`, `d5_no_help` | 5, 6 | Choose mum's call and the pharmacy card; Aunt Zina can greet him differently on the stairs later (proposed) |
+| `d5_cleaned` | 7 | The smile in «Зерно»: `full` or `soda`; the Day 7 scene counts clean teeth |
+| `d5_dentist_later` | 12 | The cleaning he booked on Day 5, outside the demo |
+| `d5_smoked`, `d5_no_smoke`, `d5_quarter`, counter `smoke_free` | 6, 7 | The next craving and the Day 7 "smoked today" check |
+| `d5_late` | 6 | Morning «Проспал»: he reread her message until three |
+
+Engine notes for days 6+ (nothing in `src/` was changed):
+- A card with `says` shows only the last phrase of the crush, and a card's text is fixed. So a message built from parts takes two cards: K5-08x opens with the first bubble, its only button sends the middle bubbles, K5-09 opens with the question. Decision 19 asks for one card with one button; the day has two cards with one button each, and the second is «Ответишь утром». One card would need the engine to show several fresh bubbles on a card.
+- The outcome text of K5-08x cannot quote the random question, and `fill()` has only the nominative name, so texts avoid «от {crush}».
+- `Cond` cannot ask whether a modifier is active: `A5-gym` infers the gym pass as K3-00b does, with the same limit.
+- A neutral choice cannot have `cost`, so the cleaning's energy is an effect and is written into the button label («−3 энергии») instead of the cost badge. With less than 3 energy it takes what is left.
+- `useItem()` would consume an item without `onUse` and do nothing; the UI never offers it (the «Применить» button needs `onUse`), so the tube stays in the bag until Day 7.
+- The chat bubbles of Day 5 carry no time stamps; "late" is said by the night part only.
 
 ## 6. Sample phrase bank for Alina
 
