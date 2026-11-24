@@ -258,6 +258,21 @@ Content prerequisites (no engine work): extend `A-job` beyond day 7; per-day act
 9. Should Day 7 sleep get «Посидеть в телефоне до трёх» in the full game?
 10. A new shop item for week 2 (for example perfume for `care`): needed?
 
+### Answers (Ruslan, 2026-11-24)
+
+| # | Answer | What it means for the grid |
+|---|---|---|
+| 1 | Yes | Day 10 stays the fixed "then and now" beat |
+| 2 | OK | K8-02a/e/d and K8-05 stay as planned |
+| 3 | It grows back | K8-01 and the Day 14 shave choice stay; keeping the stubble does `unflag shaved`, `look.facial` = `stubble` |
+| 4 | Right | Week 2 ends on Day 14 with the planned coffee |
+| 5 | Not for now | No second taste of Alina in week 2 |
+| 6 | OK | Vitya's free morning runs are the alternative to renewing the pass |
+| 7 | Keep all | Fat burner, salon and strips all stay |
+| 8 | "Decide yourself and propose" | Open. Proposed by the main chat, not yet confirmed: `acne_patch` (existing item, given once on Day 2; `gum` and `floss` already repeat) |
+| 9 | Yes | K7-sleep gets «Посидеть в телефоне до трёх» (`d7_late`), which makes K8-00 Overslept a real card. The engine has no demo/full condition (Part B2), so the button would also show in the demo; whether that is acceptable is not yet confirmed |
+| 10 | Yes, perfume | A new `care` item for week 2. Day, price, effect and Russian texts are not set yet; Day 8 has no spending, so not on Day 8 |
+
 ---
 
 # Part B. Keeping the demo ending on Day 7
