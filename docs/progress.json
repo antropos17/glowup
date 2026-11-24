@@ -4,11 +4,11 @@
   "verified": {
     "date": "2026-11-25",
     "typecheck": "pass",
-    "tests": "136/136",
-    "check_content": "pass: 203 cards (151 story, 52 action), 1 archetype, 1 crush",
+    "tests": "143/143",
+    "check_content": "pass: 223 cards (165 story, 58 action), 1 archetype, 1 crush",
     "economy": "demo economy in items.json, side-jobs.json, balance.json; see docs/DEMO_SCRIPT.md section 5a",
-    "build": "pass: dist/index.html 649 kB",
-    "playthrough": "Day 9: engine tests over the Monday morning (overslept, last gym morning, the scales), renewing the pass or Vitya's runs, the fat burner odds and the Day 2 tea, Oksana's slideshow with and without the tag, the warm-tone status line, the balcony by the counter, sleep and staying up, a fully skipped Day 9, the demo still ending on Day 7. Playwright (Chromium) on the built dist/index.html (the dev server in the worktree cannot serve fonts from the main node_modules), saves skipped to Day 9 and patched by flags: with ?full at 360x640 and 390x844 every Day 9 card (K9-late, K9-00, K9-01, K9-02a/b, K9-03a/b, K9-05w, K9-04a/b, K9-06a/b, A9-gym, A-job, K9-sleep) with no clipped text and no console errors; without ?full at 360x640 the end screen «Продолжение следует» after Day 7. Screenshots in X:/tmp/glowup-day9. Day 8 checks: X:/tmp/glowup-day8 and git history of this file"
+    "build": "pass: dist/index.html 676 kB",
+    "playthrough": "Day 10: engine tests over the Tuesday morning (overslept, Vitya at the door by d9_pass, the album with and without the Day 6 singer), the photo for Oksana by d9_oksana and d3_posted, Alina's reaction by the count of visible changes (+2/+3/+4) and Vitya's photo without a fresh one, karaoke for the Day 6 joke or the Day 7 song, the gym only while a pass runs, the balcony by the counter, sleep and staying up, a fully skipped Day 10, the demo still ending on Day 7. Playwright (Chromium, real clicks) on the built dist/index.html with a fixed clock; saves built by the engine with days 1-9 skipped, then patched by flags (three paths: vitya+promised+4 changes, renewed+song+2 changes, nothing+0 changes with three photo choices): with ?full at 360x640 and 390x844 every Day 10 card (K10-late, K10-run, K10-01a/b, K10-02a/b, K10-03a/b/c/d/e, K10-04, K10-05a/b, A10-gym, A-job, K10-sleep) with no clipped or overflowing text and no console errors; without ?full at both sizes the end screen «Продолжение следует» after Day 7. Screenshots in X:/tmp/glowup-day10. Day 9 checks: X:/tmp/glowup-day9 and git history of this file"
   },
   "demo_days": {
     "1": {
@@ -57,6 +57,11 @@
       "status": "written",
       "file": "content/cards/day9.json",
       "note": "written 2026-11-25; past the demo (demoDays 7, contentDays 9), playable on the dev page with ?full. Texts await the authors: docs/review/day9-texts.md. Design and flags: docs/WEEK2_GRID.md Part C2. K9-00 and K9-02a read d2_gym (the Day 2 pass) because Cond cannot ask whether a modifier runs (A5); K10-run is not queued (Day 10 reads d9_pass)"
+    },
+    "10": {
+      "status": "written",
+      "file": "content/cards/day10.json",
+      "note": "written 2026-11-25; past the demo (demoDays 7, contentDays 10), playable on the dev page with ?full. Texts await the authors: docs/review/day10-texts.md. Design and flags: docs/WEEK2_GRID.md Part C3. K10-run is a story card read from d9_pass (not a queued quest step); her reaction goes to the chat as status lines status_d10_*; A10-gym reads d9_pass or a shop pass bought on days 3-9 (A5 gap)"
     }
   },
   "engine_todo": [
@@ -69,6 +74,7 @@
     "store purchase verification"
   ],
   "awaiting_authors": [
+    "Day 10: review the texts (docs/review/day10-texts.md), the working title «Тогда и сейчас», the gift acne_patch and the teaser; confirm the deviations in docs/WEEK2_GRID.md Part C3 (reaction as status lines, K10-03d/e, no slideshow choice on a skipped day beyond the old photo)",
     "Day 9: review the texts (docs/review/day9-texts.md), the working title «Абонемент кончился», the gift gum and the teaser; decide whether a shop pass used after Day 2 should also get K9-00/K9-02a (needs an engine condition, docs/WEEK2_GRID.md Part C2)",
     "Day 8: review the texts (docs/review/day8-texts.md), the working title «Утро после», the gift floss and the teaser; confirm the two Day 7 changes (K7-sleep «до трёх», Day 7 gift acne_patch) and the deviations listed in docs/WEEK2_GRID.md Part C1",
     "read the texts of days 2–7, Alina's lines first",
