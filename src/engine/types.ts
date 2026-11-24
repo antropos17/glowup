@@ -202,6 +202,8 @@ export interface Balance {
   dayCoins: number;
   /** сколько дней сценария уже написано. После них идёт «Продолжение следует» */
   contentDays: number;
+  /** demo length: the game stops with «Продолжение следует» after this day; not above contentDays */
+  demoDays: number;
   /** сколько случайных карточек из колоды выпадает за одно время суток. Сюжет и квесты сюда не входят */
   cardsPerPart: number;
 }

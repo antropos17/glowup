@@ -10,7 +10,7 @@ All text values are player-facing and stay Russian.
 
 | File | Contents |
 |---|---|
-| `balance.json` | Game numbers: days, energy, start chance and its cap, how many days are written (`contentDays`) |
+| `balance.json` | Game numbers: days, energy, start chance and its cap, how many days are written (`contentDays`), demo length (`demoDays`, not above `contentDays`) |
 | `days.json` | One entry per day: title, gift for the day, the «what happens tomorrow» line |
 | `problems.json` | Problem templates: weight, skin, teeth and so on |
 | `archetypes.json` | Heroes: look and problem set (at least 5) |
@@ -206,7 +206,7 @@ Author decision 3 in `docs/DECISIONS.md`: a skipped day does not break the story
 
 When writing a neutral choice, assume the player never saw the card: it must not spend coins, send a message to the crush or start a course on the player's behalf, and its outcome text must read well in the summary without the card text.
 
-When the written days run out (`balance.contentDays`), the game shows «Продолжение следует». On day 30 the verdict is rolled against the chance.
+When the demo days run out (`balance.demoDays`), the game shows «Продолжение следует». `contentDays` is how many days have written content: `check:content` rejects a card whose `when.days` end after it, and `demoDays` above it. On the dev page, `?full` in the URL lifts the cut-off to `contentDays`. On day 30 the verdict is rolled against the chance.
 
 ## Memory
 

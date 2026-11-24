@@ -16,7 +16,7 @@ const START = Date.UTC(2026, 5, 1, 5, 0);
 const at = (hour: number) => START + (hour - 9) * H;
 const start = (seed = 7, now = START) => newGame(content, { seed, now, tzOffsetMin: TZ, archetypeId: 'andrey' });
 /** тот же контент, но будто написаны все 30 дней: чтобы проверить переход в день 2 */
-const full: Content = { ...content, balance: { ...content.balance, contentDays: 30 } };
+const full: Content = { ...content, balance: { ...content.balance, demoDays: 30 } };
 
 const pick = (s: GameState, card: string, choice: string, c = content) => choose(c, s, card, choice).state;
 /** сыграть сюжет до конца текущего времени суток, выбирая указанные варианты или первый доступный */
@@ -148,12 +148,32 @@ describe('день 1', () => {
     expect(next.summaries).toHaveLength(1);
   });
   it('после написанных дней идёт «продолжение следует»', () => {
-    const last = content.balance.contentDays;
+    const last = content.balance.demoDays;
     expect(syncClock(content, day1(), at(9 + 24 * (last - 1))).demoOver).toBeUndefined();
     const s = syncClock(content, day1(), at(9 + 24 * last));
     expect(s.demoOver).toBe(true);
     expect(s.day).toBe(last);
     expect(draw(content, s).card).toBeNull();
+  });
+  describe('demoDays cut-off', () => {
+    const k1 = content.cards.find((c) => c.id === 'K1-01')!;
+    const day8 = { ...k1, id: 'K8-test', when: { ...k1.when, days: [8, 8] as [number, number] } };
+    const week2: Content = { ...content, balance: { ...content.balance, contentDays: 8 }, cards: [...content.cards, day8] };
+    it('with Day 8 written, the demo still ends after Day 7 and never draws a Day 8 card', () => {
+      expect(validateContent(week2)).toEqual([]);
+      const s = syncClock(week2, start(), at(9 + 24 * 8));
+      expect([s.demoOver, s.day]).toEqual([true, 7]);
+      expect('K8-test' in s.seen).toBe(false);
+      expect(drawStory(week2, s).card).toBeNull();
+      const lifted: Content = { ...week2, balance: { ...week2.balance, demoDays: 8 } };
+      expect('K8-test' in syncClock(lifted, start(), at(9 + 24 * 8)).seen).toBe(true);
+    });
+    it('validation rejects demoDays above contentDays', () => {
+      expect(validateContent({ ...content, balance: { ...content.balance, demoDays: 8 } }).join('\n')).toContain('demoDays');
+    });
+    it('validation rejects a card whose days go past contentDays', () => {
+      expect(validateContent({ ...content, cards: [...content.cards, day8] }).join('\n')).toContain('K8-test');
+    });
   });
   it('одно зерно даёт одно и то же прохождение', () => {
     expect(day1().log).toEqual(day1().log);
@@ -1429,7 +1449,7 @@ describe('день 6', () => {
     const late = syncClock(full, pick(night, 'K6-sleep', 'late', full), at(153));
     expect(late.flags.d6_late).toBeDefined();
     expect([late.day, late.energy]).toEqual([7, 10 - 4]);
-    expect(content.balance.contentDays).toBe(7);
+    expect(content.balance.demoDays).toBe(7);
     const end = syncClock(content, pick(night, 'K6-sleep', 'sleep'), at(153));
     expect(end.demoOver).toBeUndefined();
     expect(end.day).toBe(7);
