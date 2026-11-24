@@ -1,0 +1,2234 @@
+[
+  {
+    "id": "K8-00",
+    "kind": "story",
+    "title": "Проспал",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d7_late"
+        }
+      ]
+    },
+    "text": "Вчера до трёх ночи перечитывал её субботнее сообщение. Воскресенье началось ближе к полудню, и сил сегодня меньше обычного.",
+    "choices": [
+      {
+        "id": "up",
+        "neutral": true,
+        "label": "Встать",
+        "outcomes": [
+          {
+            "text": "Встал к одиннадцати. Воскресенье уже шло без него."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K8-01a",
+    "kind": "story",
+    "title": "Щетина",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "shaved"
+        },
+        {
+          "flag": "d7_red"
+        }
+      ]
+    },
+    "text": "Воскресенье, зеркало. Краснота за ночь сошла, зато вернулась щетина, как будто и не брился. Бритва на полке. Без крема лицо после неё снова будет красным.",
+    "choices": [
+      {
+        "id": "cream",
+        "label": "Побриться с кремом",
+        "requires": [
+          {
+            "item": "cream_zina"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Тот же крем, та же мята. Бритва прошла чисто, без красноты. Из зеркала опять смотрит кто-то помоложе.",
+            "effects": [
+              {
+                "flag": "shaved"
+              },
+              {
+                "look": {
+                  "facial": "none",
+                  "razorBurn": false
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "bare",
+        "label": "Побриться без крема",
+        "requires": [
+          {
+            "not": {
+              "item": "cream_zina"
+            }
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Снова мыло, снова бритва по прыщам. Щетины нет, щёки горят. Пройдёт, но не сегодня.",
+            "why": "Опять раздражение",
+            "effects": [
+              {
+                "flag": "shaved"
+              },
+              {
+                "flag": "d8_red"
+              },
+              {
+                "look": {
+                  "facial": "none",
+                  "razorBurn": true
+                }
+              },
+              {
+                "problem": "conf",
+                "add": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "keep",
+        "neutral": true,
+        "label": "Оставить щетину",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d6_beard_hint"
+              }
+            ],
+            "text": "Щетина пусть растёт. В голове на секунду всплыло её «Борода вообще не моё». Ну, это пока не борода.",
+            "why": "Щетина вернулась",
+            "effects": [
+              {
+                "unflag": "shaved"
+              },
+              {
+                "look": {
+                  "facial": "stubble",
+                  "razorBurn": false
+                }
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d6_beard_hint",
+                "set": false
+              }
+            ],
+            "text": "Щетина пусть растёт. Бритва подождёт до следующего раза.",
+            "why": "Щетина вернулась",
+            "effects": [
+              {
+                "unflag": "shaved"
+              },
+              {
+                "look": {
+                  "facial": "stubble",
+                  "razorBurn": false
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K8-01b",
+    "kind": "story",
+    "title": "Щетина",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "shaved"
+        },
+        {
+          "flag": "d7_red",
+          "set": false
+        }
+      ]
+    },
+    "text": "Воскресенье, зеркало. Вчера было гладко, сегодня снова щетина. Бритва на полке. Без крема для проблемной кожи лицо после неё будет красным.",
+    "choices": [
+      {
+        "id": "cream",
+        "label": "Побриться с кремом",
+        "requires": [
+          {
+            "item": "cream_zina"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Тот же крем, та же мята. Бритва прошла чисто, без красноты. Из зеркала опять смотрит кто-то помоложе.",
+            "effects": [
+              {
+                "flag": "shaved"
+              },
+              {
+                "look": {
+                  "facial": "none",
+                  "razorBurn": false
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "bare",
+        "label": "Побриться без крема",
+        "requires": [
+          {
+            "not": {
+              "item": "cream_zina"
+            }
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Снова мыло, снова бритва по прыщам. Щетины нет, щёки горят. Пройдёт, но не сегодня.",
+            "why": "Опять раздражение",
+            "effects": [
+              {
+                "flag": "shaved"
+              },
+              {
+                "flag": "d8_red"
+              },
+              {
+                "look": {
+                  "facial": "none",
+                  "razorBurn": true
+                }
+              },
+              {
+                "problem": "conf",
+                "add": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "keep",
+        "neutral": true,
+        "label": "Оставить щетину",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d6_beard_hint"
+              }
+            ],
+            "text": "Щетина пусть растёт. В голове на секунду всплыло её «Борода вообще не моё». Ну, это пока не борода.",
+            "why": "Щетина вернулась",
+            "effects": [
+              {
+                "unflag": "shaved"
+              },
+              {
+                "look": {
+                  "facial": "stubble",
+                  "razorBurn": false
+                }
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d6_beard_hint",
+                "set": false
+              }
+            ],
+            "text": "Щетина пусть растёт. Бритва подождёт до следующего раза.",
+            "why": "Щетина вернулась",
+            "effects": [
+              {
+                "unflag": "shaved"
+              },
+              {
+                "look": {
+                  "facial": "stubble",
+                  "razorBurn": false
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K8-02a",
+    "kind": "story",
+    "title": "Её сообщение",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d7_msg",
+          "eq": "warm"
+        },
+        {
+          "flag": "d8_replied",
+          "set": false
+        }
+      ]
+    },
+    "text": "Воскресное утро. Вчера {crush} написала тепло, и сообщение так и висит без ответа. Что нажмёшь, то и уйдёт, слово в слово.",
+    "choices": [
+      {
+        "id": "ask",
+        "label": "Я тоже рад, что зашёл. Как твоё воскресенье?",
+        "outcomes": [
+          {
+            "text": "Отправлено. Под сообщением «Прочитано». Теперь ждать.",
+            "why": "Ответил и спросил в ответ",
+            "effects": [
+              {
+                "write": "Я тоже рад, что зашёл. Как твоё воскресенье?"
+              },
+              {
+                "chat": "status_reply_read"
+              },
+              {
+                "stat": "affinity",
+                "add": 3
+              },
+              {
+                "flag": "d8_replied",
+                "value": "warm"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "short",
+        "label": "И тебе.",
+        "outcomes": [
+          {
+            "text": "Отправлено. Два слова. Под ними «Прочитано».",
+            "effects": [
+              {
+                "write": "И тебе."
+              },
+              {
+                "chat": "status_reply_read"
+              },
+              {
+                "flag": "d8_replied",
+                "value": "short"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "long",
+        "label": "Привет! Я тоже очень рад, правда. Сто лет ни с кем так не болтал. Столько всего хотел рассказать, а в кафе как-то растерялся. Давай как-нибудь ещё?",
+        "outcomes": [
+          {
+            "text": "Отправлено. {hero} перечитал: длинновато вышло. Под сообщением «Прочитано».",
+            "why": "Длинное сообщение",
+            "effects": [
+              {
+                "write": "Привет! Я тоже очень рад, правда. Сто лет ни с кем так не болтал. Столько всего хотел рассказать, а в кафе как-то растерялся. Давай как-нибудь ещё?"
+              },
+              {
+                "chat": "status_reply_read"
+              },
+              {
+                "stat": "affinity",
+                "add": -2
+              },
+              {
+                "flag": "d8_replied",
+                "value": "long"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "none",
+        "neutral": true,
+        "label": "Пока не отвечать",
+        "outcomes": [
+          {
+            "text": "Сообщение подождёт. Она ни о чём не спрашивала, можно и не отвечать.",
+            "effects": [
+              {
+                "flag": "d8_replied",
+                "value": "none"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K8-02e",
+    "kind": "story",
+    "title": "Её сообщение",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d7_msg",
+          "eq": "even"
+        },
+        {
+          "flag": "d8_replied",
+          "set": false
+        }
+      ]
+    },
+    "text": "Воскресное утро. Вчера {crush} написала пару ровных строк. Ответ не обязателен, но можно. Что нажмёшь, то и уйдёт, слово в слово.",
+    "choices": [
+      {
+        "id": "ask",
+        "label": "Да, неожиданно вышло. Как выходные?",
+        "outcomes": [
+          {
+            "text": "Отправлено. Под сообщением «Прочитано». Теперь ждать.",
+            "why": "Ответил и спросил в ответ",
+            "effects": [
+              {
+                "write": "Да, неожиданно вышло. Как выходные?"
+              },
+              {
+                "chat": "status_reply_read"
+              },
+              {
+                "stat": "affinity",
+                "add": 2
+              },
+              {
+                "flag": "d8_replied",
+                "value": "warm"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "short",
+        "label": "Ага, увидимся.",
+        "outcomes": [
+          {
+            "text": "Отправлено. Коротко и ровно, как у неё. Под сообщением «Прочитано».",
+            "effects": [
+              {
+                "write": "Ага, увидимся."
+              },
+              {
+                "chat": "status_reply_read"
+              },
+              {
+                "flag": "d8_replied",
+                "value": "short"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "none",
+        "neutral": true,
+        "label": "Не отвечать",
+        "outcomes": [
+          {
+            "text": "Её строки остались без ответа. Она ни о чём не спрашивала.",
+            "effects": [
+              {
+                "flag": "d8_replied",
+                "value": "none"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K8-02d",
+    "kind": "story",
+    "title": "Её сообщение",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d7_msg",
+          "eq": "dry"
+        },
+        {
+          "flag": "d8_replied",
+          "set": false
+        }
+      ]
+    },
+    "text": "Воскресное утро. Вчера {crush} написала коротко и по делу, про встречу. Ответ не обязателен. Что нажмёшь, то и уйдёт, слово в слово.",
+    "choices": [
+      {
+        "id": "short",
+        "label": "Понял, буду.",
+        "outcomes": [
+          {
+            "text": "Отправлено. Под сообщением «Прочитано».",
+            "effects": [
+              {
+                "write": "Понял, буду."
+              },
+              {
+                "chat": "status_reply_read"
+              },
+              {
+                "flag": "d8_replied",
+                "value": "short"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "none",
+        "neutral": true,
+        "label": "Оставить как есть",
+        "outcomes": [
+          {
+            "text": "Сообщение по делу, ответа оно не просит. Телефон лёг экраном вниз.",
+            "effects": [
+              {
+                "flag": "d8_replied",
+                "value": "none"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "double",
+        "label": "Понял, буду!",
+        "outcomes": [
+          {
+            "text": "Отправлено. А через минуту вдогонку второе. Под обоими «Прочитано».",
+            "why": "Второе сообщение вдогонку",
+            "effects": [
+              {
+                "write": "Понял, буду!"
+              },
+              {
+                "write": "А ты в «Зерне» часто бываешь? Может, ещё пересечёмся"
+              },
+              {
+                "chat": "status_reply_read"
+              },
+              {
+                "stat": "affinity",
+                "add": -2
+              },
+              {
+                "flag": "d8_replied",
+                "value": "long"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K8-03a",
+    "kind": "story",
+    "title": "Обед у мамы",
+    "speaker": "Мама",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d8_lunch",
+          "set": false
+        },
+        {
+          "any": [
+            {
+              "flag": "d4_ate_pies"
+            },
+            {
+              "flag": "d1_ate_pies"
+            }
+          ]
+        },
+        {
+          "flag": "d4_pies_held",
+          "set": false
+        }
+      ]
+    },
+    "text": "Воскресенье, обед у мамы. На столе гора пирожков с картошкой. Мама ставит тарелку и подмигивает: «Опять пять?»",
+    "choices": [
+      {
+        "id": "held",
+        "label": "Один пирожок и салат",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Один пирожок и салат. «Не пять?» — удивилась мама. Не пять.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "flag": "d8_lunch",
+                "value": "held"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ate",
+        "neutral": true,
+        "label": "Есть как все",
+        "outcomes": [
+          {
+            "text": "Пять, как она и сказала. Мама довольна, ремень не очень.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": 2
+              },
+              {
+                "flag": "d8_lunch",
+                "value": "ate"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K8-03b",
+    "kind": "story",
+    "title": "Обед у мамы",
+    "speaker": "Мама",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d8_lunch",
+          "set": false
+        },
+        {
+          "any": [
+            {
+              "flag": "d4_pies_held"
+            },
+            {
+              "flag": "d1_refused_pies"
+            }
+          ]
+        }
+      ]
+    },
+    "text": "Воскресенье, обед у мамы. Пирожки на столе, но тарелка в этот раз поменьше. Мама: «Я немного напекла. Ты ж теперь следишь».",
+    "choices": [
+      {
+        "id": "held",
+        "label": "Один пирожок и салат",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Один пирожок и салат. Мама кивнула, будто так и знала.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "flag": "d8_lunch",
+                "value": "held"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ate",
+        "neutral": true,
+        "label": "Есть как все",
+        "outcomes": [
+          {
+            "text": "Тарелка поменьше опустела быстро. Мама сходила на кухню за добавкой.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": 2
+              },
+              {
+                "flag": "d8_lunch",
+                "value": "ate"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K8-03c",
+    "kind": "story",
+    "title": "Обед у мамы",
+    "speaker": "Мама",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d8_lunch",
+          "set": false
+        }
+      ]
+    },
+    "text": "Воскресенье, обед у мамы. На столе пирожки с картошкой, салат и мамино «Ешь, остынет».",
+    "choices": [
+      {
+        "id": "held",
+        "label": "Один пирожок и салат",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Один пирожок и салат. Мама проводила взглядом остальные, но промолчала.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "flag": "d8_lunch",
+                "value": "held"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ate",
+        "neutral": true,
+        "label": "Есть как все",
+        "outcomes": [
+          {
+            "text": "Пирожки, салат, ещё пирожки. Воскресенье у мамы есть воскресенье.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": 2
+              },
+              {
+                "flag": "d8_lunch",
+                "value": "ate"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K8-04",
+    "kind": "story",
+    "title": "Мама присматривается",
+    "speaker": "Мама",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d8_lunch"
+        },
+        {
+          "count": [
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "shaved",
+                    "set": false
+                  },
+                  {
+                    "flag": "d8_red"
+                  }
+                ]
+              }
+            },
+            {
+              "any": [
+                {
+                  "flag": "bought_shirt"
+                },
+                {
+                  "flag": "bought_frame"
+                }
+              ]
+            },
+            {
+              "flag": "d5_cleaned"
+            },
+            {
+              "flag": "d3_course"
+            },
+            {
+              "counter": "smoke_free",
+              "gte": 1
+            }
+          ],
+          "gte": 2
+        }
+      ]
+    },
+    "text": "Мама убирает со стола и вдруг смотрит на него внимательнее. «Ты какой-то бодрый».",
+    "choices": [
+      {
+        "id": "thanks",
+        "neutral": true,
+        "label": "Спасибо, мам",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d4_mom_talked"
+              }
+            ],
+            "text": "«Спасибо, мам». Мама: «И звонить стал по-другому. Рассказываешь»."
+          },
+          {
+            "if": [
+              {
+                "flag": "d4_mom_talked",
+                "set": false
+              },
+              {
+                "flag": "d5_helped_zina"
+              }
+            ],
+            "text": "«Спасибо, мам». Мама: «И Зина говорит, ты ей помогаешь. Ну-ну»."
+          },
+          {
+            "if": [
+              {
+                "flag": "d4_mom_talked",
+                "set": false
+              },
+              {
+                "flag": "d5_helped_zina",
+                "set": false
+              }
+            ],
+            "text": "«Спасибо, мам». Мама положила ему с собой пирожков. На всякий случай."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K8-05w",
+    "kind": "story",
+    "title": "{crush} ответила",
+    "speaker": "crush",
+    "says": "alina_d8_warm",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d8_replied",
+          "eq": "warm"
+        },
+        {
+          "flag": "d7_msg",
+          "eq": "warm"
+        },
+        {
+          "flag": "d8_answered",
+          "set": false
+        }
+      ]
+    },
+    "text": "{crush} ответила.",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Отложить телефон",
+        "outcomes": [
+          {
+            "text": "{crush} ответила на вопрос, и не одним словом. Воскресенье закончилось лучше, чем началось.",
+            "effects": [
+              {
+                "flag": "d8_answered"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K8-05e",
+    "kind": "story",
+    "title": "{crush} ответила",
+    "speaker": "crush",
+    "says": "alina_d8_even",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d8_replied",
+          "eq": "warm"
+        },
+        {
+          "flag": "d7_msg",
+          "eq": "even"
+        },
+        {
+          "flag": "d8_answered",
+          "set": false
+        }
+      ]
+    },
+    "text": "{crush} ответила.",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Отложить телефон",
+        "outcomes": [
+          {
+            "text": "{crush} ответила на вопрос. Ровно, но ответила.",
+            "effects": [
+              {
+                "flag": "d8_answered"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K8-05s",
+    "kind": "story",
+    "title": "{crush} ответила",
+    "speaker": "crush",
+    "says": "alina_d8_short",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d8_replied",
+          "eq": "short"
+        },
+        {
+          "any": [
+            {
+              "flag": "d7_msg",
+              "eq": "warm"
+            },
+            {
+              "flag": "d7_msg",
+              "eq": "even"
+            }
+          ]
+        },
+        {
+          "flag": "d8_answered",
+          "set": false
+        }
+      ]
+    },
+    "text": "{crush} ответила.",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Отложить телефон",
+        "outcomes": [
+          {
+            "text": "На короткое сообщение пришёл короткий ответ. Честный обмен.",
+            "effects": [
+              {
+                "flag": "d8_answered"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K8-05l",
+    "kind": "story",
+    "title": "{crush} ответила",
+    "speaker": "crush",
+    "says": "alina_d8_long",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d8_replied",
+          "eq": "long"
+        },
+        {
+          "flag": "d7_msg",
+          "eq": "warm"
+        },
+        {
+          "flag": "d8_answered",
+          "set": false
+        }
+      ]
+    },
+    "text": "{crush} ответила.",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Отложить телефон",
+        "outcomes": [
+          {
+            "text": "{crush} ответила вежливо и коротко. На «давай ещё» ответа не было.",
+            "effects": [
+              {
+                "flag": "d8_answered"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K8-05d",
+    "kind": "story",
+    "title": "{crush} в сети",
+    "says": "status_online_no_reply",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d7_msg",
+          "eq": "dry"
+        },
+        {
+          "any": [
+            {
+              "flag": "d8_replied",
+              "eq": "short"
+            },
+            {
+              "flag": "d8_replied",
+              "eq": "long"
+            }
+          ]
+        },
+        {
+          "flag": "d8_answered",
+          "set": false
+        }
+      ]
+    },
+    "text": "{crush} была в сети.",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Отложить телефон",
+        "outcomes": [
+          {
+            "text": "Прочитано, ответа нет. Воскресенье, у неё свои дела. До встречи ещё три недели.",
+            "effects": [
+              {
+                "flag": "d8_answered"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K8-06a",
+    "kind": "story",
+    "title": "Витя пишет",
+    "speaker": "Витя",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d7_met",
+          "eq": "ignore"
+        }
+      ]
+    },
+    "text": "«Андрюха, говорят, ты в „Зерне“ от неё в меню прятался. Ну что, видел её?» Оксана, видимо, уже всем рассказала.",
+    "choices": [
+      {
+        "id": "tell",
+        "label": "Рассказать, как было",
+        "outcomes": [
+          {
+            "text": "{hero} рассказал всё, включая меню. Витя: «Классика. Ничего, на встрече отыграешься».",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "shrug",
+        "neutral": true,
+        "label": "Ответить «Да так»",
+        "outcomes": [
+          {
+            "text": "«Да так», — написал {hero}. Витя прислал три вопросительных знака и отстал."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K8-06b",
+    "kind": "story",
+    "title": "Витя пишет",
+    "speaker": "Витя",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "not": {
+            "flag": "d7_met",
+            "eq": "ignore"
+          }
+        },
+        {
+          "flag": "d7_thread",
+          "eq": "song"
+        }
+      ]
+    },
+    "text": "«Андрюха, ну что, видел её? Говорят, вы в „Зерне“ про песни говорили. Петь собрался?» В чате класса новости расходятся быстро.",
+    "choices": [
+      {
+        "id": "tell",
+        "label": "Рассказать, как было",
+        "outcomes": [
+          {
+            "text": "{hero} рассказал про «Зерно» и про колонку под потолком. Витя: «Ну всё, на встрече с тебя песня».",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "shrug",
+        "neutral": true,
+        "label": "Ответить «Да так»",
+        "outcomes": [
+          {
+            "text": "«Да так», — написал {hero}. Витя прислал три вопросительных знака и отстал."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K8-06c",
+    "kind": "story",
+    "title": "Витя пишет",
+    "speaker": "Витя",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "not": {
+            "flag": "d7_met",
+            "eq": "ignore"
+          }
+        },
+        {
+          "not": {
+            "flag": "d7_thread",
+            "eq": "song"
+          }
+        }
+      ]
+    },
+    "text": "«Андрюха, ну что, видел её? Оксана в чате пишет, вы в „Зерне“ пересеклись». В чате класса новости расходятся быстро.",
+    "choices": [
+      {
+        "id": "tell",
+        "label": "Рассказать, как было",
+        "outcomes": [
+          {
+            "text": "{hero} рассказал про «Зерно». Витя: «Вот это я понимаю. Держи в курсе».",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "shrug",
+        "neutral": true,
+        "label": "Ответить «Да так»",
+        "outcomes": [
+          {
+            "text": "«Да так», — написал {hero}. Витя прислал три вопросительных знака и отстал."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K8-07a",
+    "kind": "story",
+    "title": "Балкон",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "night"
+      ],
+      "requires": [
+        {
+          "flag": "d8_smoked",
+          "set": false
+        },
+        {
+          "flag": "d8_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d8_quarter",
+          "set": false
+        },
+        {
+          "counter": "smoke_free",
+          "lte": 0
+        }
+      ]
+    },
+    "text": "Ночь, балкон. Воскресенье кончается, завтра снова неделя. Пачка на подоконнике.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Не открывать пачку",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d7_quarter"
+              }
+            ],
+            "text": "Вчера была четверть, сегодня ни одной. Пачка осталась закрытой. Первый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d8_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d7_quarter",
+                "set": false
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Первый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d8_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Четыре затяжки, остальное в пепельницу. Дни без сигарет считаются с нуля: четверть тоже сигарета.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d8_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. Пачка осталась лежать, где лежала.",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d8_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d7_quarter"
+              }
+            ],
+            "text": "Вчера была четверть, сегодня целая. Счёт дней без табака так и стоит на нуле.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d8_smoked"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d7_quarter",
+                "set": false
+              }
+            ],
+            "text": "Обычная сигарета на балконе. Как вчера и позавчера.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d8_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K8-07b",
+    "kind": "story",
+    "title": "Балкон",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "night"
+      ],
+      "requires": [
+        {
+          "flag": "d8_smoked",
+          "set": false
+        },
+        {
+          "flag": "d8_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d8_quarter",
+          "set": false
+        },
+        {
+          "counter": "smoke_free",
+          "gte": 1
+        }
+      ]
+    },
+    "text": "Ночь, балкон. {hero} держится не первый день, но воскресный вечер тянет сильнее обычного. Пачка на подоконнике.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Не открывать пачку",
+        "cost": {
+          "energy": 3
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 1
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Второй день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d8_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 2
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Третий день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d8_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 3
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Четвёртый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d8_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 4
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Пятый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d8_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 5
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Шестой день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d8_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 6
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Седьмой день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d8_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 7
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Восьмой день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d8_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "not": {
+                  "any": [
+                    {
+                      "counter": "smoke_free",
+                      "eq": 1
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 2
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 3
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 4
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 5
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 6
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 7
+                    }
+                  ]
+                }
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Ещё один день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d8_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Четыре затяжки, остальное в пепельницу. Дни без сигарет считаются с нуля: четверть тоже сигарета.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d8_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. Пачка осталась лежать, где лежала.",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d8_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "text": "Сигарета на балконе. Вчера удержался, сегодня нет: счёт дней без табака снова с нуля.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d8_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A8-run",
+    "kind": "action",
+    "title": "Пробежка в парке",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Пробежка в парке",
+        "cost": {
+          "energy": 4
+        },
+        "outcomes": [
+          {
+            "weight": 3,
+            "hint": "получилось",
+            "text": "Три круга по парку. В воскресенье бегунов вдвое больше, и никто ни на кого не смотрит.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          },
+          {
+            "weight": 1,
+            "hint": "закололо в боку",
+            "text": "На втором круге закололо в боку. Мамины пирожки напомнили о себе.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -1
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A8-gym",
+    "kind": "action",
+    "title": "Тренировка в зале",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ],
+      "requires": [
+        {
+          "any": [
+            {
+              "flag": "d2_gym"
+            },
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "bought_gym_pass",
+                    "set": false
+                  },
+                  {
+                    "item": "gym_pass"
+                  },
+                  {
+                    "flagAge": "bought_gym_pass",
+                    "lte": 0
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Тренировка в зале по абонементу",
+        "cost": {
+          "energy": 4
+        },
+        "outcomes": [
+          {
+            "text": "Сорок минут на тренажёрах. В воскресенье в зале пусто, тренер даже музыку сделал потише.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A8-clean",
+    "kind": "action",
+    "title": "Душ и чистая футболка",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Душ и чистая футболка",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Душ и чистая футболка. К понедельнику готов хотя бы воротник.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -5
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A8-teeth",
+    "kind": "action",
+    "title": "Почистить зубы по таймеру",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Почистить зубы две минуты по таймеру",
+        "cost": {
+          "energy": 1
+        },
+        "outcomes": [
+          {
+            "text": "Две минуты по таймеру. После пирожков особенно кстати.",
+            "effects": [
+              {
+                "problem": "teeth",
+                "add": -1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A8-couch",
+    "kind": "action",
+    "title": "Полежать на диване",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Полежать на диване",
+        "outcomes": [
+          {
+            "text": "Полчаса на диване. Воскресенье для того и придумано.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K8-sleep",
+    "kind": "action",
+    "title": "Сон",
+    "when": {
+      "days": [
+        8,
+        8
+      ],
+      "parts": [
+        "night"
+      ]
+    },
+    "text": "Воскресенье почти закончилось.",
+    "choices": [
+      {
+        "id": "sleep",
+        "label": "Лечь сейчас",
+        "outcomes": [
+          {
+            "text": "Свет выключен. Завтра понедельник. До встречи выпускников двадцать два дня.",
+            "effects": [
+              {
+                "closeDay": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "late",
+        "label": "Посидеть в телефоне до трёх",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d8_answered"
+              }
+            ],
+            "text": "К трём часам ночи её ответ перечитан раз двадцать. Завтра на четыре энергии меньше.",
+            "effects": [
+              {
+                "flag": "d8_late"
+              },
+              {
+                "tomorrow": [
+                  {
+                    "stat": "energy",
+                    "add": -4
+                  }
+                ]
+              },
+              {
+                "closeDay": true
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d8_answered",
+                "set": false
+              }
+            ],
+            "text": "В три часа ночи лента всё ещё не кончилась. Завтра на четыре энергии меньше.",
+            "effects": [
+              {
+                "flag": "d8_late"
+              },
+              {
+                "tomorrow": [
+                  {
+                    "stat": "energy",
+                    "add": -4
+                  }
+                ]
+              },
+              {
+                "closeDay": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

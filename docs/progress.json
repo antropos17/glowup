@@ -1,14 +1,14 @@
 {
-  "updated": "2026-11-24",
+  "updated": "2026-11-25",
   "goal": "7-day demo: first 7 days of the 30-day game, full presentation",
   "verified": {
-    "date": "2026-11-24",
+    "date": "2026-11-25",
     "typecheck": "pass",
-    "tests": "117/117",
-    "check_content": "pass: 159 cards (119 story, 40 action), 1 archetype, 1 crush",
+    "tests": "129/129",
+    "check_content": "pass: 185 cards (139 story, 46 action), 1 archetype, 1 crush",
     "economy": "demo economy in items.json, side-jobs.json, balance.json; see docs/DEMO_SCRIPT.md section 5a",
-    "build": "pass: dist/index.html 595 kB",
-    "playthrough": "Day 7: engine tests over the shave with and without the cream, the craving by the counter, both entrances, her line at 0-5 changes and with the trendy look, the four threads by priority, the three evening tones, the affinity range -9..+10, a fully skipped Day 7 after a normal and a late night; engine runs of days 1-7 by play style (docs/DEMO_SCRIPT.md section 5g); Playwright (headless Chrome, real pointer clicks) on the built dist/index.html at 375x812 from a clean save through days 1-7 to the demo end screen with eight timelapse frames, once with the cream from Sadovaya (clean shave, warm tone) and once without it (razor burn, even tone); every Day 7 story card also at 320x568; no horizontal overflow, no card sheet scrolls, no console errors"
+    "build": "pass: dist/index.html 629 kB",
+    "playthrough": "Day 8: engine tests over the stubble (cream, bare, keep), her message in three tones with every reply, her evening answer by tone and reply, Sunday lunch by pie history, mum at two visible changes, Vitya by the Day 7 meeting, the balcony by the counter, sleep and staying up, a fully skipped Day 8 for each tone, the demo still ending on Day 7. Playwright (Chromium, dev page) with a generated Day 7 save: with ?full at 360x640 Day 7 sleep (new «до трёх» button shown), Day 8 morning to sleep on the warm tone with the keep-the-stubble branch, the end screen after Day 8; at 390x844 the Day 8 morning cards; without ?full at 360x640 the end screen after Day 7. Screenshots in X:/tmp/glowup-day8. Earlier Day 1-7 checks: see git history of this file"
   },
   "demo_days": {
     "1": {
@@ -47,6 +47,13 @@
       "note": "written 2026-11-23, texts not reviewed by the authors yet; thresholds confirmed (DECISIONS.md rows 35-39). Acceptance leftovers merged 2026-11-24: day-end card fits 320x568 on days 1-7; approved text splits K7-01a/b cream, K7-04b/c long talk, K7-00a/b; K7-01b kept as an unreachable fallback"
     }
   },
+  "week2_days": {
+    "8": {
+      "status": "written",
+      "file": "content/cards/day8.json",
+      "note": "written 2026-11-25; past the demo (demoDays 7, contentDays 8), playable on the dev page with ?full. Texts await the authors: docs/review/day8-texts.md. Design and flags: docs/WEEK2_GRID.md Part C1. Day 7 got two changes to confirm on review: K7-sleep «Посидеть в телефоне до трёх» (d7_late) and the Day 7 gift acne_patch"
+    }
+  },
   "engine_todo": [
     "choice buttons inside the feed",
     "demo end screen: referral link and notify button",
@@ -57,6 +64,7 @@
     "store purchase verification"
   ],
   "awaiting_authors": [
+    "Day 8: review the texts (docs/review/day8-texts.md), the working title «Утро после», the gift floss and the teaser; confirm the two Day 7 changes (K7-sleep «до трёх», Day 7 gift acne_patch) and the deviations listed in docs/WEEK2_GRID.md Part C1",
     "read the texts of days 2–7, Alina's lines first",
     "Day 7: review every Alina line of the day (docs/DEMO_SCRIPT.md section 5g)",
     "Day 6: confirm the confidence threshold for the joke (conf <= 75: half of random engine paths, all diligent ones, none of the lazy ones) and review every Alina line of the day (docs/DEMO_SCRIPT.md section 5f)",

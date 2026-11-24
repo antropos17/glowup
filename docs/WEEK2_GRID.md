@@ -311,3 +311,60 @@ Option 2. One explicit number for the demo length stops the ending depending on 
 Option 1 is enough to start `/write-day 8` today with no code change; Option 2 should land before week 2 is played on the dev page. Option 3 is worth it only if the demo bundle size or spoilers matter to the testers.
 
 Separate from all options: resuming a demo save in the full game (rebase `startedAt`) is an open engine task tied to decision 8.
+
+---
+
+# Part C. Days as written
+
+## C1. Day 8 (written 2026-11-25, texts await the authors' review)
+
+File: `content/cards/day8.json` (26 cards: 20 story, 6 action). Also touched: `A-job` days 1–8 (`content/cards/side-jobs.json`), `content/days.json` day 8 («Утро после», working title; gift `floss`; teaser «Завтра понедельник. Оксана что-то затевает в чате»), `content/chat.json` (`alina_d8_warm`, `alina_d8_even`, `alina_d8_short`, `alina_d8_long`, 10 phrasings each), `content/balance.json` `contentDays` 8 (`demoDays` stays 7). Russian texts for review: `docs/review/day8-texts.md`.
+
+Day 7 changes, from answers 8 and 9, to be confirmed on review (both are visible in the demo):
+- `K7-sleep` gets «Посидеть в телефоне до трёх»: `d7_late`, −4 energy tomorrow, text of the Day 5 late night («К трём часам ночи её сообщение перечитано раз двадцать…»). In the demo the penalty never applies: the demo ends after Day 7.
+- `content/days.json` Day 7 gets `"gift": "acne_patch"`. In the demo it lands in the bag on the Day 7 card, after which the game is frozen.
+
+Cards in display order:
+
+| Part | Card | Shown when | Choices (neutral in bold) |
+|---|---|---|---|
+| morning | K8-00 Проспал | `d7_late` | **up** |
+| morning | K8-01a / K8-01b Щетина | `shaved`; a: with `d7_red` (redness gone), b: without | cream (`cream_zina`) / bare (no cream: `d8_red`, razor burn, conf +2) / **keep** (`unflag shaved`, facial `stubble`; quotes her for `d6_beard_hint`) |
+| morning | K8-02a / e / d Её сообщение | `d7_msg` = warm / even / dry | warm: ask +3 / short 0 / long −2 / **none**; even: ask +2 / short 0 / **none**; dry: short 0 / **none** / double −2 |
+| day | K8-03a / b / c Обед у мамы | a: ate pies (`d4_ate_pies` or `d1_ate_pies`, not `d4_pies_held`), b: `d4_pies_held` or `d1_refused_pies`, c: otherwise | held (2 energy, conf −1) / **ate** (weight +2) |
+| day | K8-04 Мама присматривается | after lunch, at least 2 of 5 visible changes | **thanks**; mum's line by `d4_mom_talked`, else `d5_helped_zina`, else pies to take home |
+| evening | K8-05w / e / s / l Алина ответила | w: warm reply in the warm tone, e: warm reply in the even tone, s: short reply (warm or even), l: long reply (warm) | **ok** (one chat bubble) |
+| evening | K8-05d Алина в сети | dry tone and he wrote (short or double) | **ok** («была в сети… Ответа нет») |
+| evening | K8-06a / b / c Витя пишет | a: `d7_met` = ignore, b: `d7_thread` = song, c: otherwise | tell (conf −1) / **shrug** |
+| night | K8-07a / b Балкон | `smoke_free` 0 / ≥ 1 | hold (2 / 3 energy) / quarter (`d1_half`) / gum / **smoke** |
+| day–night | A8-run, A8-gym, A8-clean, A8-teeth, A8-couch, A-job | plus menu, as on Day 7 | — |
+| night | K8-sleep | | sleep / late (`d8_late`, −4 tomorrow) |
+
+Visible changes for K8-04 (the Day 7 count, as of Sunday): a clean shave today (`shaved` and not `d8_red`), `bought_shirt` or `bought_frame`, `d5_cleaned`, `d3_course`, `smoke_free` ≥ 1.
+
+Day ends on: her answer (K8-05w/e/s/l), «была в сети… Ответа нет» for the dry tone after he wrote (K8-05d), otherwise on Vitya and the balcony.
+
+Affinity on Day 8: −2 … +3 (K8-02 only). Chance can move more: keeping the stubble removes `shaved`, which costs the `no_beard` taste bonus (8) for a player who has that taste; this follows answer 3.
+
+Skipped day (neutral choices): K8-00 `up`, K8-01a/b `keep`, K8-02a/e/d `none`, K8-03a/b/c `ate`, K8-04 `thanks`, K8-05x `ok` (never reached: no message), K8-06a/b/c `shrug`, K8-07a/b `smoke`. Result: the stubble back, no message to her, the pies eaten, smoked, `affinity` 0.
+
+### Day 8 flags
+
+| Flag | Values | Set by | Read on |
+|---|---|---|---|
+| `d8_replied` | `warm` (answered with a question), `short`, `long` (warm: the long text; dry: the second message), `none` | K8-02 | 8 (K8-05), 12 |
+| `d8_answered` | true | K8-05 | 8 (K8-05 once, K8-sleep text) |
+| `d8_red` | true | K8-01 bare | 8 (K8-04 count), 14 (shave) |
+| `d8_lunch` | `held`, `ate` | K8-03 | 8 (K8-04), 11, 13 |
+| `d8_smoked`, `d8_no_smoke`, `d8_quarter` | true | K8-07 | 8 (K8-07 once), 9 (craving texts) |
+| `d8_late` | true | K8-sleep late | 9 (morning) |
+| `shaved` | set / removed | K8-01 | 8 (K8-04), taste `no_beard`, 14 |
+
+Earlier flags paid off on Day 8: `d7_late` (K8-00), `shaved`, `d7_red`, `d6_beard_hint`, item `cream_zina` (K8-01), `d7_msg` (K8-02, K8-05), `d1_ate_pies`, `d1_refused_pies`, `d4_ate_pies`, `d4_pies_held` (K8-03), `bought_shirt`, `bought_frame`, `d5_cleaned`, `d3_course`, `d4_mom_talked`, `d5_helped_zina` (K8-04), `d7_met`, `d7_thread` (K8-06), `d7_quarter`, `d1_half`, item `gum`, counter `smoke_free` (K8-07), `d2_gym`, `bought_gym_pass` (A8-gym). `d1_one_pie` is read only through `d4_*` (Day 4 sets those only for one-pie players).
+
+Differences from the A2 grid, for the authors:
+- Warm tone: the grid made «И тебе.» neutral, but a neutral choice must not write to her (the skipped day sends nothing). Warm got a fourth choice, «Пока не отвечать», as the neutral one; «И тебе.» stays at 0.
+- Dry tone: she does not answer on Day 8 even when he writes (K8-05d, «была в сети… Ответа нет»); the grid's «Прочитано» line appears in the morning, under his message.
+- K8-01 is shown only to players who shaved on Day 7; the others still have their stubble and get no card.
+- K8-04 is shown only with 2 or more visible changes; mum's `d4_mom_talked` / Day 5 line lives inside it, so a player with fewer changes does not hear it.
+- `d7_red` stays as Day 7 history; the new `d8_red` marks a red face on Sunday.
