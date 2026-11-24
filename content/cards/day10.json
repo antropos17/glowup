@@ -1,0 +1,1731 @@
+[
+  {
+    "id": "K10-late",
+    "kind": "story",
+    "title": "Проспал",
+    "when": {
+      "days": [
+        10,
+        10
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d9_late"
+        }
+      ]
+    },
+    "text": "Вчера до трёх ночи пересматривал старые фото класса. Вторник начался с третьего будильника, и сил сегодня меньше обычного.",
+    "choices": [
+      {
+        "id": "up",
+        "neutral": true,
+        "label": "Встать",
+        "outcomes": [
+          {
+            "text": "Встал к девяти. Бутерброд пришлось доедать на ходу."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K10-run",
+    "kind": "story",
+    "title": "Витя у подъезда",
+    "when": {
+      "days": [
+        10,
+        10
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d9_pass",
+          "eq": "vitya"
+        }
+      ]
+    },
+    "text": "Семь утра. Витя у подъезда, уже в кроссовках: «Ну что, бежим? Два круга по парку, не больше».",
+    "choices": [
+      {
+        "id": "run",
+        "label": "Бежать с Витей",
+        "cost": {
+          "energy": 4
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d9_burner"
+              }
+            ],
+            "text": "Два круга с Витей. После вчерашних капсул ноги ватные, но добежал. Витя: «Завтра в семь».",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -2
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d9_burner",
+                "set": false
+              }
+            ],
+            "text": "Два круга по парку. Витя всю дорогу рассказывал про свой мангал. Завтра в семь снова.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -2
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "skip",
+        "neutral": true,
+        "label": "Не сегодня",
+        "outcomes": [
+          {
+            "text": "Витя побежал один. «Завтра в семь, без отмазок»."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K10-01a",
+    "kind": "story",
+    "title": "Старый альбом",
+    "when": {
+      "days": [
+        10,
+        10
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d6_reply",
+          "eq": "joke"
+        }
+      ]
+    },
+    "text": "Мама достала с антресолей альбом. Выпускной 11-Б. На фото {hero} с микрофоном: глаза закрыты, рот открыт. Тот самый выпускной, где он пел.",
+    "choices": [
+      {
+        "id": "pick",
+        "neutral": true,
+        "label": "Взять это фото",
+        "outcomes": [
+          {
+            "text": "Фото вынуто из альбома. Мама: «Ты тогда весь зал перепел». Двадцать лет прошло, а помнят."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K10-01b",
+    "kind": "story",
+    "title": "Старый альбом",
+    "when": {
+      "days": [
+        10,
+        10
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "not": {
+            "flag": "d6_reply",
+            "eq": "joke"
+          }
+        }
+      ]
+    },
+    "text": "Мама достала с антресолей альбом. Выпускной 11-Б. {hero} во втором ряду: чёлка и пиджак на два размера больше.",
+    "choices": [
+      {
+        "id": "pick",
+        "neutral": true,
+        "label": "Взять это фото",
+        "outcomes": [
+          {
+            "text": "Фото вынуто из альбома. Мама: «Пиджак, между прочим, был отцовский»."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K10-02a",
+    "kind": "story",
+    "title": "Фото для Оксаны",
+    "when": {
+      "days": [
+        10,
+        10
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d9_oksana",
+          "eq": "promised"
+        },
+        {
+          "flag": "d10_photo",
+          "set": false
+        }
+      ]
+    },
+    "text": "Оксана в чате: «{hero}, ты обещал! Старое и свежее, до вечера». Старое фото уже лежит на столе. Свежее ещё надо сделать.",
+    "choices": [
+      {
+        "id": "both",
+        "label": "Отправить старое фото и свежее селфи",
+        "cost": {
+          "energy": 2
+        },
+        "requires": [
+          {
+            "flag": "d3_posted",
+            "set": false
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Двадцать минут у зеркала, восемь дублей, один нормальный. Оба фото ушли Оксане. Она ответила: «Ого!»",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "flag": "d10_photo",
+                "value": "both"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "both_easy",
+        "label": "Старое и свежее: одно фото ты уже выкладывал",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d3_posted"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Во второй раз проще: три дубля, и готово. Оба фото ушли Оксане. Она ответила: «Ого!»",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "flag": "d10_photo",
+                "value": "both"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "old",
+        "neutral": true,
+        "label": "Отправить только старое",
+        "outcomes": [
+          {
+            "text": "Оксане ушло только старое фото. Она ответила: «А свежее? Ладно, покажем, каким ты был».",
+            "effects": [
+              {
+                "flag": "d10_photo",
+                "value": "old"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "none",
+        "label": "Ничего не отправлять",
+        "outcomes": [
+          {
+            "text": "Обещал, но не прислал. Оксана поставила грустный смайлик и пошла дальше по списку.",
+            "effects": [
+              {
+                "flag": "d10_photo",
+                "value": "none"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K10-02b",
+    "kind": "story",
+    "title": "Фото для Оксаны",
+    "when": {
+      "days": [
+        10,
+        10
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d9_oksana",
+          "set": false
+        },
+        {
+          "flag": "d10_photo",
+          "set": false
+        }
+      ]
+    },
+    "text": "Оксана в чате: «Кто ещё не прислал фото для слайд-шоу? Старое и свежее, до вечера». Старое фото как раз лежит на столе.",
+    "choices": [
+      {
+        "id": "both",
+        "label": "Отправить старое фото и свежее селфи",
+        "cost": {
+          "energy": 2
+        },
+        "requires": [
+          {
+            "flag": "d3_posted",
+            "set": false
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Двадцать минут у зеркала, восемь дублей, один нормальный. Оба фото ушли Оксане. Она ответила: «Ого!»",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "flag": "d10_photo",
+                "value": "both"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "both_easy",
+        "label": "Старое и свежее: одно фото ты уже выкладывал",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d3_posted"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Во второй раз проще: три дубля, и готово. Оба фото ушли Оксане. Она ответила: «Ого!»",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "flag": "d10_photo",
+                "value": "both"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "old",
+        "neutral": true,
+        "label": "Отправить только старое",
+        "outcomes": [
+          {
+            "text": "Оксане ушло только старое фото. Она ответила: «А свежее? Ладно, покажем, каким ты был».",
+            "effects": [
+              {
+                "flag": "d10_photo",
+                "value": "old"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "none",
+        "label": "Ничего не отправлять",
+        "outcomes": [
+          {
+            "text": "Фото осталось на столе. Оксана пошла дальше по списку.",
+            "effects": [
+              {
+                "flag": "d10_photo",
+                "value": "none"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K10-03a",
+    "kind": "story",
+    "title": "Черновик слайд-шоу",
+    "when": {
+      "days": [
+        10,
+        10
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d10_photo",
+          "eq": "both"
+        },
+        {
+          "count": [
+            {
+              "flag": "shaved"
+            },
+            {
+              "any": [
+                {
+                  "flag": "bought_shirt"
+                },
+                {
+                  "flag": "bought_frame"
+                }
+              ]
+            },
+            {
+              "flag": "d5_cleaned"
+            },
+            {
+              "flag": "d3_course"
+            },
+            {
+              "counter": "smoke_free",
+              "gte": 1
+            },
+            {
+              "flag": "bought_haircut"
+            }
+          ],
+          "lte": 1
+        }
+      ]
+    },
+    "text": "Оксана выложила в чат класса черновик слайд-шоу «Тогда и сейчас». На одном из слайдов {hero}: тогда и сейчас. Под свежим фото лайк от {crush}.",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Закрыть чат",
+        "outcomes": [
+          {
+            "text": "Один лайк, а смотреть на него хочется долго.",
+            "why": "{crush} лайкнула свежее фото",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": 2
+              },
+              {
+                "chat": "status_d10_like"
+              },
+              {
+                "rumor": "slideshow"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K10-03b",
+    "kind": "story",
+    "title": "Черновик слайд-шоу",
+    "when": {
+      "days": [
+        10,
+        10
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d10_photo",
+          "eq": "both"
+        },
+        {
+          "count": [
+            {
+              "flag": "shaved"
+            },
+            {
+              "any": [
+                {
+                  "flag": "bought_shirt"
+                },
+                {
+                  "flag": "bought_frame"
+                }
+              ]
+            },
+            {
+              "flag": "d5_cleaned"
+            },
+            {
+              "flag": "d3_course"
+            },
+            {
+              "counter": "smoke_free",
+              "gte": 1
+            },
+            {
+              "flag": "bought_haircut"
+            }
+          ],
+          "gte": 2,
+          "lte": 3
+        }
+      ]
+    },
+    "text": "Оксана выложила в чат класса черновик слайд-шоу «Тогда и сейчас». На одном из слайдов {hero}: тогда и сейчас. Под свежим фото {crush} написала: «{hero}, ты?»",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Закрыть чат",
+        "outcomes": [
+          {
+            "text": "Два слова, а перечитаны раз десять.",
+            "why": "{crush} не сразу узнала",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": 3
+              },
+              {
+                "chat": "status_d10_you"
+              },
+              {
+                "rumor": "slideshow"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K10-03c",
+    "kind": "story",
+    "title": "Черновик слайд-шоу",
+    "when": {
+      "days": [
+        10,
+        10
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d10_photo",
+          "eq": "both"
+        },
+        {
+          "count": [
+            {
+              "flag": "shaved"
+            },
+            {
+              "any": [
+                {
+                  "flag": "bought_shirt"
+                },
+                {
+                  "flag": "bought_frame"
+                }
+              ]
+            },
+            {
+              "flag": "d5_cleaned"
+            },
+            {
+              "flag": "d3_course"
+            },
+            {
+              "counter": "smoke_free",
+              "gte": 1
+            },
+            {
+              "flag": "bought_haircut"
+            }
+          ],
+          "gte": 4
+        }
+      ]
+    },
+    "text": "Оксана выложила в чат класса черновик слайд-шоу «Тогда и сейчас». На одном из слайдов {hero}: тогда и сейчас. Под свежим фото огонёк от {crush}.",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Закрыть чат",
+        "outcomes": [
+          {
+            "text": "Огонёк от неё. Весь чат это видел, и {hero} тоже.",
+            "why": "{crush} поставила огонёк",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": 4
+              },
+              {
+                "chat": "status_d10_fire"
+              },
+              {
+                "rumor": "slideshow"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K10-03d",
+    "kind": "story",
+    "title": "Черновик слайд-шоу",
+    "when": {
+      "days": [
+        10,
+        10
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d10_photo",
+          "eq": "old"
+        }
+      ]
+    },
+    "text": "Оксана выложила в чат класса черновик слайд-шоу «Тогда и сейчас». {hero} там только на выпускном фото. Зато Витя прислал оба, и {crush} поставила ему лайк.",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Закрыть чат",
+        "outcomes": [
+          {
+            "text": "Витя доволен собой. Слайд-шоу пока черновик.",
+            "effects": [
+              {
+                "rumor": "slideshow"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K10-03e",
+    "kind": "story",
+    "title": "Черновик слайд-шоу",
+    "when": {
+      "days": [
+        10,
+        10
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d10_photo",
+          "eq": "none"
+        }
+      ]
+    },
+    "text": "Оксана выложила в чат класса черновик слайд-шоу «Тогда и сейчас». {hero} фото не прислал, слайда с ним нет. Зато Витя прислал оба, и {crush} поставила ему лайк.",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Закрыть чат",
+        "outcomes": [
+          {
+            "text": "Витя доволен собой. Слайд-шоу пока черновик.",
+            "effects": [
+              {
+                "rumor": "slideshow"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K10-04",
+    "kind": "story",
+    "title": "Витя пишет",
+    "when": {
+      "days": [
+        10,
+        10
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "any": [
+            {
+              "flag": "d6_reply",
+              "eq": "joke"
+            },
+            {
+              "flag": "d7_thread",
+              "eq": "song"
+            }
+          ]
+        }
+      ]
+    },
+    "text": "Витя в чате класса: «Предлагаю: на встрече поёт {hero}. Кто за?» Пять плюсиков за минуту.",
+    "choices": [
+      {
+        "id": "promise",
+        "label": "Пообещать одну песню",
+        "outcomes": [
+          {
+            "text": "«Одну. И не до конца». Оксана записала в план вечера: «Песня — {hero}».",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "flag": "d10_will_sing"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "laugh",
+        "neutral": true,
+        "label": "Посмеяться",
+        "outcomes": [
+          {
+            "text": "Чат посмеялся и перешёл к меню. Петь никто не обещал."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K10-05a",
+    "kind": "story",
+    "title": "Балкон",
+    "when": {
+      "days": [
+        10,
+        10
+      ],
+      "parts": [
+        "night"
+      ],
+      "requires": [
+        {
+          "flag": "d10_smoked",
+          "set": false
+        },
+        {
+          "flag": "d10_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d10_quarter",
+          "set": false
+        },
+        {
+          "counter": "smoke_free",
+          "lte": 0
+        }
+      ]
+    },
+    "text": "Ночь, балкон. Вторник позади. Пачка на подоконнике.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Не открывать пачку",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d9_quarter"
+              }
+            ],
+            "text": "Вчера была четверть, сегодня ни одной. Пачка осталась закрытой. Первый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d10_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d9_quarter",
+                "set": false
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Первый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d10_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Четыре затяжки, остальное в пепельницу. Дни без сигарет считаются с нуля: четверть тоже сигарета.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d10_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. Пачка осталась лежать, где лежала.",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d10_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d9_quarter"
+              }
+            ],
+            "text": "Вчера была четверть, сегодня целая. Счёт дней без табака так и стоит на нуле.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d10_smoked"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d9_quarter",
+                "set": false
+              }
+            ],
+            "text": "Обычная сигарета на балконе. Вторник как вторник.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d10_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K10-05b",
+    "kind": "story",
+    "title": "Балкон",
+    "when": {
+      "days": [
+        10,
+        10
+      ],
+      "parts": [
+        "night"
+      ],
+      "requires": [
+        {
+          "flag": "d10_smoked",
+          "set": false
+        },
+        {
+          "flag": "d10_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d10_quarter",
+          "set": false
+        },
+        {
+          "counter": "smoke_free",
+          "gte": 1
+        }
+      ]
+    },
+    "text": "Ночь, балкон. {hero} держится не первый день, но вечер был длинный, и рука сама тянется к пачке.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Не открывать пачку",
+        "cost": {
+          "energy": 3
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 1
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Второй день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d10_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 2
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Третий день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d10_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 3
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Четвёртый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d10_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 4
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Пятый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d10_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 5
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Шестой день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d10_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 6
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Седьмой день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d10_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 7
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Восьмой день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d10_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 8
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Девятый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d10_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 9
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Десятый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d10_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "not": {
+                  "any": [
+                    {
+                      "counter": "smoke_free",
+                      "eq": 1
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 2
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 3
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 4
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 5
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 6
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 7
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 8
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 9
+                    }
+                  ]
+                }
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Ещё один день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d10_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Четыре затяжки, остальное в пепельницу. Дни без сигарет считаются с нуля: четверть тоже сигарета.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d10_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. Пачка осталась лежать, где лежала.",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d10_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "text": "Сигарета на балконе. Вчера удержался, сегодня нет: счёт дней без табака снова с нуля.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d10_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A10-run",
+    "kind": "action",
+    "title": "Пробежка в парке",
+    "when": {
+      "days": [
+        10,
+        10
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Пробежка в парке",
+        "cost": {
+          "energy": 4
+        },
+        "outcomes": [
+          {
+            "weight": 3,
+            "hint": "получилось",
+            "text": "Три круга по парку. Во вторник тут тише, чем в понедельник.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          },
+          {
+            "weight": 1,
+            "hint": "закололо в боку",
+            "text": "На втором круге закололо в боку. Последний круг пришлось дойти пешком.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -1
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A10-gym",
+    "kind": "action",
+    "title": "Тренировка в зале",
+    "when": {
+      "days": [
+        10,
+        10
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ],
+      "requires": [
+        {
+          "any": [
+            {
+              "flag": "d9_pass",
+              "eq": "renewed"
+            },
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "bought_gym_pass",
+                    "set": false
+                  },
+                  {
+                    "item": "gym_pass"
+                  },
+                  {
+                    "flagAge": "bought_gym_pass",
+                    "lte": 0
+                  },
+                  {
+                    "flagAge": "bought_gym_pass",
+                    "gte": 8
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Тренировка в зале по абонементу",
+        "cost": {
+          "energy": 4
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d9_pass",
+                "eq": "renewed"
+              }
+            ],
+            "text": "Сорок минут на тренажёрах. Тренер добавил вес: «Растёшь».",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "not": {
+                  "flag": "d9_pass",
+                  "eq": "renewed"
+                }
+              }
+            ],
+            "text": "Сорок минут на тренажёрах. На выходе тренер сказал: «Приходи ещё».",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A10-clean",
+    "kind": "action",
+    "title": "Душ и чистая футболка",
+    "when": {
+      "days": [
+        10,
+        10
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Душ и чистая футболка",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Душ и чистая футболка. Вторник тоже начат прилично.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -5
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A10-teeth",
+    "kind": "action",
+    "title": "Почистить зубы по таймеру",
+    "when": {
+      "days": [
+        10,
+        10
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Почистить зубы две минуты по таймеру",
+        "cost": {
+          "energy": 1
+        },
+        "outcomes": [
+          {
+            "text": "Две минуты по таймеру. Улыбаться на фото уже не так страшно.",
+            "effects": [
+              {
+                "problem": "teeth",
+                "add": -1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A10-couch",
+    "kind": "action",
+    "title": "Полежать на диване",
+    "when": {
+      "days": [
+        10,
+        10
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Полежать на диване",
+        "outcomes": [
+          {
+            "text": "Полчаса на диване со старым альбомом. На фото все такие молодые.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K10-sleep",
+    "kind": "action",
+    "title": "Сон",
+    "when": {
+      "days": [
+        10,
+        10
+      ],
+      "parts": [
+        "night"
+      ]
+    },
+    "text": "Вторник почти закончился.",
+    "choices": [
+      {
+        "id": "sleep",
+        "label": "Лечь сейчас",
+        "outcomes": [
+          {
+            "text": "Свет выключен. Оксана в чате класса: «Осталось двадцать дней!» Завтра среда.",
+            "effects": [
+              {
+                "closeDay": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "late",
+        "label": "Посидеть в телефоне до трёх",
+        "outcomes": [
+          {
+            "text": "В три часа ночи черновик слайд-шоу пересмотрен по второму кругу. Завтра на четыре энергии меньше.",
+            "effects": [
+              {
+                "flag": "d10_late"
+              },
+              {
+                "tomorrow": [
+                  {
+                    "stat": "energy",
+                    "add": -4
+                  }
+                ]
+              },
+              {
+                "closeDay": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

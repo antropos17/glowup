@@ -160,8 +160,8 @@ describe('день 1', () => {
     const after = content.balance.contentDays + 1;
     const unwritten = { ...k1, id: `K${after}-test`, when: { ...k1.when, days: [after, after] as [number, number] } };
     const week2 = (ids: string[]) => ids.filter((id) => /^[KA](8|9)-/.test(id));
-    it('with Days 8 and 9 written, the demo still ends after Day 7 with «Продолжение следует» and never draws a later card', () => {
-      expect([content.balance.demoDays, content.balance.contentDays]).toEqual([7, 9]);
+    it('with Days 8–10 written, the demo still ends after Day 7 with «Продолжение следует» and never draws a later card', () => {
+      expect([content.balance.demoDays, content.balance.contentDays]).toEqual([7, 10]);
       expect(content.cards.filter((c) => /^[KA]9-/.test(c.id)).length).toBeGreaterThan(15);
       const s = syncClock(content, start(), at(9 + 24 * 9));
       expect([s.demoOver, s.day]).toEqual([true, 7]);
@@ -2062,8 +2062,167 @@ describe('день 6', () => {
           for (const f of ['d8_late', 'd2_gym', 'bought_gym_pass', 'd2_tea', 'd6_chat_spoke', 'd7_msg', 'd8_quarter', 'd1_half', 'd9_pass']) expect(read(f), f).toBe(true);
           for (const x of ['{"item":"gum"}', '"counter":"smoke_free"']) expect(json).toContain(x);
         });
-      });
+
+        describe('день 10', () => {
+          /** Day 10 is past the demo too: the clock may cross Day 9 only with the cut-off lifted to 10 */
+          const full10: Content = { ...content, balance: { ...content.balance, demoDays: 10 } };
+          /** quiet choices of Day 10: not today, the old photo only, close the chat, laugh, a cigarette */
+          const Q10: Record<string, string> = {
+            'K10-late': 'up', 'K10-run': 'skip', 'K10-01a': 'pick', 'K10-01b': 'pick', 'K10-02a': 'old', 'K10-02b': 'old',
+            'K10-03a': 'ok', 'K10-03b': 'ok', 'K10-03c': 'ok', 'K10-03d': 'ok', 'K10-03e': 'ok', 'K10-04': 'laugh', 'K10-05a': 'smoke', 'K10-05b': 'smoke',
+          };
+          /** the visible changes the slideshow counts, all off, so each test turns on what it needs */
+          const LOOKS = ['shaved', 'bought_shirt', 'bought_frame', 'd5_cleaned', 'd3_course', 'bought_haircut'];
+          /** the quiet Monday, then sleep or stay up */
+          let n9: GameState | undefined;
+          const night9 = () => (n9 ??= play9(morning9()));
+          const morning10 = (p: Patch = {}, sleep9 = 'sleep') =>
+            patch(syncClock(full10, pick(night9(), 'K9-sleep', sleep9), at(225)), { ...p, off: ['d6_reply', 'd7_thread', 'd3_posted', ...LOOKS, ...(p.off ?? [])] });
+          const play10 = (s: GameState, p: Record<string, string> = {}, hours = [229, 235, 239.5]) =>
+            hours.reduce((x, h) => story(syncClock(full10, x, at(h)), { ...Q10, ...p }), story(s, { ...Q10, ...p }));
+          const d10 = (s: GameState) => Object.keys(s.seen).filter((id) => id.startsWith('K10-'));
+          /** the day part of Tuesday after the quiet morning */
+          const day10 = (p: Patch = {}) => syncClock(full10, story(morning10(p), Q10), at(229));
+          /** the evening of Tuesday with the photo already sent */
+          const evening10 = (p: Patch = {}) => syncClock(full10, story(day10(p), Q10), at(235));
+          const flagged = (s: GameState, flag: string, day: number) => ({ ...s, flags: { ...s.flags, [flag]: { value: true, day } } });
+
+          it('Tuesday morning: overslept after a late Monday, Vitya at the door for his runs, the old album for everyone', () => {
+            const s = morning10();
+            expect([s.day, s.part, s.energy]).toEqual([10, 'morning', 10]);
+            expect(next(s)).toBe('K10-01b');
+            const late = morning10({}, 'late');
+            expect([next(late), late.energy]).toEqual(['K10-late', 10 - 4]);
+            const runner = morning10({ on: { d9_pass: 'vitya' } });
+            expect(next(runner)).toBe('K10-run');
+            for (const pass of ['renewed', 'none']) expect(next(morning10({ on: { d9_pass: pass } })), pass).toBe('K10-01b');
+            expect(ids(runner, 'K10-run')).toEqual(['run', 'skip']);
+            expect(card('K10-run').choices.find((c) => c.neutral)!.id).toBe('skip');
+            const ran = choose(content, runner, 'K10-run', 'run');
+            expect([runner.energy - ran.state.energy, ran.state.problems.weight - runner.problems.weight]).toEqual([4, -2]);
+            expect(ran.outcome.text).toContain('мангал');
+            expect(choose(content, morning10({ on: { d9_pass: 'vitya', d9_burner: true } }), 'K10-run', 'run').outcome.text).toContain('После вчерашних капсул');
+            expect(next(morning10({ on: { d6_reply: 'joke' } }))).toBe('K10-01a');
+            expect(card('K10-01a').text).toContain('с микрофоном');
+            for (const id of ['K10-01a', 'K10-01b']) expect(card(id).choices.map((c) => c.id), id).toEqual(['pick']);
+            expect(d10(play10(morning10({ on: { d9_pass: 'vitya', d6_reply: 'joke' } }, 'late'), {}, []))).toEqual(['K10-late', 'K10-run', 'K10-01a']);
+          });
+          it('the photo for Oksana: she reminds him of the promise; both photos cost 2 energy, 1 if he has posted one before; the old one is neutral', () => {
+            expect(next(day10())).toBe('K10-02b');
+            const promised = day10({ on: { d9_oksana: 'promised' } });
+            expect(next(promised)).toBe('K10-02a');
+            expect(card('K10-02a').text).toContain('{hero}, ты обещал!');
+            expect(ids(promised, 'K10-02a')).toEqual(['both', 'old', 'none']);
+            expect(ids(day10({ on: { d3_posted: true } }), 'K10-02b')).toEqual(['both_easy', 'old', 'none']);
+            const cost = (id: string) => card(id).choices.map((c) => [c.id, c.cost?.energy ?? 0]);
+            for (const id of ['K10-02a', 'K10-02b']) {
+              expect(cost(id), id).toEqual([['both', 2], ['both_easy', 1], ['old', 0], ['none', 0]]);
+              expect(card(id).choices.find((c) => c.neutral)!.id, id).toBe('old');
+            }
+            const s = day10();
+            const sent = pick(s, 'K10-02b', 'both');
+            expect([sent.flags.d10_photo.value, sent.problems.conf - s.problems.conf, s.energy - sent.energy]).toEqual(['both', -2, 2]);
+            expect(pick(s, 'K10-02b', 'old').flags.d10_photo.value).toBe('old');
+            expect(pick(s, 'K10-02b', 'none').flags.d10_photo.value).toBe('none');
+            expect(choose(content, promised, 'K10-02a', 'none').outcome.text).toContain('Обещал, но не прислал');
+          });
+          it('the slideshow draft: Alina reacts to a fresh photo by the number of visible changes, +2 / +3 / +4; without one she likes Vitya\'s', () => {
+            const sent = (p: Patch = {}, photo = 'both') => syncClock(full10, pick(day10(p), 'K10-02b', photo), at(235));
+            const cases: [Patch, string, string, number][] = [
+              [{}, 'K10-03a', 'status_d10_like', 2],
+              [{ on: { shaved: true, d3_course: true } }, 'K10-03b', 'status_d10_you', 3],
+              [{ on: { shaved: true, bought_shirt: true, d5_cleaned: true, bought_haircut: true } }, 'K10-03c', 'status_d10_fire', 4],
+              [{ on: { bought_frame: true, d5_cleaned: true, d3_course: true }, counters: { smoke_free: 2 } }, 'K10-03c', 'status_d10_fire', 4],
+            ];
+            for (const [p, id, key, add] of cases) {
+              const s = sent({ counters: { smoke_free: 0 }, ...p });
+              expect(next(s), id).toBe(id);
+              const r = pick(drawStory(content, s).state, id, 'ok');
+              const her = r.chat.filter((m) => m.day === 10 && m.from === 'crush');
+              expect([her.length, her[0].status, bank(key).map((x) => x.replaceAll('{hero}', 'Андрей')).includes(her[0].text)], id).toEqual([1, true, true]);
+              expect([r.affinity - s.affinity, r.rumors.filter((x) => x.day === 10).map((x) => x.id)], id).toEqual([add, ['slideshow']]);
+            }
+            expect(content.chat.status_d10_you.map((x) => x.includes('{hero}')).every(Boolean)).toBe(true);
+            for (const key of ['status_d10_like', 'status_d10_you', 'status_d10_fire']) expect(bank(key), key).toHaveLength(10);
+            for (const [photo, id] of [['old', 'K10-03d'], ['none', 'K10-03e']]) {
+              const s = sent({ on: { shaved: true, d3_course: true, d5_cleaned: true, bought_haircut: true } }, photo);
+              expect(next(s), photo).toBe(id);
+              const r = pick(s, id, 'ok');
+              expect([r.affinity - s.affinity, r.chat.filter((m) => m.day === 10).length, r.rumors.filter((x) => x.day === 10).map((x) => x.id)], photo).toEqual([0, 0, ['slideshow']]);
+            }
+            expect(card('K10-03d').text).toContain('{crush} поставила ему лайк');
+          });
+          it('karaoke: for the singer of Day 6 or the song of Day 7 Vitya puts him on stage; a promise sets d10_will_sing, laughing is neutral', () => {
+            const after = (p: Patch) => pick(evening10(p), 'K10-03d', 'ok');
+            expect(next(after({}))).toBeUndefined();                                    // the evening ends on the draft
+            for (const on of [{ d6_reply: "joke" }, { d7_thread: "song" }] as Record<string, string>[]) expect(next(after({ on })), JSON.stringify(on)).toBe('K10-04');
+            const s = after({ on: { d7_thread: 'song' } });
+            expect(card('K10-04').text).toContain('на встрече поёт {hero}');
+            expect(card('K10-04').choices.find((c) => c.neutral)!.id).toBe('laugh');
+            const sing = pick(s, 'K10-04', 'promise');
+            expect([!!sing.flags.d10_will_sing, sing.problems.conf - s.problems.conf]).toEqual([true, -1]);
+            expect(pick(s, 'K10-04', 'laugh').flags.d10_will_sing).toBeUndefined();
+          });
+          it('the night: the craving on the balcony, the plus actions with the gym only while a pass runs, and sleep; Day 10 ends the lifted demo on «Осталось двадцать дней»', () => {
+            const night = (p: Patch = {}) => patch(play10(morning10()), p);
+            const before = (p: Patch) => { const s = night(p); const flags = { ...s.flags }; for (const f of ['d10_smoked', 'd10_no_smoke', 'd10_quarter']) delete flags[f]; const seen = { ...s.seen }; delete seen['K10-05a']; return { ...s, flags, seen }; };
+            expect(next(before({ counters: { smoke_free: 0 } }))).toBe('K10-05a');
+            expect(next(before({ counters: { smoke_free: 9 } }))).toBe('K10-05b');
+            const cost = (id: string) => card(id).choices.map((c) => [c.id, c.cost?.energy ?? 0]);
+            expect(cost('K10-05a')).toEqual([['hold', 2], ['quarter', 1], ['gum', 0], ['smoke', 0]]);
+            expect(cost('K10-05b')).toEqual([['hold', 3], ['quarter', 1], ['gum', 0], ['smoke', 0]]);
+            const r = choose(content, before({ counters: { smoke_free: 9 } }), 'K10-05b', 'hold');
+            expect([r.outcome.text.includes('Десятый день без табака'), r.state.counters.smoke_free]).toEqual([true, 10]);
+            expect(choose(content, before({ counters: { smoke_free: 0 }, on: { d9_quarter: true } }), 'K10-05a', 'hold').outcome.text).toContain('Вчера была четверть');
+            const s = night();
+            expect(s.flags.d10_smoked).toBeDefined();
+            expect(actionsFor(content, s).map((c) => c.id)).toEqual(['A10-run', 'A10-clean', 'A10-teeth', 'A10-couch', 'K10-sleep']);
+            expect(actionsFor(content, day10()).map((c) => c.id)).toContain('A-job');
+            const gym = (x: GameState) => actionsFor(content, x).map((c) => c.id).includes('A10-gym');
+            expect(gym(night({ on: { d9_pass: 'renewed' } }))).toBe(true);
+            expect(gym(night({ on: { d2_gym: true } }))).toBe(false);                     // the Day 2 pass ended on Day 9
+            expect(gym(flagged(s, 'bought_gym_pass', 5))).toBe(true);                     // a shop pass used from Day 5 runs to Day 12
+            expect(gym(flagged(s, 'bought_gym_pass', 2))).toBe(false);
+            expect(gym(flagged(s, 'bought_gym_pass', 10))).toBe(false);
+            expect(gym({ ...flagged(s, 'bought_gym_pass', 5), items: { ...s.items, gym_pass: 1 } })).toBe(false);
+            expect(choose(content, night({ on: { d9_pass: 'renewed' } }), 'A10-gym', 'go').outcome.text).toContain('Растёшь');
+            expect(card('K10-sleep').choices.map((c) => c.id)).toEqual(['sleep', 'late']);
+            const slept = choose(content, s, 'K10-sleep', 'sleep');
+            expect(slept.outcome.text).toContain('«Осталось двадцать дней!»');
+            const end = syncClock(full10, slept.state, at(249));
+            expect([end.demoOver, end.day]).toEqual([true, 10]);
+            expect(end.summaries[9]).toMatchObject({ day: 10, played: true, gift: 'acne_patch' });
+            expect(content.days.find((d) => d.day === 10)).toMatchObject({ title: 'Тогда и сейчас', gift: 'acne_patch' });
+            const late = pick(s, 'K10-sleep', 'late');
+            expect(late.flags.d10_late).toBeDefined();
+            expect(syncClock(full, late, at(249)).energy).toBe(10 - 4);
+            for (const part of ['morning', 'day', 'evening', 'night']) expect(content.cards.some((c) => c.id.startsWith('K10-') && c.kind === 'story' && c.when!.parts!.includes(part as 'day')), part).toBe(true);
+          });
+          it('a fully skipped Day 10: the old photo only, no reaction from her, no song promised, smoked, and affinity 0', () => {
+            for (const promised of [true, false]) {
+              const s0 = morning10({ on: { d9_pass: 'vitya', d6_reply: 'joke', ...(promised ? { d9_oksana: 'promised' } : {}), shaved: true, d3_course: true, d5_cleaned: true, bought_haircut: true } });
+              const s = syncClock(full10, s0, at(249));
+              expect([s.demoOver, s.day]).toEqual([true, 10]);
+              expect([s.flags.d10_photo.value, s.flags.d10_will_sing, !!s.flags.d10_smoked]).toEqual(['old', undefined, true]);
+              expect(s.affinity - s0.affinity).toBe(0);
+              expect(s.chat.filter((m) => m.day === 10)).toEqual([]);
+              expect(s.summaries[9]).toMatchObject({ day: 10, played: false, coins: 0 });
+              expect(s.missed!.at(-1)!.items.map((i) => i.title)).toEqual(['Витя у подъезда', 'Старый альбом', 'Фото для Оксаны', 'Черновик слайд-шоу', 'Витя пишет', 'Балкон']);
+            }
+          });
+          it('every flag set on Day 10 is read on Day 10 or has a planned payoff, and every Day 9 flag left for Day 10 is checked', () => {
+            const mine = content.cards.filter((c) => /^[KA]10-/.test(c.id));
+            const json = JSON.stringify(mine.map((c) => [c.when?.requires, c.choices.map((ch) => [ch.requires, ch.outcomes.map((o) => o.if)])]));
+            const read = (f: string) => json.includes(`{"flag":"${f}"`) || json.includes(`{"flagAge":"${f}"`);
+            const set = new Set(mine.flatMap((c) => c.choices.flatMap((ch) => ch.outcomes.flatMap((o) => (o.effects ?? []).flatMap((e) => ('flag' in e ? [e.flag] : []))))));
+            // d10_late: the Day 11 morning; d10_will_sing: the reunion, days 15–30
+            expect([...set].filter((f) => !read(f)).sort()).toEqual(['d10_late', 'd10_will_sing']);
+            for (const f of ['d9_late', 'd9_pass', 'd9_burner', 'd9_oksana', 'd9_quarter', 'd6_reply', 'd7_thread', 'd3_posted', ...LOOKS, 'bought_gym_pass', 'd1_half']) expect(read(f), f).toBe(true);
+            for (const x of ['{"item":"gum"}', '{"item":"gym_pass"}', '"counter":"smoke_free"']) expect(json).toContain(x);
+          });
+        });
     });
+      });
   });
 });
 

@@ -416,3 +416,49 @@ Differences from the A2 grid, for the authors:
 - K9-04 does not queue K10-02: a Day 10 story card comes by schedule anyway. The promise sets `d9_oksana`.
 - The overslept card is named `K9-late` (the grid gives K9-00 to the last gym morning).
 - Alina's status line is a one-button card (K9-05w) because a status line in chat needs a card's `says`.
+
+## C3. Day 10 (written 2026-11-25, texts await the authors' review)
+
+File: `content/cards/day10.json` (20 cards: 14 story, 6 action). Also touched: `A-job` days 1–10 (`content/cards/side-jobs.json`), `content/days.json` day 10 («Тогда и сейчас», working title; gift `acne_patch`; teaser «Завтра среда. Тётя Зина ждёт на лестнице»), `content/chat.json` (`status_d10_like`, `status_d10_you`, `status_d10_fire`, 10 variants each), `content/rumors.json` (`slideshow`, the feed post), `content/balance.json` `contentDays` 10 (`demoDays` stays 7). Russian texts for review: `docs/review/day10-texts.md`. No change to days 1–9.
+
+Cards in display order:
+
+| Part | Card | Shown when | Choices (neutral in bold) |
+|---|---|---|---|
+| morning | K10-late Проспал | `d9_late` | **up** |
+| morning | K10-run Витя у подъезда | `d9_pass` = `vitya` | run (4 energy, weight −2; a heavier line with `d9_burner`) / **skip** |
+| morning | K10-01a / b Старый альбом | a: `d6_reply` = `joke` (he is the one singing), b: otherwise | **pick** |
+| day | K10-02a / b Фото для Оксаны | a: `d9_oksana` = `promised` («ты обещал!»), b: without | both (2 energy, conf −2) or, with `d3_posted`, both_easy (1 energy, conf −2) / **old** / none; sets `d10_photo` |
+| evening | K10-03a / b / c Черновик слайд-шоу | `d10_photo` = `both`; visible changes 0–1 / 2–3 / 4+ | **ok**: affinity +2 / +3 / +4, her reaction as a status line in her chat, rumor `slideshow` |
+| evening | K10-03d / e Черновик слайд-шоу | `d10_photo` = `old` / `none` | **ok**: she likes Vitya's photo, no change; rumor `slideshow` |
+| evening | K10-04 Витя пишет | `d6_reply` = `joke` or `d7_thread` = `song` | promise (conf −1, `d10_will_sing`) / **laugh** |
+| night | K10-05a / b Балкон | `smoke_free` 0 / ≥ 1 | hold (2 / 3 energy) / quarter (`d1_half`) / gum / **smoke** |
+| day–night | A10-run, A10-gym, A10-clean, A10-teeth, A10-couch, A-job | plus menu, as on Day 9 | — |
+| night | K10-sleep | | sleep (Oksana: «Осталось двадцать дней!») / late (`d10_late`, −4 tomorrow) |
+
+Visible changes for K10-03 (the Day 8 list plus the haircut, decision 39): `shaved`, `bought_shirt` or `bought_frame`, `d5_cleaned`, `d3_course`, `smoke_free` ≥ 1, `bought_haircut`.
+
+Day ends on: Oksana's «Осталось двадцать дней!» in the sleep line. Affinity on Day 10: 0 … +4 (K10-03a/b/c only).
+
+Skipped day (neutral choices): K10-late `up`, K10-run `skip`, K10-01a/b `pick`, K10-02a/b `old`, K10-03d `ok`, K10-04 `laugh`, K10-05a/b `smoke`. Result: no run, the old photo only, no reaction from her, no song promised, smoked, `affinity` 0.
+
+### Day 10 flags
+
+| Flag | Values | Set by | Read on |
+|---|---|---|---|
+| `d10_photo` | `both`, `old`, `none` | K10-02a/b | 10 (K10-03), 14 |
+| `d10_will_sing` | true | K10-04 promise | days 15–30 (reunion) |
+| `d10_smoked`, `d10_no_smoke`, `d10_quarter` | true | K10-05 | 10 (K10-05 once), 11 (craving texts) |
+| `d10_late` | true | K10-sleep late | 11 (morning) |
+
+Earlier flags paid off on Day 10: `d9_late` (K10-late), `d9_pass`, `d9_burner` (K10-run, A10-gym), `d6_reply` (K10-01, K10-04), `d9_oksana` (K10-02a/b), `d3_posted` (K10-02), `shaved`, `bought_shirt`, `bought_frame`, `d5_cleaned`, `d3_course`, `bought_haircut`, counter `smoke_free` (K10-03), `d7_thread` (K10-04), `d9_quarter`, `d1_half`, item `gum` (K10-05), `bought_gym_pass`, item `gym_pass` (A10-gym).
+
+Engine gap A5, as met on Day 10:
+- The gym action should show only while a pass runs. The Day 2 pass (`d2_gym`) ended on Day 9, so it no longer opens the gym. A10-gym reads `d9_pass` = `renewed`, or a shop pass bought on days 3–9 and already used (`flagAge` of `bought_gym_pass` 1–7, no `gym_pass` in the bag). A shop pass bought on Day 2 but used later, or used more than a day after purchase, is approximated by the purchase day; the proposed `{ modifier: 'gym' }` condition (C2) would make it exact.
+
+Differences from the A2 grid, for the authors:
+- Her reaction is not a crush message: the `alina_*` keys render as her bubbles, and only keys starting with `status_` render as a status line. The reaction happens in the class chat, so it goes to her chat as a status line (`status_d10_like`, `status_d10_you`, `status_d10_fire`) by the `chat` effect of the choice, not by the card's `says`: a card with `says` replaces its own text with her line, which would hide «Оксана выложила черновик».
+- «No fresh photo: she reacts to Vitya's» became two cards, K10-03d (old photo only) and K10-03e (nothing sent), because their texts differ.
+- K10-run is a story card on Day 10 read from `d9_pass`, not a queued quest step (Day 9 queues nothing). Days 11–14 should repeat it the same way.
+- `d9_burner` is read in K10-run only (a heavier line); the −2 energy itself already comes from the Day 9 `tomorrow` effect.
+- The midpoint timelapse frame needs no content: every closed day already takes a frame.
