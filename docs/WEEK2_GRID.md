@@ -1,0 +1,298 @@
+# Week 2 grid (days 8–14) and the demo cut-off
+
+Status: draft v1, 2026-11-24, for the authors to read and approve. Nothing here is written into `content/` or `src/` yet. After approval, days are written one at a time with `/write-day <n>`, which takes its per-day design from Part A.
+
+Labels used below:
+- **[A …]**: taken from the authors' docs; the citation names the file and section or decision row.
+- **[P]**: proposal of this document, not confirmed.
+
+Card names are English working titles. Russian in «quotes» is existing game text, quoted, not new text.
+
+Facts this grid relies on (checked in the files on 2026-11-24):
+- Fiction calendar: Day 6 ends on «Завтра суббота», so Day 7 is Saturday, Day 8 Sunday, Day 14 Saturday. The engine has no weekdays; only texts carry them.
+- Energy 10 a day from Day 4 on (`content/balance.json`). Day reward 50 coins (`dayCoins`).
+- The gym pass bought in K2-04 runs mornings 3–9 (modifier `gym`, 7 days, `content/items.json`); a pass applied on day X runs to morning X+7.
+- The doctor's course runs mornings 4–13 (`derm_course`, 10 days, `DEMO_SCRIPT.md` 5c).
+- The side job `A-job` is limited to days 1–7 (`content/cards/side-jobs.json` line 7). Actions are per-day copies (`A7-run`, `A7-gym`, …).
+- `shaved` is a plain flag; the taste `no_beard` reads it for +8 chance (`content/tastes.json`). Nothing removes it today.
+- Day 7 ends with her message in one of three tones, `d7_msg` = `warm` / `even` / `dry` (15% / 70% / 15% of random runs, `DECISIONS.md` row 40), no reply, and the teaser «До встречи выпускников 23 дня».
+
+---
+
+# Part A. Grid for days 8–14
+
+## A1. The arc of week 2
+
+| | Week 1 (days 1–7) | Week 2 (days 8–14) |
+|---|---|---|
+| Crush line | Ignoring, first like, first message, first talk, chance meeting [A `DESIGN.md` §3 "arc"] | From her one-way message to a light back-and-forth; ends with the first meeting that is not by chance [P] |
+| Hero line | Start of every fix: doctor, dentist, cream, clothes, first smoke-free days | The novelty wears off: the gym pass ends (day 9), the stubble grows back (day 8), the doctor's course ends (day 13). Keeping habits without help is the theme [P] |
+| Fixed beat | Day 1 | Day 10 [A `DESIGN.md` §5 "four fixed story beats: days 1, 10, 20 and 30", proposed there] |
+
+Where Day 7 leaves each kind of player, and where Day 14 takes them [P]:
+
+| Day 7 tone (`d7_msg`) | Week 2 for this player | Day 14 ends on |
+|---|---|---|
+| `warm` | She keeps writing; on Day 12 she asks for his help with the reunion music and names Saturday at «Зерно» | A planned coffee with her: the first meeting by agreement |
+| `even` | She answers when he writes; Day 12 is a short question, no plan | He decides himself to go to «Зерно»; she is there, a short talk |
+| `dry` | She answers briefly or not at all on bad days [A `DESIGN.md` §3 "on a bad day the crush may not write at all"]; the class chat (day 10) is the way back | He may go to «Зерно»; she is with a friend, a hello and two lines. Light, recoverable |
+
+Every day ends on one beat (the "Day ends on" line in A2). Day 14's teaser counts down: «До встречи выпускников 16 дней» is the pattern [P].
+
+## A2. Day by day
+
+Common to every day of week 2 [A `DEMO_SCRIPT.md` 5d–5g pattern]:
+- Plus actions (day, evening, night): park run 4, gym workout 4 (only while a pass runs), shower 2, teeth 1, sofa 0, side job 4 (needs `A-job` extended to day 14). Sleep closes the day; «Посидеть в телефоне до трёх» sets `d<n>_late` and −4 energy tomorrow.
+- One craving card a day, ordinary (`smoke_free` 0) or strong (1+), the four choices of K6-08a/b (hold 2/3 energy, quarter 1 with `d1_half`, gum, smoke as neutral) [A decision 13, `DEMO_SCRIPT.md` 5f]. Where it sits moves with the day's story.
+- Every story card has a free neutral choice; giving in to a temptation is free and neutral [A decision 13]. No purchase offer on a card that follows a failure [A decision 6, `DESIGN.md` §12].
+- She never names what changed [A `DESIGN.md` §3].
+- `affinity` steps stay inside decision 4: small beats ±2–3, a good reply +5 to +8, a bad one −5.
+
+### Day 8 (Sunday). The morning after («Утро после», working)
+Leans on: `weight`, `conf`, `care` (stubble). Chance: −2 … +3.
+
+| Part | Card | Situation and choice | Src |
+|---|---|---|---|
+| morning | K8-00 Overslept | Only if Day 7 gets a «до трёх» option; today K7-sleep has one button, so no card | [P] |
+| morning | K8-01 Stubble | For `shaved`: the stubble is back. Shave again (with `cream_zina`: clean; without: razor burn, as K7-01) or keep it (neutral: `unflag shaved`, `look.facial` = `stubble`). For `d7_red`: the redness is gone | [P] |
+| morning | K8-02a/e/d Her message, morning | He can answer her Day 7 evening message now. `warm`: plain answer with a question back +3, short «И тебе.» 0 (neutral), a long wall of text −2. `even`: question back +2 / short 0 / no answer 0 (neutral). `dry`: short answer 0 / leave it 0 (neutral) / a second message right after the first −2 | [P]; tone from [A decision 33] |
+| day | K8-03 Sunday lunch at mum's | Pies again. Payoffs: `d1_ate_pies`, `d4_ate_pies` («опять пять?»), `d1_refused_pies`, `d4_pies_held` (she bakes fewer). One pie and salad (2 energy, conf −1) or eat like everyone (weight +2, neutral). Mum's line reuses `d4_mom_talked` / Day 5 call | [P], pies pattern [A `DEMO_SCRIPT.md` §5] |
+| day | K8-04 Mum notices | One line, indirect, by visible changes (the Day 7 count): «Ты какой-то бодрый». No choice beyond «Спасибо, мам» | [P] |
+| evening | K8-05 Her answer | Only if he wrote on K8-02. One chat bubble by tone; a one-button card | [P] |
+| evening | K8-06 Vitya | «Ну что, видел её?» — knows from the class chat. Text by `d7_met` (`ignore`: «Говорят, ты от неё прятался»), `d7_thread` = `song`. Tell (conf −1) or «Да так» (neutral) | [P] |
+| night | Craving | Balcony, per common rule | [A] |
+
+Quest steps: none. Feed: none. Day ends on: her answer, or «Прочитано» for the dry tone without an answer [P].
+Coins: in 50 (+ job). Out: none.
+Skipped day: no shave (stubble back), no message to her, pies eaten, smoked. `affinity` 0.
+
+### Day 9 (Monday). The pass ran out («Абонемент кончился», working)
+Leans on: `weight`. Chance: 0.
+
+| Part | Card | Situation and choice | Src |
+|---|---|---|---|
+| morning | K9-00 Last gym morning | For a pass started on Day 2: «Абонемент: последний день». A line only | [P] |
+| morning | K9-01 Scales | A plateau: «Весы стоят третий день». Explains in one line that weight drops slower now. No choice | [P] |
+| day | K9-02 Renew or not | For pass holders: renew for 150 (the shop item, same effects) / Vitya's free morning runs (queues K10-run, 4 energy each, weight −2) / decide later (neutral). Without a pass: only Vitya's runs or «Потом» | [P]; pass from [A `DEMO_SCRIPT.md` 5a] |
+| day | K9-03 Feed: fat burner | Trap, echo of the Day 2 tea: «Жиросжигатель: минус 3 кг за неделю», 60 coins. Odds on the button: часто ничего, иногда −2 energy for two days. With `d2_tea`: «Как тот чай?» | [P]; traps [A `DESIGN.md` §4 "rumours … can harm"] |
+| evening | K9-04 Class chat: Oksana | Oksana announces a "then and now" slideshow for the reunion: one old photo and one fresh, by Tuesday evening. Queues K10-02. With `d6_chat_spoke` she tags him by name | [P]; pays `d6_chat_spoke` |
+| evening | Alina | Silent. No card. A status line «Алина была в сети» only for `warm` | [A `DESIGN.md` §3] |
+| night | Craving | Balcony | [A] |
+
+Quest steps: K10-run (Vitya's runs, days 10–14 mornings, if chosen). Feed: K9-03. Day ends on: Oksana's «Жду фото до завтра» [P].
+Coins: in 50 (+ job). Out: 150 (renew, optional), 60 (trap, optional).
+Skipped day: pass not renewed, trap scrolled, smoked.
+
+### Day 10 (Tuesday). Then and now («Тогда и сейчас», working). Fixed beat
+Leans on: `conf`, `style`. Chance: 0 … +4.
+
+| Part | Card | Situation and choice | Src |
+|---|---|---|---|
+| morning | K10-run Vitya at the park | Quest step if chosen on Day 9: run (4 energy, weight −2) or «Не сегодня» (neutral) | [P] |
+| morning | K10-01 The old album | Mum's album: the graduation photo. With `d6_reply` = `joke`: he is the one singing in it. Pick the photo (one button) | [P]; pays the invented past [A decision 26] |
+| day | K10-02 Send to Oksana | Old photo and a fresh selfie (2 energy, conf −2), old photo only (neutral), nothing. With `d3_posted`: «Одно фото ты уже выкладывал» (easier: 1 energy) | [P] |
+| evening | K10-03a/b/c Slideshow preview | Oksana posts the drafts in the class chat. Alina reacts by the number of visible changes (Day 7 list plus `bought_haircut`), only to a fresh photo: 0–1 a like, 2–3 «Андрей, ты?», 4+ a fire. `affinity` +2 / +3 / +4, reason line names the reaction. No fresh photo: she reacts to Vitya's, no change | [P]; count condition [A decision 39] |
+| evening | K10-04 Karaoke | For `d6_reply` = `joke` or `d7_thread` = `song`: Vitya writes «На встрече поёт Андрей». Laugh it off (neutral) or promise one song (conf −1, sets `d10_will_sing`) | [P] |
+| night | Craving | Balcony | [A] |
+
+Quest steps: K10-run. Chat: none private. Feed: the slideshow draft as a feed post. Day ends on: «Осталось двадцать дней» from Oksana [P].
+Coins: in 50 (+ job). Out: none.
+Skipped day: old photo only, no reaction from her, no song promised. A midpoint "now" frame for the timelapse is taken today [P; `DESIGN.md` §10 timelapse].
+
+### Day 11 (Wednesday). Aunt Zina's nephew («Племянник», working)
+Leans on: `care`, `style`. Chance: 0.
+
+| Part | Card | Situation and choice | Src |
+|---|---|---|---|
+| morning | K11-01a/b/c Aunt Zina on the stairs | `a` `d5_helped_zina`: she sends him to her nephew, a barber on Sadovaya. `b` `d5_cream` = `bought`: she heard he found the pharmacy, same tip. `c` `d5_no_help` without cream: a hello and «Зарос ты». The tip is the hidden solution | [P]; "obvious fails, hidden works" [A `DESIGN.md` §2] |
+| day | K11-02 Feed: salon «Люкс» | The obvious solution: a trendy cut for 150. Odds on the button: часто «не твоё» (care −6, style +4), иногда fine (care −6). The trap costs coins, unlike the Day 6 look | [P] |
+| day | K11-03 The barber | With the tip: the shop's `haircut` (care −6, conf −2, 2 energy) for 70, the shop price; without the tip: not offered on a card, the shop still sells it. Free: «Потом» | [P]; item [A `DEMO_SCRIPT.md` 5a] |
+| evening | K11-04 Pizza | A hungry evening: delivery promo. Cook (2 energy) or order (weight +2, 20 coins, neutral is "eat what's in the fridge", weight +1) | [P] |
+| evening | K11-05 Mum calls | Aunt Zina reported again; light, no stakes | [P] |
+| night | Craving | Balcony. With `smoke_free` ≥ 7: K11-06 «Неделя без сигарет», care −3, a line | [P] |
+
+Quest steps: none. Feed: K11-02. Day ends on: the mirror with the haircut, or Aunt Zina's «Ну, как знаешь» [P].
+Coins: in 50 (+ job). Out: 70 or 150, 20.
+Skipped day: no haircut, the fridge, smoked.
+
+### Day 12 (Thursday). The second cleaning («Вторая чистка», working)
+Leans on: `teeth`. Chance: −2 … +5.
+
+| Part | Card | Situation and choice | Src |
+|---|---|---|---|
+| morning | K12-01 Dentist | For `d5_dentist_later` or `d5_dentist_moved`: the free cleaning, 3 energy as an effect, teeth −15; −10 with `d1_soda_teeth`. Neutral is «go», as K5-04 | [A `DEMO_SCRIPT.md` 5e table: `d5_dentist_later` → 12; decision 18] |
+| morning | K12-01c Check-up | For `d5_cleaned`: a check-up line; with `d5_smoked` «Курили сразу после чистки?» | [P] |
+| day | K12-02 Dentist's porch | The craving right after the cleaning (the K5-05 rule: smoking takes back teeth +2). Others get the craving at night | [A K5-05a/b pattern] |
+| day | K12-03w/e Alina asks | `warm`: Oksana put her on the music; «Ты же у нас певец» (with `d6_reply` = `joke`) or «Посоветуешь что-нибудь?». Help with a list (+3, sets `d12_helped_music`, she names «в субботу в «Зерне» обсудим»), short answer +1, «Не силён в этом» 0 (neutral). `even`: one plain question about the reunion, +2 / 0. `dry`: no card | [P] |
+| evening | K12-04 Feed: whitening strips | Trap, echo of the soda: 40 coins. Odds: часто чувствительность (teeth +2 for two days), иногда ничего. With `d1_soda_teeth`: «Уже пробовал содой» | [P] |
+| night | Craving | Balcony (if not on the porch) | [A] |
+
+Quest steps: K12-01 needs no queue (gated by flags). Chat fork: K12-03. Day ends on: her last chat line, or «Прочитано» [P].
+Coins: in 50 (+ job). Out: 40 (trap, optional).
+Skipped day: the cleaning happens (as decision 18), a short neutral answer to her.
+
+### Day 13 (Friday). The course ends («Конец курса», working)
+Leans on: `skin`, `weight`, `care`. Chance: 0.
+
+| Part | Card | Situation and choice | Src |
+|---|---|---|---|
+| morning | K13-01 Last tube | `d3_course` with `flagAge` ≥ 10: the last morning of the course. The mirror line names nothing new; queues K13-02 | [P]; course [A decision 11] |
+| day | K13-02 Control visit | Galina Petrovna: «Дальше сами»: wash, don't squeeze. Go (2 energy, skin −2) or «Позвоню потом» (neutral). No product is sold here; «Сияние» stays in the shop | [P]; no upsell [A decision 6] |
+| evening | K13-03a/b/c Vitya's birthday | Cake and the grill again. `a` `d4_meat_held`, `b` `d4_feast`, `c` `d4_home` («в этот раз придёшь?»). Go: the cake (one slice 2 energy / the lot weight +2, neutral) and the craving moves here. Stay home: quiet evening, mum calls | [P]; [A decision 15 "the evening must not be empty"] |
+| evening | K13-04 Vitya's toast | For `d1_joked`: the door joke once more, now about the reunion. One button | [P] |
+| night | K13-05 Saturday tip | For a player without `d2_zerno_known` and without `d12_helped_music`: Vitya mentions «Алина, говорят, по субботам в «Зерне»». One button | [P] |
+| night | Craving | Balcony, unless it was at the birthday | [A] |
+
+Quest steps: K13-02. Day ends on: «Завтра суббота» [P].
+Coins: in 50 (+ job). Out: none on cards. Optional shop: «Сияние» 220 now that the course is over.
+Skipped day: the control visit postponed, stayed home, smoked.
+
+### Day 14 (Saturday). Not by chance («Не случайно», working)
+Leans on: `conf`, plus every visible change. Chance: −4 … +8.
+
+| Part | Card | Situation and choice | Src |
+|---|---|---|---|
+| morning | K14-01 Stubble | As K8-01 | [P] |
+| morning | K14-02 Half-time mirror | «Половина пути»: the full-body mirror, the day-1 frame beside today's. No choice | [P]; before/after [A `DESIGN.md` §8–10] |
+| day | K14-03 Go to «Зерно»? | `d12_helped_music`: she is waiting, one button «Пойти». Others: go (conf −1) or stay home (neutral). Unlike Day 7, this meeting can be skipped: it is not by chance | [P] |
+| day | K14-04 Craving at the door | As K7-02a/b | [A decision 30] |
+| day | K14-05p/c/f The table | `p` planned: she has a list of songs; one question from her, answers +3 / 0 / −2. `c` came on his own (`even`): she is with her laptop, a short talk, +2 / 0 / −2. `f` (`dry`): she is with a friend, a hello, +1 / 0 / −2. Her line by visible changes, Day 7 thresholds | [P]; thresholds [A decision 35] |
+| evening | K14-06 Her message | Only after the table: one bubble by how it went, one button | [P] |
+| night | Craving, sleep | As usual. Sleep teaser «До встречи выпускников 16 дней» | [P] |
+
+Quest steps: none. Chat: K14-06. Day ends on: her message, or a photo from «Зерно» in the feed without him (home) [P].
+Coins: in 50 (+ job). Out: none (each pays for their own coffee; no paying for her) [P; affinity cannot be bought, `DESIGN.md` §6].
+Skipped day: he stayed home, no message from her, `affinity` 0.
+
+## A3. Coins of week 2
+
+| | Amount | Notes |
+|---|---|---|
+| Coins on the morning of day 8 | ~150–400 | Day 6 median 310 before the market card (`DEMO_SCRIPT.md` 5f) minus a shirt or frame, plus days 6–7 rewards and jobs; estimate, to be measured |
+| Day rewards | 350 | 7 × 50 |
+| Side job | up to 210 | only if `A-job` is extended |
+| Sinks on cards | 150 pass, 70 haircut, 150 salon trap, 60 + 40 traps, 20 pizza | all optional |
+| Sinks in the shop | 220 «Сияние», 90 / 150 the unbought shirt or frame | |
+
+Goal kept from 5a: a week of income buys about half of what is on offer [A `DEMO_SCRIPT.md` 5a].
+
+## A4. Flags
+
+### Earlier flags paid off in week 2
+Every name below is set in `content/cards/day1.json`…`day7.json` (checked by grep on 2026-11-24).
+
+| Flag | Set on | Read before | Week 2 payoff |
+|---|---|---|---|
+| `d7_msg` | 7 | 7 | 8 (her message, reply), 9, 12, 14 (tone of the week) |
+| `d7_met` | 7 | 7 | 8 (Vitya: «ты от неё прятался» for `ignore`) |
+| `d7_thread` | 7 | 7 | 8, 10 (`song`: karaoke) |
+| `d7_line` | 7 | 7 | 14 (her line compares with Saturday last week) [P] |
+| `shaved`, `d7_red` | 7 | 7 | 8, 14 (stubble back, redness gone) |
+| `d6_reply` | 6 | 6, 7 | 10 (the singer in the photo), 12 («Ты же у нас певец») |
+| `d6_chat_spoke` | 6 | never | 9 (Oksana tags him) |
+| `d6_shirt`, `d6_frame` | 6 | never | 8 (mum notices, via the count), 10 (fresh photo) |
+| `d6_beard_hint` | 6 | 7 | 8, 14 (the stubble card quotes her) |
+| `d5_dentist_later` | 5 | never | 12 (the cleaning) |
+| `d5_dentist_moved` | 5 | never | 12 (the cleaning) |
+| `d5_cleaned`, `d5_smoked` | 5 | 5, 7 | 12 (check-up) |
+| `d5_helped_zina`, `d5_no_help`, `d5_cream` | 5 | 5, 7 / never | 11 (Aunt Zina's tip) |
+| `d4_mom_talked` | 4 | 5 | 8 (mum's lunch line) |
+| `d4_ate_pies`, `d4_pies_held` | 4 | 5 | 8 (pies again) |
+| `d4_meat_held`, `d4_feast`, `d4_home`, `d4_went` | 4 | 4, 6, 7 | 13 (Vitya's birthday) |
+| `d4_alina_reacted` | 4 | never | not paid on purpose: paid through `affinity` [A `DEMO_SCRIPT.md` 5e] |
+| `d3_course` | 3 | 4, 5, 7 | 13 (`flagAge` ≥ 10: the course ends) |
+| `d3_posted` | 3 | 3, 4 | 10 (one photo already posted) |
+| `d2_tea` | 2 | 3, 4 | 9 (the fat burner) [A `DEMO_SCRIPT.md` 5b: "Day 7 can recall the tea", not done on Day 7] |
+| `d2_gym`, `bought_gym_pass` | 2 | 3–7 | 9 (the pass ends) |
+| `d2_zerno_known`, `d2_wrote_zerno` | 2 | 7 | 13, 14 (Saturday at «Зерно») |
+| `d2_liked_photo` | 2 | never | not paid on purpose, as above |
+| `d1_ate_pies`, `d1_refused_pies`, `d1_one_pie` | 1 | 2, 4, 5 | 8 (Sunday lunch) |
+| `d1_soda_teeth` | 1 | 5 | 12 (the cleaning, the strips) |
+| `d1_joked` | 1 | 3, 4 | 13 (the toast) |
+| `d1_half` | 1 | 4–7 | 8–14 (the quarter on every craving) |
+| `d1_mom_knows` | 1 | never directly | not needed: Day 2 reads its absence |
+| counters `smoke_free`, `useful` | 1–7 | 3–7 | every craving; 11 (a week without cigarettes) |
+| item `cream_zina` | 5 | 7 | 8, 14 (shaving again) |
+
+### New flags planned in week 2 [P]
+
+| Flag | Values | Set by | Read on |
+|---|---|---|---|
+| `d8_replied` | `warm`, `short`, `long`, `none` | K8-02 | 8 (her answer), 12 |
+| `d8_lunch` | `held`, `ate` | K8-03 | 11 (mum's call), 13 |
+| `d8_late` … `d14_late` | true | sleep «до трёх» | next morning |
+| `d9_pass` | `renewed`, `vitya`, `none` | K9-02 | 9–14 (gym action, K10-run) |
+| `d9_burner` | true | K9-03 | 10–11 (energy line) |
+| `d10_photo` | `both`, `old`, `none` | K10-02 | 10 (her reaction), 14 |
+| `d10_will_sing` | true | K10-04 | days 15–30 (reunion) |
+| `d11_cut` | `barber`, `salon` | K11-02/03 | 14 (visible change), counts as `bought_haircut` |
+| `d12_cleaned` | `full`, `soda` | K12-01 | 14 (visible change: teeth) |
+| `d12_helped_music` | true | K12-03w | 13, 14 (the planned coffee) |
+| `d12_strips` | true | K12-04 | 13 (sensitivity line) |
+| `d13_course_done` | true | K13-02 | days 15+ (skin maintenance) |
+| `d13_bday` | `held`, `cake`, `home` | K13-03 | 14 (Vitya's line) |
+| `d14_met` | `planned`, `came`, `home` | K14-03 | 15+ |
+| counter `d14_scene` | −2 … +2 | K14-05 | 14 (her evening message), as `d7_scene` |
+
+## A5. Engine gaps for week 2
+
+| Gap | Where | Needed for |
+|---|---|---|
+| `Cond` cannot ask whether a modifier is running | `Cond` in `src/engine/types.ts`, `eligible()` in `src/engine/game.ts` | K9-00/K9-02 for a pass applied later than bought (already noted in `DEMO_SCRIPT.md` 5c–5f). `flagAge` covers the doctor's course, which starts the day `d3_course` is set |
+| A card shows one fresh crush bubble only | `says` handling in `openCard()`, `src/engine/game.ts` | K8-05, K12-03: two cards per exchange, as Day 5/6 did |
+| No private photo to the crush | no effect in `types.ts`, no UI | `DESIGN.md` §3 "the player can send photos"; Day 10 goes through the class chat instead |
+| A demo save cannot resume into the full game | `syncClock()` returns early on `demoOver` (`game.ts` 159) and the clock counts from `startedAt` | Decision 8 "progress is kept for the full version": see Part B |
+
+Content prerequisites (no engine work): extend `A-job` beyond day 7; per-day action copies `A8-*` … `A14-*`; `days.json` entries 8–14 and the Day 7 gift; stubble regrowth is content (`unflag shaved`, `look.facial` = `stubble`).
+
+## A6. Open questions for the authors
+
+1. Day 10 is a fixed story beat ("then and now" photo for the slideshow): yes or another event?
+2. On Day 8 Andrey may answer her Day 7 message (Day 7 had no reply by decision 33): OK?
+3. Stubble grows back and shaving becomes a choice again on days 8 and 14: OK, or once shaved, stays shaved?
+4. Week 2 ends on Day 14 with a planned coffee for the warm tone: too early, or right?
+5. A second small taste of Alina in week 2 (`DESIGN.md` §3 "few, tiny"): add one, and which?
+6. Vitya's free morning runs as the alternative to renewing the pass: OK?
+7. Three paid traps in one week (fat burner, salon, strips): keep all, or one?
+8. Day 7 gift for the full game: which item?
+9. Should Day 7 sleep get «Посидеть в телефоне до трёх» in the full game?
+10. A new shop item for week 2 (for example perfume for `care`): needed?
+
+---
+
+# Part B. Keeping the demo ending on Day 7
+
+## B1. How the cut-off works now
+
+| What | Where |
+|---|---|
+| The number | `content/balance.json` line 3, `"contentDays": 7`; type `Balance.contentDays`, `src/engine/types.ts` line 204 |
+| The cut-off | `syncClock()`, `src/engine/game.ts` line 172: when the clock ends a day and `s.day >= contentDays`, it sets `demoOver` and stops. The day is closed first (`closeDay`, line 170), so the Day 7 reward of 50 coins is paid and the gift from `days.json` would be too |
+| Frozen state | `game.ts` line 159 (`syncClock` returns early on `demoOver`) and line 306 (`over()`: no cards are drawn) |
+| End screen | `src/ui/Game.tsx` lines 164–179: missed summary, then the last day card, then `DemoEnd`; after «Закрыть» the game is read-only (`frozen`, line 179). Line 721 prints `DEMO_END.written(contentDays, days)`, text in `src/ui/ru.ts` lines 51–53 |
+| Check | `src/engine/validate.ts` line 110: `contentDays` ≤ `days` |
+| Content that assumes the end | `content/cards/day7.json` `K7-sleep`: one button, no «до трёх»; `content/days.json` lines 38–42: Day 7 has no gift; `content/cards/side-jobs.json` line 7: `A-job` days 1–7 |
+| Tests | `tests/engine.test.ts` line 19 (`full` with `contentDays` 30 to play past the end), lines 150–155 (end after the last written day), line 1432 (`contentDays` is 7), lines 1689 and 1697 (demo ends on Day 7) |
+
+Finding: `contentDays` already is the demo length, not "the days that are written". Cards for day 8+ (`when.days` [8, 8]) never become eligible because the game stops at line 172 first. Adding `day8.json` does not move the ending unless `contentDays` is changed. All cards are bundled regardless (`src/content/index.ts` line 14, `import.meta.glob`).
+
+## B2. Options
+
+| | Option 1. Keep `contentDays` as the cut-off | Option 2. Separate `demoDays` | Option 3. Demo build flag and a separate bundle |
+|---|---|---|---|
+| Idea | Change nothing; write days 8+ into `content/cards/`, keep `contentDays` 7; test week 2 with the `full` override | `balance.demoDays` (7) is the cut-off; `contentDays` means written days (14) and is checked against the cards | A build-time flag picks the demo or the full game; the demo bundle loads only `day1`–`day7` |
+| Files | none (docs only) | `src/engine/types.ts` (Balance), `content/balance.json`, `game.ts` line 172, `Game.tsx` line 721, `validate.ts` line 110 (+ `demoDays` ≤ `contentDays`, card days ≤ `contentDays`), a dev switch in `src/ui/Kit.tsx` or a URL flag to play past 7 | `vite.config.ts` (`define`), `src/content/index.ts` (glob by flag), `package.json` (`build:demo`, `build:full`), `balance` override per build |
+| `K7-sleep` | Unchanged | Unchanged for both; a «до трёх» choice needs a demo/full condition (an engine gap) or stays out | Can differ: the full bundle may carry its own copy |
+| Day 7 gift | If added, demo players see it on the Day 7 card, then it waits in the frozen bag | Same as option 1 | Demo `days.json` keeps no gift; full has one (two files to keep in step) |
+| Existing saves | Unaffected | Unaffected for the demo. Releasing the full game needs a resume step: clear `demoOver` when `day` < cut-off and rebase `startedAt`, otherwise the real-time clock auto-skips every day since the save | Same as option 2 |
+| Tests | No change; week 2 tests use `full` (line 19) | Lines 19, 150–155, 1432 switch to `demoDays`; new test: day 8 cards are unreachable in the demo | Every test file runs against one bundle; a second run for the other |
+| Bundle | Days 8+ ship inside the demo (595 kB today, days 5–7 are 70–105 kB of JSON each; estimate) | Same | Demo stays as small as today |
+| Size | 0 lines | ~20–30 lines + tests | ~60–100 lines, two artefacts to verify per change |
+
+## B3. Recommendation
+
+Option 2. One explicit number for the demo length stops the ending depending on an accident of naming, lets `check:content` verify that written days have content, and gives a switch to play week 2 on the dev page. It is small and touches only the files listed.
+
+Option 1 is enough to start `/write-day 8` today with no code change; Option 2 should land before week 2 is played on the dev page. Option 3 is worth it only if the demo bundle size or spoilers matter to the testers.
+
+Separate from all options: resuming a demo save in the full game (rebase `startedAt`) is an open engine task tied to decision 8.
