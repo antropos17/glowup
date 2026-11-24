@@ -33,6 +33,26 @@ const signed = (n: number) => (n > 0 ? `+${n}` : `−${Math.abs(n)}`);
 const REFERRAL_URL = 'https://example.com/30days-demo';
 const NOTIFY_KEY = 'glowup.notifyFull';
 
+/** How long a closing sheet stays on screen for its exit animation; matches `.scrim[data-leaving]` in game.css. */
+const LEAVE_MS = 160;
+/**
+ * Keeps the last non-empty value for LEAVE_MS after it becomes empty, so a sheet can play its exit
+ * instead of vanishing. Returns the value to render and whether it is leaving. Off under reduced motion.
+ */
+function useLeaving<T>(v: T | null | undefined): [T | null, boolean] {
+  const last = useRef<T | null>(null);
+  const [, done] = useState(0);
+  if (v) last.current = v;
+  else if (typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches) last.current = null;
+  const leaving = !v && last.current !== null;
+  useEffect(() => {
+    if (!leaving) return;
+    const t = setTimeout(() => { last.current = null; done((n) => n + 1); }, LEAVE_MS);
+    return () => clearTimeout(t);
+  }, [leaving]);
+  return [v || last.current, leaving];
+}
+
 export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; api?: (a: GameApi) => void }) {
   const fresh = (archetypeId = content.archetypes[0].id) =>
     newGame(content, { seed: (clock.now() % 2_147_483_647) | 0, now: clock.now(), tzOffsetMin: clock.tzOffsetMin(), archetypeId });
@@ -85,6 +105,10 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
   const chanceNote = state.flags.chance_note?.value;
   const dayClosed = state.closedDay === state.day;
   const unseen = state.summaries.find((d) => !d.seen);
+  // closed sheets stay a moment to play their exit; the day card and «Пока тебя не было» keep the state they showed
+  const [shown, leaving] = useLeaving(sheet);
+  const [dayShown, dayLeaving] = useLeaving(unseen ? { state, d: unseen } : null);
+  const [missedShown, missedLeaving] = useLeaving(state.missed?.length ? state : null);
 
   function onPlus() {
     const d = drawStory(content, state);
@@ -119,13 +143,13 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
 
   if (state.verdict) return <Verdict state={state} onRestart={() => restart(state.archetypeId)} />;
   // what the story did on its own comes first: before the day cards and before the demo end screen
-  const missed = state.missed?.length ? <Missed state={state} onClose={() => commit(markMissedSeen(state))} /> : null;
+  const missed = missedShown ? <Missed state={missedShown} leaving={missedLeaving} onClose={() => commit(markMissedSeen(state))} /> : null;
   if (state.demoOver && !endClosed && missed) return <div class="game">{missed}</div>;
-  const dayCard = unseen ? (
-    <div class="scrim">
+  const dayCard = dayShown ? (
+    <div class="scrim" data-leaving={dayLeaving ? '' : undefined}>
       <div class="sheet" role="dialog" aria-modal="true">
         <div class="grip" />
-        <DayCard state={state} d={unseen} onClose={() => { commit(markSummarySeen(state, unseen.day)); setSheet(null); }} />
+        <DayCard state={dayShown.state} d={dayShown.d} onClose={() => { commit(markSummarySeen(state, dayShown.d.day)); setSheet(null); }} />
       </div>
     </div>
   ) : null;
@@ -195,7 +219,7 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
         </div>
       </section>
 
-      <div class="screen" ref={scroller}>
+      <div class="screen" key={tab} ref={scroller}>
         {tab === 'journal' && <Journal state={state} />}
         {tab === 'mirror' && <Mirror state={state} />}
         {tab === 'chat' && <Chat state={state} />}
@@ -237,14 +261,14 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
         {frozen ? <span /> : <NavBtn tab="shop" cur={tab} set={setTab} icon="bag" label="Вещи" />}
       </nav>
 
-      {missed ?? (dayCard && !frozen ? dayCard : sheet && (
-        <div class="scrim" onClick={(e) => { if (e.target === e.currentTarget) setSheet(null); }}>
+      {missed ?? (dayCard && !frozen ? dayCard : shown && (
+        <div class="scrim" data-leaving={leaving ? '' : undefined} onClick={(e) => { if (e.target === e.currentTarget) setSheet(null); }}>
           <div class="sheet" role="dialog" aria-modal="true">
             <div class="grip" />
             {/* a new key remounts the content, so each card and outcome plays its entrance while the sheet stays */}
-            <Fragment key={sheet.kind === 'card' ? sheet.card.id : sheet.kind}>
-            {sheet.kind === 'card' && <CardSheet state={state} card={sheet.card} onChoose={onChoose} onClose={() => setSheet(null)} />}
-            {sheet.kind === 'menu' && (
+            <Fragment key={shown.kind === 'card' ? shown.card.id : shown.kind}>
+            {shown.kind === 'card' && <CardSheet state={state} card={shown.card} onChoose={onChoose} onClose={() => setSheet(null)} />}
+            {shown.kind === 'menu' && (
               <>
                 <div class="sheet-head">
                   <h2>Чем заняться</h2>
@@ -263,18 +287,18 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
                 </div>
               </>
             )}
-            {sheet.kind === 'result' && (
+            {shown.kind === 'result' && (
               <>
-                <div class="sheet-head"><h2>{sheet.title}</h2></div>
-                <p class="sheet-text">{sheet.text}</p>
-                {sheet.delta !== 0 && chanceShown && (
-                  <div class="chance-why" data-dir={sheet.delta > 0 ? 'up' : 'down'}><b>{signed(sheet.delta)}</b> к шансу: {sheet.why}</div>
+                <div class="sheet-head"><h2>{shown.title}</h2></div>
+                <p class="sheet-text">{shown.text}</p>
+                {shown.delta !== 0 && chanceShown && (
+                  <div class="chance-why" data-dir={shown.delta > 0 ? 'up' : 'down'}><b>{signed(shown.delta)}</b> к шансу: {shown.why}</div>
                 )}
                 <button class="primary" onClick={onPlus}>Что дальше</button>
                 <button class="quiet" onClick={() => setSheet(null)}>Вернуться в журнал</button>
               </>
             )}
-            {sheet.kind === 'rest' && (
+            {shown.kind === 'rest' && (
               <>
                 <div class="sheet-head"><h2>{dayClosed ? `День ${state.day} закончен` : `${PART_NAME[state.part]}: всё сделано`}</h2></div>
                 <p class="sheet-text">
@@ -294,9 +318,9 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
 }
 
 /** «Пока тебя не было»: skipped story cards and how each one resolved, grouped by day. Shown once. */
-function Missed({ state, onClose }: { state: GameState; onClose: () => void }) {
+function Missed({ state, leaving, onClose }: { state: GameState; leaving: boolean; onClose: () => void }) {
   return (
-    <div class="scrim">
+    <div class="scrim" data-leaving={leaving ? '' : undefined}>
       <div class="sheet missed" role="dialog" aria-modal="true">
         <div class="grip" />
         <div class="sheet-head"><h2>{MISSED.title}</h2></div>
@@ -359,7 +383,10 @@ function CardSheet({ state, card, onChoose, onClose }: { state: GameState; card:
     <>
       <div class="sheet-head">
         <h2>{fill(content, state, card.title)}</h2>
-        <button class="x" onClick={onClose} aria-label="Отложить"><Icon name="close" size={18} /></button>
+        {/* story cards come back later, so their close control says so in words; an action card just closes */}
+        {card.kind === 'action'
+          ? <button class="x" onClick={onClose} aria-label="Отложить"><Icon name="close" size={18} /></button>
+          : <button class="x later" onClick={onClose}><Icon name="clock" size={16} />Отложить</button>}
       </div>
       {speaker && <span class="speaker">{speaker}</span>}
       {text && <p class="sheet-text">{text}</p>}
