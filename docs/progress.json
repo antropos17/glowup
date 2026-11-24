@@ -4,11 +4,11 @@
   "verified": {
     "date": "2026-11-25",
     "typecheck": "pass",
-    "tests": "129/129",
-    "check_content": "pass: 185 cards (139 story, 46 action), 1 archetype, 1 crush",
+    "tests": "136/136",
+    "check_content": "pass: 203 cards (151 story, 52 action), 1 archetype, 1 crush",
     "economy": "demo economy in items.json, side-jobs.json, balance.json; see docs/DEMO_SCRIPT.md section 5a",
-    "build": "pass: dist/index.html 629 kB",
-    "playthrough": "Day 8: engine tests over the stubble (cream, bare, keep), her message in three tones with every reply, her evening answer by tone and reply, Sunday lunch by pie history, mum at two visible changes, Vitya by the Day 7 meeting, the balcony by the counter, sleep and staying up, a fully skipped Day 8 for each tone, the demo still ending on Day 7. Playwright (Chromium, dev page) with a generated Day 7 save: with ?full at 360x640 Day 7 sleep (new «до трёх» button shown), Day 8 morning to sleep on the warm tone with the keep-the-stubble branch, the end screen after Day 8; at 390x844 the Day 8 morning cards; without ?full at 360x640 the end screen after Day 7. Screenshots in X:/tmp/glowup-day8. Earlier Day 1-7 checks: see git history of this file"
+    "build": "pass: dist/index.html 649 kB",
+    "playthrough": "Day 9: engine tests over the Monday morning (overslept, last gym morning, the scales), renewing the pass or Vitya's runs, the fat burner odds and the Day 2 tea, Oksana's slideshow with and without the tag, the warm-tone status line, the balcony by the counter, sleep and staying up, a fully skipped Day 9, the demo still ending on Day 7. Playwright (Chromium) on the built dist/index.html (the dev server in the worktree cannot serve fonts from the main node_modules), saves skipped to Day 9 and patched by flags: with ?full at 360x640 and 390x844 every Day 9 card (K9-late, K9-00, K9-01, K9-02a/b, K9-03a/b, K9-05w, K9-04a/b, K9-06a/b, A9-gym, A-job, K9-sleep) with no clipped text and no console errors; without ?full at 360x640 the end screen «Продолжение следует» after Day 7. Screenshots in X:/tmp/glowup-day9. Day 8 checks: X:/tmp/glowup-day8 and git history of this file"
   },
   "demo_days": {
     "1": {
@@ -52,6 +52,11 @@
       "status": "written",
       "file": "content/cards/day8.json",
       "note": "written 2026-11-25; past the demo (demoDays 7, contentDays 8), playable on the dev page with ?full. Texts await the authors: docs/review/day8-texts.md. Design and flags: docs/WEEK2_GRID.md Part C1. Day 7 got two changes to confirm on review: K7-sleep «Посидеть в телефоне до трёх» (d7_late) and the Day 7 gift acne_patch"
+    },
+    "9": {
+      "status": "written",
+      "file": "content/cards/day9.json",
+      "note": "written 2026-11-25; past the demo (demoDays 7, contentDays 9), playable on the dev page with ?full. Texts await the authors: docs/review/day9-texts.md. Design and flags: docs/WEEK2_GRID.md Part C2. K9-00 and K9-02a read d2_gym (the Day 2 pass) because Cond cannot ask whether a modifier runs (A5); K10-run is not queued (Day 10 reads d9_pass)"
     }
   },
   "engine_todo": [
@@ -64,6 +69,7 @@
     "store purchase verification"
   ],
   "awaiting_authors": [
+    "Day 9: review the texts (docs/review/day9-texts.md), the working title «Абонемент кончился», the gift gum and the teaser; decide whether a shop pass used after Day 2 should also get K9-00/K9-02a (needs an engine condition, docs/WEEK2_GRID.md Part C2)",
     "Day 8: review the texts (docs/review/day8-texts.md), the working title «Утро после», the gift floss and the teaser; confirm the two Day 7 changes (K7-sleep «до трёх», Day 7 gift acne_patch) and the deviations listed in docs/WEEK2_GRID.md Part C1",
     "read the texts of days 2–7, Alina's lines first",
     "Day 7: review every Alina line of the day (docs/DEMO_SCRIPT.md section 5g)",
