@@ -718,7 +718,7 @@ function DemoEnd({ state, onClose, onRestart }: { state: GameState; onClose: () 
     <div class="game">
       <div class="screen verdict" style="padding-top:18px">
         <h2>{DEMO_END.title}</h2>
-        <p>{DEMO_END.written(content.balance.contentDays, content.balance.days)}</p>
+        <p>{DEMO_END.written(content.balance.demoDays, content.balance.days)}</p>
         <Timelapse frames={frames} />
         <h3>{DEMO_END.heroHead}</h3>
         <div class="rows">

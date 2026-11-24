@@ -267,7 +267,7 @@ Content prerequisites (no engine work): extend `A-job` beyond day 7; per-day act
 | What | Where |
 |---|---|
 | The number | `content/balance.json` line 3, `"contentDays": 7`; type `Balance.contentDays`, `src/engine/types.ts` line 204 |
-| The cut-off | `syncClock()`, `src/engine/game.ts` line 172: when the clock ends a day and `s.day >= contentDays`, it sets `demoOver` and stops. The day is closed first (`closeDay`, line 170), so the Day 7 reward of 50 coins is paid and the gift from `days.json` would be too |
+| The cut-off | `syncClock()`, `src/engine/game.ts` line 172: when the clock ends a day and `s.day >= contentDays` (`demoDays` since Option 2 landed), it sets `demoOver` and stops. The day is closed first (`closeDay`, line 170), so the Day 7 reward of 50 coins is paid and the gift from `days.json` would be too |
 | Frozen state | `game.ts` line 159 (`syncClock` returns early on `demoOver`) and line 306 (`over()`: no cards are drawn) |
 | End screen | `src/ui/Game.tsx` lines 164–179: missed summary, then the last day card, then `DemoEnd`; after «Закрыть» the game is read-only (`frozen`, line 179). Line 721 prints `DEMO_END.written(contentDays, days)`, text in `src/ui/ru.ts` lines 51–53 |
 | Check | `src/engine/validate.ts` line 110: `contentDays` ≤ `days` |

@@ -169,7 +169,7 @@ export function syncClock(c: Content, state: GameState, now: number): GameState 
       if (s.closedDay !== s.day) autoPlayStory(c, s);
       closeDay(c, s);
       if (s.day >= c.balance.days) return finalize(c, s);
-      if (s.day >= c.balance.contentDays) { s.demoOver = true; return s; }
+      if (s.day >= c.balance.demoDays) { s.demoOver = true; return s; }
       s.day += 1;
       s.part = 'morning';
       delete s.closedDay;

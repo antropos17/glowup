@@ -60,6 +60,7 @@ export function validateContent(c: Content): string[] {
     if (card.when?.days) {
       const [a, b] = card.when.days;
       if (a < 1 || b > c.balance.days || a > b) err(w, `дни ${a}–${b} вне игры`);
+      else if (b > c.balance.contentDays) err(w, `days ${a}–${b} go past the written days (contentDays ${c.balance.contentDays})`);
     }
     if (card.kind === 'story' && !card.when?.days && !card.when?.requires) err(w, 'сюжетной карточке нужны дни или условия, иначе она выпадет сразу');
     if (card.kind === 'quest' && !queued.has(card.id)) err(w, 'шаг квеста никто не ставит в очередь');
@@ -108,5 +109,6 @@ export function validateContent(c: Content): string[] {
     if (d.gift && !items.has(d.gift)) err(`день ${d.day}`, `нет предмета-подарка «${d.gift}»`);
   }
   if (c.balance.contentDays > c.balance.days) err('balance', 'написанных дней больше, чем дней в игре');
+  if (c.balance.demoDays > c.balance.contentDays) err('balance', 'demoDays is above contentDays: the demo would run past the written days');
   return errors;
 }
