@@ -67,3 +67,10 @@ export const DEMO_END = {
   frozenNote: 'Демо закончено: всё можно посмотреть, но играть дальше нельзя.',
   restOpen: 'Итоги демо',
 };
+
+/** Hero pick before a new game. */
+export const PICK = {
+  title: 'Выбери героя',
+  problems: 'Над чем работать',
+  start: 'Начать',
+};
