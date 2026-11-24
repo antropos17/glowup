@@ -157,22 +157,27 @@ describe('день 1', () => {
   });
   describe('demoDays cut-off', () => {
     const k1 = content.cards.find((c) => c.id === 'K1-01')!;
-    const day8 = { ...k1, id: 'K8-test', when: { ...k1.when, days: [8, 8] as [number, number] } };
-    const week2: Content = { ...content, balance: { ...content.balance, contentDays: 8 }, cards: [...content.cards, day8] };
+    const after = content.balance.contentDays + 1;
+    const unwritten = { ...k1, id: `K${after}-test`, when: { ...k1.when, days: [after, after] as [number, number] } };
+    const day8 = (ids: string[]) => ids.filter((id) => /^[KA]8-/.test(id));
     it('with Day 8 written, the demo still ends after Day 7 and never draws a Day 8 card', () => {
-      expect(validateContent(week2)).toEqual([]);
-      const s = syncClock(week2, start(), at(9 + 24 * 8));
+      expect([content.balance.demoDays, content.balance.contentDays]).toEqual([7, 8]);
+      expect(day8(content.cards.map((c) => c.id)).length).toBeGreaterThan(20);
+      const s = syncClock(content, start(), at(9 + 24 * 8));
       expect([s.demoOver, s.day]).toEqual([true, 7]);
-      expect('K8-test' in s.seen).toBe(false);
-      expect(drawStory(week2, s).card).toBeNull();
-      const lifted: Content = { ...week2, balance: { ...week2.balance, demoDays: 8 } };
-      expect('K8-test' in syncClock(lifted, start(), at(9 + 24 * 8)).seen).toBe(true);
+      expect(day8(Object.keys(s.seen))).toEqual([]);
+      expect(drawStory(content, s).card).toBeNull();
+      expect(actionsFor(content, s)).toEqual([]);
+      const lifted: Content = { ...content, balance: { ...content.balance, demoDays: 8 } };
+      const s8 = syncClock(lifted, start(), at(9 + 24 * 8));
+      expect([s8.demoOver, s8.day]).toEqual([true, 8]);
+      expect(day8(Object.keys(s8.seen))).toContain('K8-02e');
     });
     it('validation rejects demoDays above contentDays', () => {
-      expect(validateContent({ ...content, balance: { ...content.balance, demoDays: 8 } }).join('\n')).toContain('demoDays');
+      expect(validateContent({ ...content, balance: { ...content.balance, demoDays: after } }).join('\n')).toContain('demoDays');
     });
     it('validation rejects a card whose days go past contentDays', () => {
-      expect(validateContent({ ...content, cards: [...content.cards, day8] }).join('\n')).toContain('K8-test');
+      expect(validateContent({ ...content, cards: [...content.cards, unwritten] }).join('\n')).toContain(unwritten.id);
     });
   });
   it('одно зерно даёт одно и то же прохождение', () => {
@@ -1704,7 +1709,7 @@ describe('день 6', () => {
       expect(range).toEqual({ 'K7-05a': [-6, 10, 27], 'K7-05b': [-6, 10, 27], 'K7-05c': [-6, 10, 27], 'K7-05d': [-6, 10, 27] });
       best = best!;
       expect(actionsFor(content, best).map((c) => c.id)).toEqual(['A7-run', 'A7-clean', 'A7-teeth', 'A7-couch', 'K7-sleep']);
-      expect(card('K7-sleep').choices.map((c) => c.id)).toEqual(['sleep']);
+      expect(card('K7-sleep').choices.map((c) => c.id)).toEqual(['sleep', 'late']);
       const end = syncClock(content, pick(best, 'K7-sleep', 'sleep'), at(177));
       expect([end.demoOver, end.day]).toEqual([true, 7]);
       expect(end.summaries.map((x) => x.played)).toEqual([true, true, true, true, true, true, true]);
@@ -1732,6 +1737,188 @@ describe('день 6', () => {
       expect([...set].filter((f) => !read(f))).toEqual([]);
       for (const f of ['d6_late', 'd6_beard_hint', 'd1_half', 'd2_zerno_known', 'd2_wrote_zerno', 'bought_shirt', 'bought_frame', 'd6_trend', 'd5_cleaned', 'd3_course', 'd1_wrote_flirty', 'd6_reply', 'd4_went']) expect(read(f), f).toBe(true);
       for (const x of ['{"item":"cream_zina"}', '{"item":"gum"}', '"counter":"smoke_free"']) expect(json).toContain(x);
+    });
+
+    describe('день 8', () => {
+      /** Day 8 is past the demo: the clock may cross Day 7 only with the cut-off lifted */
+      const full8: Content = { ...content, balance: { ...content.balance, demoDays: 8 } };
+      /** quiet choices of Day 8: keep the stubble, no answer, eat like everyone, «Да так», a cigarette */
+      const Q8: Record<string, string> = {
+        'K8-00': 'up', 'K8-01a': 'keep', 'K8-01b': 'keep', 'K8-02a': 'none', 'K8-02e': 'none', 'K8-02d': 'none',
+        'K8-03a': 'ate', 'K8-03b': 'ate', 'K8-03c': 'ate', 'K8-04': 'thanks', 'K8-05w': 'ok', 'K8-05e': 'ok', 'K8-05s': 'ok', 'K8-05l': 'ok', 'K8-05d': 'ok',
+        'K8-06a': 'shrug', 'K8-06b': 'shrug', 'K8-06c': 'shrug', 'K8-07a': 'smoke', 'K8-07b': 'smoke',
+      };
+      /** the quiet Day 7 (no shave, a nod, the even tone), then sleep or stay up */
+      let n7: GameState | undefined;
+      const night7 = () => (n7 ??= play7(morning7()));
+      const PIES = ['d1_ate_pies', 'd1_refused_pies', 'd1_one_pie', 'd4_ate_pies', 'd4_pies_held'];
+      const morning8 = (p: Patch = {}, sleep7 = 'sleep') => patch(syncClock(full8, pick(night7(), 'K7-sleep', sleep7), at(177)), { ...p, off: [...PIES, ...(p.off ?? [])] });
+      const play = (s: GameState, p: Record<string, string>, hours: number[]) => hours.reduce((x, h) => story(syncClock(full8, x, at(h)), { ...Q8, ...p }), story(s, { ...Q8, ...p }));
+      /** from the morning to the night, story only */
+      const play8 = (s: GameState, p: Record<string, string> = {}) => play(s, p, [181, 187, 191.5]);
+      const d8 = (s: GameState) => Object.keys(s.seen).filter((id) => id.startsWith('K8-'));
+      const her8 = (s: GameState) => s.chat.filter((m) => m.day === 8 && m.from === 'crush');
+      const his8 = (s: GameState) => s.chat.filter((m) => m.day === 8 && m.from === 'hero').map((m) => m.text);
+
+      it('Day 7 now has «до трёх» and a gift; a late Saturday makes «Проспал» on Sunday with four energy less', () => {
+        expect(card('K7-sleep').choices.find((c) => c.id === 'late')!.label).toBe('Посидеть в телефоне до трёх');
+        const saturday = syncClock(full8, pick(night7(), 'K7-sleep', 'sleep'), at(177));
+        expect(saturday.summaries[6]).toMatchObject({ day: 7, played: true, gift: 'acne_patch' });
+        expect([saturday.day, saturday.energy]).toEqual([8, 10]);
+        const late = morning8({}, 'late');
+        expect(late.flags.d7_late).toBeDefined();
+        expect([late.day, late.energy]).toEqual([8, 10 - 4]);
+        expect(next(late)).toBe('K8-00');
+        expect(next(morning8())).toBe('K8-02e');                       // no shave yesterday, no stubble card
+        expect(content.days.find((d) => d.day === 7)).toMatchObject({ gift: 'acne_patch', teaser: 'До встречи выпускников 23 дня' });
+      });
+      it('the stubble is back for the shaved: the cream shaves clean, without it the face is red again, keeping it is neutral', () => {
+        const shaved = (p: Patch = {}) => morning8({ ...p, on: { shaved: true, ...p.on } });
+        expect(next(shaved())).toBe('K8-01b');
+        expect(next(shaved({ on: { d7_red: true } }))).toBe('K8-01a');
+        expect(card('K8-01a').text).toContain('Краснота за ночь сошла');
+        expect(ids(shaved({ items: { cream_zina: 1 } }), 'K8-01b')).toEqual(['cream', 'keep']);
+        expect(ids(shaved({ items: { cream_zina: 0 } }), 'K8-01b')).toEqual(['bare', 'keep']);
+        const clean = pick(shaved({ items: { cream_zina: 1 }, on: { d7_red: true } }), 'K8-01a', 'cream');
+        expect([!!clean.flags.shaved, !!clean.flags.d8_red, clean.lookPatch.facial, clean.lookPatch.razorBurn]).toEqual([true, false, 'none', false]);
+        const s0 = shaved({ items: { cream_zina: 0 } });
+        const red = pick(s0, 'K8-01b', 'bare');
+        expect([!!red.flags.shaved, !!red.flags.d8_red, red.lookPatch.facial, red.lookPatch.razorBurn]).toEqual([true, true, 'none', true]);
+        expect(red.problems.conf - s0.problems.conf).toBe(2);
+        const kept = choose(content, shaved({ on: { d6_beard_hint: true } }), 'K8-01b', 'keep');
+        expect([kept.state.flags.shaved, kept.state.lookPatch.facial, kept.state.lookPatch.razorBurn]).toEqual([undefined, 'stubble', false]);
+        expect(kept.outcome.text).toContain('«Борода вообще не моё»');
+        expect(choose(content, shaved({ off: ['d6_beard_hint'] }), 'K8-01b', 'keep').outcome.text).not.toContain('Борода');
+        expect(kept.state.affinity).toBe(s0.affinity);
+        expect(chance(content, kept.state)).toBeLessThanOrEqual(chance(content, shaved({ on: { d6_beard_hint: true } })));
+      });
+      it('her message by tone: warm +3 / 0 / −2 / no answer, even +2 / 0 / no answer, dry 0 / no answer / −2; no answer is neutral', () => {
+        const TONE: Record<string, [string, string[], number[]]> = {
+          warm: ['K8-02a', ['ask', 'short', 'long', 'none'], [3, 0, -2, 0]],
+          even: ['K8-02e', ['ask', 'short', 'none'], [2, 0, 0]],
+          dry: ['K8-02d', ['short', 'none', 'double'], [0, 0, -2]],
+        };
+        for (const [tone, [id, choices, deltas]] of Object.entries(TONE)) {
+          const s = morning8({ on: { d7_msg: tone } });
+          expect(next(s), tone).toBe(id);
+          expect(ids(s, id), tone).toEqual(choices);
+          expect(choices.map((c) => pick(s, id, c).affinity - s.affinity), tone).toEqual(deltas);
+          expect(card(id).choices.find((c) => c.neutral)!.id, tone).toBe('none');
+          const quiet = pick(s, id, 'none');
+          expect([quiet.flags.d8_replied.value, his8(quiet)], tone).toEqual(['none', []]);
+          for (const c of choices.filter((x) => x !== 'none')) {
+            const sent = pick(s, id, c);
+            expect(his8(sent)[0], `${tone} ${c}`).toBe(card(id).choices.find((x) => x.id === c)!.label);
+            expect(content.chat.status_reply_read, `${tone} ${c}`).toContain(her8(sent).at(-1)!.text);
+          }
+        }
+        expect(his8(pick(morning8({ on: { d7_msg: 'dry' } }), 'K8-02d', 'double'))).toHaveLength(2);
+      });
+      it('her answer in the evening follows the tone and the reply: one bubble, one button; no answer, no card', () => {
+        const ANSWER: [string, string, string | undefined, string | undefined][] = [
+          ['warm', 'ask', 'K8-05w', 'alina_d8_warm'], ['warm', 'short', 'K8-05s', 'alina_d8_short'], ['warm', 'long', 'K8-05l', 'alina_d8_long'], ['warm', 'none', undefined, undefined],
+          ['even', 'ask', 'K8-05e', 'alina_d8_even'], ['even', 'short', 'K8-05s', 'alina_d8_short'], ['even', 'none', undefined, undefined],
+          ['dry', 'short', 'K8-05d', 'status_online_no_reply'], ['dry', 'double', 'K8-05d', 'status_online_no_reply'], ['dry', 'none', undefined, undefined],
+        ];
+        const MSG: Record<string, string> = { warm: 'K8-02a', even: 'K8-02e', dry: 'K8-02d' };
+        for (const [tone, reply, answer, key] of ANSWER) {
+          const s = play8(morning8({ on: { d7_msg: tone } }), { [MSG[tone]]: reply });
+          const fives = d8(s).filter((id) => id.startsWith('K8-05'));
+          expect(fives, `${tone} ${reply}`).toEqual(answer ? [answer] : []);
+          if (key) expect(content.chat[key], `${tone} ${reply}`).toContain(her8(s).at(-1)!.text);
+          if (key === 'status_online_no_reply') expect(her8(s).at(-1)!.status, `${tone} ${reply}`).toBe(true);
+          expect(!!s.flags.d8_answered, `${tone} ${reply}`).toBe(!!answer);
+        }
+        for (const key of ['alina_d8_warm', 'alina_d8_even', 'alina_d8_short', 'alina_d8_long']) expect(bank(key), key).toHaveLength(10);
+        for (const id of ['K8-05w', 'K8-05e', 'K8-05s', 'K8-05l', 'K8-05d']) expect(card(id).choices.map((c) => c.id), id).toEqual(['ok']);
+      });
+      it('Sunday lunch: the pies by their history, one pie costs two energy; mum notices two visible changes', () => {
+        const lunch = (p: Patch = {}) => syncClock(full8, story(morning8(p), Q8), at(181));
+        expect(next(lunch())).toBe('K8-03c');
+        expect(next(lunch({ on: { d1_ate_pies: true } }))).toBe('K8-03a');
+        expect(next(lunch({ on: { d1_one_pie: true, d4_ate_pies: true } }))).toBe('K8-03a');
+        expect(next(lunch({ on: { d1_one_pie: true, d4_pies_held: true } }))).toBe('K8-03b');
+        expect(next(lunch({ on: { d1_refused_pies: true } }))).toBe('K8-03b');
+        expect(card('K8-03a').text).toContain('«Опять пять?»');
+        const s = lunch();
+        const held = pick(s, 'K8-03c', 'held');
+        expect([s.energy - held.energy, held.problems.conf - s.problems.conf, held.problems.weight - s.problems.weight, held.flags.d8_lunch.value]).toEqual([2, -1, 0, 'held']);
+        const ate = pick(s, 'K8-03c', 'ate');
+        expect([s.energy - ate.energy, ate.problems.weight - s.problems.weight, ate.flags.d8_lunch.value]).toEqual([0, 2, 'ate']);
+        expect(card('K8-03c').choices.find((c) => c.neutral)!.id).toBe('ate');
+        // mum: two of the visible changes, never named
+        expect(next(pick(lunch({ on: { d3_course: true } }), 'K8-03c', 'ate'))).toBeUndefined();
+        const two = pick(lunch({ on: { d3_course: true, d5_cleaned: 'full' } }), 'K8-03c', 'ate');
+        expect(next(two)).toBe('K8-04');
+        expect(next(pick(lunch({ on: { d3_course: true }, counters: { smoke_free: 2 } }), 'K8-03c', 'ate'))).toBe('K8-04');
+        expect(card('K8-04').text).toContain('«Ты какой-то бодрый»');
+        const line = (p: Patch) => choose(content, patch(two, p), 'K8-04', 'thanks').outcome.text;
+        expect(line({ on: { d4_mom_talked: true } })).toContain('звонить стал по-другому');
+        expect(line({ off: ['d4_mom_talked'], on: { d5_helped_zina: 'shelf' } })).toContain('Зина говорит');
+        expect(line({ off: ['d4_mom_talked', 'd5_helped_zina'] })).toContain('пирожков');
+      });
+      it('Vitya in the evening knows from the class chat: hiding, the song, or just the meeting; telling helps confidence', () => {
+        const vitya = (p: Patch) => d8(play8(morning8(p))).find((id) => id.startsWith('K8-06'));
+        expect(vitya({ on: { d7_met: 'ignore', d7_thread: 'song' } })).toBe('K8-06a');
+        expect(vitya({ on: { d7_met: 'hello', d7_thread: 'song' } })).toBe('K8-06b');
+        expect(vitya({ on: { d7_met: 'nod', d7_thread: 'reunion' } })).toBe('K8-06c');
+        expect(card('K8-06a').text).toContain('прятался');
+        const evening = syncClock(full8, play(morning8(), {}, [181]), at(187));
+        expect(next(evening)).toBe('K8-06c');
+        expect(ids(evening, 'K8-06c')).toEqual(['tell', 'shrug']);
+        expect(pick(evening, 'K8-06c', 'tell').problems.conf - evening.problems.conf).toBe(-1);
+        expect(pick(evening, 'K8-06c', 'shrug').problems).toEqual(evening.problems);
+      });
+      it('the night: the craving on the balcony, the plus actions, and sleep; staying up costs four and Day 8 ends the lifted demo', () => {
+        const night = (p: Patch = {}) => patch(play(morning8(), {}, [181, 187, 191.5]), p);
+        const before = (p: Patch) => { const s = night(p); const flags = { ...s.flags }; for (const f of ['d8_smoked', 'd8_no_smoke', 'd8_quarter']) delete flags[f]; const seen = { ...s.seen }; delete seen['K8-07a']; return { ...s, flags, seen }; };
+        expect(next(before({ counters: { smoke_free: 0 } }))).toBe('K8-07a');
+        expect(next(before({ counters: { smoke_free: 7 } }))).toBe('K8-07b');
+        const cost = (id: string) => card(id).choices.map((c) => [c.id, c.cost?.energy ?? 0]);
+        expect(cost('K8-07a')).toEqual([['hold', 2], ['quarter', 1], ['gum', 0], ['smoke', 0]]);
+        expect(cost('K8-07b')).toEqual([['hold', 3], ['quarter', 1], ['gum', 0], ['smoke', 0]]);
+        const r = choose(content, before({ counters: { smoke_free: 7 } }), 'K8-07b', 'hold');
+        expect([r.outcome.text.includes('Восьмой день без табака'), r.state.counters.smoke_free]).toEqual([true, 8]);
+        expect(choose(content, before({ counters: { smoke_free: 0 }, on: { d7_quarter: true } }), 'K8-07a', 'hold').outcome.text).toContain('Вчера была четверть');
+        const s = night();
+        expect(s.flags.d8_smoked).toBeDefined();
+        expect(actionsFor(content, s).map((c) => c.id)).toEqual(['A8-run', 'A8-clean', 'A8-teeth', 'A8-couch', 'K8-sleep']);
+        const day = syncClock(full8, story(morning8(), Q8), at(181));
+        expect(actionsFor(content, day).map((c) => c.id)).toContain('A-job');
+        expect(actionsFor(content, patch(day, { on: { d2_gym: true } })).map((c) => c.id)).toContain('A8-gym');
+        expect(card('K8-sleep').choices.map((c) => c.id)).toEqual(['sleep', 'late']);
+        const end = syncClock(full8, pick(s, 'K8-sleep', 'sleep'), at(201));
+        expect([end.demoOver, end.day]).toEqual([true, 8]);
+        expect(end.summaries[7]).toMatchObject({ day: 8, played: true, gift: 'floss' });
+        expect(content.days.find((d) => d.day === 8)).toMatchObject({ title: 'Утро после', gift: 'floss' });
+        const late = pick(s, 'K8-sleep', 'late');
+        expect(late.flags.d8_late).toBeDefined();
+        expect(syncClock(full, late, at(201)).energy).toBe(10 - 4);
+        for (const part of ['morning', 'day', 'evening', 'night']) expect(content.cards.some((c) => c.id.startsWith('K8-') && c.kind === 'story' && c.when!.parts!.includes(part as 'day')), part).toBe(true);
+      });
+      it('a fully skipped Day 8: the stubble back, no message, the pies eaten, smoked, and affinity 0', () => {
+        for (const tone of ['warm', 'even', 'dry']) {
+          const s0 = morning8({ on: { d7_msg: tone, shaved: true } });
+          const s = syncClock(full8, s0, at(201));
+          expect([s.demoOver, s.day], tone).toEqual([true, 8]);
+          expect([s.flags.shaved, s.lookPatch.facial], tone).toEqual([undefined, 'stubble']);
+          expect([s.flags.d8_replied.value, his8(s), s.flags.d8_answered], tone).toEqual(['none', [], undefined]);
+          expect([s.flags.d8_lunch.value, !!s.flags.d8_smoked], tone).toEqual(['ate', true]);
+          expect(s.affinity - s0.affinity, tone).toBe(0);
+          expect(s.summaries[7], tone).toMatchObject({ day: 8, played: false, coins: 0 });
+          expect(s.missed!.at(-1)!.items.map((i) => i.title), tone).toEqual(['Щетина', 'Её сообщение', 'Обед у мамы', 'Витя пишет', 'Балкон']);
+        }
+      });
+      it('every flag set on Day 8 is read on Day 8 or waits for the next morning, and every earlier flag of the grid is checked', () => {
+        const mine = content.cards.filter((c) => /^[KA]8-/.test(c.id));
+        // conditions only: card requirements, choice requirements and outcome `if`, not the effects that set the flags
+        const json = JSON.stringify(mine.map((c) => [c.when?.requires, c.choices.map((ch) => [ch.requires, ch.outcomes.map((o) => o.if)])]));
+        const read = (f: string) => json.includes(`{"flag":"${f}"`);
+        const set = new Set(mine.flatMap((c) => c.choices.flatMap((ch) => ch.outcomes.flatMap((o) => (o.effects ?? []).flatMap((e) => ('flag' in e ? [e.flag] : []))))));
+        expect([...set].filter((f) => !read(f))).toEqual(['d8_late']);           // the Day 9 morning, like d7_late on Day 8
+        for (const f of ['d7_late', 'shaved', 'd7_red', 'd6_beard_hint', 'd7_msg', 'd7_met', 'd7_thread', 'd1_ate_pies', 'd1_refused_pies', 'd4_ate_pies', 'd4_pies_held', 'd4_mom_talked', 'd5_helped_zina', 'bought_shirt', 'bought_frame', 'd5_cleaned', 'd3_course', 'd1_half', 'd7_quarter', 'd2_gym', 'bought_gym_pass']) expect(read(f), f).toBe(true);
+        for (const x of ['{"item":"cream_zina"}', '{"item":"gum"}', '"counter":"smoke_free"']) expect(json).toContain(x);
+      });
     });
   });
 });
