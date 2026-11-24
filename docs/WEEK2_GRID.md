@@ -368,3 +368,51 @@ Differences from the A2 grid, for the authors:
 - K8-01 is shown only to players who shaved on Day 7; the others still have their stubble and get no card.
 - K8-04 is shown only with 2 or more visible changes; mum's `d4_mom_talked` / Day 5 line lives inside it, so a player with fewer changes does not hear it.
 - `d7_red` stays as Day 7 history; the new `d8_red` marks a red face on Sunday.
+
+## C2. Day 9 (written 2026-11-25, texts await the authors' review)
+
+File: `content/cards/day9.json` (18 cards: 12 story, 6 action). Also touched: `A-job` days 1–9 (`content/cards/side-jobs.json`), `content/days.json` day 9 («Абонемент кончился», working title; gift `gum`; teaser «Завтра вторник. Фото «тогда и сейчас»»), `content/chat.json` (`status_online`, 10 variants, a status line without «Ответа нет»), `content/balance.json` `contentDays` 9 (`demoDays` stays 7). Russian texts for review: `docs/review/day9-texts.md`. No change to days 1–8.
+
+Cards in display order:
+
+| Part | Card | Shown when | Choices (neutral in bold) |
+|---|---|---|---|
+| morning | K9-late Проспал | `d8_late` | **up** |
+| morning | K9-00 Абонемент | `d2_gym` (see the gap below) | **ok** («Абонемент: последний день») |
+| morning | K9-01 Весы | always | **ok**; the line by `weight` ≤ 78 (slower now) or ≥ 79 (nothing moved it yet) |
+| day | K9-02a Продлить? | `d2_gym` | renew (150 coins, the shop pass modifier: 7 mornings from Day 10) / vitya / **later** |
+| day | K9-02b Витя предлагает | no `d2_gym` | vitya / **later** |
+| day | K9-03a / b Лента: жиросжигатель | a: `d2_tea` («Как тот чай?»), b: without | order (60 coins; часто: ничего, иногда: слабость, −2 energy tomorrow and the day after) / **scroll** |
+| evening | K9-05w Алина в сети | `d7_msg` = warm | **ok** (status line `status_online`) |
+| evening | K9-04a / b Чат класса | a: `d6_chat_spoke` (Oksana tags him), b: without | promise (conf −1) / **scroll** |
+| night | K9-06a / b Балкон | `smoke_free` 0 / ≥ 1 | hold (2 / 3 energy) / quarter (`d1_half`) / gum / **smoke** |
+| day–night | A9-run, A9-gym, A9-clean, A9-teeth, A9-couch, A-job | plus menu, as on Day 8 | — |
+| night | K9-sleep | | sleep / late (`d9_late`, −4 tomorrow) |
+
+Day ends on: Oksana's «Жду фото до завтра» (K9-04a/b), then the balcony. Affinity on Day 9: 0 (no card changes it).
+
+Skipped day (neutral choices): K9-late `up`, K9-00 `ok`, K9-01 `ok`, K9-02a/b `later`, K9-03a/b `scroll`, K9-05w `ok`, K9-04a/b `scroll`, K9-06a/b `smoke`. Result: the pass not renewed, no runs with Vitya, the burner scrolled, no promise to Oksana, smoked, `affinity` 0.
+
+### Day 9 flags
+
+| Flag | Values | Set by | Read on |
+|---|---|---|---|
+| `d9_pass` | `renewed`, `vitya`, `none` | K9-02a/b | 9 (A9-gym text), 10–14 (gym action, Vitya's runs) |
+| `d9_burner` | true | K9-03 order | 10–11 (energy line) |
+| `d9_oksana` | `promised` | K9-04 promise | 10 (K10-02, the photo) |
+| `d9_smoked`, `d9_no_smoke`, `d9_quarter` | true | K9-06 | 9 (K9-06 once), 10 (craving texts) |
+| `d9_late` | true | K9-sleep late | 10 (morning) |
+
+Earlier flags paid off on Day 9: `d8_late` (K9-late), `d2_gym` (K9-00, K9-02a/b), `d2_gym`, `bought_gym_pass`, item `gym_pass` (A9-gym, the Day 8 gate), `d2_tea` (K9-03a), `d7_msg` (K9-05w), `d6_chat_spoke` (K9-04a), `d8_quarter`, `d1_half`, item `gum`, counter `smoke_free` (K9-06).
+
+Engine gap A5, as met on Day 9:
+- The grid wants K9-00 and the renew choice of K9-02 for everyone whose gym pass ends on Day 9, and the gym action only while a pass runs.
+- `Cond` cannot ask whether the modifier `gym` is running or when it was applied. Only the Day 2 card fixes the start day: `d2_gym` is set on Day 2 by K2-04 (bought there, or the shop pass used there), so that pass runs mornings 3–9. A shop pass used on another day sets no flag at use; `bought_gym_pass` keeps only the purchase day.
+- Content-only variant used: K9-00 and K9-02a read `d2_gym`; everyone else gets K9-02b (Vitya or later). A player whose shop pass runs from another day gets no «последний день» line and can still buy a pass in the shop. A9-gym keeps the Day 8 gate (a pass ever used), so it shows on Day 9 for every past pass holder.
+- Proposed engine change, not made: a condition `{ modifier: 'gym', daysLeft?: Cmp }` read from `GameState.modifiers`, which would let K9-00 say «последний день» exactly and hide A9-gym once the pass is over.
+
+Differences from the A2 grid, for the authors:
+- K9-02 «Vitya's runs» does not queue K10-run: Day 10 is not written and a queue needs an existing card. The choice sets `d9_pass` = `vitya`; Day 10 should read it.
+- K9-04 does not queue K10-02: a Day 10 story card comes by schedule anyway. The promise sets `d9_oksana`.
+- The overslept card is named `K9-late` (the grid gives K9-00 to the last gym morning).
+- Alina's status line is a one-button card (K9-05w) because a status line in chat needs a card's `says`.

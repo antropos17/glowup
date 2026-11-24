@@ -1,0 +1,1471 @@
+[
+  {
+    "id": "K9-late",
+    "kind": "story",
+    "title": "Проспал",
+    "when": {
+      "days": [
+        9,
+        9
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d8_late"
+        }
+      ]
+    },
+    "text": "Вчера до трёх ночи сидел в телефоне. Понедельник начался с третьего будильника, и сил сегодня меньше обычного.",
+    "choices": [
+      {
+        "id": "up",
+        "neutral": true,
+        "label": "Встать",
+        "outcomes": [
+          {
+            "text": "Встал к девяти. Чай пришлось допивать на ходу."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K9-00",
+    "kind": "story",
+    "title": "Абонемент",
+    "when": {
+      "days": [
+        9,
+        9
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d2_gym"
+        }
+      ]
+    },
+    "text": "Сообщение из зала: «Абонемент: последний день». Сегодня ещё можно прийти, а дальше только с новым.",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Понятно",
+        "outcomes": [
+          {
+            "text": "Неделя в зале пролетела. Тренер, оказывается, уже знает его по имени."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K9-01",
+    "kind": "story",
+    "title": "Весы",
+    "when": {
+      "days": [
+        9,
+        9
+      ],
+      "parts": [
+        "morning"
+      ]
+    },
+    "text": "Весы стоят третий день. Та же цифра, что в субботу.",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Слезть с весов",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "problem": "weight",
+                "lte": 78
+              }
+            ],
+            "text": "Первые килограммы уходят быстро, дальше вес идёт медленнее. Это не откат, так у всех."
+          },
+          {
+            "if": [
+              {
+                "problem": "weight",
+                "gte": 79
+              }
+            ],
+            "text": "Цифра стоит, потому что её пока почти ничего не двигало. Пробежки и еда сделают своё, но не сразу."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K9-02a",
+    "kind": "story",
+    "title": "Продлить?",
+    "when": {
+      "days": [
+        9,
+        9
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d2_gym"
+        },
+        {
+          "flag": "d9_pass",
+          "set": false
+        }
+      ]
+    },
+    "text": "Абонемент кончается сегодня. На ресепшене предлагают продлить: ещё неделя за 150 монет. Витя в переписке: «Зачем платить? Бегай со мной по утрам, в семь у подъезда».",
+    "choices": [
+      {
+        "id": "renew",
+        "label": "Продлить абонемент за 150 монет",
+        "cost": {
+          "coins": 150
+        },
+        "outcomes": [
+          {
+            "text": "Продлил. Ещё неделя: +2 энергии каждое утро, форма понемногу растёт.",
+            "effects": [
+              {
+                "modifier": {
+                  "id": "gym",
+                  "title": "Абонемент в зал",
+                  "energyPerDay": 2,
+                  "days": 7,
+                  "daily": [
+                    {
+                      "problem": "weight",
+                      "add": -1
+                    }
+                  ]
+                }
+              },
+              {
+                "flag": "d9_pass",
+                "value": "renewed"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "vitya",
+        "label": "Бегать по утрам с Витей",
+        "outcomes": [
+          {
+            "text": "Витя: «Договорились. С завтрашнего утра. Опоздаешь — бегу один».",
+            "effects": [
+              {
+                "flag": "d9_pass",
+                "value": "vitya"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "later",
+        "neutral": true,
+        "label": "Решить потом",
+        "outcomes": [
+          {
+            "text": "Абонемент закончится сам. Решить можно и потом.",
+            "effects": [
+              {
+                "flag": "d9_pass",
+                "value": "none"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K9-02b",
+    "kind": "story",
+    "title": "Витя предлагает",
+    "when": {
+      "days": [
+        9,
+        9
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d2_gym",
+          "set": false
+        },
+        {
+          "flag": "d9_pass",
+          "set": false
+        }
+      ]
+    },
+    "text": "Витя пишет: «Слушай, зал — это деньги. Давай со мной по утрам бегать. Бесплатно, в семь у подъезда».",
+    "choices": [
+      {
+        "id": "vitya",
+        "label": "Согласиться",
+        "outcomes": [
+          {
+            "text": "Витя: «Договорились. С завтрашнего утра. Опоздаешь — бегу один».",
+            "effects": [
+              {
+                "flag": "d9_pass",
+                "value": "vitya"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "later",
+        "neutral": true,
+        "label": "Потом",
+        "outcomes": [
+          {
+            "text": "{hero} ответил «Посмотрим». Витя прислал стикер с ленивцем.",
+            "effects": [
+              {
+                "flag": "d9_pass",
+                "value": "none"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K9-03a",
+    "kind": "story",
+    "title": "Лента: жиросжигатель",
+    "speaker": "Лента",
+    "when": {
+      "days": [
+        9,
+        9
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d2_tea"
+        }
+      ]
+    },
+    "text": "Пост в ленте: «Жиросжигатель: минус 3 кг за неделю». Банка капсул, 60 монет. {hero} вспомнил чудо-чай: «Как тот чай?»",
+    "choices": [
+      {
+        "id": "order",
+        "label": "Заказать за 60 монет",
+        "cost": {
+          "coins": 60
+        },
+        "outcomes": [
+          {
+            "weight": 3,
+            "hint": "ничего",
+            "text": "Банка пришла к вечеру. Капсулы как капсулы: ни жара, ни минус трёх кило. Весы завтра покажут то же самое.",
+            "effects": [
+              {
+                "flag": "d9_burner"
+              }
+            ]
+          },
+          {
+            "weight": 1,
+            "hint": "слабость",
+            "text": "После двух капсул сердце стучит, руки дрожат. Остальное в мусор. Завтра и послезавтра на 2 энергии меньше.",
+            "effects": [
+              {
+                "flag": "d9_burner"
+              },
+              {
+                "tomorrow": [
+                  {
+                    "stat": "energy",
+                    "add": -2
+                  },
+                  {
+                    "tomorrow": [
+                      {
+                        "stat": "energy",
+                        "add": -2
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "scroll",
+        "neutral": true,
+        "label": "Пролистать",
+        "outcomes": [
+          {
+            "text": "Пост пролистан. Один такой чай уже был."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K9-03b",
+    "kind": "story",
+    "title": "Лента: жиросжигатель",
+    "speaker": "Лента",
+    "when": {
+      "days": [
+        9,
+        9
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d2_tea",
+          "set": false
+        }
+      ]
+    },
+    "text": "Пост в ленте: «Жиросжигатель: минус 3 кг за неделю». Банка капсул, 60 монет, доставка сегодня.",
+    "choices": [
+      {
+        "id": "order",
+        "label": "Заказать за 60 монет",
+        "cost": {
+          "coins": 60
+        },
+        "outcomes": [
+          {
+            "weight": 3,
+            "hint": "ничего",
+            "text": "Банка пришла к вечеру. Капсулы как капсулы: ни жара, ни минус трёх кило. Весы завтра покажут то же самое.",
+            "effects": [
+              {
+                "flag": "d9_burner"
+              }
+            ]
+          },
+          {
+            "weight": 1,
+            "hint": "слабость",
+            "text": "После двух капсул сердце стучит, руки дрожат. Остальное в мусор. Завтра и послезавтра на 2 энергии меньше.",
+            "effects": [
+              {
+                "flag": "d9_burner"
+              },
+              {
+                "tomorrow": [
+                  {
+                    "stat": "energy",
+                    "add": -2
+                  },
+                  {
+                    "tomorrow": [
+                      {
+                        "stat": "energy",
+                        "add": -2
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "scroll",
+        "neutral": true,
+        "label": "Пролистать",
+        "outcomes": [
+          {
+            "text": "Пост пролистан. Минус три кило за неделю бывает только в рекламе."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K9-05w",
+    "kind": "story",
+    "title": "{crush} в сети",
+    "says": "status_online",
+    "when": {
+      "days": [
+        9,
+        9
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d7_msg",
+          "eq": "warm"
+        }
+      ]
+    },
+    "text": "{crush} была в сети.",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Отложить телефон",
+        "outcomes": [
+          {
+            "text": "Сегодня она не пишет. Понедельник, у всех свои дела."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K9-04a",
+    "kind": "story",
+    "title": "Чат класса",
+    "when": {
+      "days": [
+        9,
+        9
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d6_chat_spoke"
+        }
+      ]
+    },
+    "text": "Чат «11-Б навсегда». Оксана: «Делаю на встречу слайд-шоу „Тогда и сейчас“. С каждого одно старое фото и одно свежее. Жду фото до завтра. {hero}, тебя тоже касается!»",
+    "choices": [
+      {
+        "id": "promise",
+        "label": "Ответить: «Пришлю»",
+        "outcomes": [
+          {
+            "text": "Оксана поставила сердечко. Осталось найти старое фото и сделать новое.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "flag": "d9_oksana",
+                "value": "promised"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "scroll",
+        "neutral": true,
+        "label": "Пролистать",
+        "outcomes": [
+          {
+            "text": "Чат пролистан. Оксана всё равно напомнит завтра."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K9-04b",
+    "kind": "story",
+    "title": "Чат класса",
+    "when": {
+      "days": [
+        9,
+        9
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d6_chat_spoke",
+          "set": false
+        }
+      ]
+    },
+    "text": "Чат «11-Б навсегда». Оксана: «Делаю на встречу слайд-шоу „Тогда и сейчас“. С каждого одно старое фото и одно свежее. Жду фото до завтра».",
+    "choices": [
+      {
+        "id": "promise",
+        "label": "Ответить: «Пришлю»",
+        "outcomes": [
+          {
+            "text": "Оксана поставила сердечко. Осталось найти старое фото и сделать новое.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "flag": "d9_oksana",
+                "value": "promised"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "scroll",
+        "neutral": true,
+        "label": "Пролистать",
+        "outcomes": [
+          {
+            "text": "Чат пролистан. Оксана всё равно напомнит завтра."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K9-06a",
+    "kind": "story",
+    "title": "Балкон",
+    "when": {
+      "days": [
+        9,
+        9
+      ],
+      "parts": [
+        "night"
+      ],
+      "requires": [
+        {
+          "flag": "d9_smoked",
+          "set": false
+        },
+        {
+          "flag": "d9_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d9_quarter",
+          "set": false
+        },
+        {
+          "counter": "smoke_free",
+          "lte": 0
+        }
+      ]
+    },
+    "text": "Ночь, балкон. Понедельник позади, впереди целая неделя. Пачка на подоконнике.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Не открывать пачку",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d8_quarter"
+              }
+            ],
+            "text": "Вчера была четверть, сегодня ни одной. Пачка осталась закрытой. Первый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d9_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d8_quarter",
+                "set": false
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Первый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d9_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Четыре затяжки, остальное в пепельницу. Дни без сигарет считаются с нуля: четверть тоже сигарета.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d9_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. Пачка осталась лежать, где лежала.",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d9_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d8_quarter"
+              }
+            ],
+            "text": "Вчера была четверть, сегодня целая. Счёт дней без табака так и стоит на нуле.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d9_smoked"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d8_quarter",
+                "set": false
+              }
+            ],
+            "text": "Обычная сигарета на балконе. Понедельник есть понедельник.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d9_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K9-06b",
+    "kind": "story",
+    "title": "Балкон",
+    "when": {
+      "days": [
+        9,
+        9
+      ],
+      "parts": [
+        "night"
+      ],
+      "requires": [
+        {
+          "flag": "d9_smoked",
+          "set": false
+        },
+        {
+          "flag": "d9_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d9_quarter",
+          "set": false
+        },
+        {
+          "counter": "smoke_free",
+          "gte": 1
+        }
+      ]
+    },
+    "text": "Ночь, балкон. {hero} держится не первый день, но после понедельника рука сама тянется к пачке.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Не открывать пачку",
+        "cost": {
+          "energy": 3
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 1
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Второй день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d9_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 2
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Третий день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d9_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 3
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Четвёртый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d9_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 4
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Пятый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d9_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 5
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Шестой день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d9_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 6
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Седьмой день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d9_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 7
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Восьмой день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d9_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 8
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Девятый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d9_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "not": {
+                  "any": [
+                    {
+                      "counter": "smoke_free",
+                      "eq": 1
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 2
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 3
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 4
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 5
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 6
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 7
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 8
+                    }
+                  ]
+                }
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе просто так. Ещё один день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d9_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Четыре затяжки, остальное в пепельницу. Дни без сигарет считаются с нуля: четверть тоже сигарета.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d9_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. Пачка осталась лежать, где лежала.",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d9_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "text": "Сигарета на балконе. Вчера удержался, сегодня нет: счёт дней без табака снова с нуля.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d9_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A9-run",
+    "kind": "action",
+    "title": "Пробежка в парке",
+    "when": {
+      "days": [
+        9,
+        9
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Пробежка в парке",
+        "cost": {
+          "energy": 4
+        },
+        "outcomes": [
+          {
+            "weight": 3,
+            "hint": "получилось",
+            "text": "Три круга по парку. В понедельник тут все, кто начинает новую жизнь с понедельника.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          },
+          {
+            "weight": 1,
+            "hint": "закололо в боку",
+            "text": "На втором круге закололо в боку. Последний круг пришлось дойти пешком.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -1
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A9-gym",
+    "kind": "action",
+    "title": "Тренировка в зале",
+    "when": {
+      "days": [
+        9,
+        9
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ],
+      "requires": [
+        {
+          "any": [
+            {
+              "flag": "d2_gym"
+            },
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "bought_gym_pass",
+                    "set": false
+                  },
+                  {
+                    "item": "gym_pass"
+                  },
+                  {
+                    "flagAge": "bought_gym_pass",
+                    "lte": 0
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Тренировка в зале по абонементу",
+        "cost": {
+          "energy": 4
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d9_pass",
+                "eq": "renewed"
+              }
+            ],
+            "text": "Сорок минут на тренажёрах. Продлённый абонемент отрабатывает каждую монету.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "not": {
+                  "flag": "d9_pass",
+                  "eq": "renewed"
+                }
+              }
+            ],
+            "text": "Сорок минут на тренажёрах. На выходе тренер сказал: «Приходи ещё».",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A9-clean",
+    "kind": "action",
+    "title": "Душ и чистая футболка",
+    "when": {
+      "days": [
+        9,
+        9
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Душ и чистая футболка",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Душ и чистая футболка. Понедельник начат прилично.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -5
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A9-teeth",
+    "kind": "action",
+    "title": "Почистить зубы по таймеру",
+    "when": {
+      "days": [
+        9,
+        9
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Почистить зубы две минуты по таймеру",
+        "cost": {
+          "energy": 1
+        },
+        "outcomes": [
+          {
+            "text": "Две минуты по таймеру. Привычка, кажется, приживается.",
+            "effects": [
+              {
+                "problem": "teeth",
+                "add": -1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A9-couch",
+    "kind": "action",
+    "title": "Полежать на диване",
+    "when": {
+      "days": [
+        9,
+        9
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Полежать на диване",
+        "outcomes": [
+          {
+            "text": "Полчаса на диване. После понедельника можно.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K9-sleep",
+    "kind": "action",
+    "title": "Сон",
+    "when": {
+      "days": [
+        9,
+        9
+      ],
+      "parts": [
+        "night"
+      ]
+    },
+    "text": "Понедельник почти закончился.",
+    "choices": [
+      {
+        "id": "sleep",
+        "label": "Лечь сейчас",
+        "outcomes": [
+          {
+            "text": "Свет выключен. Завтра вторник. До встречи выпускников двадцать один день.",
+            "effects": [
+              {
+                "closeDay": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "late",
+        "label": "Посидеть в телефоне до трёх",
+        "outcomes": [
+          {
+            "text": "В три часа ночи пересмотрены все старые фото класса. Завтра на четыре энергии меньше.",
+            "effects": [
+              {
+                "flag": "d9_late"
+              },
+              {
+                "tomorrow": [
+                  {
+                    "stat": "energy",
+                    "add": -4
+                  }
+                ]
+              },
+              {
+                "closeDay": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
