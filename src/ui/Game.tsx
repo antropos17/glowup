@@ -1,3 +1,4 @@
+import { Fragment } from 'preact';
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { content } from '../content';
 import { msToNextPart, type Clock } from '../engine/clock';
@@ -177,7 +178,7 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
               </div>
               <div class="meter" role="img" aria-label={`Шанс понравиться ${pct} процентов`}><i style={{ width: `${pct}%` }} /></div>
               {state.lastChange
-                ? <div class="chance-why" data-dir={state.lastChange.delta > 0 ? 'up' : 'down'}><b>{signed(state.lastChange.delta)}</b>: {state.lastChange.why}</div>
+                ? <div class="chance-why" key={state.history.length} data-dir={state.lastChange.delta > 0 ? 'up' : 'down'}><b>{signed(state.lastChange.delta)}</b>: {state.lastChange.why}</div>
                 : chanceNote ? <div class="chance-why">{String(chanceNote)}</div> : null}
             </div>
           ) : (
@@ -240,6 +241,8 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
         <div class="scrim" onClick={(e) => { if (e.target === e.currentTarget) setSheet(null); }}>
           <div class="sheet" role="dialog" aria-modal="true">
             <div class="grip" />
+            {/* a new key remounts the content, so each card and outcome plays its entrance while the sheet stays */}
+            <Fragment key={sheet.kind === 'card' ? sheet.card.id : sheet.kind}>
             {sheet.kind === 'card' && <CardSheet state={state} card={sheet.card} onChoose={onChoose} onClose={() => setSheet(null)} />}
             {sheet.kind === 'menu' && (
               <>
@@ -282,6 +285,7 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
                 <button class="quiet" onClick={() => setSheet(null)}>Вернуться в журнал</button>
               </>
             )}
+            </Fragment>
           </div>
         </div>
       ))}
@@ -293,7 +297,7 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
 function Missed({ state, onClose }: { state: GameState; onClose: () => void }) {
   return (
     <div class="scrim">
-      <div class="sheet" role="dialog" aria-modal="true">
+      <div class="sheet missed" role="dialog" aria-modal="true">
         <div class="grip" />
         <div class="sheet-head"><h2>{MISSED.title}</h2></div>
         <p class="row-sub">{MISSED.lead}</p>
