@@ -2,5 +2,6 @@ node_modules/
 dist/
 .claude/settings.local.json
 .playwright-mcp/
+.claude/*.local.json
 .claude/shots/
 .claude/worktrees/
