@@ -29,6 +29,9 @@
   --r-sheet: 26px;
   --shadow-sheet: 0 -10px 40px rgba(20, 35, 59, .18);
   --shadow-key: 0 3px 0 #0A7468;
+  /* mint for buttons with a white label: 4.83:1 with white (--mint gives 3.15:1), and its own darker key */
+  --mint-key: #0C8073;
+  --shadow-mint-key: 0 3px 0 #08594F;
   /* one easing for every entrance: quick start, soft landing */
   --ease: cubic-bezier(.2, .8, .2, 1);
   color-scheme: light;
@@ -196,7 +199,9 @@
 .grip { align-self: center; width: 40px; height: 4px; border-radius: 2px; background: var(--tile-line); }
 .sheet-head { display: flex; gap: 10px; align-items: flex-start; }
 .sheet-head h2 { flex: 1; font-family: var(--display); font-weight: 600; font-size: 18px; line-height: 1.25; text-wrap: balance; }
-.x { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--tile); flex: none; }
+.x { position: relative; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--tile); flex: none; }
+/* touch area 44×44 around the 34px circle, as .snd does */
+.x::before { content: ''; position: absolute; inset: -5px; }
 .speaker { align-self: flex-start; font-size: 12.5px; font-weight: 600; padding: 2px 10px; border-radius: var(--r-chip); background: var(--note); }
 .sheet-text { font-size: 16px; line-height: 1.5; }
 .choices { display: flex; flex-direction: column; gap: 8px; }
@@ -213,7 +218,7 @@
 .cost[data-kind='energy'] { color: var(--mint-deep); }
 .cost[data-kind='coins'] { color: #8A6400; }
 .why { font-size: 12.5px; color: var(--bad); margin: -4px 2px 0; }
-.game button.primary { width: 100%; padding: 14px; border-radius: var(--r-card); background: var(--mint); color: #fff; font-weight: 600; box-shadow: var(--shadow-key); }
+.game button.primary { width: 100%; padding: 14px; border-radius: var(--r-card); background: var(--mint-key); color: #fff; font-weight: 600; box-shadow: var(--shadow-mint-key); }
 .game button.primary:active { transform: translateY(3px); box-shadow: none; }
 .game button.quiet { width: 100%; padding: 12px; border-radius: var(--r-card); background: var(--tile); font-weight: 500; }
 .result-delta { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--ink-soft); }
@@ -228,7 +233,8 @@
 .mirror-lg::before { content: ''; position: absolute; top: 26px; left: 30px; width: 14px; height: 120px; border-radius: 7px; background: #fff; opacity: .55; transform: rotate(18deg); }
 .mirror-lg svg { width: 170px; height: auto; display: block; position: relative; }
 .seg { align-self: center; display: inline-flex; background: var(--paper); border-radius: var(--r-chip); padding: 3px; }
-.seg button { padding: 6px 16px; border-radius: var(--r-chip); font-size: 13.5px; font-weight: 500; color: var(--ink-soft); }
+/* chips wrap into touching rows, so the 44px touch height is the chip itself, not an overlapping halo */
+.seg button { min-height: 44px; padding: 6px 16px; border-radius: var(--r-chip); font-size: 13.5px; font-weight: 500; color: var(--ink-soft); }
 .seg button[aria-pressed='true'] { background: var(--ink); color: #fff; }
 .rows { display: flex; flex-direction: column; gap: 6px; }
 .row { display: flex; align-items: center; gap: 10px; background: var(--paper); border-radius: var(--r-card); padding: 10px 12px; }
@@ -262,9 +268,11 @@
 .item-head small { color: var(--ink-soft); font-size: 13px; }
 .limits { font-size: 13px; background: #FFF6DA; border-radius: 10px; padding: 8px 10px; }
 .item-actions { display: flex; gap: 8px; }
-.game button.buy { flex: 1; padding: 10px; border-radius: 12px; background: var(--ink); color: #fff; font-weight: 600; display: inline-flex; justify-content: center; align-items: center; gap: 6px; }
+.game button.buy { flex: 1; min-height: 44px; padding: 10px; border-radius: 12px; background: var(--ink); color: #fff; font-weight: 600; display: inline-flex; justify-content: center; align-items: center; gap: 6px; }
 .game button.buy[disabled] { background: var(--tile); color: var(--ink-soft); cursor: not-allowed; }
-.game button.use { flex: 1; padding: 10px; border-radius: 12px; background: var(--mint); color: #fff; font-weight: 600; }
+.game button.use { flex: 1; min-height: 44px; padding: 10px; border-radius: 12px; background: var(--mint-key); color: #fff; font-weight: 600; }
+/* a course already running: same muted look as a sold-out «Купить» (ink-soft on tile, 5.22:1) */
+.game button.use[disabled] { background: var(--tile); color: var(--ink-soft); cursor: not-allowed; }
 
 /* ---------- финал ---------- */
 .verdict { text-align: left; display: flex; flex-direction: column; gap: 12px; }
@@ -318,9 +326,11 @@
   .frame svg { width: 64px; }
   .delta-row { grid-template-columns: minmax(0, 1fr) auto 28px; gap: 6px; line-height: 1.2; padding: 1px 0; }
 }
-/* short phones: the day card fits the sheet without scrolling, so «Понятно» stays on screen */
-@media (max-height: 600px) {
-  .sheet:has(.daycard) { gap: 8px; }
+/* short phones: the day card fits the sheet without scrolling, so «Понятно» stays on screen.
+   Up to 700px high (360×640 included) the day card also takes the sheet's full height bar 24px:
+   with 88% its 5-bar day 6 ended «Понятно» at 693px on a 640px screen. */
+@media (max-height: 700px) {
+  .sheet:has(.daycard) { max-height: calc(100% - 24px); gap: 8px; }
   /* keep the bottom strip at 18px and the scroll end exact with the smaller gap */
   .sheet:has(.daycard)::before, .sheet:has(.daycard)::after { margin-top: -4px; }
   .sheet:has(.daycard) .rows { gap: 4px; }
@@ -347,8 +357,11 @@
 .end-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .game .end-actions button { min-height: 52px; padding: 8px 10px; border-radius: var(--r-card); background: var(--paper); box-shadow: 0 0 0 1.5px var(--ink); font-weight: 600; font-size: 14px; line-height: 1.2; text-wrap: balance; }
 .game .end-actions button:active { transform: translateY(2px); }
-.game button.end-restart { align-self: center; padding: 4px 10px; font-size: 13px; color: var(--ink-soft); text-decoration: underline; text-underline-offset: 3px; }
+/* the link stays small; its touch area grows to 44px into the 8px gap above and the 14px padding below */
+.game button.end-restart::before { content: ''; position: absolute; inset: -8px 0 -10px; }
+.game .frozen button::before { content: ''; position: absolute; inset: -7px 0; }
+.game button.end-restart { position: relative; align-self: center; padding: 4px 10px; font-size: 13px; color: var(--ink-soft); text-decoration: underline; text-underline-offset: 3px; }
 .frozen { flex: none; display: flex; align-items: center; gap: 10px; margin: 0 14px 8px; padding: 8px 10px 8px 12px; background: var(--paper); border-radius: var(--r-card); font-size: 13px; color: var(--ink-soft); line-height: 1.3; }
 .frozen span { flex: 1; min-width: 0; }
-.game .frozen button { flex: none; padding: 7px 12px; border-radius: 10px; background: var(--tile); color: var(--ink); font-weight: 600; font-size: 13px; }
+.game .frozen button { position: relative; flex: none; padding: 7px 12px; border-radius: 10px; background: var(--tile); color: var(--ink); font-weight: 600; font-size: 13px; }
 .game button.plus[disabled] { cursor: default; color: #fff; }
