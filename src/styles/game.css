@@ -12,8 +12,11 @@
   --mint: #10A391;        /* главное действие */
   --mint-deep: #0A7468;   /* мятный для текста на светлом */
   --rasp: #DE3A6B;        /* краш и шанс */
+  /* raspberry for small text and under white text: 5.49:1 with white, 4.72:1 on tile (--rasp gives 4.27 and 3.67) */
+  --rasp-deep: #C42A5A;
   --note: #FFD25E;        /* стикер: подсказки, монеты */
-  --good: #1B9A5E;
+  /* 5.51:1 on white, 4.73:1 on tile and on the green chip (was #1B9A5E: 3.60 and 3.10) */
+  --good: #13784A;
   --bad: #CF4040;
 
   --morning: #FFE3A8;
@@ -63,7 +66,7 @@
   display: flex; flex-direction: column; text-align: center;
   box-shadow: 0 2px 0 var(--tile-line);
 }
-.leaf-head { background: var(--rasp); color: #fff; font-size: 11px; font-weight: 600; padding: 2px 0 3px; }
+.leaf-head { background: var(--rasp-deep); color: #fff; font-size: 11px; font-weight: 600; padding: 2px 0 3px; }
 .leaf-num { font-family: var(--display); font-weight: 700; font-size: 28px; line-height: 1; padding: 7px 0 1px; }
 .leaf-of { font-size: 11px; color: var(--ink-soft); padding-bottom: 6px; }
 
@@ -150,7 +153,8 @@
   box-shadow: var(--shadow-key), 0 0 0 5px var(--paper); transition: transform .08s ease, box-shadow .08s ease;
 }
 .game button.plus:active { transform: translateY(3px); box-shadow: 0 0 0 #0A7468, 0 0 0 5px var(--paper); }
-.game button.plus[data-rest] { background: #B9CBD0; box-shadow: 0 3px 0 #94A9AF, 0 0 0 5px var(--paper); }
+/* the resting «+» still opens the "day is over" sheet: its icon is ink-soft on the grey, 3.62:1 (white gave 1.68) */
+.game button.plus[data-rest] { color: var(--ink-soft); background: #B9CBD0; box-shadow: 0 3px 0 #94A9AF, 0 0 0 5px var(--paper); }
 
 /* ---------- лист с карточкой ---------- */
 .scrim { position: absolute; inset: 0; background: rgba(20, 35, 59, .42); display: flex; align-items: flex-end; z-index: 5; animation: fade .18s ease; }
@@ -202,6 +206,8 @@
 .x { position: relative; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--tile); flex: none; }
 /* touch area 44×44 around the 34px circle, as .snd does */
 .x::before { content: ''; position: absolute; inset: -5px; }
+/* on story cards the control is a «Отложить» pill with a clock: the card comes back, it is not dismissed */
+.x.later { width: auto; display: inline-flex; gap: 5px; padding: 0 12px 0 9px; border-radius: var(--r-chip); font-size: 13px; font-weight: 600; white-space: nowrap; }
 .speaker { align-self: flex-start; font-size: 12.5px; font-weight: 600; padding: 2px 10px; border-radius: var(--r-chip); background: var(--note); }
 .sheet-text { font-size: 16px; line-height: 1.5; }
 .choices { display: flex; flex-direction: column; gap: 8px; }
@@ -252,7 +258,7 @@
 .who small { color: var(--ink-soft); font-size: 13px; }
 .bubble { max-width: 82%; padding: 9px 13px; border-radius: 18px; font-size: 15px; }
 .bubble[data-from='crush'] { align-self: flex-start; background: var(--paper); border-bottom-left-radius: 5px; }
-.bubble[data-from='hero'] { align-self: flex-end; background: var(--rasp); color: #fff; border-bottom-right-radius: 5px; }
+.bubble[data-from='hero'] { align-self: flex-end; background: var(--rasp-deep); color: #fff; border-bottom-right-radius: 5px; }
 .bubble[data-quiet] { background: transparent; color: var(--ink-soft); font-size: 13px; padding: 0 4px; }
 
 /* ---------- слухи и блокнот ---------- */
@@ -286,10 +292,19 @@
 @keyframes rise { from { transform: translateY(32px) scale(.98); opacity: 0; } }
 @keyframes enter { from { transform: translateY(8px); opacity: 0; } }
 @keyframes pop { from { transform: scale(.94); opacity: 0; } }
+@keyframes fade-out { to { opacity: 0; } }
+@keyframes sink { to { transform: translateY(24px) scale(.98); opacity: 0; } }
+/* closing: the scrim fades and the sheet sinks for 160ms (LEAVE_MS in Game.tsx), then it is removed;
+   taps already pass through to the game underneath */
+.scrim[data-leaving] { pointer-events: none; animation: fade-out .16s ease forwards; }
+.scrim[data-leaving] .sheet { animation: sink .16s ease-in forwards; }
+/* a new tab fades in */
+.screen { animation: fade .12s ease; }
 /* the hero's chance line replays when a choice moves the chance */
 .hero .chance-why { animation: pop .3s var(--ease); transform-origin: left center; }
 @media (prefers-reduced-motion: reduce) {
-  .scrim, .sheet, .sheet > :not(.grip), .choices > *, .sheet .chance-why, .hero .chance-why { animation: none; }
+  .scrim, .sheet, .sheet > :not(.grip), .choices > *, .sheet .chance-why, .hero .chance-why, .screen { animation: none; }
+  .scrim[data-leaving] { display: none; }
   .sheet { animation: fade .18s ease; }
   .meter i, .bar-line i, .game button { transition: none; }
 }
@@ -303,7 +318,7 @@
 .chance-why[data-dir='up'] b { color: var(--good); }
 .chance-why[data-dir='down'] b { color: var(--bad); }
 .countdown { font-size: 13.5px; color: var(--ink-soft); }
-.countdown b { color: var(--rasp); font-weight: 700; font-size: 17px; }
+.countdown b { color: var(--rasp-deep); font-weight: 700; font-size: 17px; }
 .game button.choice .choice-main { flex: 1; display: flex; flex-direction: column; gap: 2px; }
 .game button.choice small { font-size: 12.5px; font-weight: 400; color: var(--ink-soft); }
 .seg { flex-wrap: wrap; justify-content: center; }
@@ -364,4 +379,4 @@
 .frozen { flex: none; display: flex; align-items: center; gap: 10px; margin: 0 14px 8px; padding: 8px 10px 8px 12px; background: var(--paper); border-radius: var(--r-card); font-size: 13px; color: var(--ink-soft); line-height: 1.3; }
 .frozen span { flex: 1; min-width: 0; }
 .game .frozen button { position: relative; flex: none; padding: 7px 12px; border-radius: 10px; background: var(--tile); color: var(--ink); font-weight: 600; font-size: 13px; }
-.game button.plus[disabled] { cursor: default; color: #fff; }
+.game button.plus[disabled] { cursor: default; color: var(--ink-soft); }
