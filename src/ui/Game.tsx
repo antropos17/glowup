@@ -11,7 +11,7 @@ import { DAY_PARTS, type Card, type Choice, type DaySummary, type GameState, typ
 import type { Look } from '../art/avatar';
 import { Body, Cost, Icon, Portrait } from './bits';
 import { timelapsePng } from './shareTimelapse';
-import { DAY_CARD, DEMO_END, duration, MISSED, PART_ICON, PART_NAME, PART_NEXT, SMOKE_FREE, SOUND } from './ru';
+import { DAY_CARD, DEMO_END, duration, MISSED, PART_ICON, PART_NAME, PART_NEXT, PICK, SMOKE_FREE, SOUND } from './ru';
 import { isMuted, play, played, setMuted, tap } from './sound';
 
 type Tab = 'journal' | 'mirror' | 'chat' | 'feed' | 'shop';
@@ -53,10 +53,28 @@ function useLeaving<T>(v: T | null | undefined): [T | null, boolean] {
   return [v || last.current, leaving];
 }
 
+/**
+ * A new game starts on the hero-pick screen; a save goes straight into the game. Starting over from inside
+ * the game returns to the pick screen. `api.restart(id)` (the showcase's dev button) skips the pick.
+ */
 export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; api?: (a: GameApi) => void }) {
-  const fresh = (archetypeId = content.archetypes[0].id) =>
-    newGame(content, { seed: (clock.now() % 2_147_483_647) | 0, now: clock.now(), tzOffsetMin: clock.tzOffsetMin(), archetypeId });
-  const [state, setState] = useState<GameState>(() => syncClock(content, store.load() ?? fresh(), clock.now()));
+  const [first, setFirst] = useState<GameState | null>(() => store.load());
+  const [run, setRun] = useState(0);
+  const play = useRef<{ refresh(): void } | null>(null);
+  const start = (archetypeId: string) => {
+    const s = newGame(content, { seed: (clock.now() % 2_147_483_647) | 0, now: clock.now(), tzOffsetMin: clock.tzOffsetMin(), archetypeId });
+    store.save(s); setFirst(s); setRun((n) => n + 1);
+  };
+  const over = () => { store.clear(); setFirst(null); };
+  useEffect(() => { api?.({ restart: (id) => { store.clear(); start(id); }, refresh: () => play.current?.refresh() }); }, []);
+  if (!first) return <Pick clock={clock} onPick={start} />;
+  return <Play key={run} clock={clock} store={store} first={first} onRestart={over} api={(a) => (play.current = a)} />;
+}
+
+function Play({ clock, store, first, onRestart, api }: {
+  clock: Clock; store: SaveStore; first: GameState; onRestart: () => void; api: (a: { refresh(): void }) => void;
+}) {
+  const [state, setState] = useState<GameState>(() => syncClock(content, first, clock.now()));
   const [tab, setTab] = useState<Tab>('journal');
   const [sheet, setSheet] = useState<Sheet>(null);
   const [chatSeen, setChatSeen] = useState(state.chat.length);
@@ -67,10 +85,9 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
 
   const commit = (s: GameState) => { store.save(s); setState(s); };
   const refresh = () => { setState((s) => { const n = syncClock(content, s, clock.now()); if (n !== s) store.save(n); return n; }); tick((n) => n + 1); };
-  const restart = (id?: string) => { store.clear(); commit(fresh(id)); setSheet(null); setTab('journal'); setChatSeen(0); setEndClosed(false); };
 
   useEffect(() => {
-    api?.({ restart, refresh });
+    api({ refresh });
     const t = setInterval(refresh, 20_000);
     document.addEventListener('visibilitychange', refresh);
     // every button of the game taps, unless its own handler has already played something more specific
@@ -141,7 +158,7 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
     if (d.card) { play('open'); setSheet({ kind: 'card', card: d.card }); }
   }
 
-  if (state.verdict) return <Verdict state={state} onRestart={() => restart(state.archetypeId)} />;
+  if (state.verdict) return <Verdict state={state} onRestart={onRestart} />;
   // what the story did on its own comes first: before the day cards and before the demo end screen
   const missed = missedShown ? <Missed state={missedShown} leaving={missedLeaving} onClose={() => commit(markMissedSeen(state))} /> : null;
   if (state.demoOver && !endClosed && missed) return <div class="game">{missed}</div>;
@@ -156,68 +173,105 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
   // then the day cards the player has not seen: the last day's card comes before the end screen, never after it
   if (state.demoOver && !endClosed && dayCard) return <div class="game">{dayCard}</div>;
   if (state.demoOver && !endClosed) {
-    return <DemoEnd state={state} onClose={() => { setSheet(null); setTab('journal'); setEndClosed(true); }} onRestart={() => restart(state.archetypeId)} />;
+    return <DemoEnd state={state} onClose={() => { setSheet(null); setTab('journal'); setEndClosed(true); }} onRestart={onRestart} />;
   }
   // after the demo end screen is closed the game stays open read-only
   const frozen = !!state.demoOver;
 
+  const leaf = (
+    <div class="leaf" aria-label={`День ${state.day} из ${content.balance.days}`}>
+      <div class="leaf-head">день</div>
+      <div class="leaf-num">{state.day}</div>
+      <div class="leaf-of">из {content.balance.days}</div>
+    </div>
+  );
+  const snd = (
+    <button class="snd" aria-pressed={!muted} aria-label={muted ? SOUND.turnOn : SOUND.turnOff} onClick={() => { setMuted(!muted); setMutedShown(!muted); }}>
+      <Icon name={muted ? 'mute' : 'sound'} size={17} />
+    </button>
+  );
+  const portrait = (
+    <button class="mirror-sm" onClick={() => setTab('mirror')} aria-label="Открыть зеркало">
+      <Portrait look={look} title={me.name} />
+    </button>
+  );
+  const wallet = (
+    <div class="wallet">
+      <span class="energy" aria-label={`Энергия ${state.energy} из ${maxE}`}>
+        <Icon name="bolt" size={16} />
+        <span class="num">{state.energy}</span>
+        <span class="energy-line"><i style={{ width: `${Math.min(100, (state.energy / Math.max(1, maxE)) * 100)}%` }} /></span>
+      </span>
+      <span class="coins"><Icon name="coin" size={17} /><span class="num">{state.coins}</span></span>
+    </div>
+  );
+
   return (
     <div class="game">
-      <header class="top">
-        <div class="leaf" aria-label={`День ${state.day} из ${content.balance.days}`}>
-          <div class="leaf-head">день</div>
-          <div class="leaf-num">{state.day}</div>
-          <div class="leaf-of">из {content.balance.days}</div>
-        </div>
-        <div class="parts" data-part={state.part}>
-          <div class="parts-now">
-            <span class="parts-name">{PART_NAME[state.part]}</span>
-            {!frozen && <span class="parts-next">{PART_NEXT[state.part]} через {next}</span>}
-          </div>
-          <div class="parts-row">
-            <div class="track" aria-hidden="true">
-              {DAY_PARTS.map((p, i) => (
-                <span data-on={i === partIdx ? 'now' : i < partIdx ? 'past' : 'next'}><Icon name={PART_ICON[p]} size={17} /></span>
-              ))}
-            </div>
-            <button class="snd" aria-pressed={!muted} aria-label={muted ? SOUND.turnOn : SOUND.turnOff} onClick={() => { setMuted(!muted); setMutedShown(!muted); }}>
-              <Icon name={muted ? 'mute' : 'sound'} size={17} />
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <section class="hero">
-        <button class="mirror-sm" onClick={() => setTab('mirror')} aria-label="Открыть зеркало">
-          <Portrait look={look} title={me.name} />
-        </button>
-        <div class="hero-info">
-          <div class="hero-name">{me.name} <small>{me.age}</small></div>
-          {chanceShown ? (
-            <div class="chance">
-              <div class="chance-row">
-                <Icon name="heart" size={18} />
-                <span class="num">{pct}%</span>
-                <span class="chance-label">шанс понравиться</span>
+      {/* the journal keeps the full hero; other tabs get one compact line with the same numbers */}
+      {tab === 'journal' ? (
+        <>
+          <header class="top">
+            {leaf}
+            <div class="parts" data-part={state.part}>
+              <div class="parts-now">
+                <span class="parts-name">{PART_NAME[state.part]}</span>
+                {!frozen && <span class="parts-next">{PART_NEXT[state.part]} через {next}</span>}
               </div>
-              <div class="meter" role="img" aria-label={`Шанс понравиться ${pct} процентов`}><i style={{ width: `${pct}%` }} /></div>
-              {state.lastChange
-                ? <div class="chance-why" key={state.history.length} data-dir={state.lastChange.delta > 0 ? 'up' : 'down'}><b>{signed(state.lastChange.delta)}</b>: {state.lastChange.why}</div>
-                : chanceNote ? <div class="chance-why">{String(chanceNote)}</div> : null}
+              <div class="parts-row">
+                <div class="track" aria-hidden="true">
+                  {DAY_PARTS.map((p, i) => (
+                    <span data-on={i === partIdx ? 'now' : i < partIdx ? 'past' : 'next'}><Icon name={PART_ICON[p]} size={17} /></span>
+                  ))}
+                </div>
+                {snd}
+              </div>
             </div>
-          ) : (
-            <div class="countdown">До встречи <b class="num">{content.balance.days - state.day + 1}</b> дней</div>
-          )}
-          <div class="wallet">
-            <span class="energy" aria-label={`Энергия ${state.energy} из ${maxE}`}>
-              <Icon name="bolt" size={16} />
-              <span class="num">{state.energy}</span>
-              <span class="energy-line"><i style={{ width: `${Math.min(100, (state.energy / Math.max(1, maxE)) * 100)}%` }} /></span>
-            </span>
-            <span class="coins"><Icon name="coin" size={17} /><span class="num">{state.coins}</span></span>
+          </header>
+
+          <section class="hero">
+            {portrait}
+            <div class="hero-info">
+              <div class="hero-head">
+                <div class="hero-name">{me.name} <small>{me.age}</small></div>
+                {wallet}
+              </div>
+              {chanceShown ? (
+                <div class="chance">
+                  <div class="chance-row">
+                    <Icon name="heart" size={18} />
+                    <span class="num">{pct}%</span>
+                    <span class="chance-label">шанс понравиться</span>
+                  </div>
+                  <div class="meter" role="img" aria-label={`Шанс понравиться ${pct} процентов`}><i style={{ width: `${pct}%` }} /></div>
+                  {state.lastChange
+                    ? <div class="chance-why" key={state.history.length} data-dir={state.lastChange.delta > 0 ? 'up' : 'down'}><b>{signed(state.lastChange.delta)}</b>: {state.lastChange.why}</div>
+                    : chanceNote ? <div class="chance-why">{String(chanceNote)}</div> : null}
+                </div>
+              ) : (
+                <div class="countdown">До встречи <b class="num">{content.balance.days - state.day + 1}</b> дней</div>
+              )}
+            </div>
+          </section>
+        </>
+      ) : (
+        <header class="mini">
+          {portrait}
+          {leaf}
+          <div class="mini-info">
+            <div class="mini-row">
+              <span class="mini-part" data-part={state.part}><Icon name={PART_ICON[state.part]} size={15} />{PART_NAME[state.part]}</span>
+              {snd}
+            </div>
+            <div class="mini-stats">
+              {chanceShown && (
+                <span class="mini-chance" role="img" aria-label={`Шанс понравиться ${pct} процентов`}><Icon name="heart" size={16} /><span class="num">{pct}%</span></span>
+              )}
+              {wallet}
+            </div>
           </div>
-        </div>
-      </section>
+        </header>
+      )}
 
       <div class="screen" key={tab} ref={scroller}>
         {tab === 'journal' && <Journal state={state} />}
@@ -722,6 +776,39 @@ function Verdict({ state, onRestart }: { state: GameState; onRestart: () => void
         {state.tastes.map((id) => <div class="sticky">{content.tastes.find((t) => t.id === id)?.title}</div>)}
         <Decisions state={state} />
         <button class="primary" onClick={onRestart}>Сыграть ещё раз</button>
+      </div>
+    </div>
+  );
+}
+
+/** Hero pick before a new game: one card per archetype from content, the first one preselected. */
+function Pick({ clock, onPick }: { clock: Clock; onPick: (archetypeId: string) => void }) {
+  const [sel, setSel] = useState(content.archetypes[0].id);
+  // the hero's day-one look comes from a throwaway game state, so the portrait matches the start of play
+  const heroes = useMemo(() => content.archetypes.map((a) => {
+    const s = newGame(content, { seed: 0, now: clock.now(), tzOffsetMin: clock.tzOffsetMin(), archetypeId: a.id });
+    return { a, look: startLook(content, s) };
+  }), []);
+  return (
+    <div class="game">
+      <div class="pick">
+        <h1>{PICK.title}</h1>
+        <div class="pick-list" role="radiogroup" aria-label={PICK.title}>
+          {heroes.map(({ a, look }) => (
+            <button class="pick-card" role="radio" aria-checked={sel === a.id} onClick={() => setSel(a.id)}>
+              <span class="pick-face"><Portrait look={look} title={a.name} /></span>
+              <span class="pick-text">
+                <span class="hero-name">{a.name} <small>{a.age}</small></span>
+                <span class="pick-blurb">{a.blurb}</span>
+              </span>
+              <span class="pick-head">{PICK.problems}</span>
+              <span class="pick-tags">
+                {content.problems.filter((p) => a.problems[p.id] !== undefined).map((p) => <span>{p.title}</span>)}
+              </span>
+            </button>
+          ))}
+        </div>
+        <button class="primary" onClick={() => onPick(sel)}>{PICK.start}</button>
       </div>
     </div>
   );
