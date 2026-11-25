@@ -566,3 +566,57 @@ Differences from the A2 grid, for the authors:
 - `d8_replied` (A4: read on 12) is not read: the grid's K12-03 does not use it and no Day 12 line needed it.
 - The dentist and the check-up have no «move again» choice: one neutral «go», as the grid says.
 - K12-07 «week without cigarettes» is not repeated; the hold outcome counts the days («Седьмой день без табака»).
+
+## C6. Day 13 (written 2026-11-25, texts await the authors' review)
+
+File: `content/cards/day13.json` (26 cards: 20 story, 6 action). Also touched: `A-job` days 1–13 (`content/cards/side-jobs.json`), `content/days.json` day 13 («Конец курса», working title; gift `acne_patch`; teaser «Завтра суббота. Половина пути»), `content/chat.json` (`alina_d13_time`, `status_reply_read_eve`, 10 variants each), `content/rumors.json` (`vitya_bday`), `content/hints.json` (`zerno_saturday`), `content/balance.json` `contentDays` 13 (`demoDays` stays 7). Russian texts for review: `docs/review/day13-texts.md`. No change to days 1–12.
+
+Cards in display order:
+
+| Part | Card | Shown when | Choices (neutral in bold) |
+|---|---|---|---|
+| morning | K13-late Проспал | `d12_late` | **up** |
+| morning | K13-run Витя у подъезда | `d9_pass` = `vitya` | run (4 energy, weight −2; the birthday cap; another line with `d9_burner`) / **skip** |
+| morning | K13-00s Холодная вода | `d12_strips` = `sore` | **ok** (the teeth ache; the +2 itself came from the Day 12 `tomorrow` effect) |
+| morning | K13-00n Ящик в ванной | `d12_strips` = `none` | **ok** |
+| morning | K13-01 Последний тюбик | `d3_course` with `flagAge` ≥ 10 | **ok** |
+| day | K13-02 Контроль | `seen` K13-01 | go (2 energy, skin −2, `d13_course_done`) / **later** «Позвоню потом» |
+| day | K13-03a / b / c Витин день рождения | a: `d4_meat_held`, b: `d4_feast`, c: neither (`d4_home`) | go (conf −1, `d13_went`) / **home** (`d13_bday` = `home`) |
+| evening | K13-03k Торт | `d13_went` | slice (2 energy, conf −1, `d13_bday` = `held`) / **lot** (weight +2, `cake`); rumor `vitya_bday` |
+| evening | K13-04 Тост | `d13_went`, `d1_joked` | **ok** (conf −1) |
+| evening | K13-06a / q / b У мангала | `d13_went`; yesterday `d12_smoked` (or no Day 12 flag) / `d12_quarter` / `d12_no_smoke` | hold (2 / 2 / 3 energy) / quarter (`d1_half`) / gum / **smoke** |
+| evening | K13-03h Мама звонит | `d13_bday` = `home` | **talk** (conf −1; a line by `d13_course_done`); rumor `vitya_bday` |
+| evening | K13-05m {crush} пишет | `d12_helped_music` | yes «Буду. Список возьму с собой.» (status «прочитала», `d13_zerno_reply` = `yes`) / **later** (no message, `later`); affinity 0 |
+| night | K13-05 Витя пишет | no `d2_zerno_known`, no `d12_helped_music` | **ok** (hint `zerno_saturday`, `d13_zerno_tip`) |
+| night | K13-07a / q / b Балкон | did not go to Vitya; yesterday as K13-06 | hold (2 / 2 / 3 energy) / quarter / gum / **smoke** |
+| day–night | A13-run, A13-gym, A13-clean, A13-teeth, A13-couch, A-job | plus menu, as on Day 12 | — |
+| night | K13-sleep | | sleep («Завтра суббота») / late (`d13_late`, −4 tomorrow) |
+
+Day ends on: «Завтра суббота» in the sleep line. Affinity on Day 13: 0 (no card changes it).
+
+Skipped day (neutral choices): K13-late `up`, K13-run `skip`, K13-00s/n `ok`, K13-01 `ok`, K13-02 `later`, K13-03a/b/c `home`, K13-03h `talk`, K13-05m `later`, K13-05 `ok`, K13-07a/q/b `smoke`. Result: the control visit put off, stayed home, mum called, no answer to her, smoked, no coins spent, `affinity` 0.
+
+### Day 13 flags
+
+| Flag | Values | Set by | Read on |
+|---|---|---|---|
+| `d13_course_done` | true | K13-02 go | 13 (K13-03h), days 15+ (skin maintenance) |
+| `d13_went` | true | K13-03a/b/c go | 13 (cake, toast, the craving at the grill, no balcony) |
+| `d13_bday` | `held`, `cake`, `home` | K13-03k / K13-03a/b/c home | 13 (K13-03h), 14 (Vitya's line) |
+| `d13_zerno_reply` | `yes`, `later` | K13-05m | 14 (the planned coffee: her first line) |
+| `d13_zerno_tip` | true | K13-05 | 14 (K14-03: he knows where she is on Saturdays) |
+| `d13_smoked`, `d13_no_smoke`, `d13_quarter` | true | K13-06 or K13-07 | 13 (once a day), 14 (craving texts) |
+| `d13_late` | true | K13-sleep late | 14 (morning) |
+
+Earlier flags paid off on Day 13: `d12_late` (K13-late), `d9_pass`, `d9_burner` (K13-run, A13-gym), `d12_strips` (K13-00s/n), `d3_course` (K13-01), `d4_meat_held`, `d4_feast` (K13-03a/b/c), `d1_joked` (K13-04), `d12_smoked`, `d12_quarter`, `d12_no_smoke`, `d1_half`, item `gum`, counter `smoke_free` (K13-06, K13-07), `d12_helped_music` (K13-05m, K13-05), `d2_zerno_known` (K13-05), `bought_gym_pass`, item `gym_pass` (A13-gym).
+
+Engine gap A5, as met on Day 13: A13-gym uses the Day 10 workaround unchanged: `d9_pass` = `renewed` (that pass runs mornings 10–16), or a shop pass bought and already used with `flagAge` of `bought_gym_pass` 1–7 (on Day 13 that is a purchase on days 6–12). The proposed `{ modifier: 'gym' }` condition (C2) would make it exact. The course needs no workaround: `flagAge` of `d3_course` covers it.
+
+Differences from the A2 grid, for the authors:
+- K13-02 is a story card gated by `seen` K13-01, not a queued quest step: a quest step left on a skipped day would stay in the queue and open on Day 14; a story card plays its neutral «Позвоню потом» instead, which is what the grid's «skipped day» line asks.
+- The invitation is a day card (K13-03a/b/c, go / home) and the cake a separate evening card (K13-03k), as Day 4 did with K4-02 and K4-03; the grid named one evening card. The neutral of the invitation is «В этот раз без меня» (the grid: «skipped day: stayed home»).
+- Staying home: mum calls (K13-03h) and reads `d13_course_done`; Vitya's cake reaches the feed as the rumor `vitya_bday`.
+- K13-05m is new: the grid gave `d12_helped_music` no visible payoff on Day 13 (only K13-05 skipped). She confirms Saturday at «Зерно», eleven o'clock; the reply sends a message but changes no affinity (the grid's chance for Day 13 is 0). The neutral is «Ответить утром», no message.
+- K13-05 (Vitya's tip) is a message at night, so it reads the same whether he went or not; it sets `d13_zerno_tip` and a notebook hint for Day 14.
+- The two morning lines for `d12_strips` (K13-00s/n) are new cards; the grid said only «sensitivity line».
+- The craving at the grill (K13-06a/q/b) and on the balcony (K13-07a/q/b) are split by the Day 12 result as on Days 11–12.
