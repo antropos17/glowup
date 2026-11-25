@@ -620,3 +620,36 @@ Differences from the A2 grid, for the authors:
 - K13-05 (Vitya's tip) is a message at night, so it reads the same whether he went or not; it sets `d13_zerno_tip` and a notebook hint for Day 14.
 - The two morning lines for `d12_strips` (K13-00s/n) are new cards; the grid said only «sensitivity line».
 - The craving at the grill (K13-06a/q/b) and on the balcony (K13-07a/q/b) are split by the Day 12 result as on Days 11–12.
+
+## C7. Day 14 (written 2026-11-25, texts await the authors' review)
+
+File: `content/cards/day14.json` (37 cards: 31 story, 6 action). Also touched: `A-job` days 1–14 (`content/cards/side-jobs.json`), `content/days.json` day 14 («Половина пути»; gift `floss`; teaser «Завтра воскресенье. До встречи выпускников 16 дней»), `content/chat.json` (`alina_d14_warm`, `alina_d14_even`, `alina_d14_dry`, 10 variants each), `content/rumors.json` (`zerno_d14`), `content/balance.json` `contentDays` 14 (`demoDays` stays 7). Russian texts and the list of deviations from the A2 row: `docs/review/day14-texts.md`. No change to days 1–13.
+
+Cards in display order:
+
+| Part | Card | Shown when | Choices (neutral in bold) |
+|---|---|---|---|
+| morning | K14-late Проспал | `d13_late` | **up** (line by `d12_helped_music`) |
+| morning | K14-run Витя у подъезда | `d9_pass` = `vitya` | run (4 energy, weight −2; another line with `d9_burner`) / **skip** |
+| morning | K14-01a / b Щетина | `shaved`; a: `d8_red`, b: without | cream (`cream_zina`) / bare (`d14_red`, conf +2) / **keep** (`unflag shaved`; quotes her for `d6_beard_hint`) |
+| morning | K14-02 Половина пути | always | **look**: line by `d11_cut` (barber / salon) or `bought_haircut` |
+| day | K14-03p / t / e Суббота | p: `d12_helped_music`; t: `d13_zerno_tip`; e: otherwise | go (conf −1; `d14_met` = `planned` / `came`) / **home** |
+| day | K14-04a / q / b У двери «Зерна» | went; yesterday `d13_smoked` (or none) / `d13_quarter` / `d13_no_smoke` | hold (2 / 2 / 3) / quarter / gum / **smoke** |
+| day | K14-05p / c / f Кофейня «Зерно» | planned / came (not dry) / came (dry) | **sit** / **hello**; p: her first line by `d13_zerno_reply` |
+| day | K14-05v4 / v2 / v0 {crush} у окна | visible changes ≥ 4 / 2–3 / fewer | **ok**; compared with `d7_line`; sets `d14_line` |
+| day | K14-05s Слайд-шоу | went, not dry | **look**: by `d10_photo` |
+| day | K14-05pq / cq / fq | planned / came / dry | good +3 / +2 / +1, **short** 0, bad −2; counter `d14_scene` +1 / 0 / −1 |
+| evening | K14-06a / b / c Витя пишет | `d13_bday` = `held` / `cake` / otherwise | **ok** |
+| evening | K14-07w / d / e {crush} пишет | went; `d14_scene` ≥ 1 / ≤ −1 / otherwise | **ok** (her line; `d14_msg`) |
+| evening | K14-07h Лента | `d14_met` = `home` | **ok** (rumor `zerno_d14`) |
+| night | K14-08a / q / b Балкон | no craving today (stayed home); yesterday as K14-04 | hold / quarter / gum / **smoke** |
+| day–night | A14-run, A14-gym, A14-clean, A14-teeth, A14-couch, A-job | plus menu, as on Day 13 | — |
+| night | K14-sleep | | sleep («До встречи выпускников шестнадцать дней») / late (`d14_late`) |
+
+Visible changes for K14-05v (the Day 10 list plus the Day 12 cleaning): a clean shave today (`shaved`, not `d14_red`), `bought_shirt` or `bought_frame`, `d5_cleaned` or `d12_cleaned`, `d3_course`, no cigarette today, `bought_haircut`. The salon cut is not counted (open question).
+
+Day ends on: her message (K14-07w/d/e), or her photo from «Зерно» in the feed for those at home (K14-07h). Affinity on Day 14: −2 … +3 (the question only).
+
+Skipped day (neutral choices): stayed home, kept the stubble, smoked on the balcony, Vitya answered, the feed post, `affinity` 0, no message from her.
+
+Engine gap A5, as met on Day 14: A14-gym uses the Day 10 workaround unchanged (`d9_pass` = `renewed`, or a shop pass bought on days 7–13 and already used).
