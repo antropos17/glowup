@@ -1477,33 +1477,7 @@
       ],
       "requires": [
         {
-          "any": [
-            {
-              "flag": "d9_pass",
-              "eq": "renewed"
-            },
-            {
-              "not": {
-                "any": [
-                  {
-                    "flag": "bought_gym_pass",
-                    "set": false
-                  },
-                  {
-                    "item": "gym_pass"
-                  },
-                  {
-                    "flagAge": "bought_gym_pass",
-                    "lte": 0
-                  },
-                  {
-                    "flagAge": "bought_gym_pass",
-                    "gte": 8
-                  }
-                ]
-              }
-            }
-          ]
+          "modifier": "gym"
         }
       ]
     },

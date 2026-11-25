@@ -4,7 +4,7 @@
   "verified": {
     "date": "2026-11-25",
     "typecheck": "pass",
-    "tests": "169/169",
+    "tests": "174/174",
     "check_content": "pass: 334 cards (252 story, 82 action), 1 archetype, 1 crush",
     "economy": "demo economy in items.json, side-jobs.json, balance.json; see docs/DEMO_SCRIPT.md section 5a",
     "build": "pass: dist/index.html 844 kB",
