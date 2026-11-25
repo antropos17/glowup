@@ -516,3 +516,53 @@ Differences from the A2 grid, for the authors:
 - The day's end beat (mirror / «Ну, как знаешь») is in the evening, before the night balcony, as Day 9 did with Oksana's line.
 - The craving is split by yesterday's result (K11-06a/q/b) so each Day 10 branch has its own card text; the grid's «Неделя без сигарет» card is K11-07 (K11-06 is the balcony).
 - The perfume (answer 10) is not added on Day 11: its day, price and texts are still open.
+
+## C5. Day 12 (written 2026-11-25, texts await the authors' review)
+
+File: `content/cards/day12.json` (25 cards: 19 story, 6 action). Also touched: `A-job` days 1–12 (`content/cards/side-jobs.json`), `content/days.json` day 12 («Вторая чистка», working title; gift `gum`; teaser «Завтра пятница. У Вити день рождения»), `content/chat.json` (seven situations, 10 variants each: `alina_d12_music_singer`, `alina_d12_music_ask`, `alina_d12_zerno`, `alina_d12_short`, `alina_d12_pass`, `alina_d12_even_q`, `alina_d12_even_thanks`), `content/rumors.json` (`strips_ad`, the feed post), `content/balance.json` `contentDays` 12 (`demoDays` stays 7). Russian texts for review: `docs/review/day12-texts.md`. No change to days 1–11.
+
+Cards in display order:
+
+| Part | Card | Shown when | Choices (neutral in bold) |
+|---|---|---|---|
+| morning | K12-late Проспал | `d11_late` | **up** |
+| morning | K12-run Витя у подъезда | `d9_pass` = `vitya` | run (4 energy, weight −2; another line with `d9_burner`) / **skip** |
+| morning | K12-01 Стоматолог | `d5_dentist_later` or `d5_dentist_moved` | **go**: energy −3 as an effect; teeth −15 (`d12_cleaned` = `full`), −10 with `d1_soda_teeth` (`soda`) |
+| morning | K12-01c Контрольный осмотр | `d5_cleaned` | **go**: teeth −3; with `d5_smoked` «Курили сразу после чистки?», teeth −1 |
+| day | K12-02a / q / b Крыльцо стоматологии | `d12_cleaned`; yesterday `d11_smoked` (or no Day 11 flag) / `d11_quarter` / `d11_no_smoke` | hold (2 / 2 / 3 energy) / quarter (`d1_half`, teeth +1) / gum / **smoke** (teeth +2) |
+| day | K12-03ws / wa {crush} пишет | `d7_msg` = `warm`; ws with `d6_reply` = `joke` («Ты же у нас певец»), wa otherwise | list (+3, `d12_helped_music`) / short (+1) / pass «Я в музыке не силён» (0) / **later** (no message); sets `d12_reply` |
+| day | K12-03e {crush} пишет | `d7_msg` = `even` | answer «Вера Павловна…» (+2) / short «Не помню» (0) / **later**; sets `d12_reply` |
+| evening | K12-04a / b Лента: полоски «Белый жемчуг» | a: `d1_soda_teeth` (the soda line), b: without | buy (40 coins; часто «заныли зубы»: teeth +2 today and +2 tomorrow, `d12_strips` = `sore`; иногда «ничего не изменилось», `none`) / **scroll**; rumor `strips_ad` on every choice |
+| evening | K12-05l / s / p / e {crush} ответила | `d12_reply` = `list` / `short` (warm) / `pass` / `answer` | **ok**; l: she names Saturday at «Зерно» |
+| night | K12-06a / q / b Балкон | no porch today; yesterday as K12-02 | hold (2 / 2 / 3 energy) / quarter / gum / **smoke** |
+| day–night | A12-run, A12-gym, A12-clean, A12-teeth, A12-couch, A-job | plus menu, as on Day 11 | — |
+| night | K12-sleep | | sleep («Завтра пятница, у Вити день рождения») / late (`d12_late`, −4 tomorrow) |
+
+Day ends on: her answer (K12-05*) for the warm and even tones; «Прочитано» only (no answer card) after the even «Не помню» or a later answer; the strips for the dry tone. Then the balcony for those without the porch. Affinity on Day 12: 0 … +3 (K12-03 only).
+
+Skipped day (neutral choices): K12-late `up`, K12-run `skip`, K12-01 `go` (the cleaning happens, decision 18), K12-01c `go`, K12-02a/q/b `smoke`, K12-03ws/wa/e `later`, K12-04a/b `scroll`, K12-06a/q/b `smoke`. Result: cleaned or checked, smoked, no message to her, no strips, no coins spent, `affinity` 0.
+
+### Day 12 flags
+
+| Flag | Values | Set by | Read on |
+|---|---|---|---|
+| `d12_cleaned` | `full`, `soda` | K12-01 | 12 (K12-02 porch), 14 (visible change: teeth) |
+| `d12_reply` | `list`, `short`, `pass`, `later` (warm); `answer`, `short`, `later` (even) | K12-03 | 12 (K12-05) |
+| `d12_helped_music` | true | K12-03ws/wa list | 13 (K13-05 Saturday tip is skipped), 14 (the planned coffee) |
+| `d12_strips` | `sore`, `none` | K12-04 buy | 13 (sensitivity line) |
+| `d12_smoked`, `d12_no_smoke`, `d12_quarter` | true | K12-02 or K12-06 | 12 (once a day), 13 (craving texts) |
+| `d12_late` | true | K12-sleep late | 13 (morning) |
+
+Earlier flags paid off on Day 12: `d11_late` (K12-late), `d9_pass`, `d9_burner` (K12-run, A12-gym), `d5_dentist_later`, `d5_dentist_moved` (K12-01), `d1_soda_teeth` (K12-01, K12-04a), `d5_cleaned`, `d5_smoked` (K12-01c), `d11_smoked`, `d11_quarter`, `d11_no_smoke`, `d1_half`, item `gum`, counter `smoke_free` (K12-02, K12-06), `d7_msg`, `d6_reply` (K12-03), `bought_gym_pass`, item `gym_pass` (A12-gym).
+
+Engine gap A5, as met on Day 12: A12-gym uses the Day 10 workaround unchanged: `d9_pass` = `renewed`, or a shop pass bought and already used with `flagAge` of `bought_gym_pass` 1–7 (on Day 12 that is a purchase on days 5–11).
+
+Differences from the A2 grid, for the authors:
+- The neutral reply to Alina is «Ответить потом» (no message sent), not «Не силён в этом»: `CONTENT_FORMAT` says a neutral choice must not write to the crush, because a skipped day plays it. «Я в музыке не силён, если честно» stays as a non-neutral reply (0). The grid's «skipped day: a short neutral answer to her» therefore becomes «no answer».
+- The exchange is two cards (the A5 gap «one fresh crush bubble per card»): her question with his reply in the day, her answer in the evening, as Day 8 did.
+- The even tone's «plain question» is the name of the physics teacher for Oksana's slideshow; +2 for the answer, 0 for «Не помню», no answer card after «Не помню».
+- K12-01c (check-up) gives teeth −3, or −1 after `d5_smoked`; the grid named no effect.
+- «Teeth +2 for two days» from the strips is teeth +2 now and +2 via `tomorrow`.
+- `d8_replied` (A4: read on 12) is not read: the grid's K12-03 does not use it and no Day 12 line needed it.
+- The dentist and the check-up have no «move again» choice: one neutral «go», as the grid says.
+- K12-07 «week without cigarettes» is not repeated; the hold outcome counts the days («Седьмой день без табака»).
