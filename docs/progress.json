@@ -4,11 +4,11 @@
   "verified": {
     "date": "2026-11-25",
     "typecheck": "pass",
-    "tests": "187/187",
-    "check_content": "pass: 385 cards (291 story, 94 action), 1 archetype, 1 crush",
+    "tests": "194/194",
+    "check_content": "pass: 404 cards (304 story, 100 action), 1 archetype, 1 crush",
     "economy": "demo economy in items.json, side-jobs.json, balance.json; see docs/DEMO_SCRIPT.md section 5a",
-    "build": "pass: dist/index.html 923.19 kB",
-    "playthrough": "Day 16: engine tests over the Monday morning (overslept by d15_late, Vitya's run by d9_pass, K16-00 on the last morning of any gym pass by { modifier: gym, eq: 0 }, Vitya's slice of cake: exactly one of K16-01a/h/k for every d13_bday value), Oksana's jobs by d15_team (music / chairs and volunteer / class chat), K16-03 renew / Vitya's runs / later on the pass's last day only, the gym open on Day 16 (last day, and after a renewal) and closed on Day 17 without one (open 17-23 with one), the balcony by the Day 15 result, sleep and staying up, a fully skipped Day 16, the demo still ending on Day 7. Playwright (Chromium, real clicks, page.clock for the time of day) on the built dist/index.html?full opened as a file; Day 16 reached with a save built by the engine (days 1-15 skipped with neutral choices by syncClock), then flags switched in the save: 360x640 renewed pass from Day 9, d15_team chairs, d13_bday home (K16-00, K16-01a, K16-02c, K16-03 later, gym in the menus, balcony, sleep, day-end card with acne_patch and the teaser, Day 17 shows «Продолжение следует»); 390x844 the same save with d15_team music and d13_bday held (K16-01h, K16-02m, K16-03 renew, gym still in the evening and night menus). All sheets fit, no horizontal overflow. Screenshots in X:/tmp/glowup-day16"
+    "build": "pass: dist/index.html 954.68 kB",
+    "playthrough": "Day 17: engine tests over the Tuesday morning (overslept by d16_late, Vitya's run by d9_pass or d16_pass = vitya), the cologne trap K17-01 with its odds (часто: слишком резко, иногда: нормально), Gosha K17-03 for d11_tip without a cut (before the pharmacy), the pharmacy: exactly one of K17-02z/a/b/s for all 108 combinations of d16_cake, d5_helped_zina, smoke_free and d17_alpha, one outcome per choice, no second visit at night after a cigarette, the evening by d15_team and d15_tone, the balcony by the Day 16 result (the perfume line on a cigarette), the gym by { modifier: gym } (renewal of Day 16, last day of a shop pass), sleep and staying up, a fully skipped Day 17, the demo still ending on Day 7. Playwright (Chromium, real clicks, page.clock at 07:00 and the dev button for the parts of the day) on the built dist/index.html?full served from a local folder; Day 17 reached with a save built by the engine (days 1-16 played with the first affordable story choice), then flags switched in the save: 360x640 d16_pass vitya, held on Day 16, d15_team music, d15_tone warm, d16_cake zina, d11_tip, 400 coins (K17-run run, K17-01 buy, K17-03 cut, K17-02z buy, K17-04, K17-05w, K17-06b hold, sleep, day-end card with floss and the teaser); 390x844 smoked on Day 16, no team, dry tone (K17-run skip, K17-01 scroll, K17-02s tester, no evening card, K17-06a smoke, sleep late). All sheets fit. Screenshots in X:/tmp/glowup-day17"
   },
   "demo_days": {
     "1": {
@@ -60,6 +60,11 @@
       "status": "written",
       "file": "content/cards/day16.json",
       "note": "written 2026-11-25; past the demo (demoDays 7, contentDays 16), playable on the dev page with ?full. Texts await the authors: docs/review/day16-texts.md (deviations listed at its top). Design and flags: docs/WEEK3_GRID.md Part C, section «D. Day 16 as written». The renewed pass ends: K16-00 and K16-03 use { modifier: gym, eq: 0 } for any pass; sets d16_cake and d16_pass; Oksana names the reunion «в понедельник»; no Alina card, no perfume (Day 17)"
+    },
+    "17": {
+      "status": "written",
+      "file": "content/cards/day17.json",
+      "note": "written 2026-11-25; past the demo (demoDays 7, contentDays 17), playable on the dev page with ?full. Texts await the authors: docs/review/day17-texts.md (deviations listed at its top). Design and flags: docs/WEEK3_GRID.md Part C, section «E. Day 17 as written». The cologne trap, Gosha, the pharmacy on Садовая with the perfume sold on a card (120 coins, care -6, not offered with smoke_free 0); sets d17_alpha, d17_scent, d17_cut, bought_perfume; no message to her"
     }
   },
   "week2_days": {
@@ -104,6 +109,7 @@
     "store purchase verification"
   ],
   "awaiting_authors": [
+    "Day 17: review the texts (docs/review/day17-texts.md), the title «Запах», the gift floss and the teaser; confirm the deviations listed there (K17-02 split into four cards, d17_tester replaced by d17_scent, Gosha before the pharmacy, the cologne care +2 stays, the perfume line on the balcony)",
     "Day 16: review the texts (docs/review/day16-texts.md), the title «Кусок торта», the gift acne_patch and the teaser; confirm the deviations listed there (K16-01b split into two cards, K16-02 split by team, A16-gym open after a renewal, no Alina card, d15_pimple not read)",
     "Day 15: review the texts (docs/review/day15-texts.md), the title «Оргкомитет», the gift gum and the teaser; confirm the deviations listed there (three pimple variants, the random squeeze, status lines for the even tone, the K15-07m line without a weekday)",
     "Day 14: review the texts (docs/review/day14-texts.md), the title «Половина пути», the gift floss and the teaser; decide the open questions listed there (does the salon cut count as a visible change, should d8_replied be read, the neutral «Остаться дома» on the planned coffee, the friend Даша)",

@@ -1,6 +1,6 @@
 # Week 3 grid (days 15–21)
 
-Status: v1, 2026-11-25. Ruslan answered the open questions on 2026-11-25 («Все по рекомендации», A6 answers); the day rows below follow those answers. Days 15 and 16 are written (Part C below); days 17–21 are not. After approval, days are written one at a time with `/write-day <n>`, which takes its per-day design from Part A.
+Status: v1, 2026-11-25. Ruslan answered the open questions on 2026-11-25 («Все по рекомендации», A6 answers); the day rows below follow those answers. Days 15, 16 and 17 are written (Part C below); days 18–21 are not. After approval, days are written one at a time with `/write-day <n>`, which takes its per-day design from Part A.
 
 Labels used below:
 - **[F]**: fact, checked in the repo files on 2026-11-25 (the file is named).
@@ -469,3 +469,40 @@ Flags set on Day 16 and what later days can rely on:
 | `d16_late` | true | only for «до трёх» | 17 morning |
 
 Earlier flags read on Day 16: `d15_late`, `d15_team`, `d15_smoked` / `d15_no_smoke` / `d15_quarter`, `d13_bday`, `d9_pass`, `d1_half`, counter `smoke_free`, item `gum`, modifier `gym`. Not read on Day 16: `d15_tone` (no Alina card today), `d15_pimple` (grid allowed none), `d15_photo`, `d15_lunch`, `d15_reply`.
+
+## E. Day 17 as written
+
+Written 2026-11-25 in `content/cards/day17.json` (13 story cards, 6 actions); `contentDays` 17, `demoDays` 7; `A-job` days 1–17; day entry «Запах», gift `floss`, teaser «Завтра среда. Костюм с выпускного». Texts and deviations for review: `docs/review/day17-texts.md`. The engine was not changed; no new chat situations.
+
+Cards in display order:
+
+| Part | Card | Shown when | Choices (neutral in bold) | Sets |
+|---|---|---|---|---|
+| morning | K17-late | `d16_late` | **up** | — |
+| morning | K17-run | `d9_pass` = `vitya` or `d16_pass` = `vitya` | run (4 energy, weight −2, `useful` +1) / **skip** | — |
+| day | K17-01 | everyone | buy «Альфа» (60 coins; часто «слишком резко» care +2, иногда «нормально» care −1) / **scroll** | `d17_alpha` = `odd` / `fine` |
+| day | K17-03 | `d11_tip`, no `d11_cut`, no `bought_haircut`; before the pharmacy | cut (70 coins, 2 energy, care −6, conf −2) / **later** | `bought_haircut`, `d17_cut` = `barber` |
+| day | K17-02z / a / b | `d17_scent` unset, `smoke_free` ≥ 1; z: `d16_cake` = `zina`; a: not z, `d5_helped_zina`; b: the rest | buy the bottle (120 coins, care −6) / **tester** (care −2); each with an extra line for `d17_alpha` = `odd` | `bought_perfume`, `d17_scent` = `bottle` / `tester` |
+| day | K17-02s | `d17_scent` unset, `smoke_free` 0 | **tester** only (care −2), no purchase | `d17_scent` = `smoke` |
+| evening | K17-04 | `d15_team` = `music` | **ok** (twenty songs to cut to five by Thursday) | — |
+| evening | K17-05w | `d15_tone` = `warm` | **ok** (`status_online`) | — |
+| night | K17-06a / q / b | the Day 16 result (`d16_smoked` or none / `d16_quarter` / `d16_no_smoke`) | hold / quarter / gum / **smoke** (a perfume line for `d17_scent` = `bottle`) | `d17_smoked` / `d17_quarter` / `d17_no_smoke` |
+| plus | A17-run, A17-gym (`{ modifier: 'gym' }`), A17-clean, A17-teeth, A17-couch, A-job | | as Day 16; the gym's last-day line by `{ modifier: 'gym', eq: 0 }` | — |
+| night | K17-sleep | | sleep («До встречи выпускников тринадцать дней») / late (line by `d15_team` = `music`) | `d17_late` |
+
+Exactly one pharmacy card fits every combination of `d16_cake`, `d5_helped_zina`, `smoke_free` and `d17_alpha`, with exactly one outcome per choice (a test checks 108 combinations). The `d17_scent` guard keeps the pharmacy from coming back at night after a cigarette resets `smoke_free`. The gym on Day 17 runs for a Day 16 renewal (mornings 17–23) and for a shop pass used on days 10–16 (a pass used on Day 10 has its last morning today).
+
+Flags set on Day 17 and what later days can rely on:
+
+| Flag | Values | Always set? | For |
+|---|---|---|---|
+| `d17_scent` | `bottle`, `tester`, `smoke` | yes, every player gets one pharmacy card (a skipped day sets `tester` or `smoke`) | 20 (the smell line), 17 (balcony) |
+| `bought_perfume` | true | only after the bottle | 20, 21: a visible change on a day without a cigarette (answer 8) |
+| `d17_alpha` | `odd`, `fine` | only after buying «Альфа» | read on 17 (pharmacy lines); free for later jokes |
+| `d17_cut` | `barber` | only after Gosha's cut (with `bought_haircut`) | 20, 21 count `bought_haircut`; `d17_cut` tells the Day 17 cut apart |
+| `d17_smoked` / `d17_no_smoke` / `d17_quarter` | true | yes (one balcony card a night) | 18 craving texts |
+| `d17_late` | true | only for «до трёх» | 18 morning |
+
+Earlier flags read on Day 17: `d16_late`, `d16_pass`, `d16_cake`, `d16_smoked` / `d16_no_smoke` / `d16_quarter`, `d15_team`, `d15_tone`, `d11_tip`, `d11_cut`, `bought_haircut`, `d9_pass`, `d5_helped_zina`, `d1_half`, counter `smoke_free`, item `gum`, modifier `gym`. Not read: `d5_cream` (deviation 7 in the review file), `d15_pimple`, `d15_photo`, `d15_lunch`.
+
+Differences from the plan (details in `docs/review/day17-texts.md`): four pharmacy cards instead of three; `d17_scent` instead of `d17_tester`; Gosha before the pharmacy; the cologne's +2 is not limited to today; the perfume line on the balcony.
