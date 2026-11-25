@@ -1,6 +1,6 @@
 # Week 3 grid (days 15–21)
 
-Status: v1, 2026-11-25. Ruslan answered the open questions on 2026-11-25 («Все по рекомендации», A6 answers); the day rows below follow those answers. Day 15 is written (Part C below); days 16–21 are not. After approval, days are written one at a time with `/write-day <n>`, which takes its per-day design from Part A.
+Status: v1, 2026-11-25. Ruslan answered the open questions on 2026-11-25 («Все по рекомендации», A6 answers); the day rows below follow those answers. Days 15 and 16 are written (Part C below); days 17–21 are not. After approval, days are written one at a time with `/write-day <n>`, which takes its per-day design from Part A.
 
 Labels used below:
 - **[F]**: fact, checked in the repo files on 2026-11-25 (the file is named).
@@ -433,3 +433,39 @@ Flags set on Day 15 and what later days can rely on:
 | `d15_late` | true | only for «до трёх» | 16 morning |
 
 Earlier flags read on Day 15: `d14_late`, `d14_met`, `d14_msg`, `d14_smoked` / `d14_no_smoke` / `d14_quarter`, counter `d14_scene`, `d13_course_done`, seen `K13-02`, seen `K14-05s`, `d12_helped_music`, `d10_photo`, `d9_pass`, `d9_oksana`, `d8_lunch`, `d7_msg`, `d3_posted`, `bought_haircut`, counter `smoke_free`, `d1_half`, items `acne_patch` and `gum`, modifier `gym`. `d8_replied` is not read (answer 17).
+
+## D. Day 16 as written
+
+Written 2026-11-25 in `content/cards/day16.json` (13 story cards, 6 actions); `contentDays` 16, `demoDays` 7; `A-job` days 1–16; day entry «Кусок торта», gift `acne_patch`, teaser «Завтра вторник. Аптека на Садовой». Texts and deviations for review: `docs/review/day16-texts.md`. The engine was not changed; no new chat situations.
+
+Cards in display order:
+
+| Part | Card | Shown when | Choices (neutral in bold) | Sets |
+|---|---|---|---|---|
+| morning | K16-late | `d15_late` | **up** | — |
+| morning | K16-run | `d9_pass` = `vitya` | run (4 energy, weight −2, `useful` +1) / **skip** | — |
+| morning | K16-00 | `{ modifier: 'gym', eq: 0 }`: the last morning of any pass (the renewed pass of Day 9, a shop pass used on Day 9) | **ok** | — |
+| morning | K16-01a | `d13_bday` not `held` / `cake` (as K14-06c) | half (1 energy, conf −1) / zina (free) / **eat** (weight +1) | `d16_cake` = `half` / `zina` / `ate` |
+| morning | K16-01h / k | `d13_bday` = `held` / `cake` | **ok** (Vitya's message) | — |
+| day | K16-02m | `d15_team` = `music` | **ok** (five songs with Alina by Thursday) | — |
+| day | K16-02c | `d15_team` = `chairs` / `volunteer` | **ok** (chairs and projector with Vitya, Friday at seven) | — |
+| day | K16-02x | no `d15_team` | **ok** (class chat: the venue, «в пятницу вечером готовим зал») | — |
+| evening | K16-03 | `{ modifier: 'gym', eq: 0 }` | renew (150 coins: the shop pass modifier, mornings 17–23) / vitya (hidden for `d9_pass` = `vitya`) / **later** | `d16_pass` = `renewed` / `vitya` / `none` |
+| night | K16-04a / q / b | the Day 15 result (`d15_smoked` or none / `d15_quarter` / `d15_no_smoke`) | hold / quarter / gum / **smoke** | `d16_smoked` / `d16_quarter` / `d16_no_smoke` |
+| plus | A16-run, A16-gym (`{ any: [{ modifier: 'gym' }, { flag: 'd16_pass', eq: 'renewed' }] }`), A16-clean, A16-teeth, A16-couch, A-job | | as Day 15; the gym's last-day line by `{ modifier: 'gym', eq: 0 }` | — |
+| night | K16-sleep | | sleep («До встречи выпускников четырнадцать дней») / late (line by `d15_team`) | `d16_late` |
+
+Every K16-02 card names the reunion «в понедельник через две недели, в семь, в кафе у школы» (answers 3 and 15). Exactly one K16-01 card fits every `d13_bday` value and exactly one K16-02 card fits every `d15_team` value (tests).
+
+The gym in numbers (engine semantics of `{ modifier }`: running on mornings `fromDay + 1 … fromDay + days`, days left = `fromDay + days − day`): the renewed pass of Day 9 has 0 days left on Day 16, so K16-00, K16-03 and the last-day gym line show; without a renewal `{ modifier: 'gym' }` is false from Day 17; with a renewal on Day 16 it runs on Days 17–23 (6 days left on Day 17, 0 on Day 23).
+
+Flags set on Day 16 and what later days can rely on:
+
+| Flag | Values | Always set? | For |
+|---|---|---|---|
+| `d16_cake` | `half`, `zina`, `ate` | only for K16-01a (stayed home on Day 13); unset for `held` / `cake` | 17 (K17-02a: `zina` is the warm hello) |
+| `d16_pass` | `renewed`, `vitya`, `none` | only for players whose pass ended on Day 16 (K16-03; a skipped day sets `none`) | 17+: K-run should read `d9_pass` = `vitya` **or** `d16_pass` = `vitya`; the gym reads `{ modifier: 'gym' }`, not this flag |
+| `d16_smoked` / `d16_no_smoke` / `d16_quarter` | true | yes (one balcony card a night) | 17 craving texts |
+| `d16_late` | true | only for «до трёх» | 17 morning |
+
+Earlier flags read on Day 16: `d15_late`, `d15_team`, `d15_smoked` / `d15_no_smoke` / `d15_quarter`, `d13_bday`, `d9_pass`, `d1_half`, counter `smoke_free`, item `gum`, modifier `gym`. Not read on Day 16: `d15_tone` (no Alina card today), `d15_pimple` (grid allowed none), `d15_photo`, `d15_lunch`, `d15_reply`.
