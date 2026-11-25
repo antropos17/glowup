@@ -13,7 +13,7 @@ Mobile life-sim in the spirit of BitLife. The player picks a hero with appearanc
 <context>
 - Authors: Ruslan (developer, solo builder) and a friend (ideas, scenario). Both read Russian.
 - Current goal: a 7-day demo. It is the first 7 days of the full 30-day game, with full presentation and mechanics, ending on «Продолжение следует».
-- Status on 2026-11-25: Days 1–7 are in the game; the 7-day demo is content-complete. Days 8–12, the first days past the demo, are written (playable on the dev page with `?full`; texts await review). The authors have reviewed the texts of Day 1 only. Current status lives in `docs/progress.json`.
+- Status on 2026-11-25: Days 1–7 are in the game; the 7-day demo is content-complete. Days 8–13, the first days past the demo, are written (playable on the dev page with `?full`; texts await review). The authors have reviewed the texts of Day 1 only. Current status lives in `docs/progress.json`.
 - The docs were assembled from three claude.ai chats ("Scenario", "Production", "Ad") by a session that did not see the code. On 2026-11-22 this file and `docs/CONTENT_FORMAT.en.md` were checked against the code; other docs (`HANDOFF.md`, `DEMO_SCRIPT.md`, `DESIGN.md`) are still reports to verify.
 </context>
 
@@ -30,7 +30,7 @@ Checked against `package.json` on 2026-11-22:
 ```
 npm install
 npm run dev            # asset showcase page with the game in a phone frame
-npm test               # engine tests (155/155 on 2026-11-25)
+npm test               # engine tests (162/162 on 2026-11-25)
 npm run check:content  # scenario validation: broken refs, dead-end cards
 npm run build          # typecheck, then single-file dist/index.html
 npx tsc --noEmit       # typecheck
@@ -40,7 +40,7 @@ npx tsc --noEmit       # typecheck
 <repo_map>
 | Path | Contents |
 |---|---|
-| `content/` | Scenario as JSON. The engine reads it as is. Each day lives in `content/cards/day<n>.json` (days 1–12 on 2026-11-25; the demo stops after `balance.demoDays` = 7, `contentDays` = 12 counts the written days), side jobs in `content/cards/side-jobs.json` |
+| `content/` | Scenario as JSON. The engine reads it as is. Each day lives in `content/cards/day<n>.json` (days 1–13 on 2026-11-25; the demo stops after `balance.demoDays` = 7, `contentDays` = 13 counts the written days), side jobs in `content/cards/side-jobs.json` |
 | `src/engine/` | Headless core. `types.ts` (content and state schema), `validate.ts` (content rules), `game.ts` (cards, effects, chance, day end), `clock.ts` (day parts from local time), `save.ts` |
 | `src/art/` | Hero drawn in code from layers (`avatar.ts`, portrait and full body) and icons (`icons.ts`) |
 | `src/ui/` | `Game.tsx` (game screens), `Kit.tsx` (asset showcase, the page `main.tsx` renders), `ru.ts` (UI strings), `bits.tsx`, `sound.ts` (sound playback and the mute flag) |
@@ -48,7 +48,7 @@ npx tsc --noEmit       # typecheck
 | `src/styles/` | `game.css`, `kit.css`, `fonts.css` |
 | `src/content/` | Loader that bundles `content/` |
 | `server/supabase/` | Supabase scaffold, not deployed |
-| `tests/engine.test.ts` | Engine tests: clock, content check, the flow of each day (1–12), day transition, economy, skipped story, queued quest step |
+| `tests/engine.test.ts` | Engine tests: clock, content check, the flow of each day (1–13), day transition, economy, skipped story, queued quest step |
 | `scripts/check-content.ts` | Content checker |
 | `docs/` | Design, demo script, content format (`CONTENT_FORMAT.md` Russian original, `CONTENT_FORMAT.en.md` English guide), handoff notes, progress |
 </repo_map>
@@ -60,7 +60,7 @@ npx tsc --noEmit       # typecheck
 - Every card except `action` needs at least one choice with no cost and no requirements (no dead ends).
 - Flags use Latin snake case: `d<day>_<what_happened>`, for example `d1_wrote_plain`.
 - "Chance to be liked" is computed by the engine and never set directly. Move it through solved problems, `affinity` and matched tastes.
-- Crush chat is fully scripted, no LLM at runtime. About 10 phrasing variants per situation in `content/chat.json` (on 2026-11-25 it holds 53 situations of Days 1–12 with 1 to 10 lines each; Day 11 adds none, Day 12 adds seven).
+- Crush chat is fully scripted, no LLM at runtime. About 10 phrasing variants per situation in `content/chat.json` (on 2026-11-25 it holds 55 situations of Days 1–13 with 1 to 10 lines each; Day 11 adds none, Day 12 adds seven, Day 13 adds two).
 - Every shop item has a mandatory `limits` line shown before purchase.
 </content_rules>
 
