@@ -1,0 +1,2920 @@
+[
+  {
+    "id": "K19-late",
+    "kind": "story",
+    "title": "Проспал",
+    "when": {
+      "days": [
+        19,
+        19
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d18_late"
+        }
+      ]
+    },
+    "text": "Лёг в три, встал по третьему будильнику. Четверг начался без него. Сил сегодня меньше обычного.",
+    "choices": [
+      {
+        "id": "up",
+        "neutral": true,
+        "label": "Встать",
+        "outcomes": [
+          {
+            "text": "Холодная вода в лицо, чай на ходу. На работу впритык, но успел."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K19-run",
+    "kind": "story",
+    "title": "Витя у подъезда",
+    "when": {
+      "days": [
+        19,
+        19
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "any": [
+            {
+              "flag": "d9_pass",
+              "eq": "vitya"
+            },
+            {
+              "flag": "d16_pass",
+              "eq": "vitya"
+            }
+          ]
+        }
+      ]
+    },
+    "text": "Семь утра, четверг. Витя у подъезда, уже в шарфе своей команды: «Четверг, как обещал. Вечером наши играют, так что бежим сейчас».",
+    "choices": [
+      {
+        "id": "run",
+        "label": "Бежать с Витей",
+        "cost": {
+          "energy": 4
+        },
+        "outcomes": [
+          {
+            "text": "Два круга по парку. Витя на финише: «Если наши сегодня побегут, как ты, точно выиграем».",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -2
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "skip",
+        "neutral": true,
+        "label": "Не сегодня",
+        "outcomes": [
+          {
+            "text": "Витя махнул шарфом: «Ладно. Завтра в семь. В пятницу стулья, ноги нужны»."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K19-01pj",
+    "kind": "story",
+    "title": "Витя пишет",
+    "when": {
+      "days": [
+        19,
+        19
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d10_will_sing"
+        },
+        {
+          "flag": "d6_reply",
+          "eq": "joke"
+        },
+        {
+          "flag": "d19_sing",
+          "set": false
+        }
+      ]
+    },
+    "text": "Утро. Витя: «Оксана поставила тебя в программу. Сразу после слайд-шоу: «Песня — {hero}». Ты обещал петь не как на выпускном. Вот и проверим».",
+    "choices": [
+      {
+        "id": "practice",
+        "label": "Порепетировать дома",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "{hero} спел два раза перед зеркалом, пока закипал чайник. Второй раз почти не стыдно. Соседи не стучали: уже успех.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "flag": "d19_sing",
+                "value": "practice"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "out",
+        "label": "Попросить Оксану убрать песню",
+        "outcomes": [
+          {
+            "text": "Оксана ответила через минуту: «Без проблем. Громов споёт, переживём». Без обид: в программе стало на строчку меньше.",
+            "effects": [
+              {
+                "flag": "d19_sing",
+                "value": "out"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "later",
+        "neutral": true,
+        "label": "Подумать потом",
+        "outcomes": [
+          {
+            "text": "Песня пока в программе. До встречи одиннадцать дней, успеется.",
+            "effects": [
+              {
+                "flag": "d19_sing",
+                "value": "promised"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K19-01p",
+    "kind": "story",
+    "title": "Витя пишет",
+    "when": {
+      "days": [
+        19,
+        19
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d10_will_sing"
+        },
+        {
+          "not": {
+            "flag": "d6_reply",
+            "eq": "joke"
+          }
+        },
+        {
+          "flag": "d19_sing",
+          "set": false
+        }
+      ]
+    },
+    "text": "Утро. Витя: «Оксана поставила тебя в программу. Сразу после слайд-шоу: «Песня — {hero}». Одна песня, ты сам обещал».",
+    "choices": [
+      {
+        "id": "practice",
+        "label": "Порепетировать дома",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "{hero} спел два раза перед зеркалом, пока закипал чайник. Второй раз почти не стыдно. Соседи не стучали: уже успех.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "flag": "d19_sing",
+                "value": "practice"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "out",
+        "label": "Попросить Оксану убрать песню",
+        "outcomes": [
+          {
+            "text": "Оксана ответила через минуту: «Без проблем. Громов споёт, переживём». Без обид: в программе стало на строчку меньше.",
+            "effects": [
+              {
+                "flag": "d19_sing",
+                "value": "out"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "later",
+        "neutral": true,
+        "label": "Подумать потом",
+        "outcomes": [
+          {
+            "text": "Песня пока в программе. До встречи одиннадцать дней, успеется.",
+            "effects": [
+              {
+                "flag": "d19_sing",
+                "value": "promised"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K19-01g",
+    "kind": "story",
+    "title": "Витя пишет",
+    "when": {
+      "days": [
+        19,
+        19
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d10_will_sing",
+          "set": false
+        },
+        {
+          "flag": "d19_sing",
+          "set": false
+        }
+      ]
+    },
+    "text": "Утро. Витя: «Громов хочет петь на встрече. С гитарой. Три песни подряд. Спасай вечер».",
+    "choices": [
+      {
+        "id": "promise",
+        "label": "Ладно, одну спою",
+        "outcomes": [
+          {
+            "text": "Витя переслал это в «11-Б навсегда». Оксана записала в программу: «Песня — {hero}». Громов поставил грустный смайлик и предложил дуэт.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "flag": "d19_sing",
+                "value": "promised"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "laugh",
+        "neutral": true,
+        "label": "Посмеяться",
+        "outcomes": [
+          {
+            "text": "{hero} посмеялся над сообщением Вити. Громов с гитарой пока в программе.",
+            "effects": [
+              {
+                "flag": "d19_sing",
+                "value": "none"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K19-02a",
+    "kind": "story",
+    "title": "Оргкомитет: пять песен",
+    "when": {
+      "days": [
+        19,
+        19
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d15_team",
+          "eq": "music"
+        },
+        {
+          "counter": "d14_scene",
+          "gte": 1
+        }
+      ]
+    },
+    "text": "Днём, чат «Оргкомитет». {crush}: «Четверг! Из двадцати оставляем пять. Первая у нас уже есть: та, под которую Громов уронил стол. Остальные четыре за тобой».",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Вычеркнуть лишнее",
+        "outcomes": [
+          {
+            "text": "Пятнадцать песен вычеркнуты, пять остались. {crush} отправила список Оксане: «Готово!» Витя под сообщением: «А моя где?»"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K19-02b",
+    "kind": "story",
+    "title": "Оргкомитет: пять песен",
+    "when": {
+      "days": [
+        19,
+        19
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d15_team",
+          "eq": "music"
+        },
+        {
+          "counter": "d14_scene",
+          "lte": 0
+        }
+      ]
+    },
+    "text": "Днём, чат «Оргкомитет». {crush}: «Четверг! Из двадцати оставляем пять. Первую выбираешь ты, ты же у нас музыка».",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Вычеркнуть лишнее",
+        "outcomes": [
+          {
+            "text": "Первой {hero} поставил ту, что на выпускном играла последней. Ещё четыре нашлись быстро. {crush} отправила список Оксане: «Готово!» Витя под сообщением: «А моя где?»"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K19-03",
+    "kind": "story",
+    "title": "Витя: футбол",
+    "when": {
+      "days": [
+        19,
+        19
+      ],
+      "parts": [
+        "evening"
+      ]
+    },
+    "text": "Вечер. Витя: «Наши играют в восемь. Спорт-бар у остановки, все свои. Каждый платит за себя. Идёшь?»",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Пойти с Витей",
+        "outcomes": [
+          {
+            "text": "Спорт-бар у остановки: шарфы, большой экран, крик на каждый угловой. Витя занял столик у окна.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "flag": "d19_bar",
+                "value": "went"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "home",
+        "neutral": true,
+        "label": "Остаться дома",
+        "outcomes": [
+          {
+            "text": "Тихий вечер дома. В десять Витя прислал счёт: «2:1! Ты пропустил лучший гол сезона».",
+            "effects": [
+              {
+                "flag": "d19_bar",
+                "value": "home"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K19-04",
+    "kind": "story",
+    "title": "Спорт-бар",
+    "when": {
+      "days": [
+        19,
+        19
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d19_bar",
+          "eq": "went"
+        }
+      ]
+    },
+    "text": "Перерыв между таймами. Официант несёт меню: крылышки, картошка, бургеры. Витя уже заказал «как обычно» на двоих.",
+    "choices": [
+      {
+        "id": "held",
+        "label": "Одно пиво и салат",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Одно пиво на весь матч и салат. Витя посмотрел с подозрением и доел крылышки сам. Наши выиграли 2:1.",
+            "effects": [
+              {
+                "flag": "d19_bar",
+                "value": "held"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "lot",
+        "neutral": true,
+        "label": "Всё, что заказал Витя",
+        "outcomes": [
+          {
+            "text": "Крылышки, картошка, два пива. Наши выиграли 2:1, живот проиграл.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": 2
+              },
+              {
+                "flag": "d19_bar",
+                "value": "lot"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K19-05a",
+    "kind": "story",
+    "title": "У двери бара",
+    "when": {
+      "days": [
+        19,
+        19
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d19_smoked",
+          "set": false
+        },
+        {
+          "flag": "d19_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d19_quarter",
+          "set": false
+        },
+        {
+          "any": [
+            {
+              "flag": "d19_bar",
+              "eq": "held"
+            },
+            {
+              "flag": "d19_bar",
+              "eq": "lot"
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "flag": "d18_smoked"
+            },
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "d18_no_smoke"
+                  },
+                  {
+                    "flag": "d18_quarter"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "text": "После матча у двери бара курит полкомпании, Витя прощается со всеми по очереди. Рука сама нашла в кармане пачку. Вчера была сигарета.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Не открывать пачку",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Вчера была целая, сегодня ни одной. Пачка осталась в кармане. Первый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Четыре затяжки за компанию, остальное в урну. Дни без сигарет считаются с нуля: четверть тоже сигарета.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d19_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. Домой {hero} пошёл с запахом мяты.",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "text": "Сигарета у двери бара, за компанию. Четверг как четверг.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d19_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K19-05q",
+    "kind": "story",
+    "title": "У двери бара",
+    "when": {
+      "days": [
+        19,
+        19
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d19_smoked",
+          "set": false
+        },
+        {
+          "flag": "d19_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d19_quarter",
+          "set": false
+        },
+        {
+          "any": [
+            {
+              "flag": "d19_bar",
+              "eq": "held"
+            },
+            {
+              "flag": "d19_bar",
+              "eq": "lot"
+            }
+          ]
+        },
+        {
+          "flag": "d18_quarter"
+        }
+      ]
+    },
+    "text": "После матча у двери бара курит полкомпании, Витя прощается со всеми по очереди. Рука сама нашла в кармане пачку. Вчера была четверть: четыре затяжки и в пепельницу.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Не открывать пачку",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Вчера четверть, сегодня ни одной. Пачка осталась в кармане. Первый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Снова четверть, за компанию. Вреда вдвое меньше, но дни без сигарет опять считаются с нуля.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d19_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. Домой {hero} пошёл с запахом мяты.",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "text": "Вчера четверть, сегодня целая, за компанию. Ничего: четверть уже получалась, получится и ещё.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d19_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K19-05b",
+    "kind": "story",
+    "title": "У двери бара",
+    "when": {
+      "days": [
+        19,
+        19
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d19_smoked",
+          "set": false
+        },
+        {
+          "flag": "d19_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d19_quarter",
+          "set": false
+        },
+        {
+          "any": [
+            {
+              "flag": "d19_bar",
+              "eq": "held"
+            },
+            {
+              "flag": "d19_bar",
+              "eq": "lot"
+            }
+          ]
+        },
+        {
+          "flag": "d18_no_smoke"
+        }
+      ]
+    },
+    "text": "После матча у двери бара курит полкомпании. {hero} держится не первый день, но рука сама нашла в кармане пачку. Кто-то уже протягивает зажигалку.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Не открывать пачку",
+        "cost": {
+          "energy": 3
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 1
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял с остальными просто так и пошёл домой. Второй день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 2
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял с остальными просто так и пошёл домой. Третий день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 3
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял с остальными просто так и пошёл домой. Четвёртый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 4
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял с остальными просто так и пошёл домой. Пятый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 5
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял с остальными просто так и пошёл домой. Шестой день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 6
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял с остальными просто так и пошёл домой. Седьмой день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 7
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял с остальными просто так и пошёл домой. Восьмой день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 8
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял с остальными просто так и пошёл домой. Девятый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 9
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял с остальными просто так и пошёл домой. Десятый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 10
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял с остальными просто так и пошёл домой. Одиннадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 11
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял с остальными просто так и пошёл домой. Двенадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 12
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял с остальными просто так и пошёл домой. Тринадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 13
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял с остальными просто так и пошёл домой. Четырнадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 14
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял с остальными просто так и пошёл домой. Пятнадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 15
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял с остальными просто так и пошёл домой. Шестнадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 16
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял с остальными просто так и пошёл домой. Семнадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 17
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял с остальными просто так и пошёл домой. Восемнадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 18
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял с остальными просто так и пошёл домой. Девятнадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "not": {
+                  "any": [
+                    {
+                      "counter": "smoke_free",
+                      "eq": 1
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 2
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 3
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 4
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 5
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 6
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 7
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 8
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 9
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 10
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 11
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 12
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 13
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 14
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 15
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 16
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 17
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 18
+                    }
+                  ]
+                }
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял с остальными просто так и пошёл домой. Ещё один день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Четыре затяжки за компанию. Вчера держался, сегодня четверть: дни без сигарет снова считаются с нуля.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d19_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. Домой {hero} пошёл с запахом мяты.",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "text": "Сигарета у двери бара, за компанию. Вчера удержался, сегодня нет: счёт дней без табака снова с нуля. Вчерашний день никуда не делся.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d19_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K19-06a",
+    "kind": "story",
+    "title": "Балкон",
+    "when": {
+      "days": [
+        19,
+        19
+      ],
+      "parts": [
+        "night"
+      ],
+      "requires": [
+        {
+          "flag": "d19_smoked",
+          "set": false
+        },
+        {
+          "flag": "d19_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d19_quarter",
+          "set": false
+        },
+        {
+          "flag": "d19_bar",
+          "eq": "home"
+        },
+        {
+          "any": [
+            {
+              "flag": "d18_smoked"
+            },
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "d18_no_smoke"
+                  },
+                  {
+                    "flag": "d18_quarter"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "text": "Ночь, балкон. Вчера была сигарета. Из чьего-то окна ещё кричат «Гол!»: видимо, повтор.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Не открывать пачку",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Вчера была целая, сегодня ни одной. Пачка осталась закрытой. Первый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Вчера целая, сегодня четверть: четыре затяжки и в пепельницу. Дни без сигарет всё равно считаются с нуля.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d19_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. Пачка осталась на подоконнике, рядом с зажигалкой.",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "text": "Обычная сигарета на балконе. Четверг как четверг.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d19_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K19-06q",
+    "kind": "story",
+    "title": "Балкон",
+    "when": {
+      "days": [
+        19,
+        19
+      ],
+      "parts": [
+        "night"
+      ],
+      "requires": [
+        {
+          "flag": "d19_smoked",
+          "set": false
+        },
+        {
+          "flag": "d19_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d19_quarter",
+          "set": false
+        },
+        {
+          "flag": "d19_bar",
+          "eq": "home"
+        },
+        {
+          "flag": "d18_quarter"
+        }
+      ]
+    },
+    "text": "Ночь, балкон. Вчера была четверть: четыре затяжки и в пепельницу. Во дворе кто-то сигналит в честь победы.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Не открывать пачку",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Вчера четверть, сегодня ни одной. Пачка осталась закрытой. Первый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Снова четверть. Вреда вдвое меньше, но дни без сигарет опять считаются с нуля.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d19_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. Пачка осталась на подоконнике, рядом с зажигалкой.",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "text": "Вчера четверть, сегодня целая. Ничего: впереди ещё одиннадцать дней.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d19_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K19-06b",
+    "kind": "story",
+    "title": "Балкон",
+    "when": {
+      "days": [
+        19,
+        19
+      ],
+      "parts": [
+        "night"
+      ],
+      "requires": [
+        {
+          "flag": "d19_smoked",
+          "set": false
+        },
+        {
+          "flag": "d19_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d19_quarter",
+          "set": false
+        },
+        {
+          "flag": "d19_bar",
+          "eq": "home"
+        },
+        {
+          "flag": "d18_no_smoke"
+        }
+      ]
+    },
+    "text": "Ночь, балкон. Вчера пачка осталась закрытой. До встречи одиннадцать дней, и рука сама тянется к подоконнику.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Не открывать пачку",
+        "cost": {
+          "energy": 3
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 1
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Второй день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 2
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Третий день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 3
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Четвёртый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 4
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Пятый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 5
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Шестой день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 6
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Седьмой день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 7
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Восьмой день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 8
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Девятый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 9
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Десятый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 10
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Одиннадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 11
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Двенадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 12
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Тринадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 13
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Четырнадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 14
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Пятнадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 15
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Шестнадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 16
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Семнадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 17
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Восемнадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 18
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Девятнадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "not": {
+                  "any": [
+                    {
+                      "counter": "smoke_free",
+                      "eq": 1
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 2
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 3
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 4
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 5
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 6
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 7
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 8
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 9
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 10
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 11
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 12
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 13
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 14
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 15
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 16
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 17
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 18
+                    }
+                  ]
+                }
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Ещё один день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Вчера держался, сегодня четверть: дни без сигарет снова считаются с нуля.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d19_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. Пачка осталась на подоконнике, рядом с зажигалкой.",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d19_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "text": "Вчера удержался, сегодня нет. Счёт дней без табака снова с нуля, но вчерашний день остался вчерашним.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d19_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A19-run",
+    "kind": "action",
+    "title": "Пробежка в парке",
+    "when": {
+      "days": [
+        19,
+        19
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Пробежка в парке",
+        "cost": {
+          "energy": 4
+        },
+        "outcomes": [
+          {
+            "weight": 3,
+            "hint": "получилось",
+            "text": "Три круга по парку. В четверг в парке пусто, только ветер и он. Дышится ровно.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          },
+          {
+            "weight": 1,
+            "hint": "закололо в боку",
+            "text": "На втором круге закололо в боку. Последний круг пешком, но до конца.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -1
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A19-gym",
+    "kind": "action",
+    "title": "Тренировка в зале",
+    "when": {
+      "days": [
+        19,
+        19
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ],
+      "requires": [
+        {
+          "modifier": "gym"
+        }
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Тренировка в зале по абонементу",
+        "cost": {
+          "energy": 4
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "modifier": "gym",
+                "eq": 0
+              }
+            ],
+            "text": "Сорок минут на тренажёрах, последняя тренировка по абонементу. Администратор на выходе: «Продлевать будете?»",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "not": {
+                  "modifier": "gym",
+                  "eq": 0
+                }
+              }
+            ],
+            "text": "Сорок минут на тренажёрах. В четверг перед футболом зал полупустой.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A19-clean",
+    "kind": "action",
+    "title": "Душ и чистая футболка",
+    "when": {
+      "days": [
+        19,
+        19
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Душ и чистая футболка",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Душ и чистая футболка. Хоть сейчас на сцену.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -5
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A19-teeth",
+    "kind": "action",
+    "title": "Почистить зубы по таймеру",
+    "when": {
+      "days": [
+        19,
+        19
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Почистить зубы две минуты по таймеру",
+        "cost": {
+          "energy": 1
+        },
+        "outcomes": [
+          {
+            "text": "Две минуты по таймеру. Если уж петь, то с чистыми зубами.",
+            "effects": [
+              {
+                "problem": "teeth",
+                "add": -1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A19-couch",
+    "kind": "action",
+    "title": "Полежать на диване",
+    "when": {
+      "days": [
+        19,
+        19
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Полежать на диване",
+        "outcomes": [
+          {
+            "text": "Полчаса на диване. Четверг, можно.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K19-sleep",
+    "kind": "action",
+    "title": "Сон",
+    "when": {
+      "days": [
+        19,
+        19
+      ],
+      "parts": [
+        "night"
+      ]
+    },
+    "text": "Четверг позади.",
+    "choices": [
+      {
+        "id": "sleep",
+        "label": "Лечь сейчас",
+        "outcomes": [
+          {
+            "text": "Свет выключен. Четверг третьей недели позади. До встречи выпускников одиннадцать дней.",
+            "effects": [
+              {
+                "closeDay": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "late",
+        "label": "Посидеть в телефоне до трёх",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "any": [
+                  {
+                    "flag": "d19_sing",
+                    "eq": "practice"
+                  },
+                  {
+                    "flag": "d19_sing",
+                    "eq": "promised"
+                  }
+                ]
+              }
+            ],
+            "text": "В три часа ночи {hero} всё ещё смотрит, как поют другие: караоке, свадьбы, чужие выпускные. Завтра на четыре энергии меньше.",
+            "effects": [
+              {
+                "flag": "d19_late"
+              },
+              {
+                "tomorrow": [
+                  {
+                    "stat": "energy",
+                    "add": -4
+                  }
+                ]
+              },
+              {
+                "closeDay": true
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "not": {
+                  "any": [
+                    {
+                      "flag": "d19_sing",
+                      "eq": "practice"
+                    },
+                    {
+                      "flag": "d19_sing",
+                      "eq": "promised"
+                    }
+                  ]
+                }
+              }
+            ],
+            "text": "В три часа ночи в ленте повтор матча, все голы подряд. Завтра на четыре энергии меньше.",
+            "effects": [
+              {
+                "flag": "d19_late"
+              },
+              {
+                "tomorrow": [
+                  {
+                    "stat": "energy",
+                    "add": -4
+                  }
+                ]
+              },
+              {
+                "closeDay": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
