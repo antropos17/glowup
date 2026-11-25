@@ -132,6 +132,7 @@ Used in `when.requires`, `choice.requires`, `outcome.if` and in tastes. Numbers 
 | `{ "problem": "skin", "gte": 30 }` | Problem level: 100 neglected, 0 solved |
 | `{ "stat": "energy", "lte": 1 }` | `energy`, `coins`, `chance`, `affinity`, `day`, `streak` |
 | `{ "counter": "smoke_free", "gte": 3 }` | Counter value; a missing counter is 0 |
+| `{ "modifier": "gym", "gte": 2 }` | Modifier with this `id` is running: from the morning after it was set through its last morning (`fromDay < day <= fromDay + days`); on the day it is set it is not running yet. `eq`/`gte`/`lte` compare the days it has left, the mornings after today on which it still works (`fromDay + days - day`: `days - 1` on its first day, 0 on its last; no end without `days`). Without a comparison: just running. `"set": false`: not running. The checker wants some card or item to set a modifier with this `id` |
 | `{ "item": "cream" }` | Item is in the inventory; `"gte": 2` asks for at least two |
 | `{ "part": ["night"] }` | Current part of the day |
 | `{ "gender": "f" }` | Hero's gender |

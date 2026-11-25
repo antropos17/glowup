@@ -6,7 +6,7 @@ import {
   buy, courseActive, markMissedSeen, newGame, oddsFor, soldOut, startLook, syncClock, useItem,
 } from '../src/engine/game';
 import { validateContent } from '../src/engine/validate';
-import type { Content, GameState } from '../src/engine/types';
+import type { Content, GameState, Modifier } from '../src/engine/types';
 import { portraitSvg, type Look } from '../src/art/avatar';
 
 const H = 3_600_000;
@@ -19,6 +19,10 @@ const start = (seed = 7, now = START) => newGame(content, { seed, now, tzOffsetM
 const full: Content = { ...content, balance: { ...content.balance, demoDays: 30 } };
 
 const pick = (s: GameState, card: string, choice: string, c = content) => choose(c, s, card, choice).state;
+/** the gym pass modifier, as the shop item and the Day 9 renewal set it */
+const GYM = (content.items.find((x) => x.id === 'gym_pass')!.onUse![0] as { modifier: Modifier }).modifier;
+/** the state with a gym pass set on `fromDay` (it works from the next morning) */
+const passFrom = (s: GameState, fromDay: number): GameState => ({ ...s, modifiers: [...s.modifiers.filter((m) => m.id !== 'gym'), { ...GYM, fromDay }] });
 /** сыграть сюжет до конца текущего времени суток, выбирая указанные варианты или первый доступный */
 function story(s: GameState, picks: Record<string, string> = {}, c = content): GameState {
   for (let i = 0; i < 20; i++) {
@@ -77,6 +81,58 @@ describe('the count condition', () => {
     expect(withCond({ count: [], gte: 1 }).join()).toContain('empty list');
     expect(withCond({ count: [{ flag: 'a' }] }).join()).toContain('needs gte or lte');
     expect(withCond({ count: [{ problem: 'nope' }], gte: 1 }).join()).toContain('nope');
+  });
+});
+
+describe('the modifier condition', () => {
+  const on = (day: number, fromDay?: number): GameState => {
+    const s: GameState = { ...start(), day, part: 'evening' };
+    return fromDay === undefined ? s : passFrom(s, fromDay);
+  };
+  const n = (s: GameState, x: object) => check(content, s, x as never);
+  const gymOpen = (s: GameState) => actionsFor(full, s).some((c) => c.id === `A${s.day}-gym`);
+  it('holds from the morning after the modifier is set through its last day, not before and not after', () => {
+    expect([10, 11, 17, 18].map((d) => n(on(d, 10), { modifier: 'gym' }))).toEqual([false, true, true, false]);
+    expect([10, 11, 17, 18].map((d) => n(on(d, 10), { modifier: 'gym', set: false }))).toEqual([true, false, false, true]);
+    expect([n(on(12), { modifier: 'gym' }), n(on(12, 10), { modifier: 'derm_course' })]).toEqual([false, false]);
+  });
+  it('compares the days left: days - 1 on the first day, 0 on the last, no end without days', () => {
+    const left = (d: number, x: object) => n(on(d, 10), { modifier: 'gym', ...x });
+    expect([left(11, { eq: 6 }), left(11, { gte: 6 }), left(11, { gte: 7 }), left(11, { lte: 5 })]).toEqual([true, true, false, false]);
+    expect([left(17, { eq: 0 }), left(17, { lte: 0 }), left(16, { lte: 0 }), left(16, { eq: 1 })]).toEqual([true, true, false, true]);
+    expect(left(10, { gte: 0 })).toBe(false);                                     // the day it is set does not count
+    const endless: GameState = { ...on(25), modifiers: [{ id: 'gym', title: 'x', fromDay: 2 }] };
+    expect([n(endless, { modifier: 'gym', gte: 100 }), n(endless, { modifier: 'gym', lte: 100 })]).toEqual([true, false]);
+  });
+  it('the gym of Days 10–14 is open with the pass renewed on Day 9 and closed without a pass', () => {
+    const renewed = (d: number) => ({ ...on(d, 9), flags: { d9_pass: { value: 'renewed', day: 9 } } });
+    expect([10, 11, 12, 13, 14].map((d) => gymOpen(renewed(d)))).toEqual([true, true, true, true, true]);
+    expect([10, 11, 12, 13, 14].map((d) => gymOpen(on(d)))).toEqual([false, false, false, false, false]);
+    expect([10, 11, 12, 13, 14].map((d) => gymOpen(on(d, 2)))).toEqual([false, false, false, false, false]);   // the Day 2 pass ended on Day 9
+  });
+  it('a shop pass used on a day opens the gym for exactly its seven days, on the real clock', () => {
+    const run = (useDay: number) => {
+      const used = useItem(full, buy(full, { ...start(), day: useDay, coins: 500 }, 'gym_pass'), 'gym_pass');
+      const days: Record<number, [boolean, boolean]> = {};
+      let s = used;
+      for (let d = useDay; d <= 18; d++) {
+        s = syncClock(full, s, at(9 + 24 * (d - 1) + 10));                         // the evening of day d
+        days[d] = [n(s, { modifier: 'gym' }), d >= 10 && d <= 14 && gymOpen(s)];
+      }
+      return days;
+    };
+    const six = run(6);
+    expect(Object.entries(six).filter(([, v]) => v[0]).map(([d]) => +d)).toEqual([7, 8, 9, 10, 11, 12, 13]);
+    expect([10, 11, 12, 13, 14].map((d) => six[d][1])).toEqual([true, true, true, true, false]);
+    const twelve = run(12);
+    expect([12, 13, 14].map((d) => twelve[d][1])).toEqual([false, true, true]);
+    expect(Object.entries(twelve).filter(([, v]) => v[0]).map(([d]) => +d)).toEqual([13, 14, 15, 16, 17, 18]);
+  });
+  it('the checker rejects an unknown modifier name', () => {
+    const withCond = (x: object) => validateContent({ ...content, tastes: [{ id: 'no_beard', title: 'x', bonus: 0, wants: [x as never] }] });
+    expect(withCond({ modifier: 'gym', gte: 1 })).toEqual([]);
+    expect(withCond({ modifier: 'sauna' }).join()).toContain('no modifier «sauna»');
+    expect(withCond({ not: { modifier: 'sauna' } }).join()).toContain('sauna');
   });
 });
 
@@ -2183,13 +2239,13 @@ describe('день 6', () => {
             expect(actionsFor(content, s).map((c) => c.id)).toEqual(['A10-run', 'A10-clean', 'A10-teeth', 'A10-couch', 'K10-sleep']);
             expect(actionsFor(content, day10()).map((c) => c.id)).toContain('A-job');
             const gym = (x: GameState) => actionsFor(content, x).map((c) => c.id).includes('A10-gym');
-            expect(gym(night({ on: { d9_pass: 'renewed' } }))).toBe(true);
-            expect(gym(night({ on: { d2_gym: true } }))).toBe(false);                     // the Day 2 pass ended on Day 9
-            expect(gym(flagged(s, 'bought_gym_pass', 5))).toBe(true);                     // a shop pass used from Day 5 runs to Day 12
-            expect(gym(flagged(s, 'bought_gym_pass', 2))).toBe(false);
-            expect(gym(flagged(s, 'bought_gym_pass', 10))).toBe(false);
+            expect(gym(passFrom(night({ on: { d9_pass: 'renewed' } }), 9))).toBe(true);
+            expect(gym(passFrom(s, 2))).toBe(false);                     // the Day 2 pass ended on Day 9
+            expect(gym(passFrom(s, 5))).toBe(true);                     // a shop pass used from Day 5 runs to Day 12
+            expect(gym(passFrom(s, 2))).toBe(false);
+            expect(gym(passFrom(s, 10))).toBe(false);
             expect(gym({ ...flagged(s, 'bought_gym_pass', 5), items: { ...s.items, gym_pass: 1 } })).toBe(false);
-            expect(choose(content, night({ on: { d9_pass: 'renewed' } }), 'A10-gym', 'go').outcome.text).toContain('Растёшь');
+            expect(choose(content, passFrom(night({ on: { d9_pass: 'renewed' } }), 9), 'A10-gym', 'go').outcome.text).toContain('Растёшь');
             expect(card('K10-sleep').choices.map((c) => c.id)).toEqual(['sleep', 'late']);
             const slept = choose(content, s, 'K10-sleep', 'sleep');
             expect(slept.outcome.text).toContain('«Осталось двадцать дней!»');
@@ -2221,8 +2277,8 @@ describe('день 6', () => {
             const set = new Set(mine.flatMap((c) => c.choices.flatMap((ch) => ch.outcomes.flatMap((o) => (o.effects ?? []).flatMap((e) => ('flag' in e ? [e.flag] : []))))));
             // d10_late: the Day 11 morning; d10_will_sing: the reunion, days 15–30
             expect([...set].filter((f) => !read(f)).sort()).toEqual(['d10_late', 'd10_will_sing']);
-            for (const f of ['d9_late', 'd9_pass', 'd9_burner', 'd9_oksana', 'd9_quarter', 'd6_reply', 'd7_thread', 'd3_posted', ...LOOKS, 'bought_gym_pass', 'd1_half']) expect(read(f), f).toBe(true);
-            for (const x of ['{"item":"gum"}', '{"item":"gym_pass"}', '"counter":"smoke_free"']) expect(json).toContain(x);
+            for (const f of ['d9_late', 'd9_pass', 'd9_burner', 'd9_oksana', 'd9_quarter', 'd6_reply', 'd7_thread', 'd3_posted', ...LOOKS, 'd1_half']) expect(read(f), f).toBe(true);
+            for (const x of ['{"item":"gum"}', '{"modifier":"gym"}', '"counter":"smoke_free"']) expect(json).toContain(x);
           });
           describe('день 11', () => {
             /** Day 11 is past the demo too: the clock may cross Day 10 only with the cut-off lifted to 11 */
@@ -2352,10 +2408,10 @@ describe('день 6', () => {
               expect(actionsFor(content, s).map((c) => c.id)).toEqual(['A11-run', 'A11-clean', 'A11-teeth', 'A11-couch', 'K11-sleep']);
               expect(actionsFor(content, day11()).map((c) => c.id)).toContain('A-job');
               const gym = (x: GameState) => actionsFor(content, x).map((c) => c.id).includes('A11-gym');
-              expect(gym(night({ on: { d9_pass: 'renewed' } }))).toBe(true);
-              expect(gym(flagged(s, 'bought_gym_pass', 4))).toBe(true);                       // a shop pass used from Day 4 runs to Day 11
-              expect(gym(flagged(s, 'bought_gym_pass', 3))).toBe(false);
-              expect(gym(flagged(s, 'bought_gym_pass', 11))).toBe(false);
+              expect(gym(passFrom(night({ on: { d9_pass: 'renewed' } }), 9))).toBe(true);
+              expect(gym(passFrom(s, 4))).toBe(true);                       // a shop pass used from Day 4 runs to Day 11
+              expect(gym(passFrom(s, 3))).toBe(false);
+              expect(gym(passFrom(s, 11))).toBe(false);
               expect(gym({ ...flagged(s, 'bought_gym_pass', 6), items: { ...s.items, gym_pass: 1 } })).toBe(false);
               expect(card('K11-sleep').choices.map((c) => c.id)).toEqual(['sleep', 'late']);
               const slept = choose(content, s, 'K11-sleep', 'sleep');
@@ -2390,8 +2446,8 @@ describe('день 6', () => {
               const set = new Set(mine.flatMap((c) => c.choices.flatMap((ch) => ch.outcomes.flatMap((o) => (o.effects ?? []).flatMap((e) => ('flag' in e ? [e.flag] : []))))));
               // d11_late: the Day 12 morning
               expect([...set].filter((f) => !read(f)).sort()).toEqual(['d11_late']);
-              for (const f of ['d10_late', 'd10_smoked', 'd10_no_smoke', 'd10_quarter', 'd9_pass', 'd9_burner', 'd5_helped_zina', 'd5_no_help', 'd5_cream', 'd8_lunch', 'bought_haircut', 'bought_gym_pass', 'd1_half']) expect(read(f), f).toBe(true);
-              for (const x of ['{"item":"gum"}', '{"item":"gym_pass"}', '"counter":"smoke_free"']) expect(json).toContain(x);
+              for (const f of ['d10_late', 'd10_smoked', 'd10_no_smoke', 'd10_quarter', 'd9_pass', 'd9_burner', 'd5_helped_zina', 'd5_no_help', 'd5_cream', 'd8_lunch', 'bought_haircut', 'd1_half']) expect(read(f), f).toBe(true);
+              for (const x of ['{"item":"gum"}', '{"modifier":"gym"}', '"counter":"smoke_free"']) expect(json).toContain(x);
             });
             describe('день 12', () => {
               /** Day 12 is past the demo too: the clock may cross Day 11 only with the cut-off lifted to 12 */
@@ -2545,10 +2601,10 @@ describe('день 6', () => {
                 expect(actionsFor(content, s).map((c) => c.id)).toEqual(['A12-run', 'A12-clean', 'A12-teeth', 'A12-couch', 'K12-sleep']);
                 expect(actionsFor(content, day12()).map((c) => c.id)).toContain('A-job');
                 const gym = (x: GameState) => actionsFor(content, x).map((c) => c.id).includes('A12-gym');
-                expect(gym(night({ on: { d9_pass: 'renewed' } }))).toBe(true);
-                expect(gym(flagged(s, 'bought_gym_pass', 5))).toBe(true);                       // a shop pass used from Day 5 runs to Day 12
-                expect(gym(flagged(s, 'bought_gym_pass', 4))).toBe(false);
-                expect(gym(flagged(s, 'bought_gym_pass', 12))).toBe(false);
+                expect(gym(passFrom(night({ on: { d9_pass: 'renewed' } }), 9))).toBe(true);
+                expect(gym(passFrom(s, 5))).toBe(true);                       // a shop pass used from Day 5 runs to Day 12
+                expect(gym(passFrom(s, 4))).toBe(false);
+                expect(gym(passFrom(s, 12))).toBe(false);
                 expect(gym({ ...flagged(s, 'bought_gym_pass', 7), items: { ...s.items, gym_pass: 1 } })).toBe(false);
                 expect(card('K12-sleep').choices.map((c) => c.id)).toEqual(['sleep', 'late']);
                 const slept = choose(content, s, 'K12-sleep', 'sleep');
@@ -2584,8 +2640,8 @@ describe('день 6', () => {
                 const set = new Set(mine.flatMap((c) => c.choices.flatMap((ch) => ch.outcomes.flatMap((o) => (o.effects ?? []).flatMap((e) => ('flag' in e ? [e.flag] : []))))));
                 // d12_cleaned is read by the porch and pays off on Day 14 too; d12_helped_music: Days 13–14; d12_strips: Day 13; d12_late: the Day 13 morning
                 expect([...set].filter((f) => !read(f)).sort()).toEqual(['d12_helped_music', 'd12_late', 'd12_strips']);
-                for (const f of ['d11_late', 'd11_smoked', 'd11_no_smoke', 'd11_quarter', 'd9_pass', 'd9_burner', 'd5_dentist_later', 'd5_dentist_moved', 'd5_cleaned', 'd5_smoked', 'd1_soda_teeth', 'd7_msg', 'd6_reply', 'bought_gym_pass', 'd1_half']) expect(read(f), f).toBe(true);
-                for (const x of ['{"item":"gum"}', '{"item":"gym_pass"}', '"counter":"smoke_free"']) expect(json).toContain(x);
+                for (const f of ['d11_late', 'd11_smoked', 'd11_no_smoke', 'd11_quarter', 'd9_pass', 'd9_burner', 'd5_dentist_later', 'd5_dentist_moved', 'd5_cleaned', 'd5_smoked', 'd1_soda_teeth', 'd7_msg', 'd6_reply', 'd1_half']) expect(read(f), f).toBe(true);
+                for (const x of ['{"item":"gum"}', '{"modifier":"gym"}', '"counter":"smoke_free"']) expect(json).toContain(x);
               });
               describe('день 13', () => {
                 /** Day 13 is past the demo too: the clock may cross Day 12 only with the cut-off lifted to 13 */
@@ -2737,10 +2793,10 @@ describe('день 6', () => {
                   expect(actionsFor(content, s).map((c) => c.id)).toEqual(['A13-run', 'A13-clean', 'A13-teeth', 'A13-couch', 'K13-sleep']);
                   expect(actionsFor(content, day13()).map((c) => c.id)).toContain('A-job');
                   const gym = (x: GameState) => actionsFor(content, x).map((c) => c.id).includes('A13-gym');
-                  expect(gym(patch(s, { on: { d9_pass: 'renewed' } }))).toBe(true);
-                  expect(gym(flagged(s, 'bought_gym_pass', 6))).toBe(true);                       // a shop pass used from Day 6 runs to Day 13
-                  expect(gym(flagged(s, 'bought_gym_pass', 5))).toBe(false);
-                  expect(gym(flagged(s, 'bought_gym_pass', 13))).toBe(false);
+                  expect(gym(passFrom(patch(s, { on: { d9_pass: 'renewed' } }), 9))).toBe(true);
+                  expect(gym(passFrom(s, 6))).toBe(true);                       // a shop pass used from Day 6 runs to Day 13
+                  expect(gym(passFrom(s, 5))).toBe(false);
+                  expect(gym(passFrom(s, 13))).toBe(false);
                   expect(card('K13-sleep').choices.map((c) => c.id)).toEqual(['sleep', 'late']);
                   const slept = choose(content, s, 'K13-sleep', 'sleep');
                   expect(slept.outcome.text).toContain('Завтра суббота');
@@ -2774,8 +2830,8 @@ describe('день 6', () => {
                   const set = new Set(mine.flatMap((c) => c.choices.flatMap((ch) => ch.outcomes.flatMap((o) => (o.effects ?? []).flatMap((e) => ('flag' in e ? [e.flag] : []))))));
                   // Day 14 reads d13_late, d13_zerno_reply and d13_zerno_tip; d13_course_done also pays off on days 15+
                   expect([...set].filter((f) => !read(f)).sort()).toEqual(['d13_late', 'd13_zerno_tip']);
-                  for (const f of ['d12_late', 'd12_smoked', 'd12_no_smoke', 'd12_quarter', 'd12_strips', 'd12_helped_music', 'd9_pass', 'd9_burner', 'd3_course', 'd4_meat_held', 'd4_feast', 'd1_joked', 'd2_zerno_known', 'bought_gym_pass', 'd1_half']) expect(read(f), f).toBe(true);
-                  for (const x of ['{"item":"gum"}', '{"item":"gym_pass"}', '"counter":"smoke_free"']) expect(json).toContain(x);
+                  for (const f of ['d12_late', 'd12_smoked', 'd12_no_smoke', 'd12_quarter', 'd12_strips', 'd12_helped_music', 'd9_pass', 'd9_burner', 'd3_course', 'd4_meat_held', 'd4_feast', 'd1_joked', 'd2_zerno_known', 'd1_half']) expect(read(f), f).toBe(true);
+                  for (const x of ['{"item":"gum"}', '{"modifier":"gym"}', '"counter":"smoke_free"']) expect(json).toContain(x);
                 });
                 describe('день 14', () => {
                   /** Day 14 is past the demo too: the clock may cross Day 13 only with the cut-off lifted to 14 */
@@ -2961,10 +3017,10 @@ describe('день 6', () => {
                     expect(actionsFor(content, s).map((c) => c.id)).toEqual(['A14-run', 'A14-clean', 'A14-teeth', 'A14-couch', 'K14-sleep']);
                     expect(actionsFor(content, day14()).map((c) => c.id)).toContain('A-job');
                     const gym = (x: GameState) => actionsFor(content, x).map((c) => c.id).includes('A14-gym');
-                    expect(gym(patch(s, { on: { d9_pass: 'renewed' } }))).toBe(true);
-                    expect(gym(flagged(s, 'bought_gym_pass', 7))).toBe(true);                       // a shop pass used from Day 7 runs to Day 14
-                    expect(gym(flagged(s, 'bought_gym_pass', 6))).toBe(false);
-                    expect(gym(flagged(s, 'bought_gym_pass', 14))).toBe(false);
+                    expect(gym(passFrom(patch(s, { on: { d9_pass: 'renewed' } }), 9))).toBe(true);
+                    expect(gym(passFrom(s, 7))).toBe(true);                       // a shop pass used from Day 7 runs to Day 14
+                    expect(gym(passFrom(s, 6))).toBe(false);
+                    expect(gym(passFrom(s, 14))).toBe(false);
                     expect(card('K14-sleep').choices.map((c) => c.id)).toEqual(['sleep', 'late']);
                     const slept = choose(content, s, 'K14-sleep', 'sleep');
                     expect(slept.outcome.text).toContain('шестнадцать дней');
@@ -2999,10 +3055,10 @@ describe('день 6', () => {
                     // d14_late: the Day 15 morning; d14_met, d14_line, d14_msg also pay off on days 15+
                     expect([...set].filter((f) => !read(f)).sort()).toEqual(['d14_late']);
                     for (const f of ['d13_late', 'd13_smoked', 'd13_no_smoke', 'd13_quarter', 'd13_bday', 'd13_zerno_reply', 'd13_zerno_tip', 'd12_helped_music', 'd12_cleaned', 'd11_cut',
-                      'd10_photo', 'd9_pass', 'd9_burner', 'shaved', 'd8_red', 'd6_beard_hint', 'd7_msg', 'd7_line', 'bought_haircut', 'bought_shirt', 'bought_frame', 'd5_cleaned', 'd3_course', 'bought_gym_pass', 'd1_half']) expect(read(f), f).toBe(true);
+                      'd10_photo', 'd9_pass', 'd9_burner', 'shaved', 'd8_red', 'd6_beard_hint', 'd7_msg', 'd7_line', 'bought_haircut', 'bought_shirt', 'bought_frame', 'd5_cleaned', 'd3_course', 'd1_half']) expect(read(f), f).toBe(true);
                     // left open on purpose: d13_course_done is for days 15+, d8_replied waits for the authors
                     for (const f of ['d13_course_done', 'd8_replied']) expect(read(f), f).toBe(false);
-                    for (const x of ['{"item":"gum"}', '{"item":"gym_pass"}', '{"item":"cream_zina"}', '"counter":"smoke_free"', '"counter":"d14_scene"']) expect(json).toContain(x);
+                    for (const x of ['{"item":"gum"}', '{"modifier":"gym"}', '{"item":"cream_zina"}', '"counter":"smoke_free"', '"counter":"d14_scene"']) expect(json).toContain(x);
                   });
                 });
               });

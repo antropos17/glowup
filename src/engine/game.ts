@@ -62,6 +62,12 @@ export function check(c: Content, s: GameState, cond: Cond): boolean {
     return !!f && cmp(f.value, cond);
   }
   if ('counter' in cond) return cmp(s.counters[cond.counter] ?? 0, cond);
+  if ('modifier' in cond) {
+    // running = fromDay < day <= fromDay + days, the mornings it works; see the Cond type for "days left"
+    const m = s.modifiers.find((x) => x.id === cond.modifier && s.day > x.fromDay && (x.days === undefined || s.day <= x.fromDay + x.days));
+    if (cond.set === false) return !m;
+    return !!m && cmp(m.days === undefined ? Infinity : m.fromDay + m.days - s.day, cond);
+  }
   if ('problem' in cond) return cmp(s.problems[cond.problem] ?? 0, cond);
   if ('stat' in cond) {
     const v = cond.stat === 'chance' ? chance(c, s) : cond.stat === 'day' ? s.day : s[cond.stat];

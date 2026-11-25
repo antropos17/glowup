@@ -19,6 +19,14 @@ export type Cond =
   | ({ problem: string } & Cmp)                      // уровень проблемы: 100 запущено, 0 решено
   | ({ stat: 'energy' | 'coins' | 'chance' | 'affinity' | 'day' | 'streak' } & Cmp)
   | ({ counter: string } & Cmp)                      // счётчик: дни без сигарет, полезные действия
+  /**
+   * A modifier (by its id) is running: it was set on an earlier day and has not expired, so it worked this morning.
+   * On the day it is set it is not running yet, because a modifier works from the next morning.
+   * eq/gte/lte compare the days it has left: mornings after today on which it still works
+   * (fromDay + days - day; 0 on its last day, days - 1 on its first; no end without `days`).
+   * `set: false` is true when it is not running.
+   */
+  | ({ modifier: string; set?: boolean } & Cmp)
   | { item: string; gte?: number }                   // предмет в инвентаре
   | { part: DayPart[] }
   | { archetype: string[] }

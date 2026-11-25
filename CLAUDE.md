@@ -30,7 +30,7 @@ Checked against `package.json` on 2026-11-22:
 ```
 npm install
 npm run dev            # asset showcase page with the game in a phone frame
-npm test               # engine tests (169/169 on 2026-11-25)
+npm test               # engine tests (174/174 on 2026-11-25)
 npm run check:content  # scenario validation: broken refs, dead-end cards
 npm run build          # typecheck, then single-file dist/index.html
 npx tsc --noEmit       # typecheck

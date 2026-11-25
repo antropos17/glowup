@@ -34,6 +34,7 @@ export function validateContent(c: Content): string[] {
     if ('item' in x && !items.has(x.item)) err(where, `нет предмета «${x.item}»`);
     if ('taste' in x && !tastes.has(x.taste)) err(where, `нет вкуса «${x.taste}»`);
     if ('seen' in x && !cards.has(x.seen)) err(where, `нет карточки «${x.seen}»`);
+    if ('modifier' in x && !modifiers.has(x.modifier)) err(where, `no modifier «${x.modifier}»: no card or item sets it`);
     if ('archetype' in x) x.archetype.forEach((a) => archetypes.has(a) || err(where, `нет архетипа «${a}»`));
   };
   const effect = (where: string, e: Effect) => {
@@ -52,6 +53,14 @@ export function validateContent(c: Content): string[] {
   for (const card of c.cards) for (const ch of card.choices) for (const o of ch.outcomes) for (const e of o.effects ?? []) {
     if ('queue' in e) queued.add(e.queue);
   }
+  // modifier ids that some card or item can set, for the modifier condition
+  const modifiers = new Set<string>();
+  const addModifiers = (e: Effect): void => {
+    if ('modifier' in e) modifiers.add(e.modifier.id);
+    if ('tomorrow' in e) e.tomorrow.forEach(addModifiers);
+  };
+  for (const card of c.cards) for (const ch of card.choices) for (const o of ch.outcomes) o.effects?.forEach(addModifiers);
+  for (const it of c.items) it.onUse?.forEach(addModifiers);
 
   const checkCard = (card: Card) => {
     const w = `карточка ${card.id}`;
