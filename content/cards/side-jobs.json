@@ -4,7 +4,7 @@
     "kind": "action",
     "title": "Подработка: разгрузить машину",
     "when": {
-      "days": [1, 17],
+      "days": [1, 18],
       "parts": ["day", "evening"],
       "cooldownDays": 1
     },

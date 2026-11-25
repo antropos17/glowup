@@ -1,6 +1,6 @@
 # Week 3 grid (days 15–21)
 
-Status: v1, 2026-11-25. Ruslan answered the open questions on 2026-11-25 («Все по рекомендации», A6 answers); the day rows below follow those answers. Days 15, 16 and 17 are written (Part C below); days 18–21 are not. After approval, days are written one at a time with `/write-day <n>`, which takes its per-day design from Part A.
+Status: v1, 2026-11-25. Ruslan answered the open questions on 2026-11-25 («Все по рекомендации», A6 answers); the day rows below follow those answers. Days 15, 16, 17 and 18 are written (Part C below); days 19–21 are not. After approval, days are written one at a time with `/write-day <n>`, which takes its per-day design from Part A.
 
 Labels used below:
 - **[F]**: fact, checked in the repo files on 2026-11-25 (the file is named).
@@ -506,3 +506,37 @@ Flags set on Day 17 and what later days can rely on:
 Earlier flags read on Day 17: `d16_late`, `d16_pass`, `d16_cake`, `d16_smoked` / `d16_no_smoke` / `d16_quarter`, `d15_team`, `d15_tone`, `d11_tip`, `d11_cut`, `bought_haircut`, `d9_pass`, `d5_helped_zina`, `d1_half`, counter `smoke_free`, item `gum`, modifier `gym`. Not read: `d5_cream` (deviation 7 in the review file), `d15_pimple`, `d15_photo`, `d15_lunch`.
 
 Differences from the plan (details in `docs/review/day17-texts.md`): four pharmacy cards instead of three; `d17_scent` instead of `d17_tester`; Gosha before the pharmacy; the cologne's +2 is not limited to today; the perfume line on the balcony.
+
+## F. Day 18 as written
+
+Written 2026-11-25 in `content/cards/day18.json` (14 story cards, 6 actions); `contentDays` 18, `demoDays` 7; `A-job` days 1–18; day entry «Костюм с выпускного», gift `gum`, teaser «Завтра четверг. Песня». Five new chat situations (10 variants each): `alina_d18_dress`, `alina_d18_fits_back`, `alina_d18_joke_back`, `alina_d18_team_q`, `alina_d18_team_back`. Texts and deviations for review: `docs/review/day18-texts.md`. The engine was not changed.
+
+Cards in display order:
+
+| Part | Card | Shown when | Choices (neutral in bold) | Sets |
+|---|---|---|---|---|
+| morning | K18-late | `d17_late` | **up** | — |
+| morning | K18-run | `d9_pass` = `vitya` or `d16_pass` = `vitya` | run (4 energy, weight −2, `useful` +1) / **skip** | — |
+| morning | K18-01 | everyone | **ok** (Oksana: dress code «как на выпускном», pays the Day 17 teaser) | — |
+| day | K18-02f / t / n | `d18_suit` unset; f: `weight` ≤ 48, t: 49–60, n: ≥ 61 | **try** only; f conf −3; the tie line by `d10_photo` (`both` / `old`) | `d18_suit` = `fits` / `tight` / `no` |
+| evening | K18-03w | `d15_tone` = `warm`, `d18_reply` unset | by suit: fits «А я влез» (+2) / tight (+3) / no (+3) / short «Нормально.» (0) / **later** | `d18_reply` = `answer` / `joke` / `joke` / `short` / `later` |
+| evening | K18-03e | `d15_tone` = `even`, `d15_team` set, `d18_reply` unset | by suit, one answer (+2) / **later** (0) | `d18_reply` = `answer` / `later` |
+| evening | K18-04wa / wj / e | warm + `answer` / warm + `joke` / even + `answer` | **ok**, her answer | — |
+| night | K18-05a / q / b | the Day 17 result (`d17_smoked` or none / `d17_quarter` / `d17_no_smoke`) | hold / quarter / gum / **smoke** | `d18_smoked` / `d18_quarter` / `d18_no_smoke` |
+| plus | A18-run, A18-gym (`{ modifier: 'gym' }`), A18-clean, A18-teeth, A18-couch, A-job | | as Day 17; the gym's last-day line by `{ modifier: 'gym', eq: 0 }` | — |
+| night | K18-sleep | | sleep («До встречи выпускников двенадцать дней») / late (line by `d18_suit` = `no`) | `d18_late` |
+
+The thresholds (A6 answer 10) were measured on 600 random engine players over Days 1–17 (uniform affordable story choices plus random plus actions; «до трёх» one night in five): weight on the morning of Day 18 is 7–77; fits 33.8 %, tight 38.8 %, no 27.3 %. Players who never use the plus menu weigh 62–94 and all get «не влез». Exactly one fitting card fits every weight 0–100, and the `d18_suit` guard keeps a later change of weight from opening a second one (tests). Affinity on Day 18: 0 … +3, never a minus. Nothing is sold on a Day 18 card.
+
+Flags set on Day 18 and what later days can rely on:
+
+| Flag | Values | Always set? | For |
+|---|---|---|---|
+| `d18_suit` | `fits`, `tight`, `no` | yes, every player gets one fitting card (a skipped day plays it) | 18 (her buttons), 20 (`fits` is a visible change), weeks 4+ (the outfit) |
+| `d18_reply` | `answer`, `joke`, `short`, `later` | only for K18-03w (warm) and K18-03e (even with a team); a skipped day sets `later` | 18 (K18-04); free for a later callback |
+| `d18_smoked` / `d18_no_smoke` / `d18_quarter` | true | yes (one balcony card a night) | 19 craving texts |
+| `d18_late` | true | only for «до трёх» | 19 morning |
+
+Earlier flags read on Day 18: `d17_late`, `d17_smoked` / `d17_no_smoke` / `d17_quarter`, `d16_pass`, `d15_tone`, `d15_team`, `d10_photo`, `d9_pass`, `d1_half`, counter `smoke_free`, item `gum`, modifier `gym`, problem `weight`. Not read: `d17_scent`, `bought_perfume`, `d17_alpha`, `d17_cut` (Day 20).
+
+Differences from the plan (details in `docs/review/day18-texts.md`): tight and no get different joke buttons; the organisers' answer has a label per suit; the answer bubble is three cards (K18-04wa / wj / e); the tie line reads `d10_photo` for every band; the staying-up line by `d18_suit`.
