@@ -160,8 +160,8 @@ describe('день 1', () => {
     const after = content.balance.contentDays + 1;
     const unwritten = { ...k1, id: `K${after}-test`, when: { ...k1.when, days: [after, after] as [number, number] } };
     const week2 = (ids: string[]) => ids.filter((id) => /^[KA](8|9)-/.test(id));
-    it('with Days 8–11 written, the demo still ends after Day 7 with «Продолжение следует» and never draws a later card', () => {
-      expect([content.balance.demoDays, content.balance.contentDays]).toEqual([7, 11]);
+    it('with Days 8–12 written, the demo still ends after Day 7 with «Продолжение следует» and never draws a later card', () => {
+      expect([content.balance.demoDays, content.balance.contentDays]).toEqual([7, 12]);
       expect(content.cards.filter((c) => /^[KA]9-/.test(c.id)).length).toBeGreaterThan(15);
       const s = syncClock(content, start(), at(9 + 24 * 9));
       expect([s.demoOver, s.day]).toEqual([true, 7]);
@@ -176,6 +176,8 @@ describe('день 1', () => {
       const s9 = syncClock({ ...content, balance: { ...content.balance, demoDays: 9 } }, start(), at(9 + 24 * 9));
       expect([s9.demoOver, s9.day]).toEqual([true, 9]);
       expect(Object.keys(s9.seen)).toContain('K9-01');
+      expect(content.cards.filter((c) => /^[KA]12-/.test(c.id)).length).toBeGreaterThan(20);
+      expect(Object.keys(s.seen).filter((id) => /^K1[0-2]-/.test(id))).toEqual([]);
     });
     it('validation rejects demoDays above contentDays', () => {
       expect(validateContent({ ...content, balance: { ...content.balance, demoDays: after } }).join('\n')).toContain('demoDays');
@@ -2388,6 +2390,201 @@ describe('день 6', () => {
               expect([...set].filter((f) => !read(f)).sort()).toEqual(['d11_late']);
               for (const f of ['d10_late', 'd10_smoked', 'd10_no_smoke', 'd10_quarter', 'd9_pass', 'd9_burner', 'd5_helped_zina', 'd5_no_help', 'd5_cream', 'd8_lunch', 'bought_haircut', 'bought_gym_pass', 'd1_half']) expect(read(f), f).toBe(true);
               for (const x of ['{"item":"gum"}', '{"item":"gym_pass"}', '"counter":"smoke_free"']) expect(json).toContain(x);
+            });
+            describe('день 12', () => {
+              /** Day 12 is past the demo too: the clock may cross Day 11 only with the cut-off lifted to 12 */
+              const full12: Content = { ...content, balance: { ...content.balance, demoDays: 12 } };
+              /** quiet choices of Day 12: up, not today, the dentist, a cigarette, answer later, scroll, put the phone away */
+              const Q12: Record<string, string> = {
+                'K12-late': 'up', 'K12-run': 'skip', 'K12-01': 'go', 'K12-01c': 'go', 'K12-02a': 'smoke', 'K12-02q': 'smoke', 'K12-02b': 'smoke',
+                'K12-03ws': 'later', 'K12-03wa': 'later', 'K12-03e': 'later', 'K12-04a': 'scroll', 'K12-04b': 'scroll',
+                'K12-05l': 'ok', 'K12-05s': 'ok', 'K12-05p': 'ok', 'K12-05e': 'ok', 'K12-06a': 'smoke', 'K12-06q': 'smoke', 'K12-06b': 'smoke',
+              };
+              /** Day 5 dentist branches and Day 7 tones are switched per test; the base is «booked for Day 12», the dry tone, no soda */
+              const DENTAL = ['d5_dentist_later', 'd5_dentist_moved', 'd5_cleaned', 'd5_smoked', 'd1_soda_teeth'];
+              const CHECKUP: Patch = { on: { d5_cleaned: 'full' } };
+              const WARM: Patch = { on: { d7_msg: 'warm' } };
+              const EVEN: Patch = { on: { d7_msg: 'even' } };
+              const SINGER: Patch = { on: { d7_msg: 'warm', d6_reply: 'joke' } };
+              /** the quiet Wednesday, then sleep or stay up */
+              let n11: GameState | undefined;
+              const night11 = () => (n11 ??= play11(morning11()));
+              const morning12 = (p: Patch = {}, sleep11 = 'sleep') => {
+                const s = syncClock(full12, pick(night11(), 'K11-sleep', sleep11), at(273));
+                const base = patch(s, { off: [...DENTAL, 'd9_pass', 'd9_burner', 'd6_reply', 'd7_msg'], on: { d5_dentist_later: true } });
+                return patch(base, { coins: 300, ...p, off: [...(p.on && ('d5_cleaned' in p.on || 'd5_dentist_moved' in p.on) ? ['d5_dentist_later'] : []), ...(p.off ?? [])] });
+              };
+              const play12 = (s: GameState, p: Record<string, string> = {}, hours = [277, 283, 287.5]) =>
+                hours.reduce((x, h) => story(syncClock(full12, x, at(h)), { ...Q12, ...p }), story(s, { ...Q12, ...p }));
+              const d12 = (s: GameState) => Object.keys(s.seen).filter((id) => id.startsWith('K12-'));
+              /** the day part of Thursday after the quiet morning */
+              const day12 = (p: Patch = {}, q: Record<string, string> = {}) => syncClock(full12, story(morning12(p), { ...Q12, ...q }), at(277));
+              /** the evening of Thursday */
+              const evening12 = (p: Patch = {}, q: Record<string, string> = {}) => syncClock(full12, story(day12(p, q), { ...Q12, ...q }), at(283));
+              const her12 = (s: GameState) => s.chat.filter((m) => m.day === 12 && m.from === 'crush' && !m.status).map((m) => m.text);
+              const his12 = (s: GameState) => s.chat.filter((m) => m.day === 12 && m.from === 'hero').map((m) => m.text);
+
+              it('Thursday morning: overslept after a late Wednesday, Vitya for his runs, the postponed cleaning or the check-up', () => {
+                const s = morning12();
+                expect([s.day, s.part, s.energy]).toEqual([12, 'morning', 10]);
+                expect(next(s)).toBe('K12-01');
+                expect(next(morning12({ on: { d5_dentist_moved: true } }))).toBe('K12-01');
+                expect(next(morning12(CHECKUP))).toBe('K12-01c');
+                const late = morning12({}, 'late');
+                expect([next(late), late.energy]).toEqual(['K12-late', 10 - 4]);
+                const runner = morning12({ on: { d9_pass: 'vitya' } });
+                expect(next(runner)).toBe('K12-run');
+                for (const pass of ['renewed', 'none']) expect(next(morning12({ on: { d9_pass: pass } })), pass).toBe('K12-01');
+                expect(card('K12-run').choices.find((c) => c.neutral)!.id).toBe('skip');
+                const ran = choose(content, runner, 'K12-run', 'run');
+                expect([runner.energy - ran.state.energy, ran.state.problems.weight - runner.problems.weight]).toEqual([4, -2]);
+                expect(choose(content, morning12({ on: { d9_pass: 'vitya', d9_burner: true } }), 'K12-run', 'run').outcome.text).toContain('капсулы');
+                expect(d12(play12(morning12({ on: { d9_pass: 'vitya' } }, 'late'), {}, []))).toEqual(['K12-late', 'K12-run', 'K12-01']);
+                // the cleaning: three energy as an effect, the neutral choice is to go, the soda scratched the enamel
+                expect(card('K12-01').choices.map((c) => [c.id, !!c.neutral, c.cost ?? null])).toEqual([['go', true, null]]);
+                const clean = choose(content, s, 'K12-01', 'go');
+                expect([s.energy - clean.state.energy, clean.state.problems.teeth - s.problems.teeth, clean.state.flags.d12_cleaned.value]).toEqual([3, -15, 'full']);
+                const sodaS = morning12({ on: { d1_soda_teeth: true } });
+                const soda = choose(content, sodaS, 'K12-01', 'go');
+                expect([soda.outcome.text.includes('Содой тёрли?'), soda.state.problems.teeth - sodaS.problems.teeth, soda.state.flags.d12_cleaned.value]).toEqual([true, -10, 'soda']);
+                // the check-up for those cleaned on Day 5: the cigarette on the porch is remembered
+                const up = morning12(CHECKUP);
+                const fine = choose(content, up, 'K12-01c', 'go');
+                expect([fine.outcome.text.includes('Держится хорошо'), fine.state.problems.teeth - up.problems.teeth, fine.state.flags.d12_cleaned]).toEqual([true, -3, undefined]);
+                const smokedUp = patch(up, { on: { d5_smoked: true } });
+                const seen = choose(content, smokedUp, 'K12-01c', 'go');
+                expect([seen.outcome.text.includes('«Курили сразу после чистки?'), seen.state.problems.teeth - smokedUp.problems.teeth]).toEqual([true, -1]);
+              });
+              it('the day: the porch craving right after the cleaning, by yesterday\'s cigarette; Alina asks about the music (warm) or the physics teacher (even), nothing for the dry tone', () => {
+                const s = day12();
+                expect(s.flags.d12_cleaned.value).toBe('full');
+                expect(next(s)).toBe('K12-02a');
+                const y = (p: Patch) => day12(p);
+                expect(next(y({ on: { d11_quarter: true }, off: ['d11_smoked'] }))).toBe('K12-02q');
+                expect(next(y({ on: { d11_no_smoke: true }, off: ['d11_smoked'], counters: { smoke_free: 2 } }))).toBe('K12-02b');
+                expect(card('K12-02a').text).toContain('вчера вечером была сигарета');
+                expect(card('K12-02q').text).toContain('Вчера была четверть');
+                expect(card('K12-02b').text).toContain('Вчера пачка осталась закрытой');
+                const cost = (id: string) => card(id).choices.map((c) => [c.id, c.cost?.energy ?? 0]);
+                for (const id of ['K12-02a', 'K12-02q']) expect(cost(id), id).toEqual([['hold', 2], ['quarter', 1], ['gum', 0], ['smoke', 0]]);
+                expect(cost('K12-02b')).toEqual([['hold', 3], ['quarter', 1], ['gum', 0], ['smoke', 0]]);
+                const smoked = choose(content, s, 'K12-02a', 'smoke');
+                expect([smoked.state.problems.teeth - s.problems.teeth, !!smoked.state.flags.d12_smoked]).toEqual([2, true]);
+                const held = choose(content, y({ on: { d11_no_smoke: true }, off: ['d11_smoked'], counters: { smoke_free: 2 } }), 'K12-02b', 'hold');
+                expect([held.outcome.text.includes('Третий день без табака'), held.state.counters.smoke_free]).toEqual([true, 3]);
+                expect(choose(content, y({ on: { d11_quarter: true }, off: ['d11_smoked'] }), 'K12-02q', 'smoke').outcome.text).toContain('Вчера была четверть, сегодня целая');
+                expect(next(pick(s, 'K12-02a', 'smoke'))).toBeUndefined();                       // dry tone: no message from her
+                expect(next(day12(CHECKUP))).toBeUndefined();                                    // the check-up: no porch, the craving waits for the night
+                // the warm tone: the music, with «Ты же у нас певец» for the one who joked about singing
+                const ask = (p: Patch) => { const x = pick(day12(p), 'K12-02a', 'smoke'); return drawStory(content, x).state; };
+                expect(next(pick(day12(WARM), 'K12-02a', 'smoke'))).toBe('K12-03wa');
+                expect(next(pick(day12(SINGER), 'K12-02a', 'smoke'))).toBe('K12-03ws');
+                expect(next(pick(day12(EVEN), 'K12-02a', 'smoke'))).toBe('K12-03e');
+                expect(her12(ask(SINGER)).at(-1)).toContain('Ты же у нас певец');
+                expect(her12(ask(WARM)).at(-1)).not.toContain('певец');
+                expect(her12(ask(EVEN)).at(-1)).toContain('физичк');
+                for (const id of ['K12-03ws', 'K12-03wa']) {
+                  expect(card(id).choices.map((c) => [c.id, !!c.neutral]), id).toEqual([['list', false], ['short', false], ['pass', false], ['later', true]]);
+                }
+                expect(card('K12-03e').choices.map((c) => [c.id, !!c.neutral])).toEqual([['answer', false], ['short', false], ['later', true]]);
+                const w = ask(WARM);
+                const aff = (st: GameState, id: string, ch: string) => { const r = pick(st, id, ch); return [r.affinity - st.affinity, r.flags.d12_reply.value, his12(r).length]; };
+                expect([aff(w, 'K12-03wa', 'list'), aff(w, 'K12-03wa', 'short'), aff(w, 'K12-03wa', 'pass'), aff(w, 'K12-03wa', 'later')]).toEqual([[3, 'list', 1], [1, 'short', 1], [0, 'pass', 1], [0, 'later', 0]]);
+                expect(pick(w, 'K12-03wa', 'list').flags.d12_helped_music).toBeDefined();
+                const e = ask(EVEN);
+                expect([aff(e, 'K12-03e', 'answer'), aff(e, 'K12-03e', 'short'), aff(e, 'K12-03e', 'later')]).toEqual([[2, 'answer', 1], [0, 'short', 1], [0, 'later', 0]]);
+              });
+              it('the evening: whitening strips for 40 are a trap with odds on the button, the soda remembered; then her answer ends the day: Saturday at «Зерно» for the list', () => {
+                const s = evening12();
+                expect(next(s)).toBe('K12-04b');
+                expect(next(evening12({ on: { d1_soda_teeth: true } }))).toBe('K12-04a');
+                expect(card('K12-04a').text).toContain('сода');
+                const buy = card('K12-04b').choices.find((c) => c.id === 'buy')!;
+                expect([buy.cost, card('K12-04b').choices.find((c) => c.neutral)!.id]).toEqual([{ coins: 40 }, 'scroll']);
+                expect(oddsFor(content, s, buy).map((o) => `${o.word}: ${o.hint}`)).toEqual(['часто: заныли зубы', 'иногда: ничего не изменилось']);
+                const scrolled = pick(s, 'K12-04b', 'scroll');
+                expect([scrolled.rumors.filter((x) => x.day === 12).map((x) => x.id), next(scrolled), s.coins - scrolled.coins]).toEqual([['strips_ad'], undefined, 0]);
+                const bought = choose(content, s, 'K12-04b', 'buy');
+                expect(s.coins - bought.state.coins).toBe(40);
+                expect(['sore', 'none']).toContain(bought.state.flags.d12_strips.value);
+                const sore = card('K12-04b').choices[0].outcomes[0];
+                expect([sore.effects, sore.hint]).toEqual([expect.arrayContaining([{ problem: 'teeth', add: 2 }, { tomorrow: [{ problem: 'teeth', add: 2 }] }]), 'заныли зубы']);
+                // her answer by his reply
+                const answer = (p: Patch, q: Record<string, string>) => { const x = pick(evening12(p, q), next(evening12(p, q))!, 'scroll'); return [next(x), x] as const; };
+                const [l, ls] = answer(WARM, { 'K12-03wa': 'list' });
+                expect(l).toBe('K12-05l');
+                expect(her12(drawStory(content, ls).state).at(-1)).toMatch(/субботу.*«Зерне»/);
+                expect(answer(SINGER, { 'K12-03ws': 'short' })[0]).toBe('K12-05s');
+                expect(answer(WARM, { 'K12-03wa': 'pass' })[0]).toBe('K12-05p');
+                expect(answer(EVEN, { 'K12-03e': 'answer' })[0]).toBe('K12-05e');
+                for (const [p, q] of [[EVEN, { 'K12-03e': 'short' }], [EVEN, {}], [WARM, {}], [{}, {}]] as [Patch, Record<string, string>][]) expect(answer(p, q)[0]).toBeUndefined();
+                for (const id of ['K12-05l', 'K12-05s', 'K12-05p', 'K12-05e']) expect(card(id).choices.map((c) => !!c.neutral), id).toEqual([true]);
+                for (const k of ['alina_d12_music_singer', 'alina_d12_music_ask', 'alina_d12_zerno', 'alina_d12_short', 'alina_d12_pass', 'alina_d12_even_q', 'alina_d12_even_thanks']) expect(content.chat[k].length, k).toBe(10);
+                expect(content.chat.alina_d12_zerno.every((t) => /субботу.*«Зерне»/.test(t))).toBe(true);
+              });
+              it('the night: the balcony pays off yesterday\'s cigarette, quarter or clean day for those without the porch; the gym only while a pass runs; Day 12 ends the lifted demo', () => {
+                const night = (p: Patch = {}) => patch(play12(morning12(CHECKUP)), p);
+                const before = (p: Patch) => { const s = night(p); const flags = { ...s.flags }; for (const f of ['d12_smoked', 'd12_no_smoke', 'd12_quarter']) delete flags[f]; const seen = { ...s.seen }; delete seen['K12-06a']; return { ...s, flags, seen }; };
+                const SMOKED = { counters: { smoke_free: 0 } };
+                const QUARTER = { on: { d11_quarter: true }, off: ['d11_smoked'], counters: { smoke_free: 0 } };
+                const HELD = { on: { d11_no_smoke: true }, off: ['d11_smoked'], counters: { smoke_free: 3 } };
+                expect(d12(night())).toEqual(['K12-01c', 'K12-04b', 'K12-06a']);
+                expect([next(before(SMOKED)), next(before(QUARTER)), next(before(HELD))]).toEqual(['K12-06a', 'K12-06q', 'K12-06b']);
+                const porch = play12(morning12());
+                expect([d12(porch).includes('K12-02a'), d12(porch).some((id) => id.startsWith('K12-06')), !!porch.flags.d12_smoked]).toEqual([true, false, true]);
+                expect(card('K12-06a').text).toContain('Вчера здесь же была сигарета');
+                expect(card('K12-06q').text).toContain('Вчера была четверть');
+                expect(card('K12-06b').text).toContain('Вчера пачка осталась закрытой');
+                for (const id of ['K12-06a', 'K12-06q', 'K12-06b']) expect(card(id).choices.find((c) => c.neutral)!.id, id).toBe('smoke');
+                const held = choose(content, before(HELD), 'K12-06b', 'hold');
+                expect([held.outcome.text.includes('Четвёртый день без табака'), held.state.counters.smoke_free, held.state.problems.teeth - before(HELD).problems.teeth]).toEqual([true, 4, 0]);
+                expect(choose(content, before(HELD), 'K12-06b', 'smoke').outcome.text).toContain('Вчера удержался, сегодня нет');
+                const s = night();
+                expect(actionsFor(content, s).map((c) => c.id)).toEqual(['A12-run', 'A12-clean', 'A12-teeth', 'A12-couch', 'K12-sleep']);
+                expect(actionsFor(content, day12()).map((c) => c.id)).toContain('A-job');
+                const gym = (x: GameState) => actionsFor(content, x).map((c) => c.id).includes('A12-gym');
+                expect(gym(night({ on: { d9_pass: 'renewed' } }))).toBe(true);
+                expect(gym(flagged(s, 'bought_gym_pass', 5))).toBe(true);                       // a shop pass used from Day 5 runs to Day 12
+                expect(gym(flagged(s, 'bought_gym_pass', 4))).toBe(false);
+                expect(gym(flagged(s, 'bought_gym_pass', 12))).toBe(false);
+                expect(gym({ ...flagged(s, 'bought_gym_pass', 7), items: { ...s.items, gym_pass: 1 } })).toBe(false);
+                expect(card('K12-sleep').choices.map((c) => c.id)).toEqual(['sleep', 'late']);
+                const slept = choose(content, s, 'K12-sleep', 'sleep');
+                expect(slept.outcome.text).toContain('Завтра пятница');
+                const end = syncClock(full12, slept.state, at(297));
+                expect([end.demoOver, end.day]).toEqual([true, 12]);
+                expect(end.summaries[11]).toMatchObject({ day: 12, played: true, gift: 'gum' });
+                expect(content.days.find((d) => d.day === 12)).toMatchObject({ title: 'Вторая чистка', gift: 'gum' });
+                const late = pick(s, 'K12-sleep', 'late');
+                expect(late.flags.d12_late).toBeDefined();
+                expect(syncClock(full, late, at(297)).energy).toBe(10 - 4);
+                for (const part of ['morning', 'day', 'evening', 'night']) expect(content.cards.some((c) => c.id.startsWith('K12-') && c.kind === 'story' && c.when!.parts!.includes(part as 'day')), part).toBe(true);
+              });
+              it('a fully skipped Day 12: the cleaning happened, smoked on the porch, no answer sent, no strips, and affinity 0', () => {
+                for (const [p, titles] of [
+                  [WARM, ['Стоматолог', 'Крыльцо стоматологии', 'Алина пишет', 'Лента: полоски «Белый жемчуг»']],
+                  [CHECKUP, ['Контрольный осмотр', 'Лента: полоски «Белый жемчуг»', 'Балкон']],
+                ] as [Patch, string[]][]) {
+                  const s0 = morning12(p);
+                  const s = syncClock(full12, s0, at(297));
+                  expect([s.demoOver, s.day]).toEqual([true, 12]);
+                  expect([!!s.flags.d12_smoked, s.flags.d12_strips, s.flags.d12_helped_music, his12(s)]).toEqual([true, undefined, undefined, []]);
+                  expect([s.affinity - s0.affinity, s.coins - s0.coins]).toEqual([0, 0]);
+                  expect(s.summaries[11]).toMatchObject({ day: 12, played: false, coins: 0 });
+                  expect(s.missed!.at(-1)!.items.map((i) => i.title)).toEqual(titles);
+                }
+                expect(syncClock(full12, morning12(), at(297)).flags.d12_cleaned.value).toBe('full');
+              });
+              it('every flag set on Day 12 is read on Day 12 or has a planned payoff, and every Day 11 flag left for Day 12 is checked', () => {
+                const mine = content.cards.filter((c) => /^[KA]12-/.test(c.id));
+                const json = JSON.stringify(mine.map((c) => [c.when?.requires, c.choices.map((ch) => [ch.requires, ch.outcomes.map((o) => o.if)])]));
+                const read = (f: string) => json.includes(`{"flag":"${f}"`) || json.includes(`{"flagAge":"${f}"`);
+                const set = new Set(mine.flatMap((c) => c.choices.flatMap((ch) => ch.outcomes.flatMap((o) => (o.effects ?? []).flatMap((e) => ('flag' in e ? [e.flag] : []))))));
+                // d12_cleaned is read by the porch and pays off on Day 14 too; d12_helped_music: Days 13–14; d12_strips: Day 13; d12_late: the Day 13 morning
+                expect([...set].filter((f) => !read(f)).sort()).toEqual(['d12_helped_music', 'd12_late', 'd12_strips']);
+                for (const f of ['d11_late', 'd11_smoked', 'd11_no_smoke', 'd11_quarter', 'd9_pass', 'd9_burner', 'd5_dentist_later', 'd5_dentist_moved', 'd5_cleaned', 'd5_smoked', 'd1_soda_teeth', 'd7_msg', 'd6_reply', 'bought_gym_pass', 'd1_half']) expect(read(f), f).toBe(true);
+                for (const x of ['{"item":"gum"}', '{"item":"gym_pass"}', '"counter":"smoke_free"']) expect(json).toContain(x);
+              });
             });
           });
         });

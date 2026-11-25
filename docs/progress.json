@@ -4,11 +4,11 @@
   "verified": {
     "date": "2026-11-25",
     "typecheck": "pass",
-    "tests": "149/149",
-    "check_content": "pass: 246 cards (182 story, 64 action), 1 archetype, 1 crush",
+    "tests": "155/155",
+    "check_content": "pass: 271 cards (201 story, 70 action), 1 archetype, 1 crush",
     "economy": "demo economy in items.json, side-jobs.json, balance.json; see docs/DEMO_SCRIPT.md section 5a",
-    "build": "pass: dist/index.html 706 kB",
-    "playthrough": "Day 11: engine tests over the Wednesday morning (overslept, Vitya by d9_pass with and without d9_burner, Aunt Zina by the Day 5 branch: tip after helping or after buying the cream, «Зарос ты» otherwise, her nephew recognised after a shop haircut), the salon trap with its odds, the barber only with the tip (sets bought_haircut), pizza or cooking, mum by the haircut and d8_lunch, the mirror or «Ну, как знаешь», the balcony by the Day 10 result (smoked / quarter / held) and the week without cigarettes, the gym only while a pass runs, sleep and staying up, a fully skipped Day 11, the demo still ending on Day 7. Playwright (Chromium, real clicks) on the built dist/index.html?full with a fixed clock; saves built by the engine with days 1-10 skipped, then patched by flags (five paths A-E: late+vitya+helped+barber+held 6 days; cream+salon+pizza+quarter+renewed pass+job; bags+walk past+fridge+Zina evening+gum; shop haircut; no help) at 360x640 and 390x844: every Day 11 card (K11-late, K11-run, K11-01h/a/b/c, K11-02, K11-03, K11-04, K11-05, K11-08a/b/c, K11-06a/q/b, K11-07, A11-run/gym/clean/teeth/couch, A-job, K11-sleep) with no clipped or overflowing text and no console errors, then «Продолжение следует» after Day 11. Screenshots in X:/tmp/glowup-day11. Day 10 checks: X:/tmp/glowup-day10 and git history of this file"
+    "build": "pass: dist/index.html 751 kB",
+    "playthrough": "Day 12: engine tests over the Thursday morning (overslept, Vitya by d9_pass with and without d9_burner, the postponed cleaning for d5_dentist_later/moved with the soda variant, the check-up for d5_cleaned with the d5_smoked line), the porch craving after the cleaning and the night balcony, each split by the Day 11 result (smoked / quarter / held), Alina by d7_msg (warm: the music, «Ты же у нас певец» after d6_reply joke; even: the physics teacher; dry: nothing) and her evening answer by the reply, the strips trap with its odds and the soda line, the gym only while a pass runs, sleep and staying up, a fully skipped Day 12, the demo still ending on Day 7. Playwright (Chromium, real clicks) on the built dist/index.html?full; saves built by the engine with days 1-10 skipped and Day 5/7/9 flags patched, then Day 11 played on screen (balcony quarter / hold / smoke, one late night) and the dev clock moved to Day 12; six paths A-F at 360x640 and 390x844: every Day 12 story card (K12-late, K12-run, K12-01, K12-01c, K12-02a/q/b, K12-03ws/wa/e, K12-04a/b, K12-05l/s/p/e, K12-06a/q/b) plus the action menu, A-job and the day-end card, no clipped or overflowing text, no console errors. Screenshots in X:/tmp/glowup-day12. Day 11 checks: X:/tmp/glowup-day11 and git history of this file"
   },
   "demo_days": {
     "1": {
@@ -45,6 +45,11 @@
       "status": "in_game",
       "file": "content/cards/day7.json",
       "note": "written 2026-11-23, texts not reviewed by the authors yet; thresholds confirmed (DECISIONS.md rows 35-39). Acceptance leftovers merged 2026-11-24: day-end card fits 320x568 on days 1-7; approved text splits K7-01a/b cream, K7-04b/c long talk, K7-00a/b; K7-01b kept as an unreachable fallback"
+    },
+    "12": {
+      "status": "written",
+      "file": "content/cards/day12.json",
+      "note": "written 2026-11-25; past the demo (demoDays 7, contentDays 12), playable on the dev page with ?full. Texts await the authors: docs/review/day12-texts.md. Design and flags: docs/WEEK2_GRID.md Part C5. The cleaning for d5_dentist_later/moved, a check-up for d5_cleaned; the porch and the balcony split by the Day 11 result; Alina by d7_msg in two cards (question with his reply, her answer in the evening); the neutral reply is «Ответить потом» (no message sent); A12-gym keeps the Day 10 workaround (A5 gap)"
     }
   },
   "week2_days": {
@@ -79,6 +84,7 @@
     "store purchase verification"
   ],
   "awaiting_authors": [
+    "Day 12: review the texts (docs/review/day12-texts.md), the working title «Вторая чистка», the gift gum and the teaser; confirm the deviations in docs/WEEK2_GRID.md Part C5 (neutral reply «Ответить потом» instead of «Не силён в этом», the check-up teeth effects, the strips sensitivity as teeth +2 today and tomorrow, d8_replied not read)",
     "Day 11: review the texts (docs/review/day11-texts.md), the working title «Племянник», the gift floss and the teaser; confirm the deviations in docs/WEEK2_GRID.md Part C4 (K11-01h, the barber setting bought_haircut, whether the salon cut counts on Day 14, cooking weight −1)",
     "Day 10: review the texts (docs/review/day10-texts.md), the working title «Тогда и сейчас», the gift acne_patch and the teaser; confirm the deviations in docs/WEEK2_GRID.md Part C3 (reaction as status lines, K10-03d/e, no slideshow choice on a skipped day beyond the old photo)",
     "Day 9: review the texts (docs/review/day9-texts.md), the working title «Абонемент кончился», the gift gum and the teaser; decide whether a shop pass used after Day 2 should also get K9-00/K9-02a (needs an engine condition, docs/WEEK2_GRID.md Part C2)",
