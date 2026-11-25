@@ -462,3 +462,57 @@ Differences from the A2 grid, for the authors:
 - K10-run is a story card on Day 10 read from `d9_pass`, not a queued quest step (Day 9 queues nothing). Days 11–14 should repeat it the same way.
 - `d9_burner` is read in K10-run only (a heavier line); the −2 energy itself already comes from the Day 9 `tomorrow` effect.
 - The midpoint timelapse frame needs no content: every closed day already takes a frame.
+
+## C4. Day 11 (written 2026-11-25, texts await the authors' review)
+
+File: `content/cards/day11.json` (23 cards: 17 story, 6 action). Also touched: `A-job` days 1–11 (`content/cards/side-jobs.json`), `content/days.json` day 11 («Племянник», working title; gift `floss`; teaser «Завтра четверг. Улыбка из ленты и кресло стоматолога»), `content/hints.json` (`barber_gosha`), `content/rumors.json` (`salon_lux`, the feed post), `content/balance.json` `contentDays` 11 (`demoDays` stays 7). No new chat situations: Alina does not appear on Day 11 (chance 0 by the grid). Russian texts for review: `docs/review/day11-texts.md`. No change to days 1–10.
+
+Cards in display order:
+
+| Part | Card | Shown when | Choices (neutral in bold) |
+|---|---|---|---|
+| morning | K11-late Проспал | `d10_late` | **up** |
+| morning | K11-run Витя у подъезда | `d9_pass` = `vitya` | run (4 energy, weight −2; a heavier line with `d9_burner`) / **skip** |
+| morning | K11-01h Тётя Зина на лестнице | `bought_haircut` (a shop haircut before Day 11) | **thanks** (she takes it for her nephew's work) |
+| morning | K11-01a Тётя Зина на лестнице | `d5_helped_zina` (shelf or bags), no haircut | note (hint `barber_gosha`, `d11_tip` = `noted`) / **nod** (`d11_tip` = `heard`) |
+| morning | K11-01b Тётя Зина на лестнице | `d5_no_help`, `d5_cream` = `bought`, no haircut | as K11-01a; she heard at the pharmacy that he found the cream |
+| morning | K11-01c Тётя Зина на лестнице | `d5_no_help`, cream not bought, no haircut | **hello** («Зарос ты, Андрюша»; no tip) |
+| day | K11-02 Лента: салон «Люкс» | no haircut (neither `d11_cut` nor `bought_haircut`) | book (150 coins; часто «не твоё»: care −6, style +4; иногда «вышло нормально»: care −6; `d11_cut` = `salon`, `d11_salon` = `odd` / `fine`) / **scroll**; rumor `salon_lux` on every choice |
+| day | K11-03 Барбершоп на Садовой | `d11_tip`, no haircut | cut (70 coins, 2 energy: care −6, conf −2, the shop haircut's effect; sets `bought_haircut` and `d11_cut` = `barber`) / **later** |
+| evening | K11-04 Пицца | always | cook (2 energy, weight −1) / order (20 coins, weight +2) / **fridge** (weight +1) |
+| evening | K11-05 Мама звонит | always | **talk**: Aunt Zina reported the haircut (barber or shop), the salon, the tip, or «зарос»; plus a line by `d8_lunch` (`held` / otherwise) |
+| evening | K11-08a / b Зеркало | `d11_cut` = `barber` / `salon` (b: line by `d11_salon`) | **ok** |
+| evening | K11-08c Тётя Зина | `d11_tip`, no haircut | **later** («Не дошёл до Гоши? Ну, как знаешь») |
+| night | K11-06a / q / b Балкон | yesterday: `d10_smoked` (or no Day 10 flag) / `d10_quarter` / `d10_no_smoke` | hold (2 / 2 / 3 energy) / quarter (`d1_half`) / gum / **smoke**; card and outcome texts name yesterday's result |
+| night | K11-07 Неделя без сигарет | `d11_no_smoke` and `smoke_free` ≥ 7 | **ok** (care −3) |
+| day–night | A11-run, A11-gym, A11-clean, A11-teeth, A11-couch, A-job | plus menu, as on Day 10 | — |
+| night | K11-sleep | | sleep / late (`d11_late`, −4 tomorrow) |
+
+Day ends on: the mirror with the haircut (K11-08a/b) or Aunt Zina's «Ну, как знаешь» (K11-08c); a player without the tip and without a haircut ends the evening on mum's call. Then the balcony. Affinity on Day 11: 0 (no card changes it).
+
+Skipped day (neutral choices): K11-late `up`, K11-run `skip`, K11-01h `thanks`, K11-01a/b `nod`, K11-01c `hello`, K11-02 `scroll`, K11-03 `later`, K11-04 `fridge`, K11-05 `talk`, K11-08c `later`, K11-06a/q/b `smoke`. Result: the tip heard (if she gave it), no haircut, the fridge, smoked, no coins spent, `affinity` 0.
+
+### Day 11 flags
+
+| Flag | Values | Set by | Read on |
+|---|---|---|---|
+| `d11_tip` | `noted`, `heard` | K11-01a/b | 11 (K11-03, K11-05, K11-08c) |
+| `d11_cut` | `barber`, `salon` | K11-03 cut / K11-02 book | 11 (K11-05, K11-08a/b), 14 (visible change) |
+| `d11_salon` | `odd`, `fine` | K11-02 book | 11 (K11-08b) |
+| `bought_haircut` | true | K11-03 cut (same flag as the shop purchase) | 11 (K11-01h, K11-02, K11-03), the shop (`once`), the visible-change counts |
+| `d11_smoked`, `d11_no_smoke`, `d11_quarter` | true | K11-06 | 11 (K11-06 once, K11-07), 12 (craving texts) |
+| `d11_late` | true | K11-sleep late | 12 (morning) |
+
+Earlier flags paid off on Day 11: `d10_late` (K11-late), `d9_pass`, `d9_burner` (K11-run, A11-gym), `d5_helped_zina`, `d5_no_help`, `d5_cream` (K11-01a/b/c), `bought_haircut` (K11-01h, K11-02, K11-03, K11-05, K11-08c), `d8_lunch` (K11-05), `d10_smoked`, `d10_no_smoke`, `d10_quarter`, `d1_half`, item `gum`, counter `smoke_free` (K11-06, K11-07), `bought_gym_pass`, item `gym_pass` (A11-gym).
+
+Engine gap A5, as met on Day 11: A11-gym uses the Day 10 workaround unchanged: `d9_pass` = `renewed`, or a shop pass bought and already used with `flagAge` of `bought_gym_pass` 1–7 (on Day 11 that is a purchase on days 4–10). The proposed `{ modifier: 'gym' }` condition (C2) would make it exact.
+
+Differences from the A2 grid, for the authors:
+- K11-01h is new: a player who already bought the haircut in the shop gets Aunt Zina recognising her nephew's work instead of the tip; the salon and the barber are not shown to him.
+- K11-03 is shown only with the tip and without a haircut today (the salon or the shop); a player who chose the salon does not get a second haircut offer.
+- The barber sets `bought_haircut` (the same haircut as the shop item, so the shop shows it sold out and the visible-change counts see it). The salon sets only `d11_cut` = `salon`; whether Day 14 should count the salon cut as a visible change is open.
+- Cooking costs 2 energy as in the grid and also gives weight −1 (the grid named no effect); the fridge (neutral) is weight +1, ordering weight +2 for 20 coins.
+- Mum's call also reads `d8_lunch`, as A4 planned (11, mum's call).
+- The day's end beat (mirror / «Ну, как знаешь») is in the evening, before the night balcony, as Day 9 did with Oksana's line.
+- The craving is split by yesterday's result (K11-06a/q/b) so each Day 10 branch has its own card text; the grid's «Неделя без сигарет» card is K11-07 (K11-06 is the balcony).
+- The perfume (answer 10) is not added on Day 11: its day, price and texts are still open.
