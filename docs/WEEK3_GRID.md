@@ -1,6 +1,6 @@
 # Week 3 grid (days 15–21)
 
-Status: v1, 2026-11-25. Ruslan answered the open questions on 2026-11-25 («Все по рекомендации», A6 answers); the day rows below follow those answers. Days 15, 16, 17 and 18 are written (Part C below); days 19–21 are not. After approval, days are written one at a time with `/write-day <n>`, which takes its per-day design from Part A.
+Status: v1, 2026-11-25. Ruslan answered the open questions on 2026-11-25 («Все по рекомендации», A6 answers); the day rows below follow those answers. Days 15, 16, 17, 18 and 19 are written (Part C below); days 20–21 are not. After approval, days are written one at a time with `/write-day <n>`, which takes its per-day design from Part A.
 
 Labels used below:
 - **[F]**: fact, checked in the repo files on 2026-11-25 (the file is named).
@@ -540,3 +540,38 @@ Flags set on Day 18 and what later days can rely on:
 Earlier flags read on Day 18: `d17_late`, `d17_smoked` / `d17_no_smoke` / `d17_quarter`, `d16_pass`, `d15_tone`, `d15_team`, `d10_photo`, `d9_pass`, `d1_half`, counter `smoke_free`, item `gum`, modifier `gym`, problem `weight`. Not read: `d17_scent`, `bought_perfume`, `d17_alpha`, `d17_cut` (Day 20).
 
 Differences from the plan (details in `docs/review/day18-texts.md`): tight and no get different joke buttons; the organisers' answer has a label per suit; the answer bubble is three cards (K18-04wa / wj / e); the tie line reads `d10_photo` for every band; the staying-up line by `d18_suit`.
+
+## G. Day 19 as written
+
+Written 2026-11-25 in `content/cards/day19.json` (15 story cards, 6 actions); `contentDays` 19, `demoDays` 7; `A-job` days 1–19; day entry «Песня», gift `acne_patch`, teaser «Завтра пятница. Десять дней». No new chat situations, items, hints or rumors. Texts and deviations for review: `docs/review/day19-texts.md`. The engine was not changed.
+
+Cards in display order:
+
+| Part | Card | Shown when | Choices (neutral in bold) | Sets |
+|---|---|---|---|---|
+| morning | K19-late | `d18_late` | **up** | — |
+| morning | K19-run | `d9_pass` = `vitya` or `d16_pass` = `vitya` | run (4 energy, weight −2, `useful` +1) / **skip** | — |
+| morning | K19-01pj / p | `d19_sing` unset, `d10_will_sing`; pj: `d6_reply` = `joke`, p: otherwise | practice (2 energy, conf −2) / out (free, «Громов споёт, переживём») / **later** | `d19_sing` = `practice` / `out` / `promised` |
+| morning | K19-01g | `d19_sing` unset, no `d10_will_sing` | promise (conf −1) / **laugh** | `d19_sing` = `promised` / `none` |
+| day | K19-02a / b | `d15_team` = `music`; a: counter `d14_scene` ≥ 1 (the Gromov song on Day 14), b: ≤ 0 | **ok** (the final five; no affinity) | — |
+| evening | K19-03 | everyone | go (conf −1) / **home** (Vitya sends the score 2:1) | `d19_bar` = `went` / `home` |
+| evening | K19-04 | `d19_bar` = `went` | held (2 energy) / **lot** (weight +2) | `d19_bar` = `held` / `lot` |
+| evening | K19-05a / q / b | `d19_bar` = `held` / `lot`; the Day 18 result (`d18_smoked` or none / `d18_quarter` / `d18_no_smoke`) | hold / quarter / gum / **smoke**, at the bar door | `d19_smoked` / `d19_quarter` / `d19_no_smoke` |
+| night | K19-06a / q / b | `d19_bar` = `home`; the Day 18 result | hold / quarter / gum / **smoke**, on the balcony | `d19_smoked` / `d19_quarter` / `d19_no_smoke` |
+| plus | A19-run, A19-gym (`{ modifier: 'gym' }`), A19-clean, A19-teeth, A19-couch, A-job | | as Day 18; the gym's last-day line by `{ modifier: 'gym', eq: 0 }` | — |
+| night | K19-sleep | | sleep («До встречи выпускников одиннадцать дней») / late (line by `d19_sing` = `practice` / `promised`) | `d19_late` |
+
+Exactly one song card fits every combination of `d10_will_sing` and `d6_reply`, and none opens after it is answered whatever those flags become; exactly one «Пять песен» card fits every `d14_scene` for the music team and none for anyone else; exactly one craving card fits every `d19_bar` value (`held`, `lot`, `home`) and Day 18 result, none while `d19_bar` is unset or `went` (tests). Affinity on Day 19: 0. Nothing is sold on a Day 19 card.
+
+Flags set on Day 19 and what later days can rely on:
+
+| Flag | Values | Always set? | For |
+|---|---|---|---|
+| `d19_sing` | `practice`, `out`, `promised`, `none` | yes, every player gets one song card (a skipped day sets `promised` for the Day 10 promiser, `none` for the others) | 20 (K20-06 the microphone: `practice` sings well; `promised` sings anyway or passes the mic; `out` / `none` Gromov sings), 21 (K21-07 the program), 30. `promised` with `d10_will_sing` unset is a new promise made on Day 19 |
+| `d19_bar` | `held`, `lot`, `home` (`went` only between K19-03 and K19-04) | yes (a skipped day sets `home`) | 20 (Vitya's line about the match, 2:1) |
+| `d19_smoked` / `d19_no_smoke` / `d19_quarter` | true | yes (one craving card, at the bar door or on the balcony) | 20 craving texts (K20-03 at the venue door) |
+| `d19_late` | true | only for «до трёх» | 20 morning |
+
+Earlier flags read on Day 19: `d18_late`, `d18_smoked` / `d18_no_smoke` / `d18_quarter`, `d16_pass`, `d15_team`, counter `d14_scene`, `d10_will_sing`, `d9_pass`, `d6_reply`, `d1_half`, counter `smoke_free`, item `gum`, modifier `gym`. Not read: `d18_suit`, `d18_reply`, `d17_scent`, `bought_perfume`, `d17_cut`, `d15_tone`, `d15_photo` (Day 20).
+
+Differences from the plan (details in `docs/review/day19-texts.md`): two promiser cards (pj / p) instead of a text line; every song choice sets `d19_sing`, with a new value `none`; two «Пять песен» cards; `d19_bar` = `went` between the two bar cards; six craving cards (bar door and balcony); the bar door does not make Vitya a smoker.

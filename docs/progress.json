@@ -4,11 +4,11 @@
   "verified": {
     "date": "2026-11-25",
     "typecheck": "pass",
-    "tests": "200/200",
-    "check_content": "pass: 424 cards (318 story, 106 action), 1 archetype, 1 crush",
+    "tests": "206/206",
+    "check_content": "pass: 445 cards (333 story, 112 action), 1 archetype, 1 crush",
     "economy": "demo economy in items.json, side-jobs.json, balance.json; see docs/DEMO_SCRIPT.md section 5a",
-    "build": "pass: dist/index.html 989.39 kB",
-    "playthrough": "Day 18: engine tests over the Wednesday morning (overslept by d17_late, Vitya's run by d9_pass or d16_pass = vitya, Oksana's dress code K18-01 for everyone), the fitting: exactly one of K18-02f/t/n for every weight 0-100 (fits <= 48, tight 49-60, no >= 61) and every d10_photo value, one outcome per choice, no second fitting after a later change of weight, no coins spent; the evening by d15_tone, d15_team and d18_suit (K18-03w for warm, K18-03e for even with a team, her answer K18-04wa/wj/e by d18_reply, never a minus), the balcony by the Day 17 result, the gym by { modifier: gym }, sleep and staying up, a fully skipped Day 18 for three states, the demo still ending on Day 7. Playwright (Chromium, real clicks, page.clock at the Day 18 morning and the dev button for the parts of the day) on the built dist/index.html?full served from a local folder; Day 18 reached with a save built by the engine (days 1-17 played with the first affordable story choice), then flags switched in the save: 360x640 d15_tone warm, d16_pass vitya, held on Day 17, d10_photo old, weight 50 (K18-run run, K18-01, K18-02f, K18-03w «А я влез», K18-04wa, K18-05b hold, sleep, day-end card with gum and the teaser); 390x844 d15_tone even, d15_team chairs, smoked on Day 17, weight 95 (K18-01, K18-02n, K18-03e «Не влез», K18-04e, K18-05a smoke, sleep late, day-end card). All sheets fit, no horizontal scroll. The Форма line on the day-end card jumps because the weight was switched in the save. Screenshots in X:/tmp/glowup-day18"
+    "build": "pass: dist/index.html 1028.89 kB",
+    "playthrough": "Day 19: engine tests over the Thursday morning (overslept by d18_late, Vitya's run by d9_pass or d16_pass = vitya, the song: exactly one of K19-01pj/p/g for every d10_will_sing and d6_reply value, none after it is answered whatever those flags become), the five songs K19-02a/b for the music team by d14_scene, the evening (K19-03 football with Vitya, K19-04 the bar, d19_bar went/held/lot/home), the craving at the bar door K19-05a/q/b or on the balcony K19-06a/q/b: exactly one for every place and Day 18 result, the gym by { modifier: gym }, sleep and staying up, a fully skipped Day 19 for three states, the demo still ending on Day 7. Playwright MCP (Chromium, real clicks, page.clock at the Day 19 morning and the dev button for the parts of the day) on the built dist/index.html?full served from a local folder; Day 19 reached with a save built by the engine (days 1-18 played with the first affordable story choice, sleep every night), then flags switched in the save: 360x640 d10_will_sing, d6_reply joke, d15_team music, d14_scene 1, d9_pass vitya, held on Day 18 (K19-run run, K19-01pj practice, K19-02a, K19-03 go, K19-04 held, K19-05b: hold shown disabled at 2 energy, gum, sleep, day-end card with acne_patch and the teaser); 390x844 no promise, no team, smoked on Day 18 (K19-01g promise, A-job, K19-03 home, K19-06a smoke, sleep late with the karaoke line, day-end card). All sheets fit, no horizontal scroll. Screenshots in X:/tmp/glowup-day19"
   },
   "demo_days": {
     "1": {
@@ -70,6 +70,11 @@
       "status": "written",
       "file": "content/cards/day18.json",
       "note": "written 2026-11-25; past the demo (demoDays 7, contentDays 18), playable on the dev page with ?full. Texts await the authors: docs/review/day18-texts.md (deviations listed at its top). Design and flags: docs/WEEK3_GRID.md Part C, section «F. Day 18 as written». The graduation suit: K18-02f/t/n by weight (<= 48 / 49-60 / >= 61, measured on engine runs), her dress message for the warm tone and her question in «Оргкомитет» for the even team; sets d18_suit and d18_reply; nothing sold"
+    },
+    "19": {
+      "status": "written",
+      "file": "content/cards/day19.json",
+      "note": "written 2026-11-25; past the demo (demoDays 7, contentDays 19), playable on the dev page with ?full. Texts await the authors: docs/review/day19-texts.md (deviations listed at its top). Design and flags: docs/WEEK3_GRID.md Part C, section «G. Day 19 as written». The song: K19-01pj/p for the Day 10 promiser (practise, back out, think later), K19-01g for the others (promise or laugh); the final five for the music team; football with Vitya, the bar and its door or a quiet evening; sets d19_sing and d19_bar; nothing sold, affinity 0"
     }
   },
   "week2_days": {

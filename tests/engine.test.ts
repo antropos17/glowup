@@ -216,8 +216,8 @@ describe('день 1', () => {
     const after = content.balance.contentDays + 1;
     const unwritten = { ...k1, id: `K${after}-test`, when: { ...k1.when, days: [after, after] as [number, number] } };
     const week2 = (ids: string[]) => ids.filter((id) => /^[KA](8|9)-/.test(id));
-    it('with Days 8–18 written, the demo still ends after Day 7 with «Продолжение следует» and never draws a later card', () => {
-      expect([content.balance.demoDays, content.balance.contentDays]).toEqual([7, 18]);
+    it('with Days 8–19 written, the demo still ends after Day 7 with «Продолжение следует» and never draws a later card', () => {
+      expect([content.balance.demoDays, content.balance.contentDays]).toEqual([7, 19]);
       expect(content.cards.filter((c) => /^[KA]9-/.test(c.id)).length).toBeGreaterThan(15);
       const s = syncClock(content, start(), at(9 + 24 * 9));
       expect([s.demoOver, s.day]).toEqual([true, 7]);
@@ -3861,6 +3861,220 @@ describe('день 6', () => {
                             for (const x of ['{"item":"gum"}', '{"modifier":"gym","eq":0}', '{"modifier":"gym"}', '"counter":"smoke_free"', '{"problem":"weight"']) expect(json).toContain(x);
                             expect(json).not.toMatch(/flagAge/);
                             expect(JSON.stringify(mine)).not.toMatch(/"coins"/);                            // nothing is sold on Day 18
+                          });
+
+                          describe('день 19', () => {
+                            /** Day 19 is past the demo too: the clock may cross Day 18 only with the cut-off lifted to 19 */
+                            const full19: Content = { ...content, balance: { ...content.balance, demoDays: 19 } };
+                            /** quiet choices of Day 19: up, not today, think later / laugh, ok, stay home, the lot, a cigarette */
+                            const Q19: Record<string, string> = {
+                              'K19-late': 'up', 'K19-run': 'skip', 'K19-01pj': 'later', 'K19-01p': 'later', 'K19-01g': 'laugh', 'K19-02a': 'ok', 'K19-02b': 'ok',
+                              'K19-03': 'home', 'K19-04': 'lot', 'K19-05a': 'smoke', 'K19-05q': 'smoke', 'K19-05b': 'smoke', 'K19-06a': 'smoke', 'K19-06q': 'smoke', 'K19-06b': 'smoke',
+                            };
+                            /** Day 18 and earlier flags Day 19 reads are switched per test; the base: smoked on Day 18, no team, no runs, never promised to sing */
+                            const EARLY19 = ['d18_late', 'd18_smoked', 'd18_no_smoke', 'd18_quarter', 'd9_pass', 'd16_pass', 'd15_team', 'd10_will_sing', 'd6_reply'];
+                            let n18: GameState | undefined;
+                            const night18 = () => (n18 ??= play18(morning18()));
+                            const morning19 = (p: Patch = {}, sleep18 = 'sleep') =>
+                              patch(syncClock(full19, pick(night18(), 'K18-sleep', sleep18), at(441)), { ...p, on: { d18_smoked: true, ...p.on }, off: [...EARLY19, ...(p.off ?? [])], counters: { smoke_free: 0, d14_scene: 0, ...p.counters } });
+                            const play19 = (s: GameState, p: Record<string, string> = {}, hours = [445, 451, 455.5]) =>
+                              hours.reduce((x, h) => story(syncClock(full19, x, at(h)), { ...Q19, ...p }), story(s, { ...Q19, ...p }));
+                            const d19 = (s: GameState) => Object.keys(s.seen).filter((id) => id.startsWith('K19-'));
+                            const SONG = ['K19-01pj', 'K19-01p', 'K19-01g'];
+                            const FIVE = ['K19-02a', 'K19-02b'];
+                            const DOOR = ['K19-05a', 'K19-05q', 'K19-05b'];
+                            const BALCONY = ['K19-06a', 'K19-06q', 'K19-06b'];
+                            const songOf = (sing?: boolean, reply?: string) => (sing ? (reply === 'joke' ? 'K19-01pj' : 'K19-01p') : 'K19-01g');
+                            const SONG_CHOICES: Record<string, string[]> = { 'K19-01pj': ['practice', 'out', 'later'], 'K19-01p': ['practice', 'out', 'later'], 'K19-01g': ['promise', 'laugh'] };
+                            /** the craving state of the night: yesterday's result as a patch */
+                            const YESTERDAY: Record<string, Patch> = {
+                              smoked: {}, none: { off: ['d18_smoked'] }, quarter: { on: { d18_quarter: true }, off: ['d18_smoked'] }, held: { on: { d18_no_smoke: true }, off: ['d18_smoked'], counters: { smoke_free: 18 } },
+                            };
+                            const cravingOf = (bar: string, y: string) => (bar === 'home' ? BALCONY : DOOR)[y === 'quarter' ? 1 : y === 'held' ? 2 : 0];
+
+                            it('Thursday morning: overslept, Vitya\'s run for both kinds of runner, the song for the promiser and for everyone else', () => {
+                              const s = morning19();
+                              expect([s.day, s.part, s.energy]).toEqual([19, 'morning', 10]);
+                              expect(next(s)).toBe('K19-01g');
+                              const late = morning19({ on: { d18_late: true } }, 'late');
+                              expect([next(late), late.energy]).toEqual(['K19-late', 10 - 4]);
+                              expect(choicesOf('K19-late')).toEqual([['up', true]]);
+                              for (const [d9, d16, show] of [['vitya', undefined, true], [undefined, 'vitya', true], ['renewed', 'vitya', true], ['none', 'none', false], ['renewed', 'renewed', false], [undefined, undefined, false]] as [string | undefined, string | undefined, boolean][]) {
+                                const x = patch(s, { on: { ...(d9 ? { d9_pass: d9 } : {}), ...(d16 ? { d16_pass: d16 } : {}) } });
+                                expect(next(x) === 'K19-run', `${d9} ${d16}`).toBe(show);
+                              }
+                              expect(card('K19-run').when!.requires).toEqual([{ any: [{ flag: 'd9_pass', eq: 'vitya' }, { flag: 'd16_pass', eq: 'vitya' }] }]);
+                              const runner = morning19({ on: { d16_pass: 'vitya' } });
+                              const ran = choose(content, runner, 'K19-run', 'run');
+                              expect([runner.energy - ran.state.energy, ran.state.problems.weight - runner.problems.weight, ran.state.counters.useful - (runner.counters.useful ?? 0)]).toEqual([4, -2, 1]);
+                              expect(choicesOf('K19-run')).toEqual([['run', false], ['skip', true]]);
+                              // the Day 18 teaser «Песня» is paid in the morning: the promiser is in the program, the others get Gromov's guitar
+                              expect(choicesOf('K19-01p')).toEqual([['practice', false], ['out', false], ['later', true]]);
+                              expect(choicesOf('K19-01pj')).toEqual([['practice', false], ['out', false], ['later', true]]);
+                              expect(choicesOf('K19-01g')).toEqual([['promise', false], ['laugh', true]]);
+                              for (const id of ['K19-01p', 'K19-01pj']) expect(card(id).text, id).toContain('«Песня — {hero}»');
+                              expect(card('K19-01pj').text).toContain('не как на выпускном');
+                              expect(card('K19-01g').text).toContain('Громов');
+                              const promiser = morning19({ on: { d10_will_sing: true, d6_reply: 'joke' } });
+                              expect(next(promiser)).toBe('K19-01pj');
+                              const delta = (x: GameState, id: string, choice: string) => {
+                                const r = choose(content, x, id, choice);
+                                return [x.energy - r.state.energy, r.state.problems.conf - x.problems.conf, x.coins - r.state.coins, r.state.affinity - x.affinity, r.state.flags.d19_sing.value];
+                              };
+                              expect(delta(promiser, 'K19-01pj', 'practice')).toEqual([2, -2, 0, 0, 'practice']);
+                              expect(delta(promiser, 'K19-01pj', 'out')).toEqual([0, 0, 0, 0, 'out']);
+                              expect(choose(content, promiser, 'K19-01pj', 'out').outcome.text).toContain('Громов споёт, переживём');
+                              expect(delta(promiser, 'K19-01pj', 'later')).toEqual([0, 0, 0, 0, 'promised']);
+                              expect(delta(s, 'K19-01g', 'promise')).toEqual([0, -1, 0, 0, 'promised']);
+                              expect(delta(s, 'K19-01g', 'laugh')).toEqual([0, 0, 0, 0, 'none']);
+                              expect(d19(story(s, Q19))).toEqual(['K19-01g']);
+                            });
+
+                            it('the song: exactly one card for every Day 6 / Day 10 combination, and none after it is answered, whatever changes later', () => {
+                              const s = morning19();
+                              for (const sing of [undefined, true]) for (const reply of [undefined, 'plain', 'joke', 'excuse', 'dry']) {
+                                const x = patch(s, { on: { ...(sing ? { d10_will_sing: true } : {}), ...(reply ? { d6_reply: reply } : {}) } });
+                                const want = songOf(sing, reply);
+                                expect(fits(x, SONG), `${sing} ${reply}`).toEqual([want]);
+                                expect(oneOutcome(x, want), want).toBe(true);
+                                for (const choice of SONG_CHOICES[want]) {
+                                  const after = pick(x, want, choice);
+                                  // a later change of the Day 6 / Day 10 flags cannot open a second song card
+                                  for (const sing2 of [undefined, true]) for (const reply2 of [undefined, 'joke', 'plain']) {
+                                    const y = patch(after, { on: { ...(sing2 ? { d10_will_sing: true } : {}), ...(reply2 ? { d6_reply: reply2 } : {}) }, off: [...(sing2 ? [] : ['d10_will_sing']), ...(reply2 ? [] : ['d6_reply'])] });
+                                    expect(fits(y, SONG), `${want} ${choice} ${sing2} ${reply2}`).toEqual([]);
+                                  }
+                                }
+                              }
+                              // the five songs: one card for the music team, by the Day 14 table (d14_scene); nobody else
+                              const day = syncClock(full19, story(s, Q19), at(445));
+                              for (const team of [undefined, 'music', 'chairs', 'volunteer']) for (const scene of [-1, 0, 1, 2]) {
+                                const x = patch(day, { on: team ? { d15_team: team } : {}, counters: { d14_scene: scene } });
+                                expect(fits(x, FIVE), `${team} ${scene}`).toEqual(team === 'music' ? [scene >= 1 ? 'K19-02a' : 'K19-02b'] : []);
+                              }
+                              expect(card('K19-02a').text).toContain('Громов уронил стол');
+                              for (const id of FIVE) expect(choicesOf(id), id).toEqual([['ok', true]]);
+                              const music = patch(day, { on: { d15_team: 'music' }, counters: { d14_scene: 1 } });
+                              expect(next(music)).toBe('K19-02a');
+                              const five = choose(content, music, 'K19-02a', 'ok');
+                              expect([five.state.affinity - music.affinity, next(five.state)]).toEqual([0, undefined]);
+                              // the craving: exactly one card for every place of the evening and every Day 18 result; none while at the bar or before the choice
+                              const night = syncClock(full19, story(day, Q19), at(455.5));
+                              const bare = (x: GameState) => { const flags = { ...x.flags }; for (const f of ['d19_bar', 'd19_smoked', 'd19_no_smoke', 'd19_quarter']) delete flags[f]; return { ...x, flags }; };
+                              for (const y of Object.keys(YESTERDAY)) {
+                                const base = patch(bare(night), YESTERDAY[y]);
+                                expect(fits(base, [...DOOR, ...BALCONY]), `unset ${y}`).toEqual([]);
+                                expect(fits(patch(base, { on: { d19_bar: 'went' } }), [...DOOR, ...BALCONY]), `went ${y}`).toEqual([]);
+                                for (const bar of ['home', 'held', 'lot']) {
+                                  const x = patch(base, { on: { d19_bar: bar } });
+                                  const want = cravingOf(bar, y);
+                                  expect(fits(x, [...DOOR, ...BALCONY]), `${bar} ${y}`).toEqual([want]);
+                                  for (const ch of card(want).choices) {
+                                    if (!choicesFor(content, x, card(want)).some((c) => c.choice.id === ch.id)) continue;
+                                    const done = pick(x, want, ch.id);
+                                    for (const bar2 of ['home', 'held', 'lot']) expect(fits(patch(done, { on: { d19_bar: bar2 } }), [...DOOR, ...BALCONY]), `${want} ${ch.id} ${bar2}`).toEqual([]);
+                                  }
+                                }
+                              }
+                              for (let n = 1; n <= 20; n++) for (const id of ['K19-05b', 'K19-06b']) {
+                                const x = patch(bare(night), { ...YESTERDAY.held, on: { ...YESTERDAY.held.on, d19_bar: id === 'K19-05b' ? 'held' : 'home' }, counters: { smoke_free: n } });
+                                expect(oneOutcome(x, id), `${id} ${n}`).toBe(true);
+                              }
+                            });
+
+                            it('the evening: football with Vitya, the bar and its door, or a quiet evening with the score; nothing sold, no affinity', () => {
+                              const eve = syncClock(full19, play19(morning19(), {}, [445]), at(451));
+                              expect(next(eve)).toBe('K19-03');
+                              expect(choicesOf('K19-03')).toEqual([['go', false], ['home', true]]);
+                              const go = choose(content, eve, 'K19-03', 'go');
+                              expect([go.state.problems.conf - eve.problems.conf, go.state.flags.d19_bar.value, next(go.state)]).toEqual([-1, 'went', 'K19-04']);
+                              expect(choicesOf('K19-04')).toEqual([['held', false], ['lot', true]]);
+                              const held = choose(content, go.state, 'K19-04', 'held');
+                              expect([go.state.energy - held.state.energy, held.state.problems.weight - go.state.problems.weight, held.state.flags.d19_bar.value, next(held.state)]).toEqual([2, 0, 'held', 'K19-05a']);
+                              const lot = choose(content, go.state, 'K19-04', 'lot');
+                              expect([lot.state.problems.weight - go.state.problems.weight, lot.state.flags.d19_bar.value, next(lot.state)]).toEqual([2, 'lot', 'K19-05a']);
+                              // the craving at the bar door replaces the balcony: after it the night has no card
+                              const door = choose(content, lot.state, 'K19-05a', 'smoke');
+                              expect([door.outcome.text, !!door.state.flags.d19_smoked, next(syncClock(full19, door.state, at(455.5)))]).toEqual(['Сигарета у двери бара, за компанию. Четверг как четверг.', true, undefined]);
+                              const home = choose(content, eve, 'K19-03', 'home');
+                              expect([home.state.flags.d19_bar.value, home.outcome.text.includes('2:1'), next(home.state)]).toEqual(['home', true, undefined]);
+                              expect(next(syncClock(full19, home.state, at(455.5)))).toBe('K19-06a');
+                              const mine = content.cards.filter((c) => /^[KA]19-/.test(c.id));
+                              expect(JSON.stringify(mine)).not.toMatch(/"coins"|"affinity"|"says"|"chat"/);
+                              for (const id of [...SONG, ...FIVE, 'K19-03', 'K19-04', ...DOOR, ...BALCONY]) {
+                                expect(card(id).choices.filter((c) => c.neutral && !c.cost && !c.requires).length, id).toBe(1);
+                                expect(card(id).choices.find((c) => c.neutral)!.outcomes.some((o) => (o.effects ?? []).some((e) => 'write' in e)), id).toBe(false);
+                              }
+                              for (const id of DOOR) expect(card(id).when!.parts, id).toEqual(['evening']);
+                              for (const id of BALCONY) expect(card(id).when!.parts, id).toEqual(['night']);
+                            });
+
+                            it('the night: the balcony at home, the gym by the modifier, sleep on «одиннадцать дней», the teaser of Day 20', () => {
+                              const s = play19(morning19());
+                              expect(d19(s)).toEqual(['K19-01g', 'K19-03', 'K19-06a']);
+                              const before = (p: Patch) => { const x = patch(s, p); const flags = { ...x.flags }; for (const f of ['d19_smoked', 'd19_no_smoke', 'd19_quarter']) delete flags[f]; const seen = { ...x.seen }; delete seen['K19-06a']; return { ...x, flags, seen }; };
+                              expect([next(before({})), next(before(YESTERDAY.quarter)), next(before(YESTERDAY.held)), next(before(YESTERDAY.none))]).toEqual(['K19-06a', 'K19-06q', 'K19-06b', 'K19-06a']);
+                              const cost = (id: string) => card(id).choices.map((c) => [c.id, c.cost?.energy ?? 0]);
+                              for (const id of ['K19-05a', 'K19-05q', 'K19-06a', 'K19-06q']) expect(cost(id), id).toEqual([['hold', 2], ['quarter', 1], ['gum', 0], ['smoke', 0]]);
+                              for (const id of ['K19-05b', 'K19-06b']) expect(cost(id), id).toEqual([['hold', 3], ['quarter', 1], ['gum', 0], ['smoke', 0]]);
+                              const kept = choose(content, before(YESTERDAY.held), 'K19-06b', 'hold');
+                              expect([kept.outcome.text.includes('Девятнадцатый день без табака'), kept.state.counters.smoke_free, !!kept.state.flags.d19_no_smoke]).toEqual([true, 19, true]);
+                              expect(choose(content, before({ ...YESTERDAY.held, counters: { smoke_free: 20 } }), 'K19-06b', 'hold').outcome.text).toContain('Ещё один день без табака');
+                              for (const id of [...DOOR, ...BALCONY]) expect(card(id).choices.find((c) => c.neutral)!.id, id).toBe('smoke');
+                              expect(next(s)).toBeUndefined();
+                              // the plus menu: the gym only while a pass runs (a Day 16 renewal runs mornings 17–23; a shop pass used on Day 12 ends today)
+                              expect(actionsFor(content, s).map((c) => c.id)).toEqual(['A19-run', 'A19-clean', 'A19-teeth', 'A19-couch', 'K19-sleep']);
+                              expect(card('A19-gym').when!.requires).toEqual([{ modifier: 'gym' }]);
+                              const renewed16 = passFrom(s, 16);
+                              expect(actionsFor(content, renewed16).map((c) => c.id)).toContain('A19-gym');
+                              expect(choose(content, renewed16, 'A19-gym', 'go').outcome.text).not.toContain('последняя');
+                              expect(choose(content, passFrom(s, 12), 'A19-gym', 'go').outcome.text).toContain('последняя тренировка');
+                              expect(actionsFor(content, passFrom(s, 11)).map((c) => c.id)).not.toContain('A19-gym');
+                              expect(actionsFor(content, syncClock(full19, morning19(), at(445)))).toEqual(expect.arrayContaining([expect.objectContaining({ id: 'A-job' })]));
+                              expect(card('K19-sleep').choices.map((c) => c.id)).toEqual(['sleep', 'late']);
+                              const slept = choose(content, s, 'K19-sleep', 'sleep');
+                              expect(slept.outcome.text).toContain('одиннадцать дней');
+                              const end = syncClock(full19, slept.state, at(465));
+                              expect([end.demoOver, end.day]).toEqual([true, 19]);
+                              expect(end.summaries[18]).toMatchObject({ day: 19, played: true, gift: 'acne_patch' });
+                              expect(content.days.find((d) => d.day === 19)).toMatchObject({ title: 'Песня', gift: 'acne_patch', teaser: 'Завтра пятница. Десять дней' });
+                              const late = choose(content, patch(s, { on: { d19_sing: 'practice' } }), 'K19-sleep', 'late');
+                              expect([!!late.state.flags.d19_late, late.outcome.text.includes('караоке')]).toEqual([true, true]);
+                              expect(choose(content, patch(s, { on: { d19_sing: 'out' } }), 'K19-sleep', 'late').outcome.text).toContain('повтор матча');
+                              expect(syncClock(full, late.state, at(465)).energy).toBe(10 - 4);
+                              for (const part of ['morning', 'day', 'evening', 'night']) expect(content.cards.some((c) => /^[KA]19-/.test(c.id) && c.when!.parts!.includes(part as 'day')), part).toBe(true);
+                            });
+
+                            it('a fully skipped Day 19: the promise kept as it was, stayed home, smoked, affinity 0', () => {
+                              for (const [s0, titles, sing] of [
+                                [morning19(), ['Витя пишет', 'Витя: футбол', 'Балкон'], 'none'],
+                                [morning19({ on: { d18_no_smoke: true, d15_team: 'music', d9_pass: 'vitya', d10_will_sing: true, d6_reply: 'joke' }, off: ['d18_smoked'], counters: { smoke_free: 6, d14_scene: 1 } }),
+                                  ['Витя у подъезда', 'Витя пишет', 'Оргкомитет: пять песен', 'Витя: футбол', 'Балкон'], 'promised'],
+                                [morning19({ on: { d18_quarter: true, d10_will_sing: true, d6_reply: 'plain' }, off: ['d18_smoked'] }), ['Витя пишет', 'Витя: футбол', 'Балкон'], 'promised'],
+                              ] as [GameState, string[], string][]) {
+                                const s = syncClock(full19, s0, at(465));
+                                expect([s.demoOver, s.day]).toEqual([true, 19]);
+                                expect([!!s.flags.d19_smoked, s.flags.d19_sing.value, s.flags.d19_bar.value]).toEqual([true, sing, 'home']);
+                                expect([s.affinity - s0.affinity, s.coins - s0.coins]).toEqual([0, 0]);
+                                expect(s.chat.filter((m) => m.day === 19)).toEqual([]);
+                                expect(s.summaries[18]).toMatchObject({ day: 19, played: false, coins: 0 });
+                                expect(s.missed!.at(-1)!.items.map((i) => i.title)).toEqual(titles);
+                              }
+                            });
+
+                            it('every flag set on Day 19 is read on Day 19 or has a planned payoff, and the Day 18 flags left for Day 19 are checked', () => {
+                              const mine = content.cards.filter((c) => /^[KA]19-/.test(c.id));
+                              const json = JSON.stringify(mine.map((c) => [c.when?.requires, c.choices.map((ch) => [ch.requires, ch.outcomes.map((o) => o.if)])]));
+                              const read = (f: string) => json.includes(`{"flag":"${f}"`) || json.includes(`{"flagAge":"${f}"`);
+                              const set = new Set(mine.flatMap((c) => c.choices.flatMap((ch) => ch.outcomes.flatMap((o) => (o.effects ?? []).flatMap((e) => ('flag' in e ? [e.flag] : []))))));
+                              // d19_late: the Day 20 morning; d19_sing is read today by the staying-up line and later on Day 20 (the microphone) and Day 21 (the program)
+                              expect([...set].filter((f) => !read(f)).sort()).toEqual(['d19_late']);
+                              expect([...set].sort()).toEqual(['d19_bar', 'd19_late', 'd19_no_smoke', 'd19_quarter', 'd19_sing', 'd19_smoked']);
+                              for (const f of ['d18_late', 'd18_smoked', 'd18_no_smoke', 'd18_quarter', 'd16_pass', 'd9_pass', 'd15_team', 'd10_will_sing', 'd6_reply', 'd1_half'])
+                                expect(read(f), f).toBe(true);
+                              for (const x of ['{"item":"gum"}', '{"modifier":"gym","eq":0}', '{"modifier":"gym"}', '"counter":"smoke_free"', '{"counter":"d14_scene"']) expect(json).toContain(x);
+                              expect(json).not.toMatch(/flagAge/);
+                            });
                           });
                         });
                       });
