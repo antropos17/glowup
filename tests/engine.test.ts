@@ -216,8 +216,8 @@ describe('день 1', () => {
     const after = content.balance.contentDays + 1;
     const unwritten = { ...k1, id: `K${after}-test`, when: { ...k1.when, days: [after, after] as [number, number] } };
     const week2 = (ids: string[]) => ids.filter((id) => /^[KA](8|9)-/.test(id));
-    it('with Days 8–16 written, the demo still ends after Day 7 with «Продолжение следует» and never draws a later card', () => {
-      expect([content.balance.demoDays, content.balance.contentDays]).toEqual([7, 16]);
+    it('with Days 8–17 written, the demo still ends after Day 7 with «Продолжение следует» and never draws a later card', () => {
+      expect([content.balance.demoDays, content.balance.contentDays]).toEqual([7, 17]);
       expect(content.cards.filter((c) => /^[KA]9-/.test(c.id)).length).toBeGreaterThan(15);
       const s = syncClock(content, start(), at(9 + 24 * 9));
       expect([s.demoOver, s.day]).toEqual([true, 7]);
@@ -237,7 +237,8 @@ describe('день 1', () => {
       expect(content.cards.filter((c) => /^[KA]14-/.test(c.id)).length).toBeGreaterThan(20);
       expect(content.cards.filter((c) => /^[KA]15-/.test(c.id)).length).toBeGreaterThan(20);
       expect(content.cards.filter((c) => /^[KA]16-/.test(c.id)).length).toBeGreaterThan(15);
-      expect(Object.keys(s.seen).filter((id) => /^K1[0-6]-/.test(id))).toEqual([]);
+      expect(content.cards.filter((c) => /^[KA]17-/.test(c.id)).length).toBeGreaterThan(15);
+      expect(Object.keys(s.seen).filter((id) => /^K1[0-7]-/.test(id))).toEqual([]);
     });
     it('validation rejects demoDays above contentDays', () => {
       expect(validateContent({ ...content, balance: { ...content.balance, demoDays: after } }).join('\n')).toContain('demoDays');
@@ -3476,6 +3477,198 @@ describe('день 6', () => {
                         for (const x of ['{"item":"gum"}', '{"modifier":"gym","eq":0}', '{"modifier":"gym"}', '"counter":"smoke_free"']) expect(json).toContain(x);
                         expect(json).not.toMatch(/flagAge/);                                            // the pass ends by the modifier, no flag-age workaround
                         expect(JSON.stringify(mine)).not.toMatch(/perfume|"chat"|"write"/);             // no perfume yet, no message to her
+                      });
+
+                      describe('день 17', () => {
+                        /** Day 17 is past the demo too: the clock may cross Day 16 only with the cut-off lifted to 17 */
+                        const full17: Content = { ...content, balance: { ...content.balance, demoDays: 17 } };
+                        /** quiet choices of Day 17: up, not today, scroll, not today at Gosha's, the tester only, ok, a cigarette */
+                        const Q17: Record<string, string> = {
+                          'K17-late': 'up', 'K17-run': 'skip', 'K17-01': 'scroll', 'K17-03': 'later', 'K17-02z': 'tester', 'K17-02a': 'tester', 'K17-02b': 'tester', 'K17-02s': 'tester',
+                          'K17-04': 'ok', 'K17-05w': 'ok', 'K17-06a': 'smoke', 'K17-06q': 'smoke', 'K17-06b': 'smoke',
+                        };
+                        /** Day 16 and earlier flags Day 17 reads are switched per test; the base: smoked on Day 16, no team, no pass, no runs, Aunt Zina never helped, no tip */
+                        const EARLY17 = ['d16_late', 'd16_cake', 'd16_pass', 'd16_smoked', 'd16_no_smoke', 'd16_quarter', 'd9_pass', 'd5_helped_zina', 'd11_tip', 'd11_cut', 'bought_haircut', 'd15_team', 'd15_tone'];
+                        let n16: GameState | undefined;
+                        const night16 = () => (n16 ??= play16(morning16()));
+                        const morning17 = (p: Patch = {}, sleep16 = 'sleep') =>
+                          patch(syncClock(full17, pick(night16(), 'K16-sleep', sleep16), at(393)), { ...p, on: { d16_smoked: true, ...p.on }, off: [...EARLY17, ...(p.off ?? [])], counters: { smoke_free: 0, ...p.counters } });
+                        const play17 = (s: GameState, p: Record<string, string> = {}, hours = [397, 403, 407.5]) =>
+                          hours.reduce((x, h) => story(syncClock(full17, x, at(h)), { ...Q17, ...p }), story(s, { ...Q17, ...p }));
+                        const d17 = (s: GameState) => Object.keys(s.seen).filter((id) => id.startsWith('K17-'));
+                        const day17 = (p: Patch = {}) => syncClock(full17, story(morning17(p), Q17), at(397));
+                        const PHARMACY = ['K17-02z', 'K17-02a', 'K17-02b', 'K17-02s'];
+                        /** exactly one outcome of every choice fits the state */
+                        const oneOutcome = (s: GameState, id: string) => card(id).choices.every((ch) => ch.outcomes.filter((o) => (o.if ?? []).every((c) => check(content, s, c))).length === 1);
+
+                        it('Tuesday morning: overslept after a late Monday, Vitya\'s run for both kinds of runner', () => {
+                          const s = morning17();
+                          expect([s.day, s.part, s.energy]).toEqual([17, 'morning', 10]);
+                          expect(next(s)).toBeUndefined();                                                // nothing in the morning for the quiet player
+                          const late = morning17({ on: { d16_late: true } }, 'late');
+                          expect([next(late), late.energy]).toEqual(['K17-late', 10 - 4]);
+                          expect(choicesOf('K17-late')).toEqual([['up', true]]);
+                          // the runs: Vitya's runner from Day 9 or from Day 16, never for the rest
+                          for (const [d9, d16, show] of [['vitya', undefined, true], [undefined, 'vitya', true], ['renewed', 'vitya', true], ['none', 'none', false], ['renewed', 'renewed', false], [undefined, undefined, false]] as [string | undefined, string | undefined, boolean][]) {
+                            const x = patch(s, { on: { ...(d9 ? { d9_pass: d9 } : {}), ...(d16 ? { d16_pass: d16 } : {}) } });
+                            expect(next(x) === 'K17-run', `${d9} ${d16}`).toBe(show);
+                          }
+                          expect(card('K17-run').when!.requires).toEqual([{ any: [{ flag: 'd9_pass', eq: 'vitya' }, { flag: 'd16_pass', eq: 'vitya' }] }]);
+                          const runner = morning17({ on: { d16_pass: 'vitya' } });
+                          const ran = choose(content, runner, 'K17-run', 'run');
+                          expect([runner.energy - ran.state.energy, ran.state.problems.weight - runner.problems.weight, ran.state.counters.useful - (runner.counters.useful ?? 0)]).toEqual([4, -2, 1]);
+                          expect(choicesOf('K17-run')).toEqual([['run', false], ['skip', true]]);
+                        });
+
+                        it('the day: the cologne trap with honest odds, Gosha for the tip without a cut, then Aunt Zina at the pharmacy', () => {
+                          const s = day17({ coins: 400 });
+                          expect(next(s)).toBe('K17-01');
+                          expect(choicesOf('K17-01')).toEqual([['buy', false], ['scroll', true]]);
+                          expect(card('K17-01').choices[0].cost).toEqual({ coins: 60 });
+                          expect(oddsFor(content, s, card('K17-01').choices[0])).toEqual([{ word: 'часто', hint: 'слишком резко' }, { word: 'иногда', hint: 'нормально' }]);
+                          const alphas = new Set<string>();
+                          for (let seed = 1; seed <= 12; seed++) {
+                            const r = choose(content, { ...s, seed }, 'K17-01', 'buy').state;
+                            const v = r.flags.d17_alpha.value as string;
+                            alphas.add(v);
+                            expect([s.coins - r.coins, r.problems.care - s.problems.care]).toEqual([60, v === 'odd' ? 2 : -1]);
+                          }
+                          expect([...alphas].sort()).toEqual(['fine', 'odd']);
+                          const scrolled = pick(s, 'K17-01', 'scroll');
+                          expect([scrolled.coins, scrolled.problems.care, scrolled.flags.d17_alpha]).toEqual([s.coins, s.problems.care, undefined]);
+                          // Gosha: the Day 11 tip without any cut, before the pharmacy (no purchase offer right after Aunt Zina's smoking line)
+                          const tip = patch(scrolled, { on: { d11_tip: 'noted' } });
+                          expect(next(tip)).toBe('K17-03');
+                          expect(next(patch(tip, { on: { d11_cut: 'salon' } }))).toBe('K17-02s');
+                          expect(next(patch(tip, { on: { bought_haircut: true } }))).toBe('K17-02s');
+                          expect(next(scrolled)).toBe('K17-02s');
+                          expect(content.cards.findIndex((c) => c.id === 'K17-03')).toBeLessThan(content.cards.findIndex((c) => c.id === 'K17-02z'));
+                          expect(choicesOf('K17-03')).toEqual([['cut', false], ['later', true]]);
+                          const cut = pick(tip, 'K17-03', 'cut');
+                          expect([tip.coins - cut.coins, tip.energy - cut.energy, cut.problems.care - tip.problems.care, cut.problems.conf - tip.problems.conf, cut.flags.bought_haircut.value, cut.flags.d17_cut.value])
+                            .toEqual([70, 2, -6, -2, true, 'barber']);
+                          expect(next(cut)).toBe('K17-02s');
+                        });
+
+                        it('the pharmacy: exactly one Aunt Zina card for every Day 5, Day 16 and smoking state, one outcome per choice, no bottle for a smoker', () => {
+                          const s = day17({ coins: 400 });
+                          for (const cake of [undefined, 'half', 'zina', 'ate']) for (const helped of [undefined, 'shelf', 'bags']) for (const sf of [0, 1, 7]) for (const alpha of [undefined, 'odd', 'fine']) {
+                            const x = patch(s, { on: { ...(cake ? { d16_cake: cake } : {}), ...(helped ? { d5_helped_zina: helped } : {}), ...(alpha ? { d17_alpha: alpha } : {}) }, counters: { smoke_free: sf } });
+                            const want = sf === 0 ? 'K17-02s' : cake === 'zina' ? 'K17-02z' : helped ? 'K17-02a' : 'K17-02b';
+                            expect(fits(x, PHARMACY), `${cake} ${helped} ${sf} ${alpha}`).toEqual([want]);
+                            expect(oneOutcome(x, want), `${want} ${alpha}`).toBe(true);
+                          }
+                          for (const id of ['K17-02z', 'K17-02a', 'K17-02b']) {
+                            expect(choicesOf(id), id).toEqual([['buy', false], ['tester', true]]);
+                            expect(card(id).choices[0].cost, id).toEqual({ coins: 120 });
+                            expect(card(id).text, id).toContain('Табак она не перебивает');
+                            expect(card(id).speaker, id).toBe('Тётя Зина');
+                          }
+                          expect(choicesOf('K17-02s')).toEqual([['tester', true]]);
+                          expect(card('K17-02s').text).toContain('Духи табак не перебьют');
+                          expect(card('K17-02z').text).toContain('Торт');
+                          expect(card('K17-02a').text).toContain('крем мой');
+                          const clean = patch(s, { counters: { smoke_free: 3 }, on: { d17_alpha: 'odd' } });
+                          const bought = choose(content, clean, 'K17-02b', 'buy');
+                          expect([clean.coins - bought.state.coins, bought.state.problems.care - clean.problems.care, bought.state.flags.bought_perfume.value, bought.state.flags.d17_scent.value])
+                            .toEqual([120, -6, true, 'bottle']);
+                          expect(bought.outcome.text).toContain('магазинное смой');
+                          const tester = choose(content, patch(clean, { off: ['d17_alpha'] }), 'K17-02b', 'tester');
+                          expect([tester.state.problems.care - clean.problems.care, tester.state.flags.d17_scent.value, tester.state.flags.bought_perfume]).toEqual([-2, 'tester', undefined]);
+                          expect(tester.outcome.text).toContain('Чистая футболка');
+                          const smoker = choose(content, s, 'K17-02s', 'tester');
+                          expect([smoker.state.problems.care - s.problems.care, smoker.state.flags.d17_scent.value, smoker.state.coins]).toEqual([-2, 'smoke', s.coins]);
+                          expect(content.items.some((i) => i.id.includes('perfume'))).toBe(false);          // sold on the card only, not in the shop
+                        });
+
+                        it('the evening: twenty songs for the music team, a status line for the warm tone, no message to her', () => {
+                          const base = syncClock(full17, play17(morning17(), {}, [397]), at(403));
+                          expect(next(base)).toBeUndefined();
+                          for (const [team, tone, ids] of [['music', 'warm', ['K17-04', 'K17-05w']], ['chairs', 'warm', ['K17-05w']], ['music', 'even', ['K17-04']], ['volunteer', 'dry', []], [undefined, 'even', []]] as [string | undefined, string, string[]][]) {
+                            const x = patch(base, { on: { ...(team ? { d15_team: team } : {}), d15_tone: tone } });
+                            expect(d17(story(x, Q17)).filter((id) => /^K17-0[45]/.test(id)), `${team} ${tone}`).toEqual(ids);
+                          }
+                          const warm = patch(base, { on: { d15_tone: 'warm', d15_team: 'music' } });
+                          const after = story(warm, Q17);
+                          const today = after.chat.filter((m) => m.day === 17);
+                          expect(today.map((m) => [m.from, !!m.status])).toEqual([['crush', true]]);
+                          expect(after.affinity).toBe(warm.affinity);
+                          expect(card('K17-04').text).toContain('двадцать песен');
+                          for (const id of ['K17-04', 'K17-05w']) expect(choicesOf(id), id).toEqual([['ok', true]]);
+                        });
+
+                        it('the night: the balcony by Monday, the perfume does not cover a cigarette, the gym by the modifier, sleep on «тринадцать дней»', () => {
+                          const s = play17(morning17());
+                          expect(d17(s)).toEqual(['K17-01', 'K17-02s', 'K17-06a']);
+                          const before = (p: Patch) => { const x = patch(s, p); const flags = { ...x.flags }; for (const f of ['d17_smoked', 'd17_no_smoke', 'd17_quarter']) delete flags[f]; const seen = { ...x.seen }; delete seen['K17-06a']; return { ...x, flags, seen }; };
+                          const QUARTER = { on: { d16_quarter: true }, off: ['d16_smoked'], counters: { smoke_free: 0 } };
+                          const HELD = { on: { d16_no_smoke: true }, off: ['d16_smoked'], counters: { smoke_free: 16 } };
+                          // the pharmacy stays done once its flag is set, even when the counter it split on changes (no second visit at night)
+                          expect(PHARMACY.map((id) => fits(before(HELD), [id]))).toEqual([[], [], [], []]);
+                          expect([next(before({})), next(before(QUARTER)), next(before(HELD)), next(before({ off: ['d16_smoked'] }))]).toEqual(['K17-06a', 'K17-06q', 'K17-06b', 'K17-06a']);
+                          const cost = (id: string) => card(id).choices.map((c) => [c.id, c.cost?.energy ?? 0]);
+                          for (const id of ['K17-06a', 'K17-06q']) expect(cost(id), id).toEqual([['hold', 2], ['quarter', 1], ['gum', 0], ['smoke', 0]]);
+                          expect(cost('K17-06b')).toEqual([['hold', 3], ['quarter', 1], ['gum', 0], ['smoke', 0]]);
+                          const held = choose(content, before(HELD), 'K17-06b', 'hold');
+                          expect([held.outcome.text.includes('Семнадцатый день без табака'), held.state.counters.smoke_free, !!held.state.flags.d17_no_smoke]).toEqual([true, 17, true]);
+                          expect(choose(content, before({ ...HELD, counters: { smoke_free: 20 } }), 'K17-06b', 'hold').outcome.text).toContain('Ещё один день без табака');
+                          for (const id of ['K17-06a', 'K17-06q', 'K17-06b']) {
+                            expect(card(id).choices.find((c) => c.neutral)!.id, id).toBe('smoke');
+                            for (const scent of [undefined, 'bottle', 'tester']) expect(oneOutcome(patch(before({}), { on: scent ? { d17_scent: scent } : {} }), id), `${id} ${scent}`).toBe(true);
+                          }
+                          expect(choose(content, patch(before({}), { on: { d17_scent: 'bottle' } }), 'K17-06a', 'smoke').outcome.text).toContain('не перебивает');
+                          expect(choose(content, before({}), 'K17-06a', 'smoke').outcome.text).toContain('Вторник как вторник');
+                          // the plus menu: the gym only while a pass runs (a Day 16 renewal runs mornings 17–23; a shop pass used on Day 10 ends today)
+                          expect(actionsFor(content, s).map((c) => c.id)).toEqual(['A17-run', 'A17-clean', 'A17-teeth', 'A17-couch', 'K17-sleep']);
+                          expect(card('A17-gym').when!.requires).toEqual([{ modifier: 'gym' }]);
+                          const renewed16 = passFrom(s, 16);
+                          expect(actionsFor(content, renewed16).map((c) => c.id)).toContain('A17-gym');
+                          expect(choose(content, renewed16, 'A17-gym', 'go').outcome.text).not.toContain('последняя');
+                          expect(choose(content, passFrom(s, 10), 'A17-gym', 'go').outcome.text).toContain('последняя тренировка');
+                          expect(actionsFor(content, passFrom(s, 9)).map((c) => c.id)).not.toContain('A17-gym');
+                          expect(actionsFor(content, day17())).toEqual(expect.arrayContaining([expect.objectContaining({ id: 'A-job' })]));
+                          expect(card('K17-sleep').choices.map((c) => c.id)).toEqual(['sleep', 'late']);
+                          const slept = choose(content, s, 'K17-sleep', 'sleep');
+                          expect(slept.outcome.text).toContain('тринадцать дней');
+                          const end = syncClock(full17, slept.state, at(417));
+                          expect([end.demoOver, end.day]).toEqual([true, 17]);
+                          expect(end.summaries[16]).toMatchObject({ day: 17, played: true, gift: 'floss' });
+                          expect(content.days.find((d) => d.day === 17)).toMatchObject({ title: 'Запах', gift: 'floss', teaser: 'Завтра среда. Костюм с выпускного' });
+                          const late = choose(content, s, 'K17-sleep', 'late');
+                          expect([!!late.state.flags.d17_late, late.outcome.text.includes('лента')]).toEqual([true, true]);
+                          expect(choose(content, patch(s, { on: { d15_team: 'music' } }), 'K17-sleep', 'late').outcome.text).toContain('двадцать песен');
+                          expect(syncClock(full, late.state, at(417)).energy).toBe(10 - 4);
+                          for (const part of ['morning', 'day', 'evening', 'night']) expect(content.cards.some((c) => /^[KA]17-/.test(c.id) && c.when!.parts!.includes(part as 'day')), part).toBe(true);
+                        });
+
+                        it('a fully skipped Day 17: the cologne scrolled, the tester taken, no bottle, no haircut, smoked, affinity 0', () => {
+                          for (const [s0, titles, scent] of [
+                            [morning17(), ['Лента: «Альфа»', 'Аптека на Садовой', 'Балкон'], 'smoke'],
+                            [morning17({ on: { d16_no_smoke: true, d11_tip: 'heard', d15_team: 'music', d15_tone: 'warm' }, off: ['d16_smoked'], counters: { smoke_free: 4 } }),
+                              ['Лента: «Альфа»', 'Барбершоп на Садовой', 'Аптека на Садовой', 'Оргкомитет', '{crush} в сети', 'Балкон'], 'tester'],
+                          ] as [GameState, string[], string][]) {
+                            const s = syncClock(full17, s0, at(417));
+                            expect([s.demoOver, s.day]).toEqual([true, 17]);
+                            expect([!!s.flags.d17_smoked, s.flags.d17_scent.value, s.flags.d17_alpha, s.flags.bought_perfume, s.flags.bought_haircut]).toEqual([true, scent, undefined, undefined, undefined]);
+                            expect([s.affinity - s0.affinity, s.coins - s0.coins]).toEqual([0, 0]);
+                            expect(s.summaries[16]).toMatchObject({ day: 17, played: false, coins: 0 });
+                            expect(s.missed!.at(-1)!.items.map((i) => i.title)).toEqual(titles.map((t) => t.replace('{crush}', 'Алина')));
+                          }
+                        });
+
+                        it('every flag set on Day 17 is read on Day 17 or has a planned payoff, and the Day 16 flags left for Day 17 are checked', () => {
+                          const mine = content.cards.filter((c) => /^[KA]17-/.test(c.id));
+                          const json = JSON.stringify(mine.map((c) => [c.when?.requires, c.choices.map((ch) => [ch.requires, ch.outcomes.map((o) => o.if)])]));
+                          const read = (f: string) => json.includes(`{"flag":"${f}"`) || json.includes(`{"flagAge":"${f}"`);
+                          const set = new Set(mine.flatMap((c) => c.choices.flatMap((ch) => ch.outcomes.flatMap((o) => (o.effects ?? []).flatMap((e) => ('flag' in e ? [e.flag] : []))))));
+                          // bought_perfume: Days 20 and 21 (a visible change without a cigarette); d17_cut: weeks 4+; d17_late: the Day 18 morning
+                          expect([...set].filter((f) => !read(f)).sort()).toEqual(['bought_perfume', 'd17_cut', 'd17_late']);
+                          for (const f of ['d16_late', 'd16_cake', 'd16_pass', 'd16_smoked', 'd16_no_smoke', 'd16_quarter', 'd9_pass', 'd5_helped_zina', 'd11_tip', 'd11_cut', 'bought_haircut', 'd15_team', 'd15_tone', 'd1_half'])
+                            expect(read(f), f).toBe(true);
+                          for (const x of ['{"item":"gum"}', '{"modifier":"gym","eq":0}', '{"modifier":"gym"}', '"counter":"smoke_free"']) expect(json).toContain(x);
+                          expect(json).not.toMatch(/flagAge/);
+                          expect(JSON.stringify(mine)).not.toMatch(/"write"|"stat":"affinity"/);          // no message from him, no affinity on Day 17
+                        });
                       });
                     });
                   });
