@@ -4,11 +4,11 @@
   "verified": {
     "date": "2026-11-25",
     "typecheck": "pass",
-    "tests": "174/174",
-    "check_content": "pass: 334 cards (252 story, 82 action), 1 archetype, 1 crush",
+    "tests": "181/181",
+    "check_content": "pass: 366 cards (278 story, 88 action), 1 archetype, 1 crush",
     "economy": "demo economy in items.json, side-jobs.json, balance.json; see docs/DEMO_SCRIPT.md section 5a",
-    "build": "pass: dist/index.html 844 kB",
-    "playthrough": "Day 14: engine tests over the Saturday morning (overslept by d13_late, Vitya's last run by d9_pass, the stubble for the shaved by d8_red with cream/bare/keep, the half-time mirror by d11_cut and bought_haircut), go to «Зерно» or stay home (planned for d12_helped_music, Vitya's tip by d13_zerno_tip, otherwise the plain card), the craving at the door split by the Day 13 result, the table in three modes (planned / came / dry with a friend), her line by six visible changes at the Day 7 thresholds and compared with d7_line, the slideshow by d10_photo, the question with +3/+2/+1, 0, -2, Vitya by d13_bday, her evening message by the counter d14_scene, the feed post for those at home, the balcony only at home, the gym workaround, sleep and staying up, a fully skipped Day 14, the demo still ending on Day 7. Playwright (Chromium, real clicks) on the built dist/index.html?full served by vite preview; saves built by the engine with days 1-13 skipped (neutral choices) and earlier flags patched per path, then the dev clock moved through the parts of Day 14; four paths: A planned (360x640 and 390x844), B came/even (390x844), C dry with a friend (360x640), D stayed home (390x844): every Day 14 card on those paths opened, all sheets fit (no horizontal overflow, no clipped sheet), the day-end card shows gift floss and the teaser, then «Продолжение следует» (14 days written). Without ?full a new game stops on Day 7 with «Продолжение следует». Screenshots in X:/tmp/glowup-day14"
+    "build": "pass: dist/index.html 899 kB",
+    "playthrough": "Day 15: engine tests over the Sunday morning (overslept by d14_late, Vitya's long circle by d9_pass, the pimple in three variants by d13_course_done and seen K13-02 with wash/patch/squeeze), lunch at mum's by d8_lunch with her line by bought_haircut / smoke_free, the organisers' chat for d14_met planned (music) and came with the chairs promise (d14_scene >= 1), the class chat with volunteer for the rest, the \"now\" photo for d10_photo old/none, the week tone d15_tone (all 512 flag combinations fit exactly one evening card), her reply chain with his exact words, the balcony by the Day 14 result, two weeks without cigarettes, the gym by { modifier: gym }, sleep and staying up, a fully skipped Day 15, the demo still ending on Day 7. Playwright (Chromium, real clicks) on the built dist/index.html?full served by vite preview, Day 15 reached with the page's dev button «Следующий день» (days 1-14 skipped, neutral choices); 360x640: the save edited to the planned/warm path with the renewed pass (gym open); 390x844: no edit, the home path with the volunteer. All opened sheets fit, no horizontal overflow; day-end card shows gift gum and the teaser. Screenshots in X:/tmp/glowup-day15"
   },
   "demo_days": {
     "1": {
@@ -50,6 +50,11 @@
       "status": "written",
       "file": "content/cards/day12.json",
       "note": "written 2026-11-25; past the demo (demoDays 7, contentDays 12), playable on the dev page with ?full. Texts await the authors: docs/review/day12-texts.md. Design and flags: docs/WEEK2_GRID.md Part C5. The cleaning for d5_dentist_later/moved, a check-up for d5_cleaned; the porch and the balcony split by the Day 11 result; Alina by d7_msg in two cards (question with his reply, her answer in the evening); the neutral reply is «Ответить потом» (no message sent); A12-gym keeps the Day 10 workaround (A5 gap)"
+    },
+    "15": {
+      "status": "written",
+      "file": "content/cards/day15.json",
+      "note": "written 2026-11-25; past the demo (demoDays 7, contentDays 15), playable on the dev page with ?full. Texts await the authors: docs/review/day15-texts.md (deviations listed at its top). Design and flags: docs/WEEK3_GRID.md Part C, section «C. Day 15 as written». First day of week 3; sets the week tone d15_tone and the team d15_team; A15-gym uses the { modifier: gym } condition; no perfume (Day 17)"
     }
   },
   "week2_days": {
@@ -94,7 +99,7 @@
     "store purchase verification"
   ],
   "awaiting_authors": [
-    "Week 3 grid (days 15-21): answer the 19 open questions in docs/WEEK3_GRID.md A6 before /write-day 15; question 18 (the gym modifier condition) is an engine task to schedule before Day 15",
+    "Day 15: review the texts (docs/review/day15-texts.md), the title «Оргкомитет», the gift gum and the teaser; confirm the deviations listed there (three pimple variants, the random squeeze, status lines for the even tone, the K15-07m line without a weekday)",
     "Day 14: review the texts (docs/review/day14-texts.md), the title «Половина пути», the gift floss and the teaser; decide the open questions listed there (does the salon cut count as a visible change, should d8_replied be read, the neutral «Остаться дома» on the planned coffee, the friend Даша)",
     "Day 12: review the texts (docs/review/day12-texts.md), the working title «Вторая чистка», the gift gum and the teaser; confirm the deviations in docs/WEEK2_GRID.md Part C5 (neutral reply «Ответить потом» instead of «Не силён в этом», the check-up teeth effects, the strips sensitivity as teeth +2 today and tomorrow, d8_replied not read)",
     "Day 11: review the texts (docs/review/day11-texts.md), the working title «Племянник», the gift floss and the teaser; confirm the deviations in docs/WEEK2_GRID.md Part C4 (K11-01h, the barber setting bought_haircut, whether the salon cut counts on Day 14, cooking weight −1)",
