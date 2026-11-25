@@ -216,8 +216,8 @@ describe('день 1', () => {
     const after = content.balance.contentDays + 1;
     const unwritten = { ...k1, id: `K${after}-test`, when: { ...k1.when, days: [after, after] as [number, number] } };
     const week2 = (ids: string[]) => ids.filter((id) => /^[KA](8|9)-/.test(id));
-    it('with Days 8–17 written, the demo still ends after Day 7 with «Продолжение следует» and never draws a later card', () => {
-      expect([content.balance.demoDays, content.balance.contentDays]).toEqual([7, 17]);
+    it('with Days 8–18 written, the demo still ends after Day 7 with «Продолжение следует» and never draws a later card', () => {
+      expect([content.balance.demoDays, content.balance.contentDays]).toEqual([7, 18]);
       expect(content.cards.filter((c) => /^[KA]9-/.test(c.id)).length).toBeGreaterThan(15);
       const s = syncClock(content, start(), at(9 + 24 * 9));
       expect([s.demoOver, s.day]).toEqual([true, 7]);
@@ -3668,6 +3668,200 @@ describe('день 6', () => {
                           for (const x of ['{"item":"gum"}', '{"modifier":"gym","eq":0}', '{"modifier":"gym"}', '"counter":"smoke_free"']) expect(json).toContain(x);
                           expect(json).not.toMatch(/flagAge/);
                           expect(JSON.stringify(mine)).not.toMatch(/"write"|"stat":"affinity"/);          // no message from him, no affinity on Day 17
+                        });
+
+                        describe('день 18', () => {
+                          /** Day 18 is past the demo too: the clock may cross Day 17 only with the cut-off lifted to 18 */
+                          const full18: Content = { ...content, balance: { ...content.balance, demoDays: 18 } };
+                          /** quiet choices of Day 18: up, not today, read, try the suit on, answer later, ok, a cigarette */
+                          const Q18: Record<string, string> = {
+                            'K18-late': 'up', 'K18-run': 'skip', 'K18-01': 'ok', 'K18-02f': 'try', 'K18-02t': 'try', 'K18-02n': 'try',
+                            'K18-03w': 'later', 'K18-03e': 'later', 'K18-04wa': 'ok', 'K18-04wj': 'ok', 'K18-04e': 'ok', 'K18-05a': 'smoke', 'K18-05q': 'smoke', 'K18-05b': 'smoke',
+                          };
+                          /** Day 17 and earlier flags Day 18 reads are switched per test; the base: smoked on Day 17, the even tone, no team, no runs, no Day 10 photo */
+                          const EARLY18 = ['d17_late', 'd17_smoked', 'd17_no_smoke', 'd17_quarter', 'd9_pass', 'd16_pass', 'd15_team', 'd15_tone', 'd10_photo'];
+                          let n17: GameState | undefined;
+                          const night17 = () => (n17 ??= play17(morning17()));
+                          const morning18 = (p: Patch = {}, sleep17 = 'sleep') =>
+                            patch(syncClock(full18, pick(night17(), 'K17-sleep', sleep17), at(417)), { ...p, on: { d17_smoked: true, d15_tone: 'even', ...p.on }, off: [...EARLY18, ...(p.off ?? [])], counters: { smoke_free: 0, ...p.counters } });
+                          const play18 = (s: GameState, p: Record<string, string> = {}, hours = [421, 427, 431.5]) =>
+                            hours.reduce((x, h) => story(syncClock(full18, x, at(h)), { ...Q18, ...p }), story(s, { ...Q18, ...p }));
+                          const d18 = (s: GameState) => Object.keys(s.seen).filter((id) => id.startsWith('K18-'));
+                          const weighing = (s: GameState, weight: number): GameState => ({ ...s, problems: { ...s.problems, weight } });
+                          const FITTING = ['K18-02f', 'K18-02t', 'K18-02n'];
+                          const EVENING = ['K18-03w', 'K18-03e', 'K18-04wa', 'K18-04wj', 'K18-04e'];
+                          /** the weight thresholds of the fitting, measured on engine runs (docs/WEEK3_GRID.md, section F) */
+                          const FIT = (card('K18-02f').when!.requires![1] as { lte: number }).lte;
+                          const TIGHT = (card('K18-02t').when!.requires![1] as { lte: number }).lte;
+                          const suitOf = (w: number) => (w <= FIT ? 'fits' : w <= TIGHT ? 'tight' : 'no');
+                          const shown = (s: GameState, id: string) => choicesFor(content, s, card(id)).map((x) => x.choice.id);
+
+                          it('Wednesday morning: overslept, Vitya\'s run for both kinds of runner, Oksana\'s dress code for everyone', () => {
+                            const s = morning18();
+                            expect([s.day, s.part, s.energy]).toEqual([18, 'morning', 10]);
+                            expect(next(s)).toBe('K18-01');
+                            const late = morning18({ on: { d17_late: true } }, 'late');
+                            expect([next(late), late.energy]).toEqual(['K18-late', 10 - 4]);
+                            expect(choicesOf('K18-late')).toEqual([['up', true]]);
+                            for (const [d9, d16, show] of [['vitya', undefined, true], [undefined, 'vitya', true], ['renewed', 'vitya', true], ['none', 'none', false], ['renewed', 'renewed', false], [undefined, undefined, false]] as [string | undefined, string | undefined, boolean][]) {
+                              const x = patch(s, { on: { ...(d9 ? { d9_pass: d9 } : {}), ...(d16 ? { d16_pass: d16 } : {}) } });
+                              expect(next(x) === 'K18-run', `${d9} ${d16}`).toBe(show);
+                            }
+                            expect(card('K18-run').when!.requires).toEqual([{ any: [{ flag: 'd9_pass', eq: 'vitya' }, { flag: 'd16_pass', eq: 'vitya' }] }]);
+                            const runner = morning18({ on: { d9_pass: 'vitya' } });
+                            const ran = choose(content, runner, 'K18-run', 'run');
+                            expect([runner.energy - ran.state.energy, ran.state.problems.weight - runner.problems.weight, ran.state.counters.useful - (runner.counters.useful ?? 0)]).toEqual([4, -2, 1]);
+                            expect(choicesOf('K18-run')).toEqual([['run', false], ['skip', true]]);
+                            // the teaser of Day 17 is paid in the morning: the dress code «как на выпускном» for the whole class
+                            expect(choicesOf('K18-01')).toEqual([['ok', true]]);
+                            expect(card('K18-01').text).toContain('как на выпускном');
+                            expect(d18(story(s, Q18))).toEqual(['K18-01']);
+                          });
+
+                          it('the fitting: one card by weight for every level and Day 10 photo, the tie line, no purchase, and it never opens twice', () => {
+                            const s = syncClock(full18, story(morning18(), Q18), at(421));
+                            expect([s.part, next(s)]).toEqual(['day', FITTING[['fits', 'tight', 'no'].indexOf(suitOf(s.problems.weight))]]);
+                            expect([FIT, TIGHT]).toEqual([48, 60]);
+                            for (let w = 0; w <= 100; w++) for (const photo of [undefined, 'both', 'old', 'none']) {
+                              const x = patch(weighing(s, w), { on: photo ? { d10_photo: photo } : {} });
+                              const want = FITTING[['fits', 'tight', 'no'].indexOf(suitOf(w))];
+                              expect(fits(x, FITTING), `${w} ${photo}`).toEqual([want]);
+                              expect(oneOutcome(x, want), `${want} ${photo}`).toBe(true);
+                            }
+                            for (const id of FITTING) {
+                              expect(choicesOf(id), id).toEqual([['try', true]]);
+                              expect(card(id).choices[0].cost, id).toBeUndefined();
+                              expect(card(id).text, id).toContain('костюм с выпускного');
+                            }
+                            const delta = (w: number, id: string, photo?: string) => {
+                              const x = patch(weighing(s, w), { on: photo ? { d10_photo: photo } : {} });
+                              const r = choose(content, x, id, 'try');
+                              return [r.state.problems.conf - x.problems.conf, r.state.flags.d18_suit.value, x.coins - r.state.coins, x.energy - r.state.energy, r.outcome.text.includes('со слайда')];
+                            };
+                            expect(delta(FIT, 'K18-02f', 'old')).toEqual([-3, 'fits', 0, 0, true]);
+                            expect(delta(FIT + 1, 'K18-02t')).toEqual([0, 'tight', 0, 0, false]);
+                            expect(delta(TIGHT + 1, 'K18-02n', 'both')).toEqual([0, 'no', 0, 0, true]);
+                            expect(choose(content, weighing(s, 100), 'K18-02n', 'try').outcome.text).toContain('Время есть');
+                            // a late-day change of weight cannot bring the fitting back: the suit flag closes all three cards
+                            const tried = pick(weighing(s, 100), 'K18-02n', 'try');
+                            for (const w of [0, FIT + 1, 100]) expect(fits(weighing(tried, w), FITTING), `${w}`).toEqual([]);
+                            expect(next(syncClock(full18, weighing(tried, 0), at(431.5)))).toBe('K18-05a');
+                          });
+
+                          it('the evening: her dress message for the warm tone, her question in «Оргкомитет» for the even team, one answer bubble, never a minus', () => {
+                            const base = syncClock(full18, play18(morning18(), {}, [421]), at(427));
+                            expect(next(base)).toBeUndefined();
+                            for (const tone of ['warm', 'even', 'dry']) for (const team of [undefined, 'music', 'chairs', 'volunteer']) for (const suit of ['fits', 'tight', 'no']) {
+                              const x = patch(base, { on: { d15_tone: tone, d18_suit: suit, ...(team ? { d15_team: team } : {}) } });
+                              expect(fits(x, EVENING), `${tone} ${team} ${suit}`).toEqual(tone === 'warm' ? ['K18-03w'] : tone === 'even' && team ? ['K18-03e'] : []);
+                              // after any reply exactly one bubble or none, and the question never comes back
+                              for (const reply of ['answer', 'joke', 'short', 'later']) {
+                                const y = patch(x, { on: { d18_reply: reply } });
+                                const want = tone === 'warm' && reply === 'answer' ? ['K18-04wa'] : tone === 'warm' && reply === 'joke' ? ['K18-04wj'] : tone === 'even' && reply === 'answer' ? ['K18-04e'] : [];
+                                expect(fits(y, EVENING), `${tone} ${team} ${suit} ${reply}`).toEqual(want);
+                              }
+                            }
+                            // the buttons follow his suit: each label is his message, word for word
+                            const warm = (suit: string) => patch(base, { on: { d15_tone: 'warm', d18_suit: suit } });
+                            const even = (suit: string) => patch(base, { on: { d15_tone: 'even', d15_team: 'chairs', d18_suit: suit } });
+                            expect(['fits', 'tight', 'no'].map((x) => shown(warm(x), 'K18-03w'))).toEqual([['fits', 'short', 'later'], ['tight', 'short', 'later'], ['joke', 'short', 'later']]);
+                            expect(['fits', 'tight', 'no'].map((x) => shown(even(x), 'K18-03e'))).toEqual([['fits', 'later'], ['tight', 'later'], ['no', 'later']]);
+                            for (const [suit, choice, add, reply, back] of [['fits', 'fits', 2, 'answer', 'K18-04wa'], ['tight', 'tight', 3, 'joke', 'K18-04wj'], ['no', 'joke', 3, 'joke', 'K18-04wj'], ['fits', 'short', 0, 'short', undefined], ['no', 'later', 0, 'later', undefined]] as [string, string, number, string, string | undefined][]) {
+                              const x = warm(suit);
+                              const r = choose(content, x, 'K18-03w', choice);
+                              expect([r.state.affinity - x.affinity, r.state.flags.d18_reply.value, next(r.state)], `${suit} ${choice}`).toEqual([add, reply, back]);
+                              const label = card('K18-03w').choices.find((c) => c.id === choice)!.label;
+                              expect(r.state.chat.filter((m) => m.day === 18 && m.from === 'hero').map((m) => m.text)).toEqual(choice === 'later' ? [] : [label]);
+                            }
+                            for (const suit of ['fits', 'tight', 'no']) {
+                              const x = even(suit);
+                              const r = choose(content, x, 'K18-03e', suit);
+                              expect([r.state.affinity - x.affinity, r.state.flags.d18_reply.value, next(r.state)], suit).toEqual([2, 'answer', 'K18-04e']);
+                            }
+                            const skipped = choose(content, even('no'), 'K18-03e', 'later').state;
+                            expect([skipped.affinity - even('no').affinity, skipped.flags.d18_reply.value, next(skipped)]).toEqual([0, 'later', undefined]);
+                            // her lines go to the chat: the opener on the card, the answer bubble after his joke
+                            const talk = story(warm('no'), { ...Q18, 'K18-03w': 'joke' });
+                            expect(talk.chat.filter((m) => m.day === 18).map((m) => [m.from, !!m.status])).toEqual([['crush', false], ['hero', false], ['crush', true], ['crush', false]]);
+                            expect(d18(talk).filter((id) => /^K18-0[34]/.test(id))).toEqual(['K18-03w', 'K18-04wj']);
+                            for (const k of ['alina_d18_dress', 'alina_d18_fits_back', 'alina_d18_joke_back', 'alina_d18_team_q', 'alina_d18_team_back']) expect(content.chat[k], k).toHaveLength(10);
+                            expect(JSON.stringify(content.cards.filter((c) => /^[KA]18-/.test(c.id)))).not.toMatch(/"stat":"affinity","add":-/);
+                            for (const id of EVENING) expect(card(id).choices.some((c) => c.neutral && !c.cost && !c.requires), id).toBe(true);
+                          });
+
+                          it('the night: the balcony by Tuesday, the gym by the modifier, sleep on «двенадцать дней», the teaser of Day 19', () => {
+                            const s = play18(morning18());
+                            expect(d18(s)).toEqual(['K18-01', FITTING[['fits', 'tight', 'no'].indexOf(suitOf(morning18().problems.weight))], 'K18-05a']);
+                            const before = (p: Patch) => { const x = patch(s, p); const flags = { ...x.flags }; for (const f of ['d18_smoked', 'd18_no_smoke', 'd18_quarter']) delete flags[f]; const seen = { ...x.seen }; delete seen['K18-05a']; return { ...x, flags, seen }; };
+                            const QUARTER = { on: { d17_quarter: true }, off: ['d17_smoked'], counters: { smoke_free: 0 } };
+                            const HELD = { on: { d17_no_smoke: true }, off: ['d17_smoked'], counters: { smoke_free: 17 } };
+                            expect([next(before({})), next(before(QUARTER)), next(before(HELD)), next(before({ off: ['d17_smoked'] }))]).toEqual(['K18-05a', 'K18-05q', 'K18-05b', 'K18-05a']);
+                            const cost = (id: string) => card(id).choices.map((c) => [c.id, c.cost?.energy ?? 0]);
+                            for (const id of ['K18-05a', 'K18-05q']) expect(cost(id), id).toEqual([['hold', 2], ['quarter', 1], ['gum', 0], ['smoke', 0]]);
+                            expect(cost('K18-05b')).toEqual([['hold', 3], ['quarter', 1], ['gum', 0], ['smoke', 0]]);
+                            const held = choose(content, before(HELD), 'K18-05b', 'hold');
+                            expect([held.outcome.text.includes('Восемнадцатый день без табака'), held.state.counters.smoke_free, !!held.state.flags.d18_no_smoke]).toEqual([true, 18, true]);
+                            expect(choose(content, before({ ...HELD, counters: { smoke_free: 20 } }), 'K18-05b', 'hold').outcome.text).toContain('Ещё один день без табака');
+                            for (let n = 1; n <= 20; n++) expect(oneOutcome(before({ ...HELD, counters: { smoke_free: n } }), 'K18-05b'), `${n}`).toBe(true);
+                            for (const id of ['K18-05a', 'K18-05q', 'K18-05b']) expect(card(id).choices.find((c) => c.neutral)!.id, id).toBe('smoke');
+                            const smoked = choose(content, before({}), 'K18-05a', 'smoke');
+                            expect([smoked.state.counters.smoke_free, !!smoked.state.flags.d18_smoked, smoked.outcome.text]).toEqual([0, true, 'Обычная сигарета на балконе. Среда как среда.']);
+                            // after the balcony no card of the day comes back
+                            expect(next(s)).toBeUndefined();
+                            // the plus menu: the gym only while a pass runs (a Day 16 renewal runs mornings 17–23; a shop pass used on Day 11 ends today)
+                            expect(actionsFor(content, s).map((c) => c.id)).toEqual(['A18-run', 'A18-clean', 'A18-teeth', 'A18-couch', 'K18-sleep']);
+                            expect(card('A18-gym').when!.requires).toEqual([{ modifier: 'gym' }]);
+                            const renewed16 = passFrom(s, 16);
+                            expect(actionsFor(content, renewed16).map((c) => c.id)).toContain('A18-gym');
+                            expect(choose(content, renewed16, 'A18-gym', 'go').outcome.text).not.toContain('последняя');
+                            expect(choose(content, passFrom(s, 11), 'A18-gym', 'go').outcome.text).toContain('последняя тренировка');
+                            expect(actionsFor(content, passFrom(s, 10)).map((c) => c.id)).not.toContain('A18-gym');
+                            expect(actionsFor(content, syncClock(full18, morning18(), at(421)))).toEqual(expect.arrayContaining([expect.objectContaining({ id: 'A-job' })]));
+                            expect(card('K18-sleep').choices.map((c) => c.id)).toEqual(['sleep', 'late']);
+                            const slept = choose(content, s, 'K18-sleep', 'sleep');
+                            expect(slept.outcome.text).toContain('двенадцать дней');
+                            const end = syncClock(full18, slept.state, at(441));
+                            expect([end.demoOver, end.day]).toEqual([true, 18]);
+                            expect(end.summaries[17]).toMatchObject({ day: 18, played: true, gift: 'gum' });
+                            expect(content.days.find((d) => d.day === 18)).toMatchObject({ title: 'Костюм с выпускного', gift: 'gum', teaser: 'Завтра четверг. Песня' });
+                            const late = choose(content, patch(s, { on: { d18_suit: 'no' } }), 'K18-sleep', 'late');
+                            expect([!!late.state.flags.d18_late, late.outcome.text.includes('Пролистал')]).toEqual([true, true]);
+                            expect(choose(content, patch(s, { on: { d18_suit: 'fits' } }), 'K18-sleep', 'late').outcome.text).toContain('фото с выпускных');
+                            expect(syncClock(full, late.state, at(441)).energy).toBe(10 - 4);
+                            for (const part of ['morning', 'day', 'evening', 'night']) expect(content.cards.some((c) => /^[KA]18-/.test(c.id) && c.when!.parts!.includes(part as 'day')), part).toBe(true);
+                          });
+
+                          it('a fully skipped Day 18: the dress code read, the suit tried on, no answer to her, smoked, affinity 0', () => {
+                            for (const [s0, titles, reply] of [
+                              [morning18(), ['Чат класса', 'Примерка', 'Балкон'], undefined],
+                              [weighing(morning18({ on: { d17_no_smoke: true, d15_tone: 'warm', d15_team: 'music', d9_pass: 'vitya' }, off: ['d17_smoked'], counters: { smoke_free: 4 } }), 0),
+                                ['Витя у подъезда', 'Чат класса', 'Примерка', '{crush} пишет', 'Балкон'], 'later'],
+                              [weighing(morning18({ on: { d15_team: 'chairs' } }), FIT + 1), ['Чат класса', 'Примерка', '{crush} в «Оргкомитете»', 'Балкон'], 'later'],
+                            ] as [GameState, string[], string | undefined][]) {
+                              const s = syncClock(full18, s0, at(441));
+                              expect([s.demoOver, s.day]).toEqual([true, 18]);
+                              expect([!!s.flags.d18_smoked, s.flags.d18_suit.value, s.flags.d18_reply?.value]).toEqual([true, suitOf(s0.problems.weight), reply]);
+                              expect([s.affinity - s0.affinity, s.coins - s0.coins]).toEqual([0, 0]);
+                              expect(s.chat.filter((m) => m.day === 18 && m.from === 'hero')).toEqual([]);
+                              expect(s.summaries[17]).toMatchObject({ day: 18, played: false, coins: 0 });
+                              expect(s.missed!.at(-1)!.items.map((i) => i.title)).toEqual(titles.map((t) => t.replace('{crush}', 'Алина')));
+                            }
+                          });
+
+                          it('every flag set on Day 18 is read on Day 18 or has a planned payoff, and the Day 17 flags left for Day 18 are checked', () => {
+                            const mine = content.cards.filter((c) => /^[KA]18-/.test(c.id));
+                            const json = JSON.stringify(mine.map((c) => [c.when?.requires, c.choices.map((ch) => [ch.requires, ch.outcomes.map((o) => o.if)])]));
+                            const read = (f: string) => json.includes(`{"flag":"${f}"`) || json.includes(`{"flagAge":"${f}"`);
+                            const set = new Set(mine.flatMap((c) => c.choices.flatMap((ch) => ch.outcomes.flatMap((o) => (o.effects ?? []).flatMap((e) => ('flag' in e ? [e.flag] : []))))));
+                            // d18_late: the Day 19 morning; d18_suit is read today by her message and later on Day 20 (a visible change)
+                            expect([...set].filter((f) => !read(f)).sort()).toEqual(['d18_late']);
+                            expect([...set].sort()).toEqual(['d18_late', 'd18_no_smoke', 'd18_quarter', 'd18_reply', 'd18_smoked', 'd18_suit']);
+                            for (const f of ['d17_late', 'd17_smoked', 'd17_no_smoke', 'd17_quarter', 'd16_pass', 'd9_pass', 'd15_team', 'd15_tone', 'd10_photo', 'd1_half'])
+                              expect(read(f), f).toBe(true);
+                            for (const x of ['{"item":"gum"}', '{"modifier":"gym","eq":0}', '{"modifier":"gym"}', '"counter":"smoke_free"', '{"problem":"weight"']) expect(json).toContain(x);
+                            expect(json).not.toMatch(/flagAge/);
+                            expect(JSON.stringify(mine)).not.toMatch(/"coins"/);                            // nothing is sold on Day 18
+                          });
                         });
                       });
                     });

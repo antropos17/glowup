@@ -4,11 +4,11 @@
   "verified": {
     "date": "2026-11-25",
     "typecheck": "pass",
-    "tests": "194/194",
-    "check_content": "pass: 404 cards (304 story, 100 action), 1 archetype, 1 crush",
+    "tests": "200/200",
+    "check_content": "pass: 424 cards (318 story, 106 action), 1 archetype, 1 crush",
     "economy": "demo economy in items.json, side-jobs.json, balance.json; see docs/DEMO_SCRIPT.md section 5a",
-    "build": "pass: dist/index.html 954.68 kB",
-    "playthrough": "Day 17: engine tests over the Tuesday morning (overslept by d16_late, Vitya's run by d9_pass or d16_pass = vitya), the cologne trap K17-01 with its odds (часто: слишком резко, иногда: нормально), Gosha K17-03 for d11_tip without a cut (before the pharmacy), the pharmacy: exactly one of K17-02z/a/b/s for all 108 combinations of d16_cake, d5_helped_zina, smoke_free and d17_alpha, one outcome per choice, no second visit at night after a cigarette, the evening by d15_team and d15_tone, the balcony by the Day 16 result (the perfume line on a cigarette), the gym by { modifier: gym } (renewal of Day 16, last day of a shop pass), sleep and staying up, a fully skipped Day 17, the demo still ending on Day 7. Playwright (Chromium, real clicks, page.clock at 07:00 and the dev button for the parts of the day) on the built dist/index.html?full served from a local folder; Day 17 reached with a save built by the engine (days 1-16 played with the first affordable story choice), then flags switched in the save: 360x640 d16_pass vitya, held on Day 16, d15_team music, d15_tone warm, d16_cake zina, d11_tip, 400 coins (K17-run run, K17-01 buy, K17-03 cut, K17-02z buy, K17-04, K17-05w, K17-06b hold, sleep, day-end card with floss and the teaser); 390x844 smoked on Day 16, no team, dry tone (K17-run skip, K17-01 scroll, K17-02s tester, no evening card, K17-06a smoke, sleep late). All sheets fit. Screenshots in X:/tmp/glowup-day17"
+    "build": "pass: dist/index.html 989.39 kB",
+    "playthrough": "Day 18: engine tests over the Wednesday morning (overslept by d17_late, Vitya's run by d9_pass or d16_pass = vitya, Oksana's dress code K18-01 for everyone), the fitting: exactly one of K18-02f/t/n for every weight 0-100 (fits <= 48, tight 49-60, no >= 61) and every d10_photo value, one outcome per choice, no second fitting after a later change of weight, no coins spent; the evening by d15_tone, d15_team and d18_suit (K18-03w for warm, K18-03e for even with a team, her answer K18-04wa/wj/e by d18_reply, never a minus), the balcony by the Day 17 result, the gym by { modifier: gym }, sleep and staying up, a fully skipped Day 18 for three states, the demo still ending on Day 7. Playwright (Chromium, real clicks, page.clock at the Day 18 morning and the dev button for the parts of the day) on the built dist/index.html?full served from a local folder; Day 18 reached with a save built by the engine (days 1-17 played with the first affordable story choice), then flags switched in the save: 360x640 d15_tone warm, d16_pass vitya, held on Day 17, d10_photo old, weight 50 (K18-run run, K18-01, K18-02f, K18-03w «А я влез», K18-04wa, K18-05b hold, sleep, day-end card with gum and the teaser); 390x844 d15_tone even, d15_team chairs, smoked on Day 17, weight 95 (K18-01, K18-02n, K18-03e «Не влез», K18-04e, K18-05a smoke, sleep late, day-end card). All sheets fit, no horizontal scroll. The Форма line on the day-end card jumps because the weight was switched in the save. Screenshots in X:/tmp/glowup-day18"
   },
   "demo_days": {
     "1": {
@@ -65,6 +65,11 @@
       "status": "written",
       "file": "content/cards/day17.json",
       "note": "written 2026-11-25; past the demo (demoDays 7, contentDays 17), playable on the dev page with ?full. Texts await the authors: docs/review/day17-texts.md (deviations listed at its top). Design and flags: docs/WEEK3_GRID.md Part C, section «E. Day 17 as written». The cologne trap, Gosha, the pharmacy on Садовая with the perfume sold on a card (120 coins, care -6, not offered with smoke_free 0); sets d17_alpha, d17_scent, d17_cut, bought_perfume; no message to her"
+    },
+    "18": {
+      "status": "written",
+      "file": "content/cards/day18.json",
+      "note": "written 2026-11-25; past the demo (demoDays 7, contentDays 18), playable on the dev page with ?full. Texts await the authors: docs/review/day18-texts.md (deviations listed at its top). Design and flags: docs/WEEK3_GRID.md Part C, section «F. Day 18 as written». The graduation suit: K18-02f/t/n by weight (<= 48 / 49-60 / >= 61, measured on engine runs), her dress message for the warm tone and her question in «Оргкомитет» for the even team; sets d18_suit and d18_reply; nothing sold"
     }
   },
   "week2_days": {
@@ -109,6 +114,7 @@
     "store purchase verification"
   ],
   "awaiting_authors": [
+    "Day 18: review the texts (docs/review/day18-texts.md), the title «Костюм с выпускного», the gift gum and the teaser «Завтра четверг. Песня»; confirm the weight thresholds of the fitting (fits <= 48, tight 49-60, no >= 61: a player who never uses the plus menu never fits) and the deviations listed there (separate joke buttons for tight and no, one organisers' answer per suit, three answer-bubble cards)",
     "Day 17: review the texts (docs/review/day17-texts.md), the title «Запах», the gift floss and the teaser; confirm the deviations listed there (K17-02 split into four cards, d17_tester replaced by d17_scent, Gosha before the pharmacy, the cologne care +2 stays, the perfume line on the balcony)",
     "Day 16: review the texts (docs/review/day16-texts.md), the title «Кусок торта», the gift acne_patch and the teaser; confirm the deviations listed there (K16-01b split into two cards, K16-02 split by team, A16-gym open after a renewal, no Alina card, d15_pimple not read)",
     "Day 15: review the texts (docs/review/day15-texts.md), the title «Оргкомитет», the gift gum and the teaser; confirm the deviations listed there (three pimple variants, the random squeeze, status lines for the even tone, the K15-07m line without a weekday)",
