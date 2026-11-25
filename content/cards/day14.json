@@ -1,0 +1,3978 @@
+[
+  {
+    "id": "K14-late",
+    "kind": "story",
+    "title": "Проспал",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d13_late"
+        }
+      ]
+    },
+    "text": "В три ночи лента всё ещё крутилась: торты, свечи, чужие планы на субботу. Будильник звонил трижды, и сил сегодня меньше обычного.",
+    "choices": [
+      {
+        "id": "up",
+        "neutral": true,
+        "label": "Встать",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d12_helped_music"
+              }
+            ],
+            "text": "Встал к девяти. До одиннадцати ещё можно успеть."
+          },
+          {
+            "if": [
+              {
+                "flag": "d12_helped_music",
+                "set": false
+              }
+            ],
+            "text": "Встал к девяти. Суббота, торопиться некуда."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-run",
+    "kind": "story",
+    "title": "Витя у подъезда",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "d9_pass",
+          "eq": "vitya"
+        }
+      ]
+    },
+    "text": "Семь утра, суббота. Витя у подъезда, как и обещал: «Суббота не повод, я же говорил. Два круга, и свободен».",
+    "choices": [
+      {
+        "id": "run",
+        "label": "Бежать с Витей",
+        "cost": {
+          "energy": 4
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d9_burner"
+              }
+            ],
+            "text": "Два круга по пустому парку. Про капсулы ноги уже не вспоминают. Витя на финише: «Пятый раз бежим, а ты ещё живой».",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -2
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d9_burner",
+                "set": false
+              }
+            ],
+            "text": "Два круга по пустому парку. Витя на финише: «Пятый раз бежим, а ты ещё живой. Уважаю».",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -2
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "skip",
+        "neutral": true,
+        "label": "Не сегодня",
+        "outcomes": [
+          {
+            "text": "Витя махнул рукой: «Ладно, отдыхай. Выходной есть выходной»."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-01a",
+    "kind": "story",
+    "title": "Щетина",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "shaved"
+        },
+        {
+          "flag": "d8_red"
+        }
+      ]
+    },
+    "text": "Суббота, зеркало. С воскресенья краснота сошла, а щетина вернулась. Бритва на полке. Без крема лицо после неё снова будет красным.",
+    "choices": [
+      {
+        "id": "cream",
+        "label": "Побриться с кремом",
+        "requires": [
+          {
+            "item": "cream_zina"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Тот же крем, та же мята. Бритва прошла чисто, без красноты. К субботе в самый раз.",
+            "effects": [
+              {
+                "flag": "shaved"
+              },
+              {
+                "look": {
+                  "facial": "none",
+                  "razorBurn": false
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "bare",
+        "label": "Побриться без крема",
+        "requires": [
+          {
+            "not": {
+              "item": "cream_zina"
+            }
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Снова мыло, снова бритва по прыщам. Щетины нет, щёки горят. К вечеру пройдёт, но не к обеду.",
+            "effects": [
+              {
+                "flag": "shaved"
+              },
+              {
+                "flag": "d14_red"
+              },
+              {
+                "look": {
+                  "facial": "none",
+                  "razorBurn": true
+                }
+              },
+              {
+                "problem": "conf",
+                "add": 2
+              }
+            ],
+            "why": "Опять раздражение"
+          }
+        ]
+      },
+      {
+        "id": "keep",
+        "neutral": true,
+        "label": "Оставить щетину",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d6_beard_hint"
+              }
+            ],
+            "text": "Щетина пусть растёт. Её «Борода вообще не моё» всплыло в голове и ушло. Это всё ещё не борода.",
+            "effects": [
+              {
+                "unflag": "shaved"
+              },
+              {
+                "look": {
+                  "facial": "stubble",
+                  "razorBurn": false
+                }
+              }
+            ],
+            "why": "Щетина вернулась"
+          },
+          {
+            "if": [
+              {
+                "flag": "d6_beard_hint",
+                "set": false
+              }
+            ],
+            "text": "Щетина пусть растёт. Бритва подождёт до следующего раза.",
+            "effects": [
+              {
+                "unflag": "shaved"
+              },
+              {
+                "look": {
+                  "facial": "stubble",
+                  "razorBurn": false
+                }
+              }
+            ],
+            "why": "Щетина вернулась"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-01b",
+    "kind": "story",
+    "title": "Щетина",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "morning"
+      ],
+      "requires": [
+        {
+          "flag": "shaved"
+        },
+        {
+          "flag": "d8_red",
+          "set": false
+        }
+      ]
+    },
+    "text": "Суббота, зеркало. С воскресенья щетина вернулась, как будто и не брился. Бритва на полке. Без крема для проблемной кожи лицо после неё будет красным.",
+    "choices": [
+      {
+        "id": "cream",
+        "label": "Побриться с кремом",
+        "requires": [
+          {
+            "item": "cream_zina"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Тот же крем, та же мята. Бритва прошла чисто, без красноты. К субботе в самый раз.",
+            "effects": [
+              {
+                "flag": "shaved"
+              },
+              {
+                "look": {
+                  "facial": "none",
+                  "razorBurn": false
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "bare",
+        "label": "Побриться без крема",
+        "requires": [
+          {
+            "not": {
+              "item": "cream_zina"
+            }
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Снова мыло, снова бритва по прыщам. Щетины нет, щёки горят. К вечеру пройдёт, но не к обеду.",
+            "effects": [
+              {
+                "flag": "shaved"
+              },
+              {
+                "flag": "d14_red"
+              },
+              {
+                "look": {
+                  "facial": "none",
+                  "razorBurn": true
+                }
+              },
+              {
+                "problem": "conf",
+                "add": 2
+              }
+            ],
+            "why": "Опять раздражение"
+          }
+        ]
+      },
+      {
+        "id": "keep",
+        "neutral": true,
+        "label": "Оставить щетину",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d6_beard_hint"
+              }
+            ],
+            "text": "Щетина пусть растёт. Её «Борода вообще не моё» всплыло в голове и ушло. Это всё ещё не борода.",
+            "effects": [
+              {
+                "unflag": "shaved"
+              },
+              {
+                "look": {
+                  "facial": "stubble",
+                  "razorBurn": false
+                }
+              }
+            ],
+            "why": "Щетина вернулась"
+          },
+          {
+            "if": [
+              {
+                "flag": "d6_beard_hint",
+                "set": false
+              }
+            ],
+            "text": "Щетина пусть растёт. Бритва подождёт до следующего раза.",
+            "effects": [
+              {
+                "unflag": "shaved"
+              },
+              {
+                "look": {
+                  "facial": "stubble",
+                  "razorBurn": false
+                }
+              }
+            ],
+            "why": "Щетина вернулась"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-02",
+    "kind": "story",
+    "title": "Половина пути",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "morning"
+      ]
+    },
+    "text": "Четырнадцатый день из тридцати. В зеркале {hero} во весь рост, а рядом, во вкладке «Зеркало», он же в первый день. Сравнивать можно сколько угодно.",
+    "choices": [
+      {
+        "id": "look",
+        "neutral": true,
+        "label": "Посмотреть",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d11_cut",
+                "eq": "barber"
+              }
+            ],
+            "text": "Первый день и сегодня, рядом. Стрижка от Гоши ещё держит форму. Половина пути позади."
+          },
+          {
+            "if": [
+              {
+                "flag": "d11_cut",
+                "eq": "salon"
+              }
+            ],
+            "text": "Первый день и сегодня, рядом. Чёлка из «Люкса» отросла и легла почти как надо. Половина пути позади."
+          },
+          {
+            "if": [
+              {
+                "flag": "d11_cut",
+                "set": false
+              },
+              {
+                "flag": "bought_haircut"
+              }
+            ],
+            "text": "Первый день и сегодня, рядом. Стрижка ещё держит форму. Половина пути позади."
+          },
+          {
+            "if": [
+              {
+                "flag": "d11_cut",
+                "set": false
+              },
+              {
+                "flag": "bought_haircut",
+                "set": false
+              }
+            ],
+            "text": "Первый день и сегодня, рядом. Волосы за две недели отросли. Половина пути позади."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-03p",
+    "kind": "story",
+    "title": "Суббота, одиннадцать",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d12_helped_music"
+        },
+        {
+          "flag": "d14_met",
+          "set": false
+        }
+      ]
+    },
+    "text": "Без двадцати одиннадцать. Список песен в телефоне, в «Зерне» у окна ждёт {crush}. Договаривались, значит, ждёт.",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Пойти",
+        "outcomes": [
+          {
+            "text": "{hero} вышел из дома. До «Зерна» десять минут пешком.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "flag": "d14_met",
+                "value": "planned"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "home",
+        "neutral": true,
+        "label": "Остаться дома",
+        "outcomes": [
+          {
+            "text": "{hero} так и не вышел из дома. Список песен остался в телефоне.",
+            "effects": [
+              {
+                "flag": "d14_met",
+                "value": "home"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-03t",
+    "kind": "story",
+    "title": "Суббота",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d12_helped_music",
+          "set": false
+        },
+        {
+          "flag": "d13_zerno_tip"
+        },
+        {
+          "flag": "d14_met",
+          "set": false
+        }
+      ]
+    },
+    "text": "Суббота, утро. Витя вчера сказал к слову: {crush} по субботам с утра в «Зерне», на углу у парка. Неделю назад {hero} попал туда случайно. Сегодня это было бы уже не случайно.",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Пойти в «Зерно»",
+        "outcomes": [
+          {
+            "text": "{hero} надел чистое и вышел. До «Зерна» десять минут пешком.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "flag": "d14_met",
+                "value": "came"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "home",
+        "neutral": true,
+        "label": "Остаться дома",
+        "outcomes": [
+          {
+            "text": "Суббота дома. «Зерно» никуда не денется.",
+            "effects": [
+              {
+                "flag": "d14_met",
+                "value": "home"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-03e",
+    "kind": "story",
+    "title": "Суббота",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d12_helped_music",
+          "set": false
+        },
+        {
+          "flag": "d13_zerno_tip",
+          "set": false
+        },
+        {
+          "flag": "d14_met",
+          "set": false
+        }
+      ]
+    },
+    "text": "Суббота, утро. Неделю назад в «Зерне», на углу у парка, они столкнулись случайно. {crush} там по субботам. Сегодня это было бы уже не случайно.",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Пойти в «Зерно»",
+        "outcomes": [
+          {
+            "text": "{hero} надел чистое и вышел. До «Зерна» десять минут пешком.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "flag": "d14_met",
+                "value": "came"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "home",
+        "neutral": true,
+        "label": "Остаться дома",
+        "outcomes": [
+          {
+            "text": "Суббота дома. «Зерно» никуда не денется.",
+            "effects": [
+              {
+                "flag": "d14_met",
+                "value": "home"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-04a",
+    "kind": "story",
+    "title": "У двери «Зерна»",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d14_smoked",
+          "set": false
+        },
+        {
+          "flag": "d14_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d14_quarter",
+          "set": false
+        },
+        {
+          "any": [
+            {
+              "flag": "d14_met",
+              "eq": "planned"
+            },
+            {
+              "flag": "d14_met",
+              "eq": "came"
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "flag": "d13_smoked"
+            },
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "d13_no_smoke"
+                  },
+                  {
+                    "flag": "d13_quarter"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "text": "Угол у парка, до двери «Зерна» десять шагов. Рука сама нашла в кармане пачку. Вчера была сигарета.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Не открывать пачку",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Вчера была целая, сегодня ни одной. Пачка осталась в кармане. Первый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Четыре затяжки за углом, остальное в урну. Дни без сигарет считаются с нуля: четверть тоже сигарета.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d14_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. В «Зерно» {hero} вошёл с запахом мяты.",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "text": "Обычная сигарета у двери «Зерна». Суббота как суббота.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d14_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-04q",
+    "kind": "story",
+    "title": "У двери «Зерна»",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d14_smoked",
+          "set": false
+        },
+        {
+          "flag": "d14_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d14_quarter",
+          "set": false
+        },
+        {
+          "any": [
+            {
+              "flag": "d14_met",
+              "eq": "planned"
+            },
+            {
+              "flag": "d14_met",
+              "eq": "came"
+            }
+          ]
+        },
+        {
+          "flag": "d13_quarter"
+        }
+      ]
+    },
+    "text": "Угол у парка, до двери «Зерна» десять шагов. Рука сама нашла в кармане пачку. Вчера была четверть: четыре затяжки и в урну.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Не открывать пачку",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Вчера четверть, сегодня ни одной. Пачка осталась в кармане. Первый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Снова четверть, за углом. Вреда вдвое меньше, но дни без сигарет опять считаются с нуля.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d14_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. В «Зерно» {hero} вошёл с запахом мяты.",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "text": "Вчера четверть, сегодня целая, у самой двери. Ничего: четверть уже получалась, получится и ещё.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d14_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-04b",
+    "kind": "story",
+    "title": "У двери «Зерна»",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d14_smoked",
+          "set": false
+        },
+        {
+          "flag": "d14_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d14_quarter",
+          "set": false
+        },
+        {
+          "any": [
+            {
+              "flag": "d14_met",
+              "eq": "planned"
+            },
+            {
+              "flag": "d14_met",
+              "eq": "came"
+            }
+          ]
+        },
+        {
+          "flag": "d13_no_smoke"
+        }
+      ]
+    },
+    "text": "Угол у парка, до двери «Зерна» десять шагов. {hero} держится не первый день, но рука сама нашла в кармане пачку. Кто войдёт с запахом табака, с ним и будет сидеть за столиком.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Не открывать пачку",
+        "cost": {
+          "energy": 3
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 1
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял у двери просто так и вошёл. Второй день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 2
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял у двери просто так и вошёл. Третий день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 3
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял у двери просто так и вошёл. Четвёртый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 4
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял у двери просто так и вошёл. Пятый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 5
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял у двери просто так и вошёл. Шестой день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 6
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял у двери просто так и вошёл. Седьмой день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 7
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял у двери просто так и вошёл. Восьмой день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 8
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял у двери просто так и вошёл. Девятый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 9
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял у двери просто так и вошёл. Десятый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 10
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял у двери просто так и вошёл. Одиннадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 11
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял у двери просто так и вошёл. Двенадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 12
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял у двери просто так и вошёл. Тринадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 13
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял у двери просто так и вошёл. Четырнадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "not": {
+                  "any": [
+                    {
+                      "counter": "smoke_free",
+                      "eq": 1
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 2
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 3
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 4
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 5
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 6
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 7
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 8
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 9
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 10
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 11
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 12
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 13
+                    }
+                  ]
+                }
+              }
+            ],
+            "text": "Пачка осталась в кармане. {hero} постоял у двери просто так и вошёл. Ещё один день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Четыре затяжки за углом. Вчера держался, сегодня четверть: дни без сигарет снова считаются с нуля.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d14_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. В «Зерно» {hero} вошёл с запахом мяты.",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "text": "Сигарета у двери «Зерна». Вчера удержался, сегодня нет: счёт дней без табака снова с нуля. Вчерашний день никуда не делся.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d14_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-05p",
+    "kind": "story",
+    "title": "Кофейня «Зерно»",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d14_met",
+          "eq": "planned"
+        }
+      ]
+    },
+    "text": "Внутри пахнет кофе и корицей. {crush} у окна, перед ней ноутбук и наушники. Увидела его и помахала.",
+    "choices": [
+      {
+        "id": "sit",
+        "neutral": true,
+        "label": "Сесть напротив",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d13_zerno_reply",
+                "eq": "yes"
+              }
+            ],
+            "text": "{crush}: «Пришёл, и со списком. Садись, я уже половину переслушала»."
+          },
+          {
+            "if": [
+              {
+                "not": {
+                  "flag": "d13_zerno_reply",
+                  "eq": "yes"
+                }
+              }
+            ],
+            "text": "{crush}: «А я не знала, придёшь ли: ты вчера так и не ответил. Садись, раз пришёл»."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-05c",
+    "kind": "story",
+    "title": "Кофейня «Зерно»",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d14_met",
+          "eq": "came"
+        },
+        {
+          "not": {
+            "flag": "d7_msg",
+            "eq": "dry"
+          }
+        }
+      ]
+    },
+    "text": "Внутри пахнет кофе и корицей. {crush} у окна, перед ней ноутбук и наушники. Увидела его, сняла один наушник и кивнула на свободный стул.",
+    "choices": [
+      {
+        "id": "sit",
+        "neutral": true,
+        "label": "Подсесть",
+        "outcomes": [
+          {
+            "text": "{hero} взял себе кофе и сел напротив. {crush} сдвинула ноутбук, чтобы хватило места."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-05f",
+    "kind": "story",
+    "title": "Кофейня «Зерно»",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d14_met",
+          "eq": "came"
+        },
+        {
+          "flag": "d7_msg",
+          "eq": "dry"
+        }
+      ]
+    },
+    "text": "Внутри пахнет кофе и корицей. {crush} у окна, но не одна: напротив неё подруга, обе смеются над чем-то в телефоне. {crush} его заметила.",
+    "choices": [
+      {
+        "id": "hello",
+        "neutral": true,
+        "label": "Подойти поздороваться",
+        "outcomes": [
+          {
+            "text": "{hero} взял кофе и подошёл к их столику. Подруга оглядела его с ног до головы."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-05v4",
+    "kind": "story",
+    "title": "{crush} у окна",
+    "speaker": "crush",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "any": [
+            {
+              "flag": "d14_met",
+              "eq": "planned"
+            },
+            {
+              "flag": "d14_met",
+              "eq": "came"
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "seen": "K14-05p"
+            },
+            {
+              "seen": "K14-05c"
+            },
+            {
+              "seen": "K14-05f"
+            }
+          ]
+        },
+        {
+          "flag": "d14_line",
+          "set": false
+        },
+        {
+          "count": [
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "shaved",
+                    "set": false
+                  },
+                  {
+                    "flag": "d14_red"
+                  }
+                ]
+              }
+            },
+            {
+              "any": [
+                {
+                  "flag": "bought_shirt"
+                },
+                {
+                  "flag": "bought_frame"
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "flag": "d5_cleaned"
+                },
+                {
+                  "flag": "d12_cleaned"
+                }
+              ]
+            },
+            {
+              "flag": "d3_course"
+            },
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "d14_smoked"
+                  },
+                  {
+                    "flag": "d14_quarter"
+                  }
+                ]
+              }
+            },
+            {
+              "flag": "bought_haircut"
+            }
+          ],
+          "gte": 4
+        }
+      ]
+    },
+    "text": "{crush} посмотрела на него внимательнее, чем в прошлый раз. «Ты какой-то другой. Тебе идёт».",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Спасибо",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d7_line",
+                "eq": "nice"
+              }
+            ],
+            "text": "{crush} сказала, что ему идёт. В прошлую субботу было «прикольно выглядишь». Значит, не показалось.",
+            "effects": [
+              {
+                "flag": "d14_line",
+                "value": "nice"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "not": {
+                  "flag": "d7_line",
+                  "eq": "nice"
+                }
+              }
+            ],
+            "text": "{crush} сказала, что ему идёт. В прошлую субботу она такого не говорила.",
+            "effects": [
+              {
+                "flag": "d14_line",
+                "value": "nice"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-05v2",
+    "kind": "story",
+    "title": "{crush} у окна",
+    "speaker": "crush",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "any": [
+            {
+              "flag": "d14_met",
+              "eq": "planned"
+            },
+            {
+              "flag": "d14_met",
+              "eq": "came"
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "seen": "K14-05p"
+            },
+            {
+              "seen": "K14-05c"
+            },
+            {
+              "seen": "K14-05f"
+            }
+          ]
+        },
+        {
+          "flag": "d14_line",
+          "set": false
+        },
+        {
+          "count": [
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "shaved",
+                    "set": false
+                  },
+                  {
+                    "flag": "d14_red"
+                  }
+                ]
+              }
+            },
+            {
+              "any": [
+                {
+                  "flag": "bought_shirt"
+                },
+                {
+                  "flag": "bought_frame"
+                }
+              ]
+            },
+            {
+              "any": [
+                {
+                  "flag": "d5_cleaned"
+                },
+                {
+                  "flag": "d12_cleaned"
+                }
+              ]
+            },
+            {
+              "flag": "d3_course"
+            },
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "d14_smoked"
+                  },
+                  {
+                    "flag": "d14_quarter"
+                  }
+                ]
+              }
+            },
+            {
+              "flag": "bought_haircut"
+            }
+          ],
+          "gte": 2,
+          "lte": 3
+        }
+      ]
+    },
+    "text": "{crush} посмотрела внимательнее. «Ты какой-то другой. Не пойму только, в чём дело».",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Пожать плечами",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d7_line",
+                "eq": "other"
+              }
+            ],
+            "text": "{crush} опять сказала, что он какой-то другой, как в прошлую субботу. {hero} пожал плечами: «Да вроде тот же».",
+            "effects": [
+              {
+                "flag": "d14_line",
+                "value": "other"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d7_line",
+                "eq": "nice"
+              }
+            ],
+            "text": "В прошлую субботу было «прикольно выглядишь», сегодня просто «какой-то другой». {hero} пожал плечами. Суббота не последняя.",
+            "effects": [
+              {
+                "flag": "d14_line",
+                "value": "other"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "not": {
+                  "any": [
+                    {
+                      "flag": "d7_line",
+                      "eq": "other"
+                    },
+                    {
+                      "flag": "d7_line",
+                      "eq": "nice"
+                    }
+                  ]
+                }
+              }
+            ],
+            "text": "В прошлую субботу {crush} спросила только, какими он тут судьбами. Сегодня сказала, что он какой-то другой. {hero} пожал плечами.",
+            "effects": [
+              {
+                "flag": "d14_line",
+                "value": "other"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-05v0",
+    "kind": "story",
+    "title": "{crush} у окна",
+    "speaker": "crush",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "any": [
+            {
+              "flag": "d14_met",
+              "eq": "planned"
+            },
+            {
+              "flag": "d14_met",
+              "eq": "came"
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "seen": "K14-05p"
+            },
+            {
+              "seen": "K14-05c"
+            },
+            {
+              "seen": "K14-05f"
+            }
+          ]
+        },
+        {
+          "flag": "d14_line",
+          "set": false
+        }
+      ]
+    },
+    "text": "{crush} отодвинула стакан. «Ну, привет. Как неделя?»",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Нормально.",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "any": [
+                  {
+                    "flag": "d7_line",
+                    "eq": "other"
+                  },
+                  {
+                    "flag": "d7_line",
+                    "eq": "nice"
+                  }
+                ]
+              }
+            ],
+            "text": "{crush} спросила, как неделя. {hero}: «Нормально». {crush}: «У меня тоже». В прошлую субботу она смотрела внимательнее.",
+            "effects": [
+              {
+                "flag": "d14_line",
+                "value": "plain"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "not": {
+                  "any": [
+                    {
+                      "flag": "d7_line",
+                      "eq": "other"
+                    },
+                    {
+                      "flag": "d7_line",
+                      "eq": "nice"
+                    }
+                  ]
+                }
+              }
+            ],
+            "text": "{crush} спросила, как неделя. {hero}: «Нормально». {crush}: «У меня тоже».",
+            "effects": [
+              {
+                "flag": "d14_line",
+                "value": "plain"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-05s",
+    "kind": "story",
+    "title": "Слайд-шоу",
+    "speaker": "crush",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "any": [
+            {
+              "flag": "d14_met",
+              "eq": "planned"
+            },
+            {
+              "flag": "d14_met",
+              "eq": "came"
+            }
+          ]
+        },
+        {
+          "not": {
+            "flag": "d7_msg",
+            "eq": "dry"
+          }
+        },
+        {
+          "flag": "d14_line"
+        }
+      ]
+    },
+    "text": "{crush} развернула ноутбук: «Оксана прислала черновик слайд-шоу. Глянь, пока она не видит».",
+    "choices": [
+      {
+        "id": "look",
+        "neutral": true,
+        "label": "Посмотреть",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d10_photo",
+                "eq": "both"
+              }
+            ],
+            "text": "Слайд за слайдом, весь класс «тогда и сейчас». На его слайде {crush} задержалась на секунду дольше и ничего не сказала. Перелистнула."
+          },
+          {
+            "if": [
+              {
+                "flag": "d10_photo",
+                "eq": "old"
+              }
+            ],
+            "text": "Слайд за слайдом, весь класс «тогда и сейчас». У него на слайде только «тогда»: выпускной и галстук набок. {crush}: «Оксана ждёт «сейчас». Пришлёшь?»"
+          },
+          {
+            "if": [
+              {
+                "not": {
+                  "any": [
+                    {
+                      "flag": "d10_photo",
+                      "eq": "both"
+                    },
+                    {
+                      "flag": "d10_photo",
+                      "eq": "old"
+                    }
+                  ]
+                }
+              }
+            ],
+            "text": "Слайд за слайдом, весь класс «тогда и сейчас». Его слайда нет вообще. {crush}: «Оксана тебя потеряла. Пришлёшь хоть старое?»"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-05pq",
+    "kind": "story",
+    "title": "Первая песня",
+    "speaker": "crush",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d14_met",
+          "eq": "planned"
+        },
+        {
+          "seen": "K14-05s"
+        }
+      ]
+    },
+    "text": "{crush} открыла его список: «Двадцать песен, а ставить будем пять. Какую первой?»",
+    "choices": [
+      {
+        "id": "good",
+        "label": "Ту, под которую на выпускном танцевали все, даже Громов.",
+        "outcomes": [
+          {
+            "text": "{crush} засмеялась: «Точно. Громов тогда ещё стол уронил». Первая песня выбрана за минуту, остальные за час. «Оксане отправлю вечером».",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": 3
+              },
+              {
+                "counter": "d14_scene",
+                "add": 1
+              }
+            ],
+            "why": "Выбрали песни вместе"
+          }
+        ]
+      },
+      {
+        "id": "short",
+        "neutral": true,
+        "label": "Любую. Ты лучше знаешь.",
+        "outcomes": [
+          {
+            "text": "{crush} спросила, какую песню ставить первой. {hero}: «Любую. Ты лучше знаешь». {crush}: «Ладно, тогда решу сама». И решила."
+          }
+        ]
+      },
+      {
+        "id": "long",
+        "label": "Рассказать про каждую песню из списка",
+        "outcomes": [
+          {
+            "text": "{hero} начал с первой песни и рассказал, кто под неё с кем танцевал. На седьмой {crush} посмотрела на часы. Кофе у неё остыл.",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": -2
+              },
+              {
+                "counter": "d14_scene",
+                "add": -1
+              }
+            ],
+            "why": "Длинная лекция про песни"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-05cq",
+    "kind": "story",
+    "title": "Про встречу",
+    "speaker": "crush",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d14_met",
+          "eq": "came"
+        },
+        {
+          "not": {
+            "flag": "d7_msg",
+            "eq": "dry"
+          }
+        },
+        {
+          "seen": "K14-05s"
+        }
+      ]
+    },
+    "text": "{crush} прикрыла ноутбук. «Оксана меня запрягла: музыка, слайды, зал. А ты на встрече чем займёшься, кроме как всех узнавать?»",
+    "choices": [
+      {
+        "id": "help",
+        "label": "Помогу тебе. Скажи только, с чем.",
+        "outcomes": [
+          {
+            "text": "{crush} подумала секунду: «Стулья. Их всегда не хватает». И записала его в список Оксаны прямо в телефоне. «Ладно, мне пора. Хорошо, что зашёл».",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": 2
+              },
+              {
+                "counter": "d14_scene",
+                "add": 1
+              }
+            ],
+            "why": "Предложил помочь"
+          }
+        ]
+      },
+      {
+        "id": "see",
+        "neutral": true,
+        "label": "Посмотрим.",
+        "outcomes": [
+          {
+            "text": "{crush} спросила, чем он займётся на встрече. {hero}: «Посмотрим». {crush}: «Посмотрим». Допила кофе. «Ладно, мне пора»."
+          }
+        ]
+      },
+      {
+        "id": "food",
+        "label": "Сказать, что пойдёт только ради бесплатной еды",
+        "outcomes": [
+          {
+            "text": "{hero} сказал, что пойдёт ради бесплатной еды. {crush}: «Еда за свой счёт, вообще-то». «Ладно, мне пора». Ноутбук уже в сумке.",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": -2
+              },
+              {
+                "counter": "d14_scene",
+                "add": -1
+              }
+            ],
+            "why": "Неудачная шутка про встречу"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-05fq",
+    "kind": "story",
+    "title": "Подруга",
+    "speaker": "crush",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "day"
+      ],
+      "requires": [
+        {
+          "flag": "d14_met",
+          "eq": "came"
+        },
+        {
+          "flag": "d7_msg",
+          "eq": "dry"
+        },
+        {
+          "flag": "d14_line"
+        }
+      ]
+    },
+    "text": "{crush}: «Привет. Это Даша, мы вместе работаем». Даша кивнула и снова уткнулась в телефон.",
+    "choices": [
+      {
+        "id": "hello",
+        "label": "Привет. Не буду мешать, хорошей субботы.",
+        "outcomes": [
+          {
+            "text": "Коротко и вовремя. {crush} улыбнулась: «И тебе». {hero} забрал кофе с собой.",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": 1
+              },
+              {
+                "counter": "d14_scene",
+                "add": 1
+              }
+            ],
+            "why": "Поздоровался и не мешал"
+          }
+        ]
+      },
+      {
+        "id": "short",
+        "neutral": true,
+        "label": "Привет.",
+        "outcomes": [
+          {
+            "text": "{crush} представила подругу. {hero}: «Привет». Даша: «Привет». {hero} забрал кофе с собой."
+          }
+        ]
+      },
+      {
+        "id": "sit",
+        "label": "Подсесть к ним третьим",
+        "outcomes": [
+          {
+            "text": "{hero} подсел третьим. Разговор про какой-то сериал сразу кончился. Через пять минут {crush}: «Нам вообще-то пора». Ушли обе.",
+            "effects": [
+              {
+                "stat": "affinity",
+                "add": -2
+              },
+              {
+                "counter": "d14_scene",
+                "add": -1
+              }
+            ],
+            "why": "Подсел без приглашения"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-06a",
+    "kind": "story",
+    "title": "Витя пишет",
+    "speaker": "Витя",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d13_bday",
+          "eq": "held"
+        }
+      ]
+    },
+    "text": "«Андрюха, я вчера всё видел: один кусок торта и чай без сахара. Ты к встрече готовишься, что ли? Уважаю».",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Ответить смайликом",
+        "outcomes": [
+          {
+            "text": "Смайлик ушёл. Витя: «Понял. Не спрашиваю»."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-06b",
+    "kind": "story",
+    "title": "Витя пишет",
+    "speaker": "Витя",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d13_bday",
+          "eq": "cake"
+        }
+      ]
+    },
+    "text": "«Андрюха, ты как после вчерашнего? Я до обеда лежал. Торт был огонь, но три куска — это много».",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Ответить «Живой»",
+        "outcomes": [
+          {
+            "text": "Витя: «Вот и я живой. В следующий раз режем на двоих»."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-06c",
+    "kind": "story",
+    "title": "Витя пишет",
+    "speaker": "Витя",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "not": {
+            "any": [
+              {
+                "flag": "d13_bday",
+                "eq": "held"
+              },
+              {
+                "flag": "d13_bday",
+                "eq": "cake"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "text": "«Андрюха, вчера без тебя. Торт кончился за десять минут, но кусок я тебе отложил. В понедельник занесу».",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Ответить «Спасибо»",
+        "outcomes": [
+          {
+            "text": "Витя: «Свои люди». Кусок торта приедет в понедельник."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-07w",
+    "kind": "story",
+    "title": "{crush} пишет",
+    "speaker": "crush",
+    "says": "alina_d14_warm",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "any": [
+            {
+              "flag": "d14_met",
+              "eq": "planned"
+            },
+            {
+              "flag": "d14_met",
+              "eq": "came"
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "seen": "K14-05pq"
+            },
+            {
+              "seen": "K14-05cq"
+            },
+            {
+              "seen": "K14-05fq"
+            }
+          ]
+        },
+        {
+          "flag": "d14_msg",
+          "set": false
+        },
+        {
+          "counter": "d14_scene",
+          "gte": 1
+        }
+      ]
+    },
+    "text": "{crush} пишет.",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Отложить телефон",
+        "outcomes": [
+          {
+            "text": "Вечером {crush} написала первой, и тепло. Отвечать не нужно. {hero} всё равно перечитал трижды.",
+            "effects": [
+              {
+                "flag": "d14_msg",
+                "value": "warm"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-07d",
+    "kind": "story",
+    "title": "{crush} пишет",
+    "speaker": "crush",
+    "says": "alina_d14_dry",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "any": [
+            {
+              "flag": "d14_met",
+              "eq": "planned"
+            },
+            {
+              "flag": "d14_met",
+              "eq": "came"
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "seen": "K14-05pq"
+            },
+            {
+              "seen": "K14-05cq"
+            },
+            {
+              "seen": "K14-05fq"
+            }
+          ]
+        },
+        {
+          "flag": "d14_msg",
+          "set": false
+        },
+        {
+          "counter": "d14_scene",
+          "lte": -1
+        }
+      ]
+    },
+    "text": "{crush} пишет.",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Отложить телефон",
+        "outcomes": [
+          {
+            "text": "Вечером {crush} написала коротко. Отвечать не нужно. До встречи шестнадцать дней: время ещё есть.",
+            "effects": [
+              {
+                "flag": "d14_msg",
+                "value": "dry"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-07e",
+    "kind": "story",
+    "title": "{crush} пишет",
+    "speaker": "crush",
+    "says": "alina_d14_even",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "any": [
+            {
+              "flag": "d14_met",
+              "eq": "planned"
+            },
+            {
+              "flag": "d14_met",
+              "eq": "came"
+            }
+          ]
+        },
+        {
+          "any": [
+            {
+              "seen": "K14-05pq"
+            },
+            {
+              "seen": "K14-05cq"
+            },
+            {
+              "seen": "K14-05fq"
+            }
+          ]
+        },
+        {
+          "flag": "d14_msg",
+          "set": false
+        }
+      ]
+    },
+    "text": "{crush} пишет.",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Отложить телефон",
+        "outcomes": [
+          {
+            "text": "Вечером {crush} написала пару ровных строк. Отвечать не нужно.",
+            "effects": [
+              {
+                "flag": "d14_msg",
+                "value": "even"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-07h",
+    "kind": "story",
+    "title": "Лента",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "evening"
+      ],
+      "requires": [
+        {
+          "flag": "d14_met",
+          "eq": "home"
+        }
+      ]
+    },
+    "text": "Суббота, вечер. В ленте новое фото.",
+    "choices": [
+      {
+        "id": "ok",
+        "neutral": true,
+        "label": "Пролистать",
+        "outcomes": [
+          {
+            "text": "{crush} выложила фото из «Зерна»: ноутбук и стакан на столике у окна. Суббота прошла без него.",
+            "effects": [
+              {
+                "rumor": "zerno_d14"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-08a",
+    "kind": "story",
+    "title": "Балкон",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "night"
+      ],
+      "requires": [
+        {
+          "flag": "d14_smoked",
+          "set": false
+        },
+        {
+          "flag": "d14_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d14_quarter",
+          "set": false
+        },
+        {
+          "any": [
+            {
+              "flag": "d13_smoked"
+            },
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "d13_no_smoke"
+                  },
+                  {
+                    "flag": "d13_quarter"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "text": "Ночь, балкон. Вчера была сигарета. Внизу у подъезда кто-то смеётся: суббота.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Не открывать пачку",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Вчера была целая, сегодня ни одной. Пачка осталась закрытой. Первый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Вчера целая, сегодня четверть: четыре затяжки и в пепельницу. Дни без сигарет всё равно считаются с нуля.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d14_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. Пачка осталась лежать на подоконнике.",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "text": "Обычная сигарета на балконе. Суббота как суббота.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d14_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-08q",
+    "kind": "story",
+    "title": "Балкон",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "night"
+      ],
+      "requires": [
+        {
+          "flag": "d14_smoked",
+          "set": false
+        },
+        {
+          "flag": "d14_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d14_quarter",
+          "set": false
+        },
+        {
+          "flag": "d13_quarter"
+        }
+      ]
+    },
+    "text": "Ночь, балкон. Вчера была четверть: четыре затяжки и в пепельницу. Внизу у подъезда кто-то смеётся: суббота.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Не открывать пачку",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Вчера четверть, сегодня ни одной. Пачка осталась закрытой. Первый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -1
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Снова четверть. Вреда вдвое меньше, но дни без сигарет опять считаются с нуля.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d14_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. Пачка осталась лежать на подоконнике.",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "text": "Вчера четверть, сегодня целая. Ничего: впереди ещё шестнадцать дней.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d14_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-08b",
+    "kind": "story",
+    "title": "Балкон",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "night"
+      ],
+      "requires": [
+        {
+          "flag": "d14_smoked",
+          "set": false
+        },
+        {
+          "flag": "d14_no_smoke",
+          "set": false
+        },
+        {
+          "flag": "d14_quarter",
+          "set": false
+        },
+        {
+          "flag": "d13_no_smoke"
+        }
+      ]
+    },
+    "text": "Ночь, балкон. Вчера пачка осталась закрытой. Внизу у подъезда кто-то смеётся, и рука сама тянется к подоконнику.",
+    "choices": [
+      {
+        "id": "hold",
+        "label": "Не открывать пачку",
+        "cost": {
+          "energy": 3
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 1
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Второй день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 2
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Третий день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 3
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Четвёртый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 4
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Пятый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 5
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Шестой день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 6
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Седьмой день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 7
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Восьмой день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 8
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Девятый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 9
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Десятый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 10
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Одиннадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 11
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Двенадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 12
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Тринадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "counter": "smoke_free",
+                "eq": 13
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Четырнадцатый день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "not": {
+                  "any": [
+                    {
+                      "counter": "smoke_free",
+                      "eq": 1
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 2
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 3
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 4
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 5
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 6
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 7
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 8
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 9
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 10
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 11
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 12
+                    },
+                    {
+                      "counter": "smoke_free",
+                      "eq": 13
+                    }
+                  ]
+                }
+              }
+            ],
+            "text": "Пачка осталась закрытой. {hero} постоял на балконе и ушёл спать. Ещё один день без табака.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "problem": "conf",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "quarter",
+        "label": "Выкурить четверть: вреда вдвое меньше",
+        "cost": {
+          "energy": 1
+        },
+        "requires": [
+          {
+            "flag": "d1_half"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Четыре затяжки, остальное в пепельницу. Вчера держался, сегодня четверть: дни без сигарет снова считаются с нуля.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 1
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d14_quarter"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "gum",
+        "label": "Достать жвачку",
+        "requires": [
+          {
+            "item": "gum"
+          }
+        ],
+        "outcomes": [
+          {
+            "text": "Жвачка вместо сигареты. Пачка осталась лежать на подоконнике.",
+            "effects": [
+              {
+                "item": "gum",
+                "add": -1
+              },
+              {
+                "problem": "care",
+                "add": -2
+              },
+              {
+                "counter": "smoke_free",
+                "add": 1
+              },
+              {
+                "flag": "d14_no_smoke"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "smoke",
+        "neutral": true,
+        "label": "Выкурить как обычно",
+        "outcomes": [
+          {
+            "text": "Вчера удержался, сегодня нет. Счёт дней без табака снова с нуля. Ничего: вчерашний день никуда не делся.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": 2
+              },
+              {
+                "counter": "smoke_free",
+                "set": 0
+              },
+              {
+                "flag": "d14_smoked"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A14-run",
+    "kind": "action",
+    "title": "Пробежка в парке",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Пробежка в парке",
+        "cost": {
+          "energy": 4
+        },
+        "outcomes": [
+          {
+            "weight": 3,
+            "hint": "получилось",
+            "text": "Три круга по парку. В субботу на дорожках полно бегунов, и никто ни на кого не смотрит.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          },
+          {
+            "weight": 1,
+            "hint": "закололо в боку",
+            "text": "На втором круге закололо в боку. До скамейки пришлось дойти пешком и посидеть.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -1
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A14-gym",
+    "kind": "action",
+    "title": "Тренировка в зале",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ],
+      "requires": [
+        {
+          "any": [
+            {
+              "flag": "d9_pass",
+              "eq": "renewed"
+            },
+            {
+              "not": {
+                "any": [
+                  {
+                    "flag": "bought_gym_pass",
+                    "set": false
+                  },
+                  {
+                    "item": "gym_pass"
+                  },
+                  {
+                    "flagAge": "bought_gym_pass",
+                    "lte": 0
+                  },
+                  {
+                    "flagAge": "bought_gym_pass",
+                    "gte": 8
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Тренировка в зале по абонементу",
+        "cost": {
+          "energy": 4
+        },
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d9_pass",
+                "eq": "renewed"
+              }
+            ],
+            "text": "Сорок минут на тренажёрах. В субботу в зале одни постоянные, и тебя уже узнают.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "not": {
+                  "flag": "d9_pass",
+                  "eq": "renewed"
+                }
+              }
+            ],
+            "text": "Сорок минут на тренажёрах. Субботний зал шумный, но свободный тренажёр нашёлся.",
+            "effects": [
+              {
+                "problem": "weight",
+                "add": -3
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A14-clean",
+    "kind": "action",
+    "title": "Душ и чистая футболка",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Душ и чистая футболка",
+        "cost": {
+          "energy": 2
+        },
+        "outcomes": [
+          {
+            "text": "Душ и чистая футболка. Суббота снова пахнет порошком, как неделю назад.",
+            "effects": [
+              {
+                "problem": "care",
+                "add": -5
+              },
+              {
+                "counter": "useful",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A14-teeth",
+    "kind": "action",
+    "title": "Почистить зубы по таймеру",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Почистить зубы две минуты по таймеру",
+        "cost": {
+          "energy": 1
+        },
+        "outcomes": [
+          {
+            "text": "Две минуты по таймеру. Половина пути, а привычка уже на всю дорогу.",
+            "effects": [
+              {
+                "problem": "teeth",
+                "add": -1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "A14-couch",
+    "kind": "action",
+    "title": "Полежать на диване",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "day",
+        "evening",
+        "night"
+      ]
+    },
+    "text": "",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Полежать на диване",
+        "outcomes": [
+          {
+            "text": "Полчаса на диване. Суббота всё-таки, имеет право.",
+            "effects": [
+              {
+                "problem": "conf",
+                "add": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "K14-sleep",
+    "kind": "action",
+    "title": "Сон",
+    "when": {
+      "days": [
+        14,
+        14
+      ],
+      "parts": [
+        "night"
+      ]
+    },
+    "text": "Суббота почти закончилась.",
+    "choices": [
+      {
+        "id": "sleep",
+        "label": "Лечь сейчас",
+        "outcomes": [
+          {
+            "text": "Свет выключен. Половина пути позади. До встречи выпускников шестнадцать дней.",
+            "effects": [
+              {
+                "closeDay": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "late",
+        "label": "Посидеть в телефоне до трёх",
+        "outcomes": [
+          {
+            "if": [
+              {
+                "flag": "d14_msg"
+              }
+            ],
+            "text": "К трём часам ночи её сообщение перечитано раз двадцать. Завтра на четыре энергии меньше.",
+            "effects": [
+              {
+                "flag": "d14_late"
+              },
+              {
+                "tomorrow": [
+                  {
+                    "stat": "energy",
+                    "add": -4
+                  }
+                ]
+              },
+              {
+                "closeDay": true
+              }
+            ]
+          },
+          {
+            "if": [
+              {
+                "flag": "d14_msg",
+                "set": false
+              }
+            ],
+            "text": "В три часа ночи лента всё ещё крутится: чужие субботы, чужие кофейни. Завтра на четыре энергии меньше.",
+            "effects": [
+              {
+                "flag": "d14_late"
+              },
+              {
+                "tomorrow": [
+                  {
+                    "stat": "energy",
+                    "add": -4
+                  }
+                ]
+              },
+              {
+                "closeDay": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
