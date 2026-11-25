@@ -1,6 +1,6 @@
 # Week 3 grid (days 15–21)
 
-Status: draft v1, 2026-11-25, for the authors to read and approve. Nothing here is written into `content/` or `src/` yet. After approval, days are written one at a time with `/write-day <n>`, which takes its per-day design from Part A.
+Status: v1, 2026-11-25. Ruslan answered the open questions on 2026-11-25 («Все по рекомендации», A6 answers); the day rows below follow those answers. Nothing here is written into `content/` or `src/` yet. After approval, days are written one at a time with `/write-day <n>`, which takes its per-day design from Part A.
 
 Labels used below:
 - **[F]**: fact, checked in the repo files on 2026-11-25 (the file is named).
@@ -24,7 +24,7 @@ Facts this grid relies on (checked in the files on 2026-11-25):
   - K14-05cq names what Oksana gave her: «музыка, слайды, зал». The venue is not chosen in the text yet. «Еда за свой счёт» is said about the reunion.
   - Her friend Даша: «мы вместе работаем». Alina is at «Зерно» on Saturday mornings [F, hint `zerno_saturday`].
   - Sleep line: «До встречи выпускников шестнадцать дней».
-- Fixed story beats [A `DESIGN.md` §5, proposed there: days 1, 10, 20, 30; Day 10 confirmed by answer 1 of the week 2 grid]. Day 20 is in week 3 and is still only proposed (A6, question 1).
+- Fixed story beats [A `DESIGN.md` §5, proposed there: days 1, 10, 20, 30; Day 10 confirmed by answer 1 of the week 2 grid]. Day 20 is in week 3; Ruslan accepted it as the week 3 fixed beat (A6 answer 1).
 
 ---
 
@@ -70,8 +70,8 @@ The share of players in each tone is to be measured on engine runs when Day 15 i
 ## A2. Day by day
 
 Common to every day of week 3 [F pattern of days 8–14, unchanged]:
-- Plus actions (day, evening, night): `A<n>-run`, `A<n>-gym` (only while a pass runs, A5 gap 1), `A<n>-clean`, `A<n>-teeth`, `A<n>-couch`, and `A-job` extended to day 21. Sleep closes the day; «Посидеть в телефоне до трёх» sets `d<n>_late` and −4 energy tomorrow; next morning `K<n>-late` «Проспал».
-- K-run «Витя у подъезда» every morning for `d9_pass` = `vitya` (run 4 energy, weight −2, `useful` +1 / **skip**) [P, A6 question 13]. The `d9_burner` lines stop: a week later nobody remembers the capsules [T].
+- Plus actions (day, evening, night): `A<n>-run`, `A<n>-gym` (only while a pass runs: the new modifier condition, A6 answer 18; exact shape: see `src/engine/types.ts` after the gym-condition task lands; fallback A5 gap 1), `A<n>-clean`, `A<n>-teeth`, `A<n>-couch`, and `A-job` extended to day 21. Sleep closes the day; «Посидеть в телефоне до трёх» sets `d<n>_late` and −4 energy tomorrow; next morning `K<n>-late` «Проспал».
+- K-run «Витя у подъезда» every morning for `d9_pass` = `vitya` (run 4 energy, weight −2, `useful` +1 / **skip**) [A6 answer 13]. The `d9_burner` lines stop: a week later nobody remembers the capsules [T].
 - One craving a day, split by yesterday's result (`d<n-1>_smoked` or no flag / `_quarter` / `_no_smoke`): hold 2 / 2 / 3 energy, quarter 1 (`d1_half`), gum, **smoke**. Where it sits moves with the story (Day 19 bar door, Day 20 venue door, Day 21 «Зерно» door) [A decision 13, decision 30 pattern].
 - Every story card has a free neutral; a neutral never writes to her (except where a decision says otherwise, as decision 22). No purchase offer on a card that follows a failure [A decision 6].
 - She never names what changed [A `DESIGN.md` §3]. Affinity steps inside decision 4.
@@ -87,7 +87,7 @@ Cards in display order [P]. Neutral in **bold**.
 | morning | K15-late Проспал | `d14_late` | **up** | — |
 | morning | K15-run Витя у подъезда | `d9_pass` = `vitya` | Sunday run; draft «Витя: «В воскресенье бежим длинный круг»». run (4 energy, weight −2, `useful` +1) / **skip** | — |
 | morning | K15-01a / b Прыщ | a: `d13_course_done`; b: otherwise | One new pimple on the chin, two days after the course. a quotes Galina Petrovna («руками не трогать», existing K13-02 text); b: the control visit was put off («Позвоню потом»). wash (1 energy, skin −1) / patch (requires item `acne_patch`; item −1, skin −3) / **squeeze** (skin +3; draft hint «часто: краснеет»). No purchase choice: this is a small failure moment | `d15_pimple` = `washed` / `patch` / `squeezed` |
-| day | K15-02a / b Обед у мамы | a: `d8_lunch` = `held` (she baked fewer, a salad on the table); b: `ate` | The Sunday ritual [P, A6 question 5]. Mum's line, first that applies: `bought_haircut` («Подстригся! Совсем другое дело», draft), `smoke_free` ≥ 7 («И куревом не пахнет», draft), otherwise pies to take home. one pie and salad (2 energy, conf −1) / **eat** (weight +2) | `d15_lunch` = `held` / `ate` |
+| day | K15-02a / b Обед у мамы | a: `d8_lunch` = `held` (she baked fewer, a salad on the table); b: `ate` | The Sunday ritual [A6 answer 5]. Mum's line, first that applies: `bought_haircut` («Подстригся! Совсем другое дело», draft), `smoke_free` ≥ 7 («И куревом не пахнет», draft), otherwise pies to take home. one pie and salad (2 energy, conf −1) / **eat** (weight +2) | `d15_lunch` = `held` / `ate` |
 | day | K15-03m Алина добавила тебя | `d14_met` = `planned` | Alina adds him to the chat «Оргкомитет» (Oksana, Alina, Vitya, him): draft «Добавила тебя: ты же у нас музыка». **ok** | `d15_team` = `music` |
 | day | K15-03c Алина добавила тебя | `d14_met` = `came`, `d7_msg` ≠ `dry`, counter `d14_scene` ≥ 1 | Same chat; draft «Ты обещал стулья. Добавила, не отвертишься». **ok** | `d15_team` = `chairs` |
 | day | K15-04 Чат класса | no `d15_team` | Oksana in «11-Б навсегда»: draft «Нужны руки: стулья, проектор, звук. Кто может?». With `d9_oksana` she names him. volunteer «Я могу» (conf −1; he lands in «Оргкомитет») / **scroll** | `d15_team` = `volunteer` |
@@ -99,7 +99,7 @@ Cards in display order [P]. Neutral in **bold**.
 | evening | K15-07w / m {crush} ответила | `d15_reply` = `ask` (w) / `sorry` (m) | One bubble (two-card rule, A5 gap 5). w: she answers his question back; m: draft «Нормально. Пять песен из двадцати выбрали, остальное в пятницу». **ok** | — |
 | night | K15-08a / q / b Балкон | yesterday `d14_smoked` (or no Day 14 flag) / `d14_quarter` / `d14_no_smoke` | as common | `d15_smoked` / `d15_no_smoke` / `d15_quarter` |
 | night | K15-09 Две недели без сигарет | `d15_no_smoke` and `smoke_free` ≥ 14 | **ok** (care −3), as K11-07 | — |
-| day–night | A15-run, A15-gym, A15-clean, A15-teeth, A15-couch, A-job | plus menu | as Day 14 (gym: A5 gap 1) | — |
+| day–night | A15-run, A15-gym, A15-clean, A15-teeth, A15-couch, A-job | plus menu | as Day 14; A15-gym requires the modifier `gym` to be running (new condition, see `src/engine/types.ts` after the gym-condition task lands; fallback A5 gap 1) | — |
 | night | K15-sleep | | sleep (draft «До встречи выпускников пятнадцать дней») / late (`d15_late`) | `d15_late` |
 
 Content prerequisites for Day 15: `A-job` days 1–15; `content/days.json` day 15 (title, gift `gum`, draft teaser «Завтра понедельник. Оксана раздаёт задания»); chat situations for K15-06w (two openers), K15-06m, K15-06e, K15-07w (by his question), K15-07m, 10 phrasings each; `balance.contentDays` 15.
@@ -114,7 +114,7 @@ Leans on: `weight`. Chance: 0.
 
 | Part | Card | Situation and choices | Src |
 |---|---|---|---|
-| morning | K16-00 Абонемент: последний день | For `d9_pass` = `renewed` (pass mornings 10–16): a line. For a shop pass, only if A5 gap 1 is fixed | [F] date, [P] card |
+| morning | K16-00 Абонемент: последний день | Shown when the modifier `gym` has its last morning today (new condition, `daysLeft` 0 or its equivalent, see `src/engine/types.ts` after the gym-condition task lands): the renewed pass (mornings 10–16) and any shop pass alike. Fallback without the condition: `d9_pass` = `renewed` only | [F] date, [A6 answer 18] card |
 | morning | K16-01a Витя с тортом | `d13_bday` = `home`: Vitya at the door (or at the run) with the slice he promised. eat half (1 energy) / give it to Aunt Zina (free, `d16_cake` = `zina`) / **eat** (weight +1) | [F] K14-06c promise |
 | morning | K16-01b Витя | `d13_bday` = `held` / `cake`: one line at the run or by message, no choice | [P] |
 | day | K16-02 Оргкомитет: задания | `d15_team`: Oksana hands out the jobs: `music` five songs with Alina by Thursday; `chairs` / `volunteer` chairs and the projector on Friday. The venue and time are named (A6, question 3). **ok** | [P] |
@@ -131,7 +131,7 @@ Leans on: `care`, `style`. Chance: 0.
 
 | Part | Card | Situation and choices | Src |
 |---|---|---|---|
-| day | K17-01 Лента: одеколон «Альфа» | The obvious solution for smell, 60 coins. Odds on the button: часто «слишком резко» (care +2 today), иногда «нормально» (care −1). **scroll**. The week's only paid trap | [P]; "obvious fails" [A `DESIGN.md` §2] |
+| day | K17-01 Лента: одеколон «Альфа» | The obvious solution for smell, 60 coins. Odds on the button: часто «слишком резко» (care +2 today), иногда «нормально» (care −1). **scroll**. The week's only paid trap (A6 answer 9) | [A6 answer 9]; "obvious fails" [A `DESIGN.md` §2] |
 | day | K17-02a / b / s Аптека на Садовой | Aunt Zina at the pharmacy where the cream came from. a: `d5_helped_zina` or `d16_cake` = `zina` (warm hello); b: otherwise; both for `smoke_free` ≥ 1. She sniffs: draft «Табаком не пахнет. Уже полдела». She gives a tester of the pharmacy's eau de toilette (care −2, free). buy the bottle (120 coins, A6 question 7) / **later**. Variant s (`smoke_free` 0, he smoked yesterday): draft «Куришь всё-таки? Духи табак не перебьют»; tester only, **no purchase choice** (the card states a failure) | [P]; hidden solution: no smoke + clean shirt |
 | day | K17-03 Гоша выглянул | `d11_tip`, no `bought_haircut`, no `d11_cut`: the barber next door. cut (70 coins, 2 energy, the shop haircut effects, sets `bought_haircut`) / **later** | [P]; pays `d11_tip` |
 | evening | K17-04 Оргкомитет: двадцать песен | `d15_team` = `music`: Alina sends the twenty songs to cut to five. **ok** (no affinity) | [P] |
@@ -177,17 +177,17 @@ Skipped day: the promise kept as it was, stayed home, smoked.
 ### Day 20 (Friday). Ten days («Десять дней», working). Fixed beat
 Leans on: `conf` and every visible change. Chance: −2 … +5.
 
-Visible changes for K20-05v [P]: the Day 14 list (a shave: `shaved` and not `d14_red`; `bought_shirt` or `bought_frame`; `d5_cleaned` or `d12_cleaned`; `d3_course`; no cigarette today; `bought_haircut`) plus `d18_suit` = `fits`, plus `bought_perfume` on a day without a cigarette (A6 question 8), plus `d11_salon` = `fine` (A6 question 16). With up to nine conditions the Day 7 thresholds (4+ / 2–3 / 0–1) are to be re-measured on engine runs before Day 20 is written.
+Visible changes for K20-05v [P]: the Day 14 list (a shave: `shaved` and not `d14_red`; `bought_shirt` or `bought_frame`; `d5_cleaned` or `d12_cleaned`; `d3_course`; no cigarette today; `bought_haircut`) plus `d18_suit` = `fits`, plus `bought_perfume` on a day without a cigarette (A6 answer 8), plus `d11_salon` = `fine` (A6 answer 16; `d11_salon` = `odd` is not counted). With up to nine conditions the Day 7 thresholds (4+ / 2–3 / 0–1) are to be re-measured on engine runs before Day 20 is written.
 
-Fixed beat [P, A6 question 1]: Oksana gathers whoever can help at the venue on Friday evening: chairs, projector, sound. Everyone is invited; only the entrance differs (`d15_team` expected / others free to come). Going can be skipped (it is a chore, not a chance meeting).
+Fixed beat [A6 answer 1]: Oksana gathers whoever can help at the venue on Friday evening: chairs, projector, sound. Everyone is invited; only the entrance differs (`d15_team` expected / others free to come). Going can be skipped (it is a chore, not a chance meeting).
 
 | Part | Card | Situation and choices | Src |
 |---|---|---|---|
 | morning | K20-01 Оксана | Everyone: draft «Сегодня в семь, помогаем с залом». **ok** | [P] |
 | evening | K20-02t / o Пятница, семь | t: `d15_team` (Oksana counts on him); o: otherwise. go (conf −1) / **home** | [P] |
 | evening | K20-03a / q / b У двери | went; the craving before going in, split by Day 19 | common |
-| evening | K20-04c Стулья | `d15_team` = `chairs` / `volunteer`, or anyone who went: carrying chairs with Vitya and Gromov. **ok** (one line; the chairs promise kept) | [P] |
-| evening | K20-05v / x Слайд-шоу на экране | went. v: `d10_photo` = `both` or `d15_photo`: his slide on the big screen; the class reacts, Alina's line by visible changes (Day 14 list plus `d18_suit` = `fits` and, if A6 question 8 is yes, the perfume on a no-smoke day), compared with `d14_line`. x: no fresh photo: «тогда» only, Oksana: draft «Андрей, ну где «сейчас»?» **ok**, affinity 0 (the line is the reward) | [P] |
+| evening | K20-04c Стулья | `d15_team` = `chairs` / `volunteer`, or anyone who went: carrying chairs with Vitya and Gromov (Gromov is a comic foil, never a rival: A6 answer 12). **ok** (one line; the chairs promise kept) | [P] |
+| evening | K20-05v / x Слайд-шоу на экране | went. v: `d10_photo` = `both` or `d15_photo`: his slide on the big screen; the class reacts, Alina's line by visible changes (Day 14 list plus `d18_suit` = `fits`, the perfume on a no-smoke day and the salon cut `fine`, list above), compared with `d14_line`. x: no fresh photo: «тогда» only, Oksana: draft «Андрей, ну где «сейчас»?» **ok**, affinity 0 (the line is the reward) | [P] |
 | evening | K20-06 Микрофон | went. Sound check; Vitya hands him the mic. `d19_sing` = `practice`: one line, well (conf −2, affinity +2). promised or old promise, no practice: sing anyway (+1, the class laughs with him) / **pass the mic**. `out` or no promise: Gromov sings, a line only | [P] |
 | evening | K20-07w / e / d Последние | went. Packing the projector, a minute alone with her. Question by `d15_tone`: w personal (draft «Зачем ты вообще вписался?»), e about the reunion, d short («Спасибо за стулья»). good +3 / +2 / +1, **short** 0, bad −2; counter `d20_scene` +1 / 0 / −1 | [P] |
 | evening | K20-08w / e / d {crush} пишет | went; by `d20_scene` (≥ 1 / 0 / ≤ −1). **ok** | as K14-07 |
@@ -204,7 +204,7 @@ Leans on: `conf`, `care` (stubble), plus visible changes. Chance: −2 … +3.
 | Part | Card | Situation and choices | Src |
 |---|---|---|---|
 | morning | K21-01a / b Щетина | `shaved`; a: `d14_red`, b: without. As K14-01 (cream / bare `d21_red` / **keep**); quotes her for `d6_beard_hint` | [F] pattern, answer 3 of week 2 |
-| morning | K21-02w {crush} пишет | `d20_msg` = `warm`: draft «Я в «Зерне» до двенадцати. Потом хочу пройтись по парку. Составишь компанию?». With `d9_pass` = `vitya` or `useful` high: «вы же с Витей там бегаете». yes (conf −1) / **later** | [P, A6 question 14] |
+| morning | K21-02w {crush} пишет | `d20_msg` = `warm`: draft «Я в «Зерне» до двенадцати. Потом хочу пройтись по парку. Составишь компанию?». With `d9_pass` = `vitya` or `useful` high: «вы же с Витей там бегаете». yes (conf −1) / **later** | [A6 answer 14] |
 | day | K21-03o Суббота | not invited (or invited and «later»): go to «Зерно» (conf −1) / **home**, as K14-03t | [F] her Saturdays |
 | day | K21-04a / q / b У двери «Зерна» | went; craving split by Day 20 | common |
 | day | K21-05w Парк | invited and went: a walk, the first meeting not about the reunion. Her question about him (runs, the week), +3 / 0 / −2; counter `d21_scene` | [P] |
@@ -215,7 +215,7 @@ Leans on: `conf`, `care` (stubble), plus visible changes. Chance: −2 … +3.
 | night | Craving, sleep | Sleep draft «До встречи выпускников девять дней» | |
 
 Reads: `shaved`, `d14_red`, `d6_beard_hint`, item `cream_zina`, `d20_msg`, `d9_pass`, counter `useful`, `d15_tone`, `d19_sing`, `d15_team`. Sets: `d21_red`, `d21_met` (`invited`, `came`, `home`), counter `d21_scene`, `d21_msg`. Day ends on: her message, or the program from Oksana [P].
-Problems: conf −2 … +2. Affinity −2 … +3. Coins: in 50 (+ job); out none (the perfume can be offered once more on a shop-like card if A6 question 7 says so).
+Problems: conf −2 … +2. Affinity −2 … +3. Coins: in 50 (+ job); out none (the perfume is sold on Day 17 only; a repeat offer on Day 21 is not decided).
 Skipped day: kept the stubble, stayed home, the feed post, smoked, `affinity` 0.
 
 ## A3. Coins of week 3
@@ -225,7 +225,7 @@ Skipped day: kept the stubble, stayed home, the feed post, smoked, `affinity` 0.
 | Coins on the morning of Day 15 | ~250–600 | estimate: start 100, 14 × 50 day rewards, jobs, minus week 1–2 purchases; to be measured on engine runs when Day 15 is written |
 | Day rewards | 350 | 7 × 50 |
 | Side job | up to ~200 | `A-job` extended to Day 21, about 28 a day on average, 4 energy |
-| Sinks on cards | 150 pass renewal (16), 60 cologne trap (17), 120 perfume (17, A6 question 7), 70 barber for `d11_tip` without a cut (17) | all optional |
+| Sinks on cards | 150 pass renewal (16), 60 cologne trap (17), 120 perfume (17, on a card, A6 answer 7), 70 barber for `d11_tip` without a cut (17) | all optional |
 | Sinks in the shop | 220 «Сияние», 150 pass, 90 shirt, 150 frame, 70 haircut (unbought ones) | unchanged |
 
 On cards a week costs at most 400; income is 350–550. The week 2 goal holds: a week of income buys about half of what is on offer [A `DEMO_SCRIPT.md` 5a]. Nothing on a card buys affinity, time or the result: the perfume moves `care` only, the outfit `style`/`conf` only [A `DESIGN.md` §6].
@@ -251,11 +251,11 @@ Every name below is set in `content/cards/day1.json`…`day14.json` with the val
 | `d10_will_sing` | true | 10 | — | 19 (K19-01p), 20 (K20-06), weeks 4+ (the reunion itself) |
 | `d10_photo` | `both`, `old`, `none` | 10 | 10, 14 | 15 (K15-05), 20 (K20-05) |
 | `d11_tip` | `noted`, `heard` | 11 | 11 | 17 (K17-03 Gosha) for players without a haircut |
-| `d11_cut`, `d11_salon` | `barber`/`salon`; `odd`/`fine` | 11 | 11, 14 / 11 | 17 (K17-03 is hidden for any cut); counting the salon cut is A6 question 16 |
+| `d11_cut`, `d11_salon` | `barber`/`salon`; `odd`/`fine` | 11 | 11, 14 / 11 | 17 (K17-03 is hidden for any cut); 15+ counts the salon cut only for `d11_salon` = `fine` (A6 answer 16) |
 | `d9_pass` | `renewed`, `vitya`, `none` | 9 | 9–14 | 15–21 (K-run, A-gym), 16 (K16-00: the renewed pass ends) |
 | `d9_oksana` | `promised` | 9 | 10 | 15 (K15-04 Oksana names him) |
 | `d8_lunch` | `held`, `ate` | 8 | 8, 11 | 15 (K15-02a/b) |
-| `d8_replied` | `warm`, `short`, `long`, `none` | 8 | 8 | not read (A6 question 17): its effect is already in `affinity`, and a message from two weeks ago is stale by Day 15 [T] |
+| `d8_replied` | `warm`, `short`, `long`, `none` | 8 | 8 | never read (A6 answer 17): its effect is already in `affinity`, and a message from two weeks ago is stale by Day 15 [T] |
 | `d7_msg` | `warm`, `even`, `dry` | 7 | 7–9, 12, 14 | 15 (`d15_tone`, K15-03c) |
 | `d6_reply` | `plain`, `joke`, `excuse`, `dry` | 6 | 6, 7, 10, 12 | 19 (`joke`: «как на выпускном») |
 | `d6_beard_hint` | true | 6 | 7, 8, 14 | 21 (K21-01) |
@@ -307,7 +307,7 @@ Every name below is set in `content/cards/day1.json`…`day14.json` with the val
 | # | Gap | Where | Needed for | Content workaround | Acceptable? |
 |---|---|---|---|---|---|
 | 1 | `Cond` cannot ask whether a modifier runs or how many mornings it has left | `Cond` in `src/engine/types.ts`, `check()` in `src/engine/game.ts` (modifiers are already in `GameState.modifiers` with `fromDay` and `days`) | K16-00 «последний день» for any pass, A15–A21-gym | Renewed pass: `d9_pass` = `renewed` **and** `flagAge` of `d9_pass` ≤ 7 (the flag is set only on Day 9, so this ends on Day 16; without the age check the Day 10–14 copy keeps the gym open forever). Shop pass: purchase day as today (`flagAge` of `bought_gym_pass` 1–7, no `gym_pass` in the bag), wrong for a pass used days after purchase. A Day 16 renewal sets `d16_pass` and needs its own age check | Works, but every gym card of days 15–30 carries a growing `any` of special cases, and K16-00 cannot speak to shop-pass players |
-| 2 | Shop items cannot be gated by day or flag | `Item` in `types.ts`, the shop in `src/ui/Game.tsx` | The perfume (A6 question 7): in `items.json` with a price it is on sale from Day 1, in the demo too | Sell it on a card choice (K17-02, cost 120, effects `care` −6 and `{ flag: 'bought_perfume' }`), once more on a Day 21 card if wanted | Yes for week 3. If the authors want it in the shop, a field such as `fromDay` on `Item` is a small engine task |
+| 2 | Shop items cannot be gated by day or flag | `Item` in `types.ts`, the shop in `src/ui/Game.tsx` | The perfume (A6 answer 7): in `items.json` with a price it is on sale from Day 1, in the demo too | Sell it on a card choice (K17-02, cost 120, effects `care` −6 and `{ flag: 'bought_perfume' }`); decided by A6 answer 7 | Yes. A shop listing would need a field such as `fromDay` on `Item`; not requested |
 | 3 | An item's effect cannot depend on state | `onUse` is a flat list | "Perfume does not cover smoke" | The interaction lives in cards: the visible-change count reads `bought_perfume` and no cigarette today; the honest `limits` / button text says it | Yes |
 | 4 | No derived value: the week tone is not stored | — | `d15_tone` | K15-06w/m/e/d set `d15_tone` in every choice, neutral included, so a skipped day sets it too. The four cards must have mutually exclusive `requires` | Yes |
 | 5 | A card shows one fresh crush bubble | `says` in `openCard()`, `game.ts` | Every two-line exchange (K15-06/07, K18-03/04) | Two cards, question in one part, her answer later, as days 8, 12 | Yes |
@@ -316,7 +316,7 @@ Every name below is set in `content/cards/day1.json`…`day14.json` with the val
 | 8 | No weekday in the engine | — | Every teaser | Texts only, as weeks 1–2 | Yes |
 | 9 | One speaker per card | `speaker` | Day 20 group scene | A chain of short cards (K20-04 … K20-07), as Day 7 and Day 14 | Yes |
 
-Recommendation on gap 1: **fix it now, before `/write-day 15`**, as a separate small engine task. Reasons: (a) the workaround stops being uniform in week 3: the renewed pass ends on Day 16, a Day 16 renewal starts a third case, and a shop pass bought on days 8–20 keeps the approximation; (b) every remaining day 15–30 copies the gym card, so the cost of the workaround grows with each day while the fix is paid once; (c) the change is local: one `Cond` variant `{ modifier: string; set?: boolean; daysLeft?: Cmp }`, one branch in `check()`, one rule in `validate.ts`, a test. This is an engine change and needs the authors' word (standing rule: content days do not change the engine), so it is A6 question 18. If the answer is no, week 3 uses the workaround in the gap 1 row and K16-00 speaks only to `d9_pass` = `renewed`.
+Decision on gap 1 (A6 answer 18, 2026-11-25): **fixed in the engine before `/write-day 15`**, by a separate gym-condition task. Week 3 gym cards (A15–A21-gym, K16-00) use the new modifier condition; its exact shape: see `src/engine/types.ts` after the gym-condition task lands. The workaround in the gap 1 row stays as the fallback if that task does not land. The reasoning that led to the recommendation: Reasons: (a) the workaround stops being uniform in week 3: the renewed pass ends on Day 16, a Day 16 renewal starts a third case, and a shop pass bought on days 8–20 keeps the approximation; (b) every remaining day 15–30 copies the gym card, so the cost of the workaround grows with each day while the fix is paid once; (c) the change is local: one `Cond` variant `{ modifier: string; set?: boolean; daysLeft?: Cmp }`, one branch in `check()`, one rule in `validate.ts`, a test. This is an engine change and needs the authors' word (standing rule: content days do not change the engine), so it is A6 question 18. If the answer is no, week 3 uses the workaround in the gap 1 row and K16-00 speaks only to `d9_pass` = `renewed`.
 
 ## A6. Open questions for the authors
 
@@ -342,10 +342,31 @@ Each line: the question, the recommended answer **in bold**, and what changes wi
 18. The gym condition `{ modifier: 'gym', daysLeft? }`: fix the engine now, before Day 15? **Yes, a separate small engine task.** If no: week 3 keeps the workaround in A5 gap 1.
 19. «Находки с телефона»: in the project card this means notes from playing on a real phone, not a game idea. Is there anything from the phone that should change week 3 (for example the number of cards: Day 14 has 31 story cards)? **List them separately; this grid does not wait for them.** If they include "too many cards a day": week 3 cuts the optional lines first (K16-01b, K17-05w, K21-07).
 
-### Answers (Ruslan, <date>)
+### Answers (Ruslan, 2026-11-25)
+
+Ruslan accepted every recommendation in one phrase, «Все по рекомендации», not question by question.
 
 | # | Answer | What it means for the grid |
 |---|---|---|
+| 1 | Yes | Day 20 «Десять дней» is the fixed beat of week 3: the Friday setup at the venue, everyone invited |
+| 2 | Yes | «Оргкомитет» stays: Alina adds the music and chairs players on Day 15 (K15-03m/c), anyone else volunteers (K15-04) |
+| 3 | Café | The venue is a café next to the old school; the name stays the working «кафе у школы» until Ruslan names it |
+| 4 | Yes | `d15_tone` is set on Day 15 by the A1 table; staying home lowers only the warm tone |
+| 5 | Yes | Sunday lunch at mum's is weekly: days 8, 15, 22, 29 (K15-02a/b) |
+| 6 | Yes | K15-01a/b stays; the neutral «squeeze» is skin +3 |
+| 7 | Yes, on a card | The perfume is sold on K17-02 at the pharmacy: 120 coins, `care` −6, once, «табак не перебивает», not offered with `smoke_free` 0; not in the shop |
+| 8 | Yes | `bought_perfume` counts as a visible change on Days 20 and 21, only on a day without a cigarette |
+| 9 | One | The cologne «Альфа» (60 coins, Day 17) is the only paid trap of week 3 |
+| 10 | Yes | K18-02f/t/n by a weight threshold measured for about a third of random players to fit; no purchase offer after «тесно» or «не влез» |
+| 11 | Yes | K19-01p allows practise or back out with no penalty; K19-01g lets a non-promiser promise |
+| 12 | Foil | Gromov is a comic foil (beard, guitar, the microphone), never a rival for Alina |
+| 13 | Yes | K-run continues every morning of week 3, Sunday included |
+| 14 | Yes | K21-02w: after `d20_msg` = `warm` she invites him for a walk in the park |
+| 15 | Keep Monday | The reunion is on Monday evening, Day 30; Oksana's Day 16 post says «в понедельник» |
+| 16 | Only `fine` | From Day 15 the salon cut counts as a visible change only for `d11_salon` = `fine` |
+| 17 | No | `d8_replied` is never read again |
+| 18 | Yes | The gym condition is added to the engine by a separate task before Day 15; week 3 gym cards use it (exact shape in `src/engine/types.ts` after it lands), A5 gap 1 workaround is the fallback |
+| 19 | List separately | No phone notes have been given; the grid does not wait for them |
 
 ## A7. Docs that disagree with the content
 
@@ -357,7 +378,7 @@ The content wins in each case; the grid above follows the content.
 | `WEEK2_GRID.md` A2 Day 9: Vitya's runs on mornings of days 10–14 | K9-02a/b promise runs «по утрам» with no end; K-run exists on 10–14 only because only those days are written | `content/cards/day9.json` |
 | `WEEK2_GRID.md` C3–C7: the gym action reads `d9_pass` = `renewed` | Correct for days 10–14 only: the renewed pass is a 7-day modifier applied on Day 9 (mornings 10–16); the condition has no end | `day10.json` … `day14.json` A-gym |
 | `WEEK2_GRID.md` A4: `d11_cut` "counts as `bought_haircut`" | The barber sets both; the salon sets only `d11_cut` = `salon` | `content/cards/day11.json` |
-| `DESIGN.md` §5: fixed beats on days 1, 10, 20, 30 (proposed) | Day 10 confirmed (week 2 answer 1); Day 20 still a proposal | A6 question 1 |
+| `DESIGN.md` §5: fixed beats on days 1, 10, 20, 30 (proposed) | Day 10 confirmed (week 2 answer 1); Day 20 confirmed for week 3 (A6 answer 1) | A6 answer 1 |
 | «Phone findings» listed as an undecided game idea (week 3 brief) | The project card means notes from playing on a real phone | `C:\Users\murtu\.claude\project-cards\14-glowup.md` |
 
 ---
