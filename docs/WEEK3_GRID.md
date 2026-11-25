@@ -1,6 +1,6 @@
 # Week 3 grid (days 15–21)
 
-Status: v1, 2026-11-25. Ruslan answered the open questions on 2026-11-25 («Все по рекомендации», A6 answers); the day rows below follow those answers. Nothing here is written into `content/` or `src/` yet. After approval, days are written one at a time with `/write-day <n>`, which takes its per-day design from Part A.
+Status: v1, 2026-11-25. Ruslan answered the open questions on 2026-11-25 («Все по рекомендации», A6 answers); the day rows below follow those answers. Day 15 is written (Part C below); days 16–21 are not. After approval, days are written one at a time with `/write-day <n>`, which takes its per-day design from Part A.
 
 Labels used below:
 - **[F]**: fact, checked in the repo files on 2026-11-25 (the file is named).
@@ -384,3 +384,52 @@ The content wins in each case; the grid above follows the content.
 ---
 
 # Part C. Days as written
+
+## C. Day 15 as written
+
+Written 2026-11-25 in `content/cards/day15.json` (26 story cards, 6 actions); `contentDays` 15, `demoDays` 7; `A-job` days 1–15; day entry «Оргкомитет», gift `gum`, teaser «Завтра понедельник. Оксана раздаёт задания». Texts and deviations for review: `docs/review/day15-texts.md`. The engine was not changed.
+
+Cards in display order:
+
+| Part | Card | Shown when | Choices (neutral in bold) | Sets |
+|---|---|---|---|---|
+| morning | K15-late | `d14_late` | **up** | — |
+| morning | K15-run | `d9_pass` = `vitya` | run (4 energy, weight −2, `useful` +1) / **skip** | — |
+| morning | K15-01a / b / c | a: `d13_course_done`; b: seen K13-02, no `d13_course_done`; c: never saw K13-02 | wash (1 energy, skin −1) / patch (item `acne_patch`, skin −3) / **squeeze** (часто skin +3, иногда +1) | `d15_pimple` = `washed` / `patch` / `squeezed` |
+| day | K15-02a / b | a: `d8_lunch` = `held`; b: otherwise | held (2 energy, conf −1) / **ate** (weight +2); mum's line by `bought_haircut`, then `smoke_free` ≥ 7, else pies | `d15_lunch` = `held` / `ate` |
+| day | K15-03m | `d14_met` = `planned` | **ok** | `d15_team` = `music` |
+| day | K15-03c | `d14_met` = `came`, `d7_msg` ≠ `dry`, counter `d14_scene` ≥ 1 | **ok** | `d15_team` = `chairs` |
+| day | K15-04a / b | no `d15_team`; a: `d9_oksana`, b: without | volunteer (conf −1) / **scroll** | `d15_team` = `volunteer` |
+| day | K15-05a / b | `d10_photo` = `old` / `none`; a: seen K14-05s, b: otherwise | selfie (2 energy, or 1 with `d3_posted`; conf −2) / **later** | `d15_photo` = `fresh` |
+| evening | K15-06wm / ws | tone warm; wm: `d12_helped_music`, ws: without | ask (+3) / short (0) / long (−2) / **later** (0); his exact words go to the chat | `d15_tone` = `warm`, `d15_reply` |
+| evening | K15-06m | `d14_met` = `home`, `d12_helped_music` | sorry (+2) / short (0) / **later** | `d15_tone` = `even`, `d15_reply` |
+| evening | K15-06et / ec | tone even, not K15-06m; et: `d15_team`, ec: without | **ok** (status line) | `d15_tone` = `even` |
+| evening | K15-06d | tone dry | **ok** (`status_online`) | `d15_tone` = `dry` |
+| evening | K15-07wm / ws / m | `d15_reply` = `ask` (by opener) / `sorry` | **ok**, her answer | — |
+| night | K15-08a / q / b | the Day 14 result | hold / quarter / gum / **smoke** | `d15_smoked` / `d15_quarter` / `d15_no_smoke` |
+| night | K15-09 | `d15_no_smoke`, `smoke_free` ≥ 14 | **ok** (care −3) | — |
+| plus | A15-run, A15-gym (`{ modifier: 'gym' }`), A15-clean, A15-teeth, A15-couch, A-job | | as Day 14 | — |
+| night | K15-sleep | | sleep / late | `d15_late` |
+
+The tone rule as conditions (exactly one evening card fits any flag combination; a test checks all 512):
+- warm: `d14_met` ≠ `home` and (`d14_msg` = `warm`, or `d14_msg` = `even` and `d7_msg` = `warm`);
+- missed (K15-06m, even): `d14_met` = `home` and `d12_helped_music`;
+- dry: `d14_met` ≠ `home` and `d14_msg` = `dry`, or `d14_met` = `home`, no `d12_helped_music`, `d7_msg` = `dry`;
+- even: everything else (including Saturday at home with `d7_msg` `warm` or `even`, and a missing `d14_msg`).
+
+Measured shares of `d15_tone` on engine runs (Days 1–15 from a new game, Day 15 evening): 2000 players choosing uniformly among affordable story choices (sleep «до трёх» one night in five): warm 398 (19.9 %), even 1116 (55.8 %), dry 486 (24.3 %). A player who takes only neutral choices lands in even (stayed home on Day 14, `d7_msg` not dry). The simulation was a throwaway test file, not kept in the repo.
+
+Flags set on Day 15 and what later days can rely on:
+
+| Flag | Values | Always set? | For |
+|---|---|---|---|
+| `d15_tone` | `warm`, `even`, `dry` | yes, by every evening card including a skipped day | 16–21: every Alina card |
+| `d15_team` | `music`, `chairs`, `volunteer` | only for the team; unset = not in «Оргкомитет» | 16–21 |
+| `d15_reply` | `ask`, `short`, `long`, `later` (warm); `sorry`, `short`, `later` (missed) | only for K15-06wm/ws/m | read on 15 (K15-07), K15-sleep |
+| `d15_photo` | `fresh` | only after a selfie | 20 (the slide: `d10_photo` = `both` or `d15_photo`) |
+| `d15_pimple` | `washed`, `patch`, `squeezed` | yes (every player gets K15-01a/b/c) | 16 (one mirror line) |
+| `d15_lunch` | `held`, `ate` | yes | Sunday 22 |
+| `d15_smoked` / `d15_no_smoke` / `d15_quarter` | true | yes (one balcony card a night) | 16 craving texts |
+| `d15_late` | true | only for «до трёх» | 16 morning |
+
+Earlier flags read on Day 15: `d14_late`, `d14_met`, `d14_msg`, `d14_smoked` / `d14_no_smoke` / `d14_quarter`, counter `d14_scene`, `d13_course_done`, seen `K13-02`, seen `K14-05s`, `d12_helped_music`, `d10_photo`, `d9_pass`, `d9_oksana`, `d8_lunch`, `d7_msg`, `d3_posted`, `bought_haircut`, counter `smoke_free`, `d1_half`, items `acne_patch` and `gum`, modifier `gym`. `d8_replied` is not read (answer 17).
