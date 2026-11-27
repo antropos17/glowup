@@ -11,6 +11,8 @@ export interface TgWebApp {
   expand(): void;
   close(): void;
   isVersionAtLeast?(v: string): boolean;
+  /** opens a t.me link inside the client (Bot API 6.1); the share picker of the end screen uses it */
+  openTelegramLink?(url: string): void;
   setHeaderColor?(color: string): void;
   setBackgroundColor?(color: string): void;
 }

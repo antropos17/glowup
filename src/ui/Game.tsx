@@ -14,14 +14,17 @@ import { nightWindowSvg } from '../art/items';
 import { sceneFor, type SceneId } from '../art/scenes';
 import { Body, Cost, Face, Icon, ItemArt, Portrait, Scene, Spot } from './bits';
 import { timelapsePng } from './shareTimelapse';
-import { DAY_CARD, DEMO_END, duration, MISSED, PART_ICON, PART_NAME, PART_NEXT, PICK, SMOKE_FREE, SOUND } from './ru';
+import { DAY_CARD, DEMO_END, duration, FUNNEL, MISSED, PART_ICON, PART_NAME, PART_NEXT, PICK, SMOKE_FREE, SOUND } from './ru';
+import { beatFor, wishlistUrl, BOT_URL, type Beat, type Funnel } from '../funnel';
+import { BeatArt, Cliffhanger, Intro, introSeen } from './Funnel';
+import type { TgWebApp } from '../telegram';
 import { isMuted, play, played, setMuted, tap } from './sound';
 
 type Tab = 'journal' | 'mirror' | 'chat' | 'feed' | 'shop';
 type Sheet =
   | { kind: 'card'; card: Card }
   | { kind: 'menu' }
-  | { kind: 'result'; title: string; text: string; delta: number; why?: string; scene: SceneId; face?: Look }
+  | { kind: 'result'; title: string; text: string; delta: number; why?: string; scene: SceneId; face?: Look; beat?: Beat }
   | { kind: 'rest' }
   | null;
 
@@ -61,7 +64,11 @@ function useLeaving<T>(v: T | null | undefined): [T | null, boolean] {
  * the game returns to the pick screen. `api.restart(id)` (the showcase's dev button) skips the pick.
  */
 /** `onLeave`, given inside the Telegram Mini App, closes the app from the demo end screen. */
-export function Game({ clock, store, api, onLeave }: { clock: Clock; store: SaveStore; api?: (a: GameApi) => void; onLeave?: () => void }) {
+/** `funnel` (only for `?demo=1`) adds the intro, the Day 1 beats, the cliffhanger and the wishlist call; `tg` is the Mini App. */
+export function Game({ clock, store, api, onLeave, funnel, tg }: {
+  clock: Clock; store: SaveStore; api?: (a: GameApi) => void; onLeave?: () => void; funnel?: Funnel; tg?: TgWebApp;
+}) {
+  const [intro, setIntro] = useState(() => !!funnel && !introSeen());
   const [first, setFirst] = useState<GameState | null>(() => store.load());
   const [run, setRun] = useState(0);
   const play = useRef<{ refresh(): void } | null>(null);
@@ -71,18 +78,22 @@ export function Game({ clock, store, api, onLeave }: { clock: Clock; store: Save
   };
   const over = () => { store.clear(); setFirst(null); };
   useEffect(() => { api?.({ restart: (id) => { store.clear(); start(id); }, refresh: () => play.current?.refresh() }); }, []);
+  if (!first && intro) return <Intro clock={clock} onDone={() => setIntro(false)} />;
   if (!first) return <Pick clock={clock} onPick={start} />;
-  return <Play key={run} clock={clock} store={store} first={first} onRestart={over} onLeave={onLeave} api={(a) => (play.current = a)} />;
+  return <Play key={run} clock={clock} store={store} first={first} onRestart={over} onLeave={onLeave} funnel={funnel} tg={tg} api={(a) => (play.current = a)} />;
 }
 
-function Play({ clock, store, first, onRestart, onLeave, api }: {
-  clock: Clock; store: SaveStore; first: GameState; onRestart: () => void; onLeave?: () => void; api: (a: { refresh(): void }) => void;
+function Play({ clock, store, first, onRestart, onLeave, funnel, tg, api }: {
+  clock: Clock; store: SaveStore; first: GameState; onRestart: () => void; onLeave?: () => void; funnel?: Funnel; tg?: TgWebApp;
+  api: (a: { refresh(): void }) => void;
 }) {
   const [state, setState] = useState<GameState>(() => syncClock(content, first, clock.now()));
   const [tab, setTab] = useState<Tab>('journal');
   const [sheet, setSheet] = useState<Sheet>(null);
   const [chatSeen, setChatSeen] = useState(state.chat.length);
   const [endClosed, setEndClosed] = useState(false);
+  // funnel: the cliffhanger plays once before the first end screen of this visit
+  const [cliffDone, setCliffDone] = useState(false);
   const [muted, setMutedShown] = useState(isMuted);
   const [, tick] = useState(0);
   const scroller = useRef<HTMLDivElement>(null);
@@ -125,6 +136,8 @@ function Play({ clock, store, first, onRestart, onLeave, api }: {
   const chanceShown = !!state.flags.chance_shown || state.day > 1;
   const chanceNote = state.flags.chance_note?.value;
   const dayClosed = state.closedDay === state.day;
+  // the clock ends the demo at the next morning; the 1-day funnel ends it as soon as the player goes to sleep
+  const ended = !!state.demoOver || (!!funnel && dayClosed && state.day >= content.balance.demoDays);
   const unseen = state.summaries.find((d) => !d.seen);
   // closed sheets stay a moment to play their exit; the day card and «Пока тебя не было» keep the state they showed
   const [shown, leaving] = useLeaving(sheet);
@@ -150,7 +163,7 @@ function Play({ clock, store, first, onRestart, onLeave, api }: {
     else if (r.state.coins !== state.coins) play('coins');
     setSheet({
       kind: 'result', title: fill(content, r.state, card.title), text: r.outcome.text, delta: r.chanceDelta, why: r.state.lastChange?.why,
-      scene: sceneFor(card), face: castLook(card.speaker),
+      scene: sceneFor(card), face: castLook(card.speaker), beat: funnel ? beatFor(card.id, choiceId) : undefined,
     });
   }
   function onAction(card: Card) {
@@ -168,7 +181,7 @@ function Play({ clock, store, first, onRestart, onLeave, api }: {
   if (state.verdict) return <Verdict state={state} onRestart={onRestart} />;
   // what the story did on its own comes first: before the day cards and before the demo end screen
   const missed = missedShown ? <Missed state={missedShown} leaving={missedLeaving} onClose={() => commit(markMissedSeen(state))} /> : null;
-  if (state.demoOver && !endClosed && missed) return <div class="game">{missed}</div>;
+  if (ended && !endClosed && missed) return <div class="game">{missed}</div>;
   const dayCard = dayShown ? (
     <div class="scrim" data-leaving={dayLeaving ? '' : undefined}>
       <div class="sheet" role="dialog" aria-modal="true">
@@ -178,12 +191,13 @@ function Play({ clock, store, first, onRestart, onLeave, api }: {
     </div>
   ) : null;
   // then the day cards the player has not seen: the last day's card comes before the end screen, never after it
-  if (state.demoOver && !endClosed && dayCard) return <div class="game">{dayCard}</div>;
-  if (state.demoOver && !endClosed) {
-    return <DemoEnd state={state} onClose={() => { setSheet(null); setTab('journal'); setEndClosed(true); }} onRestart={onRestart} onLeave={onLeave} />;
+  if (ended && !endClosed && dayCard) return <div class="game" data-funnel={funnel ? '' : undefined}>{dayCard}</div>;
+  if (ended && !endClosed && funnel && !cliffDone) return <Cliffhanger state={state} onNext={() => setCliffDone(true)} />;
+  if (ended && !endClosed) {
+    return <DemoEnd state={state} onClose={() => { setSheet(null); setTab('journal'); setEndClosed(true); }} onRestart={onRestart} onLeave={onLeave} funnel={funnel} tg={tg} />;
   }
   // after the demo end screen is closed the game stays open read-only
-  const frozen = !!state.demoOver;
+  const frozen = ended;
 
   const leaf = (
     <div class="leaf" aria-label={`День ${state.day} из ${content.balance.days}`}>
@@ -214,7 +228,7 @@ function Play({ clock, store, first, onRestart, onLeave, api }: {
   );
 
   return (
-    <div class="game">
+    <div class="game" data-funnel={funnel ? '' : undefined}>
       {/* the journal keeps the full hero; other tabs get one compact line with the same numbers */}
       {tab === 'journal' ? (
         <>
@@ -350,7 +364,7 @@ function Play({ clock, store, first, onRestart, onLeave, api }: {
             )}
             {shown.kind === 'result' && (
               <>
-                <Scene id={shown.scene} part={state.part} crush={her.look} face={shown.face} />
+                {shown.beat ? <BeatArt beat={shown.beat} state={state} pct={pct} /> : <Scene id={shown.scene} part={state.part} crush={her.look} face={shown.face} />}
                 <div class="sheet-head"><h2>{shown.title}</h2></div>
                 <p class="sheet-text">{shown.text}</p>
                 {shown.delta !== 0 && chanceShown && (
@@ -404,8 +418,9 @@ function Missed({ state, leaving, onClose }: { state: GameState; leaving: boolea
   );
 }
 
-const Line = ({ v }: { v: number }) => (
-  <div class="bar-line"><i style={{ width: `${Math.max(3, v)}%` }} data-low={v < 34 ? '' : undefined} data-mid={v >= 34 && v < 67 ? '' : undefined} /></div>
+const Line = ({ v, from }: { v: number; from?: number }) => (
+  <div class="bar-line"><i style={{ width: `${Math.max(3, v)}%`, ...(from !== undefined ? { '--from': `${Math.max(3, from)}%` } : {}) }} data-from={from !== undefined ? '' : undefined}
+    data-low={v < 34 ? '' : undefined} data-mid={v >= 34 && v < 67 ? '' : undefined} /></div>
 );
 
 function NavBtn(p: { tab: Tab; cur: Tab; set: (t: Tab) => void; icon: string; label: string; dot?: boolean }) {
@@ -708,10 +723,15 @@ function readNotified() {
   try { return localStorage.getItem(NOTIFY_KEY) === '1'; } catch { return false; }
 }
 
-function DemoEnd({ state, onClose, onRestart, onLeave }: { state: GameState; onClose: () => void; onRestart: () => void; onLeave?: () => void }) {
+function DemoEnd({ state, onClose, onRestart, onLeave, funnel, tg }: {
+  state: GameState; onClose: () => void; onRestart: () => void; onLeave?: () => void; funnel?: Funnel; tg?: TgWebApp;
+}) {
   const frames = timelapseFrames(state, false);
   const [notified, setNotified] = useState(readNotified);
   const [shareNote, setShareNote] = useState('');
+  const [joined, setJoined] = useState(false);
+  // the funnel shares the game page (keeping the creator code) instead of the placeholder link
+  const shareUrl = funnel ? `${location.origin}${location.pathname}?demo=1${funnel.code ? `&ref=${funnel.code}` : ''}` : REFERRAL_URL;
   const last = state.summaries.at(-1);
   const gift = last?.gift ? content.items.find((i) => i.id === last.gift) : undefined;
   const pct = chance(content, state);
@@ -728,19 +748,24 @@ function DemoEnd({ state, onClose, onRestart, onLeave }: { state: GameState; onC
         const file = new File([await timelapsePng(frames)], 'timelapse.png', { type: 'image/png' });
         if (navigator.canShare?.({ files: [file] })) files = [file];
       } catch { /* no picture: share the link */ }
-      try { await navigator.share({ title: DEMO_END.shareTitle, text: DEMO_END.shareMessage, url: REFERRAL_URL, ...(files.length ? { files } : {}) }); }
+      try { await navigator.share({ title: funnel ? FUNNEL.brand : DEMO_END.shareTitle, text: funnel ? FUNNEL.shareText : DEMO_END.shareMessage, url: shareUrl, ...(files.length ? { files } : {}) }); }
       catch { /* the player closed the share sheet */ }
       return;
     }
-    try { await navigator.clipboard.writeText(REFERRAL_URL); setShareNote(DEMO_END.shareCopied); }
-    catch { setShareNote(DEMO_END.shareFailed(REFERRAL_URL)); }
+    try { await navigator.clipboard.writeText(shareUrl); setShareNote(DEMO_END.shareCopied); }
+    catch { setShareNote(DEMO_END.shareFailed(shareUrl)); }
+  }
+  /** Inside Telegram: the share picker of the client with the bot link, so a friend lands on /start too. */
+  function shareTg() {
+    const url = `https://t.me/share/url?url=${encodeURIComponent(BOT_URL)}&text=${encodeURIComponent(FUNNEL.shareText)}`;
+    if (tg?.openTelegramLink) tg.openTelegramLink(url); else window.open(url, '_blank', 'noopener');
   }
 
   return (
     <div class="game">
-      <div class="screen verdict" style="padding-top:18px">
-        <h2>{DEMO_END.title}</h2>
-        <p>{DEMO_END.written(content.balance.demoDays, content.balance.days)}</p>
+      <div class="screen verdict" style="padding-top:18px" data-funnel={funnel ? '' : undefined}>
+        <h2>{funnel ? FUNNEL.endTitle : DEMO_END.title}</h2>
+        <p>{funnel ? FUNNEL.endLead : DEMO_END.written(content.balance.demoDays, content.balance.days)}</p>
         <Timelapse frames={frames} />
         <h3>{DEMO_END.heroHead}</h3>
         <div class="rows">
@@ -755,7 +780,8 @@ function DemoEnd({ state, onClose, onRestart, onLeave }: { state: GameState; onC
             return (
               <div class="row"><Icon name={def.icon} /><div class="row-main">
                 <div class="row-title"><span>{def.bar}</span><span class="num">{from}% → {v}%{v !== from ? ` (${signed(v - from)})` : ''}</span></div>
-                <Line v={v} />
+                {/* funnel: the bar slides from the start value to now */}
+                <Line v={v} from={funnel ? from : undefined} />
               </div></div>
             );
           })}
@@ -764,13 +790,28 @@ function DemoEnd({ state, onClose, onRestart, onLeave }: { state: GameState; onC
           ? <div class="reward"><Icon name="coin" size={18} /><span>За день {last.day}: <b class="num">+{last.coins}</b> монет{gift ? ` и ${gift.title.toLowerCase()}` : ''}</span></div>
           : <div class="reward" data-miss="calm">День {last.day} пропущен: награды нет.</div>)}
         <Decisions state={state} />
-        <h3>{DEMO_END.shareHead}</h3>
-        <div class="share">
+        {!(funnel && onLeave) && <h3>{DEMO_END.shareHead}</h3>}
+        {!(funnel && onLeave) && <div class="share">
           <p>{DEMO_END.shareText}</p>
           <button class="quiet" onClick={share}>{DEMO_END.shareBtn}</button>
           {shareNote && <p class="share-note" role="status">{shareNote}</p>}
-        </div>
+        </div>}
       </div>
+      {funnel ? (
+        <div class="end-foot">
+          {/* equal buttons: joining and leaving weigh the same */}
+          {onLeave
+            ? <p class="end-note end-listed" role="status"><Icon name="check" size={16} /><span><b>{FUNNEL.listedHead}</b> {FUNNEL.listedText}</span></p>
+            : joined && <p class="end-note" role="status">{FUNNEL.joinNote}</p>}
+          <div class="end-actions">
+            {onLeave
+              ? <button onClick={shareTg}>{FUNNEL.share}</button>
+              : <a class="end-join" href={wishlistUrl(funnel.code)} target="_blank" rel="noopener" onClick={() => setJoined(true)}>{FUNNEL.join}</a>}
+            {onLeave ? <button onClick={onLeave}>{DEMO_END.leave}</button> : <button onClick={onClose}>{DEMO_END.close}</button>}
+          </div>
+          <button class="end-restart" onClick={onRestart}>{DEMO_END.restart}</button>
+        </div>
+      ) : (
       <div class="end-foot">
         {/* in Telegram the bot already put the player on the list, so the line replaces the notify button */}
         {onLeave
@@ -782,6 +823,7 @@ function DemoEnd({ state, onClose, onRestart, onLeave }: { state: GameState; onC
         </div>
         <button class="end-restart" onClick={onRestart}>{DEMO_END.restart}</button>
       </div>
+      )}
     </div>
   );
 }
