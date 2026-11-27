@@ -19,9 +19,9 @@ was measured from each `music.mp3` (chat 114.75 bpm, feed 123, pov 144.75).
 
 ### Voice-over (ElevenLabs)
 
-`assets/vo/*.mp3`: voice «Andrey Permikin - Expressive and Natural» (shared library, id `lsAmGFzUYusakA482527`),
-model `eleven_multilingual_v2`, stability 0.35, similarity 0.8, style 0.55. Lines and start times are the
-`vo-*` audio tags in each `index.html`. Music sits at volume 0.55 under the voice. The API key stays outside the repo.
+`assets/vo/*.mp3`: voice «Max - Alive and Emotional» (shared library, young male, id `Uv3rf12Omd9Asyv54Bqw`),
+model `eleven_v3`, `language_code` ru, stability 0.5, similarity 0.8; each line levelled to −12 LUFS. Lines and
+start times are the `vo-*` audio tags in each `index.html`. Music sits at volume 0.3, about 10 dB under the voice. The API key stays outside the repo.
 
 ## Rebuild
 
