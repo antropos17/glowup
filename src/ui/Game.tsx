@@ -566,9 +566,18 @@ function timelapseFrames(state: GameState, withNow: boolean): { label: string; l
 function Timelapse({ frames }: { frames: { label: string; look: Look }[] }) {
   const [i, setI] = useState(frames.length - 1);
   const cur = frames[Math.min(i, frames.length - 1)];
+  const seg = useRef<HTMLDivElement>(null);
+  // the strip scrolls sideways once the frames outgrow it: keep the picked chip in view, from the start
+  // the last one, so «Сейчас» is visible without a swipe
+  useEffect(() => {
+    const el = seg.current, b = el?.querySelector<HTMLElement>('[aria-pressed="true"]');
+    if (!el || !b) return;
+    if (b.offsetLeft < el.scrollLeft) el.scrollLeft = b.offsetLeft - 3;
+    else if (b.offsetLeft + b.offsetWidth > el.scrollLeft + el.clientWidth) el.scrollLeft = b.offsetLeft + b.offsetWidth - el.clientWidth + 3;
+  }, [i, frames.length]);
   return (
     <>
-      <div class="seg" role="group" aria-label="Какой кадр показать">
+      <div class="seg" ref={seg} role="group" aria-label="Какой кадр показать">
         {frames.map((f, n) => <button aria-pressed={n === Math.min(i, frames.length - 1)} onClick={() => setI(n)}>{f.label}</button>)}
       </div>
       <div class="mirror-lg"><Body look={cur.look} title={cur.label} /></div>
