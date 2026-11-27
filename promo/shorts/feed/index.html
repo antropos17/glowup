@@ -35,7 +35,8 @@
       #endcard { background: var(--ink); color: var(--paper); z-index: 20; }
       #endcard .logo { position: absolute; left: 60px; right: 60px; top: 820px; text-align: center; font-family: "Unbounded30", sans-serif; font-weight: 900; font-size: 158px; line-height: 1.0; letter-spacing: -0.03em; }
       #endcard .logo em { font-style: normal; color: var(--accent); }
-      #endcard .cta { position: absolute; left: 90px; right: 90px; top: 1200px; text-align: center; font-size: 58px; line-height: 1.25; font-weight: 700; }
+      #endcard .cta { position: absolute; left: 60px; right: 60px; top: 1210px; text-align: center; font-size: 84px; font-family: Unbounded30, sans-serif; line-height: 1.25; font-weight: 700; }
+      #endcard .cta em { font-style: normal; color: var(--accent); }
       #endcard img { position: absolute; left: 340px; top: 300px; width: 400px; height: 452px; }
       .post { top: 560px; padding: 34px 44px 40px; }
       .post .src { display: flex; align-items: center; gap: 20px; font-size: 36px; font-weight: 700; color: var(--muted); }
@@ -113,11 +114,17 @@
           <img id="end-hero" src="assets/andrey.svg" alt="" />
           <div class="logo" id="end-logo">Краш<br /><em>за 30</em></div>
           <div class="burst" id="end-burst" style="left: 540px; top: 960px"></div>
-          <div class="cta" id="end-cta">Демо на 7 дней —<br />играй бесплатно</div>
+          <div class="cta" id="end-cta">Демо — <em>в канале</em></div>
         </div>
       </div>
       <div id="flash" data-layout-ignore></div>
-      <audio id="music" class="clip" src="assets/music.mp3" data-start="0" data-duration="20" data-track-index="6" data-volume="0.8"></audio>
+      <audio id="music" class="clip" src="assets/music.mp3" data-start="0" data-duration="20" data-track-index="6" data-volume="0.55"></audio>
+      <audio id="vo-f1" class="clip" src="assets/vo/f1.mp3" data-start="0.2" data-duration="1.94" data-track-index="9" data-volume="1"></audio>
+      <audio id="vo-f2" class="clip" src="assets/vo/f2.mp3" data-start="2.95" data-duration="1.10" data-track-index="9" data-volume="1"></audio>
+      <audio id="vo-f3" class="clip" src="assets/vo/f3.mp3" data-start="8.25" data-duration="0.69" data-track-index="9" data-volume="1"></audio>
+      <audio id="vo-f4" class="clip" src="assets/vo/f4.mp3" data-start="13.55" data-duration="0.83" data-track-index="9" data-volume="1"></audio>
+      <audio id="vo-f5" class="clip" src="assets/vo/f5.mp3" data-start="15.95" data-duration="1.52" data-track-index="9" data-volume="1"></audio>
+      <audio id="vo-f6" class="clip" src="assets/vo/f6.mp3" data-start="17.8" data-duration="2.59" data-track-index="9" data-volume="1"></audio>
       <audio id="sfx-01" class="clip" src="assets/sfx/tap-b.mp3" data-start="0.45" data-duration="0.19" data-track-index="7" data-volume="0.9"></audio>
       <audio id="sfx-02" class="clip" src="assets/sfx/tap-a.mp3" data-start="1.15" data-duration="0.26" data-track-index="8" data-volume="0.9"></audio>
       <audio id="sfx-03" class="clip" src="assets/sfx/whoosh-a.mp3" data-start="1.6" data-duration="0.19" data-track-index="7" data-volume="0.75"></audio>
@@ -143,6 +150,7 @@
       <audio id="sfx-23" class="clip" src="assets/sfx/plus.mp3" data-start="19.1" data-duration="1.11" data-track-index="7" data-volume="0.55"></audio>
     </div>
     <script>
+      const PUNCH = [[0.45, 0.03, 0.28], [1.15, 0.03, 0.28], [1.6, 0.025, 0.28], [2.2, 0.045, 0.23], [2.43, 0.018, 0.28], [3.07, 0.06, 0.28], [3.41, 0.018, 0.28], [4.38, 0.018, 0.28], [5.3, 0.025, 0.28], [5.75, 0.03, 0.28], [6.45, 0.03, 0.28], [6.9, 0.025, 0.28], [7.31, 0.018, 0.19], [7.5, 0.045, 0.28], [8.37, 0.06, 0.28], [9.26, 0.018, 0.28], [10.24, 0.018, 0.28], [10.6, 0.025, 0.28], [11.05, 0.03, 0.28], [11.75, 0.03, 0.28], [12.2, 0.025, 0.28], [12.8, 0.045, 0.28], [13.16, 0.018, 0.28], [13.67, 0.06, 0.28], [14.14, 0.018, 0.28], [15.11, 0.018, 0.28], [15.9, 0.03, 0.28], [16.2, 0.03, 0.28], [16.55, 0.06, 0.28], [17.07, 0.018, 0.28], [17.7, 0.025, 0.28], [18.04, 0.018, 0.2], [18.24, 0.06, 0.28], [19.1, 0.045, 0.28]];
       // ---- dopamine helpers (all driven by the paused timeline, seek-safe) ----
       const tl = gsap.timeline({ paused: true });
       const POP = { duration: 0.42, ease: "back.out(2.6)" };
@@ -215,6 +223,7 @@
       burst("moral-burst", 16.55, ["#FF5436", "#3B5BFF", "#17A56B"], 16, 380);
       ENDCARD(17.7);
 
+      PUNCH.forEach(([t, a, d]) => tl.fromTo("#root", { scale: 1 + a }, { scale: 1, duration: d, ease: "power2.out", immediateRender: false }, t));
       window.__timelines["main"] = tl;
       tl.seek(0);
     </script>

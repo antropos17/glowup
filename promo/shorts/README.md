@@ -4,7 +4,7 @@ Three vertical ads for TikTok / Reels / Shorts, built as HyperFrames composition
 Each folder is a standalone project: `index.html`, `assets/` (hero SVGs, fonts, music, sound effects).
 Rendered mp4 files live outside the repo: `X:\Projects 2027\Glowup promo\shorts\` (not committed).
 
-Format: 1080×1920, 30 fps, stereo AAC, no voice-over. Palette and fonts follow `docs/AD_30S.md`
+Format: 1080×1920, 30 fps, stereo AAC, Russian voice-over (ElevenLabs). Palette and fonts follow `docs/AD_30S.md`
 (Unbounded titles, Golos Text body, `#F4EFE6` / `#22212A` / `#FF5436`). Accent text on the light
 background uses the darker `#D23A1C` to reach 3:1 contrast; `#FF5436` stays on buttons and the dark end card.
 Key text sits between 250 and 1540 px vertically; the lower half carries the phone, the outcome rows,
@@ -13,7 +13,15 @@ stamps and the before/after bodies.
 Motion style (2026-11-27, "dopamine" pass): every change lands with a hit. Shared GSAP helpers in each
 `index.html`: `pop` (overshoot pop-in), `slam` (stamp drop), `shake`, `bounce`, `flash` (full-frame white),
 `roll` (rolling number on HUD bars), `burst` (deterministic particles) and `badge` («−3» / «+1» burst-in).
-Something moves at least every ~0.7 s; each hit has a sound effect.
+Something moves at least every ~0.7 s; each hit has a sound effect. The whole frame punches
+(scale 1.02) on every second beat of the music and harder (up to 1.06) on every hit sound; the beat grid
+was measured from each `music.mp3` (chat 114.75 bpm, feed 123, pov 144.75).
+
+### Voice-over (ElevenLabs)
+
+`assets/vo/*.mp3`: voice «Andrey Permikin - Expressive and Natural» (shared library, id `lsAmGFzUYusakA482527`),
+model `eleven_multilingual_v2`, stability 0.35, similarity 0.8, style 0.55. Lines and start times are the
+`vo-*` audio tags in each `index.html`. Music sits at volume 0.55 under the voice. The API key stays outside the repo.
 
 ## Rebuild
 
@@ -29,9 +37,9 @@ then cut to length with a 1.2 s fade-out into `assets/music.mp3`:
 
 | Short | Query | Source length | Cut |
 |---|---|---|---|
-| chat | light playful pop, curious anticipation, plucky synth, soft beat, 110 bpm | 56 s | from 8 s, 18 s (the louder section lands near the question at 12 s) |
-| feed | quirky funny upbeat ukulele pop with claps, comedic, 120 bpm | 30 s | from 0, 20 s |
-| pov | uplifting motivational pop, builds to bright energetic drop, transformation, 120 bpm | 57 s | from 0, 20 s |
+| chat | funky live band groove, slap bass, real drums, brass stabs, cheeky playful, 115 bpm | 51 s | from 30 s, 18 s |
+| feed | comedic funk, bouncy live drums, clavinet, quirky horns, meme energy, 120 bpm | 34 s | from 13.5 s, 20 s |
+| pov | energetic indie rock, live drums, driving guitars, triumphant hype, 130 bpm | 55 s | from 8 s, 20 s (the louder section lands near the before/after) |
 
 ### Sound effects (Higgsfield, Epidemic Sound catalog)
 
@@ -88,7 +96,7 @@ a problem going up is a bar going down.
 | 15.5–17.5 | «Победа не гарантирована», «30 реальных дней. Каждый выбор считается.» |
 | 17.5–20 | End card |
 
-End card in all three: hero portrait, «Краш за 30», «Демо на 7 дней — играй бесплатно». No prices, timers,
+End card in all three: hero portrait, «Краш за 30», «Демо — в канале». No prices, timers,
 store badges, reviews or winning promises.
 
 ## Assumptions to confirm
