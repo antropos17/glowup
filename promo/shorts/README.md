@@ -1,8 +1,11 @@
-# Vertical shorts «Краш за 30 дней»
+# Vertical shorts «Glow Up: челлендж 30 дней»
 
 Three vertical ads for TikTok / Reels / Shorts, built as HyperFrames compositions (2026-11-27).
 Each folder is a standalone project: `index.html`, `assets/` (hero SVGs, fonts, music, sound effects).
 Rendered mp4 files live outside the repo: `X:\Projects 2027\Glowup promo\shorts\` (not committed).
+Current files are `glowup30-<name>.mp4` with a frame sheet `glowup30-<name>-sheet.jpg` (`chat`, `feed`, `pov`,
+`live-1` … `live-5`, `v2-park`, `v2-pies`, `v2-mirror`, `v2-soda`). Files with the `krash30-` prefix carry the
+cancelled name: do not publish them.
 
 Format: 1080×1920, 30 fps, stereo AAC, Russian voice-over (ElevenLabs). Palette and fonts follow `docs/AD_30S.md`
 (Unbounded titles, Golos Text body, `#F4EFE6` / `#22212A` / `#FF5436`). Accent text on the light
@@ -25,6 +28,8 @@ start times are the `vo-*` audio tags in each `index.html`. Music sits at volume
 The closing line `c4` / `f6` / `p6` is one take shared by all three (2026-11-27): «Краш за тридцать дней. Демо — в канале.»,
 the pause between the sentences cut to 0.1 s and the tempo raised 7% (`atempo=1.07`) so it is 2.34 s long and ends at least
 0.15 s before the video does (chat 15.4–17.74, feed 17.5–19.84, pov 17.3–19.64).
+**This take still says the cancelled name** (the name is now «Glow Up: челлендж 30 дней», `docs/DECISIONS.md` row 48): it was not
+regenerated. Decide what to do with it before publishing the drawn shorts. No other voice-over line says the name.
 
 ## Rebuild
 
@@ -53,9 +58,14 @@ then cut to length with a 1.2 s fade-out into `assets/music.mp3`:
 Render (HyperFrames CLI 0.9.102, run inside each short's folder), then level the audio to about −15 LUFS:
 
 ```
-hyperframes render --quality delivery -o "X:/Projects 2027/Glowup promo/shorts/krash30-chat.mp4"
-ffmpeg -i krash30-chat.mp4 -c:v copy -af loudnorm=I=-15:TP=-1.5:LRA=11 -ar 48000 -c:a aac -b:a 192k out.mp4
+hyperframes render --quality delivery -o raw.mp4
+ffmpeg -i raw.mp4 -c:v copy -af loudnorm=I=-15:TP=-1.5:LRA=11 -ar 48000 -c:a aac -b:a 192k "X:/Projects 2027/Glowup promo/shorts/glowup30-chat.mp4"
 ```
+
+Measure the result (`ffmpeg -i out.mp4 -af ebur128=peak=true -f null -`). On the 2026-11-27 rename the single pass
+left the renders at −15.7 to −17.4 LUFS, so all twelve `glowup30-` files were levelled in two passes (first with
+`print_format=json`, then with its `measured_*` values, `offset` and `linear=true`): −15.1 to −15.5 LUFS, true peak
+≤ −1.1 dBFS.
 
 `hyperframes` means `node <skills>/hyperframes/scripts/plugin-cli.mjs --cli-version 0.9.102`.
 `hyperframes check` passes with no errors; the remaining warnings are the single-file structure
@@ -99,7 +109,7 @@ a problem going up is a bar going down.
 | 15.5–17.5 | «Победа не гарантирована», «30 реальных дней. Каждый выбор считается.» |
 | 17.5–20 | End card |
 
-End card in all three: hero portrait, «Краш за 30 дней», «Демо — в канале», the channel handle
+End card in all three: hero portrait, «Glow Up: челлендж 30 дней», «Демо — в канале», the channel handle
 `@glowupchallenge30` (no profile link before 1000 TikTok followers). No prices, timers,
 store badges, reviews or winning promises.
 
@@ -145,7 +155,7 @@ the model's own audio (voice and lip sync come from the same generation):
 | 2.8–7.3 | Day 1 mirror, six problems, «Андрей смотрит в зеркало. 30 дней.» (K1-02); captions «Мы сделали из него игру.», «Тридцать настоящих дней,», «каждый выбор считается.» | his voice goes on under the game |
 | 7.3–11.3 | «Каждый день — выбор», «Рука сама тянется к пачке.» → «Убрать пачку, взять жвачку» → «Пачка в ящике, жвачка во рту.», Уверенность +1 (K1-06) | music, sound effects |
 | 11.3–13 | Андрей again, caption «Демо — в канале.» | his line (file 8.3–10.04 s) |
-| 13–16.5 | End card «Краш за 30 дней», «Демо — в канале» | music |
+| 13–16.5 | End card «Glow Up: челлендж 30 дней», «Демо — в канале» | music |
 
 Captions follow the script the model was given; Ruslan listened to the take and accepted it. Phrase times were
 measured from the pauses (`ffmpeg silencedetect`), not from a transcript. Music and sound effects are pov's.
@@ -156,7 +166,7 @@ The start frames are Nano Banana Pro stills in Unlimited mode with the hero port
 glasses with the taped temple, grey t-shirt), one per location. Each speech take is Seedance 2.5, start frame = that still,
 10 s, 9:16, 720p, Unlimited mode (0 credits), with the model's own voice and lip sync. Every take opens on the
 hero to camera with a hook caption (`.say.hook`, slammed in), then game cards from `content/` cut in over his voice,
-then he comes back for «Демо — в канале», then the end card «Краш за 30 дней». Captions follow the script the model was
+then he comes back for «Демо — в канале», then the end card «Glow Up: челлендж 30 дней». Captions follow the script the model was
 given; phrase times come from the pauses (`silencedetect` and an RMS envelope), not from a transcript.
 Music: live-2 and live-4 use feed's track, live-3 chat's, live-5 pov's; sound effects as above.
 
@@ -241,7 +251,7 @@ The «Утро» label on the run card is the ad's own (A1-run is a day action w
 Four ~21 s shorts in the same recipe as `live-1` … `live-5`, but faster and absurd: each opens on a 0.7–0.8 s cold open
 of the absurd peak of its take with a slammed caption, the hero (same AI-generated Андрей) says as the makers «мы
 сделали игру…», game cards from `content/` cut in for 1–1.5 s with their text verbatim, and the end card shows
-«Краш за 30 дней», «Демо — в канале» and the channel nick `glowupchallenge30` as text (until 1000 followers TikTok
+«Glow Up: челлендж 30 дней», «Демо — в канале» and the channel nick `glowupchallenge30` as text (until 1000 followers TikTok
 gives no profile link). The same AI label rule applies: **switch on the "AI-generated content" label when publishing.**
 
 Each take is Seedance 2.5, start frame = the location still of `live-2` … `live-5` (Nano Banana Pro), 20 s, 9:16,
@@ -249,7 +259,7 @@ Each take is Seedance 2.5, start frame = the location still of `live-2` … `liv
 (timed HARD CUTs, FOV in degrees, light in Kelvin, positive locks); the full texts are in
 `X:\Projects 2027\Glowup promo\live\v2-prompts\`. Footage lives in `X:\Projects 2027\Glowup promo\live\`
 (`v2-<name>-talk.mp4`); copy it into `promo/shorts/live-v2-<name>/assets/` to render. Finished files:
-`X:\Projects 2027\Glowup promo\shorts\krash30-v2-<name>.mp4` with a frame sheet `krash30-v2-<name>-sheet.jpg`.
+`X:\Projects 2027\Glowup promo\shorts\glowup30-v2-<name>.mp4` with a frame sheet `glowup30-v2-<name>-sheet.jpg`.
 Captions follow the script the model was given; phrase times come from an RMS envelope of the take (speech band
 250–3500 Hz), not from a transcript. Nobody has listened to the takes yet.
 

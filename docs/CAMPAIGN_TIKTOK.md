@@ -1,4 +1,4 @@
-# TikTok campaign plan: «Краш за 30 дней», 4 weeks
+# TikTok campaign plan: «Glow Up: челлендж 30 дней», 4 weeks
 
 Status: **accepted by Ruslan on 2026-11-27; revised on 2026-11-27 after the monetization chat; the primary target is open**. Nothing in it is published or sent yet. Related: `docs/NAME_AND_PROMO.md` (name, creator outreach, referral; draft), `docs/TELEGRAM.md` (bot and Mini App), `promo/shorts/README.md` (ready shorts).
 
@@ -14,7 +14,7 @@ Marks: **F** fact (checked in code or docs, or on an official page, then with it
 | Time | 15+ hours a week |
 | Main hook | a realistic Andrey |
 
-Name: Ruslan chose «Краш за 30 дней» on 2026-11-27; the bot greeting uses it (F, commit 393e3cf). The Telegram channel keeps the English name «Glow Up : 30 days challenge» (Ruslan, 2026-11-27). Not decided by the authors, so not promised to anyone: a bonus for a viewer who comes by a code, money now or a fixed fee for creators.
+Name: Ruslan decided «Glow Up: челлендж 30 дней» on 2026-11-27 (`DECISIONS.md` row 48); the bot greeting in the code uses it (F, `server/supabase/functions/bot/logic.ts`; the deployed bot changes only after a new deploy). The Telegram channel keeps the English name «Glow Up : 30 days challenge» (Ruslan, 2026-11-27). Not decided by the authors, so not promised to anyone: a bonus for a viewer who comes by a code, money now or a fixed fee for creators.
 
 ## 1. Objective
 
@@ -81,7 +81,7 @@ Creators: their link goes straight to the bot with their code, otherwise their s
 
 **Order for the first 5–10 creators:**
 1. The first 2–3 are people Ruslan knows: they test the whole chain. Then 5–7 cold contacts.
-2. Ruslan sends the letter himself, from the template in `NAME_AND_PROMO.md` with the name «Краш за 30 дней».
+2. Ruslan sends the letter himself, from the template in `NAME_AND_PROMO.md` with the name «Glow Up: челлендж 30 дней».
 3. The creator agrees → writes `/start` to the bot → Ruslan finds their id (the newest row in Supabase `wishlist`) → `/addcode <nick> <Name> <id>` → the bot replies with the link; Ruslan forwards it. The owner must be set at once: a repeated `/addcode` on the same code is refused and there is no "change owner" command (F).
 4. The creator puts the link in their bio or a pinned comment and checks `/stats` themselves.
 5. After 72 hours Ruslan records their views (from the creator's screenshot) and the `/stats` count in the creator table.
@@ -97,7 +97,7 @@ On 15+ hours a week: 5 videos in week 1, then 7 a week (H). 26 videos in total.
 | Follow-up «вы выбрали 2, вот что ответила Алина» | 1 | the series hook; ends with «демо в канале» |
 | Drawn (HyperFrames) | 1 | the three ready shorts already end on «Демо — в канале» (F, `promo/shorts/README.md`) |
 
-Every video of ours, in any format (Ruslan, 2026-11-27): the handle `glowupchallenge30` on the end card, the "Your brand" disclosure, a pinned comment with the handle as text. No end card in `promo/shorts/` carries the handle yet (F, checked 2026-11-27).
+Every video of ours, in any format (Ruslan, 2026-11-27): the handle `glowupchallenge30` on the end card, the "Your brand" disclosure, a pinned comment with the handle as text. In `promo/shorts/` the drawn shorts and `live-v2-*` carry the handle on the end card; `live-1` … `live-5` do not (F, checked 2026-11-27).
 
 | Week | Videos | Creators | Code in the pinned post | Other |
 |---|---|---|---|---|
@@ -136,7 +136,7 @@ If the session making the live shorts has not added the «по мотивам т
 | In Russia TikTok may not show new videos, and Promote may not reach a Russian audience (H: so it was from 2022; not checked now) | on day 1 ask someone with a Russian SIM to find our video. If it is not visible, TikTok works for the CIS and Russia moves to other platforms (outside this plan) |
 | A clickable profile link needs 1000 followers or a verified business account (F, [TikTok help](https://www.tiktok.com/support/faq_detail?id=7581821550328896012), checked 2026-11-27); until then some people will not type the handle into Telegram (H) | the handle as text in the profile, on the end card and in a pinned comment; the profile link after 1000 followers (Ruslan, 2026-11-27). A business account is not chosen |
 | The `t.me` profile link may be refused even after 1000 followers: the same help page says links that open other social apps are not supported (F); whether `t.me` counts is not checked (H) | check on reaching 1000 followers; if refused, ask Ruslan |
-| The three drawn shorts and the logo mark (`promo/avatars`) still say «Краш за 30» (F); the bot and the channel post say «Краш за 30 дней». None of the end cards, drawn or live, carries the handle `glowupchallenge30` (F, `promo/shorts/*/index.html`) | fix the name on the drawn end cards and the logo, add the handle to every end card, re-render before publishing |
+| The voice-over of the three drawn shorts still says the cancelled name in its closing line, while their end card shows «Glow Up: челлендж 30 дней» (F, `promo/shorts/README.md`). The end cards of `live-1` … `live-5` carry no handle `glowupchallenge30` (F, `promo/shorts/*/index.html`) | Ruslan decides what to do with the closing line before the drawn shorts are published; add the handle to the `live-1` … `live-5` end cards and re-render |
 | The Mini App was never checked in a real Telegram client on a phone (F, `TELEGRAM.md`) | walk the whole funnel before the first video of week 1 |
 | Day 1 follows real local time (F); a person who arrives at night may see something odd | check during the funnel walk |
 | The channel has no pinned post with a button to the bot, people get lost at step 3a | make the pinned post before the first video (Ruslan publishes it) |

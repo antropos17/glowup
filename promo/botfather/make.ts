@@ -1,6 +1,6 @@
 /**
  * Description picture of the Telegram bot (BotFather → Edit Bot → Edit Description Picture), 640×360.
- * Same hero and palette as promo/avatars/make.ts: Day 1 Andrey on mint, the solved look on gold, the name «Краш за 30 дней».
+ * Same hero and palette as promo/avatars/make.ts: Day 1 Andrey on mint, the solved look on gold, the name «Glow Up: челлендж 30 дней».
  *
  * Run: npx tsx promo/botfather/make.ts
  * Writes description.svg and description.png (640×360) to promo/botfather/.
@@ -81,10 +81,11 @@ const svg =
   `<text x="${HALF - 14}" y="${CARD.y + 34}" text-anchor="end" font-family="Unbounded" font-weight="800" font-size="19" fill="#fff">до</text>` +
   `<text x="${HALF + 14}" y="${CARD.y + 34}" font-family="Unbounded" font-weight="800" font-size="19" fill="${INK}">после</text>` +
   // the name
-  `<g transform="translate(330 58) scale(1.7)"><path d="${HEART}" fill="${NOTE}"/></g>` +
-  `<text x="330" y="134" font-family="Unbounded" font-weight="800" font-size="38" fill="#fff">КРАШ ЗА</text>` +
-  `<text x="326" y="214" font-family="Unbounded" font-weight="900" font-size="86" letter-spacing="-3" fill="#fff">30</text>` +
-  `<text x="488" y="214" font-family="Unbounded" font-weight="800" font-size="34" fill="#fff">ДНЕЙ</text>` +
+  `<g transform="translate(330 30) scale(1.7)"><path d="${HEART}" fill="${NOTE}"/></g>` +
+  `<text x="330" y="102" font-family="Unbounded" font-weight="900" font-size="36" fill="#fff">GLOW UP:</text>` +
+  `<text x="330" y="140" font-family="Unbounded" font-weight="800" font-size="31" fill="${NOTE}">ЧЕЛЛЕНДЖ</text>` +
+  `<text x="326" y="218" font-family="Unbounded" font-weight="900" font-size="82" letter-spacing="-3" fill="#fff">30</text>` +
+  `<text x="480" y="218" font-family="Unbounded" font-weight="800" font-size="34" fill="#fff">ДНЕЙ</text>` +
   // the chance meter, as on the logo avatar
   `<rect x="330" y="236" width="280" height="16" rx="8" fill="#fff" fill-opacity=".28"/>` +
   `<rect x="330" y="236" width="196" height="16" rx="8" fill="${NOTE}"/>` +

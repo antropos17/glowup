@@ -2,41 +2,25 @@
 
 Status: **draft, not confirmed by the authors** (2026-11-27). Nothing here is built. When the authors confirm a part, move it to `DECISIONS.md` as a numbered row.
 
-Ruslan chose the RU name on 2026-11-27: **«Краш за 30 дней»**. The rest is still a draft.
+Ruslan decided the name on 2026-11-27: **«Glow Up: челлендж 30 дней»** for the game and all promo (`DECISIONS.md` row 48, which cancels row 41). The rest is still a draft.
 
 Market order (Ruslan, 2026-11-27): the CIS first, international later.
 
 ## 1. Name
 
-### Proposal
+Decided by Ruslan on 2026-11-27: **«Glow Up: челлендж 30 дней»**. The game (`index.html`, `src/`, `content/`) and the promo (logo, bot, end cards) use it. The Telegram channel keeps the English name «Glow Up : 30 days challenge» (`DECISIONS.md` row 43). The international name is not decided.
 
-| | CIS (first) | International (later) |
-|---|---|---|
-| Brand | **Краш за 30 дней** | **Crush in 30** |
-| Store title | «Краш за 30 дней: глоуап-симулятор» | "Crush in 30: Glow Up Simulator" |
-| Said in videos | «Краш за 30 дней» | "Crush in 30" |
+Search facts behind the risk (kept apart from the decision):
+- Fact (web search 2026-11-27, Google Play): "Glow Up" is taken by at least seven apps (Glow Up Story, Glow Up Girl, GlowUp Stylist, Glow Up Idle!, Idle Looksmax: Glow Up, Glow Up by Gamapi, Glow Up: ASMR Makeup). "30 Days Glow Up" and "GlowQuest – 30 Days Challenge" are habit apps. "Picka: 30 Days to Love" is a Korean messenger-style dating sim, close to our genre.
+- Hypothesis: a name built on "Glow Up" is harder to find and to tell apart in store search, and at the same time it catches searches for the 30-day glow-up challenge trend on TikTok and YouTube.
 
-One brand with the same meaning in both markets: «краш» is a common word among young CIS players, so the RU name is a direct translation and the logo, the icon and creator videos carry over to the international launch.
+### To check
 
-Why this shape (fact, hypothesis, taste kept apart):
-- Fact (web search 2026-11-27, Google Play): "Glow Up" is taken by at least seven apps (Glow Up Story, Glow Up Girl, GlowUp Stylist, Glow Up Idle!, Idle Looksmax: Glow Up, Glow Up by Gamapi, Glow Up: ASMR Makeup). "30 Days Glow Up" and "GlowQuest – 30 Days Challenge" are habit apps. "Picka: 30 Days to Love" is a Korean messenger-style dating sim, close to our genre. A brand built on "Glow Up" or "30 Days to Love" would be lost or confused.
-- Fact (same search): no game or app is called exactly "Crush in 30".
-- Hypothesis: "glow up" in the descriptor still catches store search and the 30-day glow-up challenge trend on TikTok and YouTube, while the brand stays distinct.
-- Taste: the brand names the goal (the crush) and the limit (30 days), the two things the game is about.
-
-### Alternatives
-
-1. «30 дней до свидания» / "30 Days to a Date": clear, but close to "Picka: 30 Days to Love".
-2. «Шанс» / "Chance": names the core mechanic (the chance to be liked), but the word is generic and hard to find in search.
-
-### To check before confirming
-
-- [ ] Search App Store and Google Play in RU and EN (only Google Play was searched, through a web search).
-- [ ] Handles free on TikTok, Instagram, YouTube, VK, Telegram.
+- [ ] Search App Store and Google Play in RU for the full name (the search above was Google Play only and not for the full name).
+- [ ] Handles on Instagram, YouTube, VK.
 - [ ] Domain.
-- [ ] Trademarks. Risk to ask a lawyer about: King has defended "Candy Crush" and "Crush"-type marks for games before; "Crush Crush" (a dating idle game on Steam) exists.
+- [ ] Trademarks.
 - [ ] Age rating: a dating theme with a school-reunion crush; check the store rules for the target age.
-- [ ] The full game adds a heroine: «краш» works for either hero.
 
 ## 2. Creator outreach
 
@@ -67,7 +51,7 @@ Hypotheses, to test on the first 5–10 creators:
 
 ### First message (RU, to adapt)
 
-> Привет! Мы делаем мобильную игру «Краш за 30 дней»: у героя 30 реальных дней, чтобы привести себя в порядок и понравиться человеку. Каждый день открывается по настоящему времени, как челлендж. Похоже на твой формат «до/после». Хочешь ранний доступ? Можно вести героя параллельно своему челленджу, а зрители в комментариях выберут, что ответить крашу.
+> Привет! Мы делаем мобильную игру «Glow Up: челлендж 30 дней»: у героя 30 реальных дней, чтобы привести себя в порядок и понравиться человеку. Каждый день открывается по настоящему времени, как челлендж. Похоже на твой формат «до/после». Хочешь ранний доступ? Можно вести героя параллельно своему челленджу, а зрители в комментариях выберут, что ответить крашу.
 
 ### Legal (CIS)
 
@@ -105,6 +89,6 @@ So the reward must not touch the chance, `affinity`, problems, energy or coins (
 
 ## Open questions for the authors
 
-1. RU name: «Краш за 30 дней», chosen by Ruslan on 2026-11-27. Confirm "Crush in 30" for the international launch, or pick an alternative.
+1. International name: not decided (the RU name «Glow Up: челлендж 30 дней» is, `DECISIONS.md` row 48).
 2. The duet card as the only referral reward: yes or no.
 3. Creators in the demo stage: early access and thanks only, or money from the start?
