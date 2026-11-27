@@ -4,16 +4,15 @@ Decisions confirmed by Ruslan in the coordinator chat. They override "proposed" 
 
 ## 2026-11-27 — Promo, TikTok and Telegram
 
-Rows 42–46 were decided in the monetization chat, not in the coordinator chat. Campaign details: `CAMPAIGN_TIKTOK.md`.
+Rows 42–45 were decided in the monetization chat, not in the coordinator chat. Campaign details: `CAMPAIGN_TIKTOK.md`.
 
 | # | Question | Decision |
 |---|---|---|
 | 41 | Promo name | Ruslan, 2026-11-27. The RU name is «Краш за 30 дней». The international name is not decided. |
-| 42 | TikTok before 1000 followers | Ruslan, 2026-11-27. The handle `glowupchallenge30` as text in the profile, on the end card of every video and in a pinned comment; the "Your brand" disclosure on every video; the profile link `t.me/glowupchallenge30` only after 1000 followers. No business account (the chat's summary notes that this was advised and he did not ask for one). |
+| 42 | TikTok before 1000 followers | Ruslan, 2026-11-27. The handle `glowupchallenge30` as text in the profile, on the end card of every video and in a pinned comment; the "Your brand" disclosure on every video; the profile link `t.me/glowupchallenge30` only after 1000 followers. |
 | 43 | Telegram layout | Ruslan, 2026-11-27. The channel `t.me/glowupchallenge30` keeps the English name «Glow Up : 30 days challenge». Two groups: «… \| чат», the discussion group linked to the channel (comments under posts), and the community group «… \| чатик» `@glowup30chat`, where only members can write, with the topics «Отзывы», «Баги», «Идеи», «Болтовня», «Обновления», «Предложения». There are two groups because topics cannot be enabled in a group linked to a channel ([channels.toggleForum](https://core.telegram.org/method/channels.toggleForum), `CHAT_DISCUSSION_UNALLOWED`, checked 2026-11-27). |
-| 44 | Wishlist reward | Ruslan, 2026-11-27. A cosmetic in the game plus a small bonus; votes are mandatory. The exact bonus is open. Under row 6 the reward does not touch coins, energy, affinity or the chance (the reading of the session that recorded it; Ruslan did not object). |
-| 45 | Goal, ad budget, main hook | Ruslan, 2026-11-27. The goal is faster than 300 people in 4 weeks; no new number was named. Ad budget $200, up to $300 if it works, spent only on finished strong videos. The main hook is a realistic Andrey. |
-| 46 | Paid third-party bots | Ruslan, 2026-11-27. None for now: built-in Telegram features and our own bot cover moderation, posting, statistics and giveaways at this scale (recommended in the chat; he did not object). |
+| 44 | Wishlist reward | Ruslan, 2026-11-27: «косметика в игре, небольшой бонус, голосование обязательно». Which bonus is open. |
+| 45 | Ad budget and main hook | Ruslan, 2026-11-27. Ad budget $200, up to $300 if it works, spent only on finished strong videos. The main hook is a realistic Andrey. |
 
 ## 2026-11-24 — Day 7 evening tone
 
