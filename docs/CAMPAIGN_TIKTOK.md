@@ -1,23 +1,28 @@
 # TikTok campaign plan: «Краш за 30 дней», 4 weeks
 
-Status: **accepted by Ruslan on 2026-11-27**. Nothing in it is published or sent yet. Related: `docs/NAME_AND_PROMO.md` (name, creator outreach, referral; draft), `docs/TELEGRAM.md` (bot and Mini App), `promo/shorts/README.md` (ready shorts).
+Status: **accepted by Ruslan on 2026-11-27, revised after the monetization chat** the same day (2026-11-27). Nothing in it is published or sent yet. Related: `docs/NAME_AND_PROMO.md` (name, creator outreach, referral; draft), `docs/TELEGRAM.md` (bot and Mini App), `promo/shorts/README.md` (ready shorts).
 
-Marks: **F** fact (checked in code or docs), **H** hypothesis, **T** taste. Every numeric target is a hypothesis: there is no data yet. Recompute the targets after week 1.
+Marks: **F** fact (checked in code or docs, or on an official page, then with its link), **H** hypothesis, **T** taste. A decision carries Ruslan's name and the date; it is not a fact about TikTok or Telegram. Every numeric target is a hypothesis: there is no data yet. Recompute the targets after week 1.
 
 ## 0. Inputs (Ruslan, 2026-11-27)
 
 | Input | Answer |
 |---|---|
 | Market and language | Russia and the CIS, videos in Russian |
-| Paid budget | up to $100 for tests |
+| Paid budget | $200, up to $300 if it works; only on finished strong videos |
 | Duration | 4 weeks, 2026-11-30 to 2026-12-27, no fixed date |
 | Time | 15+ hours a week |
+| Main hook | a realistic Andrey |
 
-Name: Ruslan chose «Краш за 30 дней» on 2026-11-27; the bot greeting uses it. Not decided by the authors, so not promised to anyone: a bonus for a viewer who comes by a code, money or a share for creators.
+Name: Ruslan chose «Краш за 30 дней» on 2026-11-27; the bot greeting uses it.
+
+Wishlist reward (Ruslan, 2026-11-27): a cosmetic in the game plus a small bonus; votes are mandatory. The exact bonus is open, and the reward is not built. It must not touch coins, energy, affinity or the chance (`DECISIONS.md` rows 6 and 44).
+
+Not decided by the authors, so not promised to anyone: a bonus for a viewer who comes by a creator's code, money or a share for creators.
 
 ## 1. Objective
 
-Primary: **300 people in the bot wishlist in 4 weeks, at least half of them by creator codes (H).**
+Primary (Ruslan, 2026-11-27): **faster than 300 people in the bot wishlist in 4 weeks.** He named no new number or date, so 300 stays in this plan as the floor until he does. At least half of them by creator codes (H).
 
 What the campaign must teach us: which source brings people more cheaply (our own channel or creators), and which video format leads people to the bot best.
 
@@ -32,7 +37,7 @@ Core message (Ruslan's words): the hero says it himself, on camera: «Мы сд�
 | You can lose, and that is fine | light tone, no promise of winning | F (`CLAUDE.md`) |
 | You choose what to reply to the crush | the chat has three reply buttons | F |
 
-Call to action everywhere: **«Демо в канале».**
+Call to action everywhere: **«Демо в канале»**, with the handle `glowupchallenge30` on the end card (Ruslan, 2026-11-27). The main hook is a realistic Andrey (Ruslan, 2026-11-27).
 
 ## 3. Funnel
 
@@ -40,12 +45,21 @@ Call to action everywhere: **«Демо в канале».**
 |---|---|---|---|---|
 | 1 | Video in the feed | views, completion, comments | TikTok Studio | yes |
 | 2 | Profile visit | profile views | TikTok Studio | yes |
-| 3 | Link in the TikTok bio goes to the channel `t.me/glowupchallenge30` | channel joins | Telegram channel statistics | **check** the subscriber threshold for statistics |
+| 3 | No clickable bio link before 1000 followers: the person reads the handle `glowupchallenge30` and finds the channel `t.me/glowupchallenge30` in Telegram by hand | channel joins | Telegram channel statistics | partly (below); **check** the subscriber threshold for statistics |
 | 3a | Pinned channel post: «Играть демо» → bot | visits to the bot | `/stats` by the code in the post link | yes |
 | 4 | `/start <code>` → wishlist | new people and their first code (kept forever, F) | `/stats`, Supabase `wishlist.created_at` | yes |
 | 5 | «Играть день 1» | did the person open the Mini App | none | **no** |
 | 6 | End of Day 1 | did they reach «Ты в списке…» | none | **no** |
 | 7 | After that | they wait for the sequel. There is no broadcast, though the screen says «Бот напишет» (F) | none | not built |
+
+**Step 3 before 1000 followers:**
+- Ruslan, 2026-11-27: the handle `glowupchallenge30` is plain text in the TikTok profile, on the end card of every video and in a pinned comment. The profile link `t.me/glowupchallenge30` is added only after 1000 followers. No business account.
+- F: a profile link needs 1000 followers or a verified business account; links that open other social apps are not supported, links to websites are ([TikTok help](https://www.tiktok.com/support/faq_detail?id=7581821550328896012), checked 2026-11-27). Whether a `t.me` link is accepted is not checked.
+- F: links in comments count as spam, and there is no rule against naming another platform ([Community Guidelines](https://www.tiktok.com/community-guidelines/en/accounts-features), checked 2026-11-27). So the pinned comment carries the handle as text, never a link.
+- Can be counted: views and profile visits (TikTok Studio), channel joins (Telegram), then arrivals in the bot by the weekly code.
+- Cannot be counted: how many people saw the handle and searched for it, which video brought them, whether a new subscriber came from TikTok at all.
+
+**Telegram around the channel** (Ruslan, 2026-11-27): a discussion group «… | чат» linked to the channel (comments under posts) and the community group `@glowup30chat` with the topics «Отзывы», «Баги», «Идеи», «Болтовня», «Обновления», «Предложения». The plan counts neither as a funnel step and sets no target for them.
 
 Source tracking without bot changes: the weekly code (`tt-w1`, `tt-w2`, …) sits in the link of the pinned channel post; change the link every Monday. At this stage almost all new channel subscribers come from TikTok (H), so the weekly code covers them. Per-video tracking is not possible.
 
@@ -61,13 +75,13 @@ Creators: their link goes straight to the bot with their code, otherwise their s
 - early access to Day 8 and later, only after the texts are reviewed (they are not yet, F);
 - their name in the credits, only if Ruslan decides so (no credits screen exists).
 
-**Not promised:** money, a share, a bonus for viewers. None of these is decided or built (F).
+**Not promised:** money, a share, a bonus for coming by a creator's code. None of these is decided or built (F). The wishlist reward (section 0) is decided only in principle: its bonus is open, it is not built, and nothing says yet that letters or videos may announce it.
 
 **Order for the first 5–10 creators:**
 1. The first 2–3 are people Ruslan knows: they test the whole chain. Then 5–7 cold contacts.
 2. Ruslan sends the letter himself, from the template in `NAME_AND_PROMO.md` with the name «Краш за 30 дней».
 3. The creator agrees → writes `/start` to the bot → Ruslan finds their id (the newest row in Supabase `wishlist`) → `/addcode <nick> <Name> <id>` → the bot replies with the link; Ruslan forwards it. The owner must be set at once: a repeated `/addcode` on the same code is refused and there is no "change owner" command (F).
-4. The creator puts the link in their bio or a pinned comment and checks `/stats` themselves.
+4. The creator puts the link in their profile and checks `/stats` themselves. Not in a comment: links in comments count as spam (F). A profile link needs 1000 followers, which the 5–50k creators have, but whether a `t.me` link is accepted is not checked (section 3).
 5. After 72 hours Ruslan records their views (from the creator's screenshot) and the `/stats` count in the creator table.
 
 ## 5. Pace and calendar
@@ -81,11 +95,13 @@ On 15+ hours a week: 5 videos in week 1, then 7 a week (H). 26 videos in total.
 | Follow-up «вы выбрали 2, вот что ответила Алина» | 1 | the series hook; ends with «демо в канале» |
 | Drawn (HyperFrames) | 1 | the three ready shorts already end on «Демо — в канале» (F, `promo/shorts/README.md`) |
 
+Every video of ours, in any format (Ruslan, 2026-11-27): the handle `glowupchallenge30` on the end card, the "Your brand" disclosure, a pinned comment with the handle as text. No end card in `promo/shorts/` carries the handle yet (F, checked 2026-11-27).
+
 | Week | Videos | Creators | Code in the pinned post | Other |
 |---|---|---|---|---|
 | 1 (30.11–06.12) | 3 drawn (ready) + 2 hero on camera | 10 letters, 2–3 known creators with codes | `tt-w1` | funnel check on a phone |
 | 2 (07–13.12) | 3 «ответ» + 1 follow-up + 2 hero + 1 drawn | 15 more letters | `tt-w2` | first recompute of the targets |
-| 3 (14–20.12) | the same, double the best format | 15 more letters, follow-ups to those who answered | `tt-w3` | **$100:** the 2 best videos, $50 each via Promote, bot links `ad-a` / `ad-b` |
+| 3 (14–20.12) | the same, double the best format | 15 more letters, follow-ups to those who answered | `tt-w3` | **Paid:** $200, up to $300 if it works, via Promote, only on finished strong videos; the split between videos is not decided; bot links `ad-a` / `ad-b` only if a paid video can carry one (section 6) |
 | 4 (21–27.12) | the same, pre-New Year themes (T) | creator results | `tt-w4` | final report, decision on paying creators |
 
 If the session making the live shorts has not added the «по мотивам тренда» line yet, pass it on through the main chat.
@@ -94,12 +110,12 @@ If the session making the live shorts has not added the «по мотивам т
 
 | Metric | Target (H) | Source | How often |
 |---|---|---|---|
-| **Primary: people in the wishlist** | cumulative: week 1 ≥20, week 2 ≥60, week 3 ≥150, week 4 ≥300 | `/stats` (admin), SQL by day and code in Supabase | glance daily, review on Mondays |
+| **Primary: people in the wishlist** | cumulative floor: week 1 ≥20, week 2 ≥60, week 3 ≥150, week 4 ≥300 (the goal is to be faster, section 1) | `/stats` (admin), SQL by day and code in Supabase | glance daily, review on Mondays |
 | Share of people by creator codes | ≥50% | `/stats` | Monday |
 | Wishlist people per 1000 views | ≥3 | Supabase ÷ TikTok Studio | Monday |
 | Median views of an own video at 72 h | ≥1000 by week 4 | TikTok Studio | Monday |
 | Creators: written / answered / posted with a code | 40 / ≥8 / ≥5 | creator table + `/stats` | Monday |
-| Cost per person in the paid test | ≤$0.5; above $1 the test is not extended | Promote + `ad-*` codes | end of week 3 |
+| Cost per person in the paid test ($200, up to $300) | ≤$0.5; above $1 the budget is not raised to $300 (H: what "works" means is not decided) | Promote spend + `ad-*` codes, if they can be used (below) | end of week 3 |
 
 ### What cannot be measured now, and what it needs
 
@@ -108,26 +124,29 @@ If the session making the live shorts has not added the «по мотивам т
 | Mini App opens and the end of Day 1 | a small events table and `opened` / `day1_done` writes from the Mini App, checked by `initData` (separate session) |
 | The promise «Бот напишет, когда выйдет продолжение» | a broadcast to the wishlist; it needs the bot token as a function secret (F: not built) |
 | Which video brought a person | not possible; weekly codes only |
-| Clicks on the bio link | depend on the TikTok account type; check |
+| People who search the handle in Telegram (before 1000 followers) | not possible; only channel joins show |
+| A clickable bot link on a paid video (`ad-a` / `ad-b`) | not checked whether Promote can attach one to this account before 1000 followers; check before paying. If it cannot, the paid test has no codes of its own: only the daily wishlist pace on paid days against the days before (H: rough, mixes sources) |
+| Clicks on the profile link (after 1000 followers) | check |
 
 ## 7. Risks
 
 | Risk | Mitigation |
 |---|---|
 | In Russia TikTok may not show new videos, and Promote may not reach a Russian audience (H: so it was from 2022; not checked now) | on day 1 ask someone with a Russian SIM to find our video. If it is not visible, TikTok works for the CIS and Russia moves to other platforms (outside this plan) |
-| The bio link may not be clickable on a personal account with few followers (H) | check; if so, switch to a business account, or put the channel name as text and pin a comment with the link |
-| The three ready shorts and the logo mark (`promo/avatars`) still say «Краш за 30» (F); the bot and the channel post say «Краш за 30 дней» | change the end card and the logo, then re-render the shorts |
+| No clickable profile link before 1000 followers (F, [TikTok help](https://www.tiktok.com/support/faq_detail?id=7581821550328896012)); some people will not type the handle into Telegram (H) | the handle as text in the profile, on the end card and in a pinned comment; the profile link after 1000 followers; no business account (Ruslan, 2026-11-27) |
+| The `t.me` profile link may be refused even after 1000 followers: the same help page says links that open other social apps are not supported (F); whether `t.me` counts is not checked (H) | check on reaching 1000 followers; if refused, ask Ruslan |
+| The three drawn shorts and the logo mark (`promo/avatars`) still say «Краш за 30» (F); the bot and the channel post say «Краш за 30 дней». None of the end cards, drawn or live, carries the handle `glowupchallenge30` (F, `promo/shorts/*/index.html`) | fix the name on the drawn end cards and the logo, add the handle to every end card, re-render before publishing |
 | The Mini App was never checked in a real Telegram client on a phone (F, `TELEGRAM.md`) | walk the whole funnel before the first video of week 1 |
 | Day 1 follows real local time (F); a person who arrives at night may see something odd | check during the funnel walk |
 | The channel has no pinned post with a button to the bot, people get lost at step 3a | make the pinned post before the first video (Ruslan publishes it) |
 | Creators do not respond without money | 40 letters instead of 10; decide on payment at the end of week 3 |
 | Russian advertising law: a paid integration must be labelled and registered (erid) (F); barter may count too | ask a lawyer before the first payment or barter |
-| TikTok rules: a realistic AI person on camera needs the AI-generated label (F, TikTok rules; check the current wording) | the "AI-generated" label on every Higgsfield video and every video with the ElevenLabs voice. No fake engagement, no reviews from our own accounts, no promise like «точно понравишься» |
+| TikTok rules: a realistic AI person on camera needs the AI-generated label (F, TikTok rules; check the current wording). Commercial content must be disclosed, and links in comments count as spam (F, [Community Guidelines](https://www.tiktok.com/community-guidelines/en/accounts-features), checked 2026-11-27) | the "AI-generated" label on every Higgsfield video and every video with the ElevenLabs voice; the "Your brand" disclosure on every video (Ruslan, 2026-11-27); the pinned comment without a link. No fake engagement, no reviews from our own accounts, no promise like «точно понравишься» |
 
 ## 8. First three days
 
 | Day | What to do |
 |---|---|
-| Fri 27.11 | check whether a video is visible from Russia; check that the bio link is clickable; `/addcode tt-w1 …`; put the channel link in the TikTok bio; draft the pinned channel post with `t.me/glowupchallenge30bot?start=tt-w1` (Ruslan publishes) |
-| Sat 28.11 | walk the funnel on a phone: TikTok → channel → bot → «Играть день 1» → end of the day; build the table of 40 creators (nick, segment, followers, tone, contact); decide the bot greeting |
-| Sun 29.11 | captions and the AI label for the 5 videos of week 1, scheduled; send the first 10 letters (Ruslan himself) |
+| Fri 27.11 | check whether a video is visible from Russia; `/addcode tt-w1 …`; write the handle `glowupchallenge30` as text in the TikTok profile (no link yet); draft the pinned channel post with `t.me/glowupchallenge30bot?start=tt-w1` (Ruslan publishes) |
+| Sat 28.11 | walk the funnel on a phone: TikTok profile → search the handle in Telegram → channel → bot → «Играть день 1» → end of the day; build the table of 40 creators (nick, segment, followers, tone, contact); decide the bot greeting |
+| Sun 29.11 | the handle on the end cards of the 5 videos of week 1; captions, the AI label and the "Your brand" disclosure; schedule them, and pin the comment with the handle under each one once it is live; send the first 10 letters (Ruslan himself) |
