@@ -566,9 +566,18 @@ function timelapseFrames(state: GameState, withNow: boolean): { label: string; l
 function Timelapse({ frames }: { frames: { label: string; look: Look }[] }) {
   const [i, setI] = useState(frames.length - 1);
   const cur = frames[Math.min(i, frames.length - 1)];
+  const seg = useRef<HTMLDivElement>(null);
+  // the strip scrolls sideways once the frames outgrow it: keep the picked chip in view, from the start
+  // the last one, so «Сейчас» is visible without a swipe
+  useEffect(() => {
+    const el = seg.current, b = el?.querySelector<HTMLElement>('[aria-pressed="true"]');
+    if (!el || !b) return;
+    if (b.offsetLeft < el.scrollLeft) el.scrollLeft = b.offsetLeft - 3;
+    else if (b.offsetLeft + b.offsetWidth > el.scrollLeft + el.clientWidth) el.scrollLeft = b.offsetLeft + b.offsetWidth - el.clientWidth + 3;
+  }, [i, frames.length]);
   return (
     <>
-      <div class="seg" role="group" aria-label="Какой кадр показать">
+      <div class="seg" ref={seg} role="group" aria-label="Какой кадр показать">
         {frames.map((f, n) => <button aria-pressed={n === Math.min(i, frames.length - 1)} onClick={() => setI(n)}>{f.label}</button>)}
       </div>
       <div class="mirror-lg"><Body look={cur.look} title={cur.label} /></div>
@@ -668,6 +677,8 @@ function Shop({ state, commit }: { state: GameState; commit: (s: GameState) => v
     const active = courseActive(state, it);
     // an owned item is counted and applied under «Твои вещи» only; the shop card just sells
     const usable = !selling && have > 0 && !!it.onUse;
+    // useItem refuses an item that costs more energy than is left: say so instead of a dead button
+    const tired = state.energy < (it.energy ?? 0);
     return (
       <div class="item">
         <div class="item-head">
@@ -684,9 +695,10 @@ function Shop({ state, commit }: { state: GameState; commit: (s: GameState) => v
               : coins !== undefined
               ? <button class="buy" disabled={state.coins < coins} onClick={() => { commit(buy(content, state, it.id)); play('coins'); }}>Купить <Icon name="coin" size={16} />{coins}</button>
               : <button class="buy" disabled>За реальные деньги, в прототипе выключено</button>)}
-            {usable && <button class="use" disabled={active} onClick={() => commit(useItem(content, state, it.id))}>Применить</button>}
+            {usable && <button class="use" disabled={active || tired} onClick={() => commit(useItem(content, state, it.id))}>Применить</button>}
           </div>
         )}
+        {usable && !active && tired && <p class="why">Не хватает энергии</p>}
       </div>
     );
   };

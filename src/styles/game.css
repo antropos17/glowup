@@ -178,7 +178,10 @@
 .empty { color: var(--ink-soft); padding: 18px 4px; }
 
 /* ---------- шкалы проблем ---------- */
-.bars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px 10px; padding: 6px 14px 5px; background: var(--paper); border-top: 1px solid var(--tile-line); }
+.bars { display: grid; grid-template-columns: repeat(3, minmax(min-content, 1fr)); gap: 4px 10px; padding: 6px 14px 18px; background: var(--paper); border-top: 1px solid var(--tile-line); }
+/* a column is never narrower than its label with the percent, so «Уверенность» shows in full (on 320px
+   phones the gaps and the font tighten to leave room); the bottom padding keeps the «Уход» line clear of
+   the «+» ring, which rises 29px above the nav */
 .bar { min-width: 0; }
 .bar-top { display: flex; justify-content: space-between; align-items: center; font-size: 12px; line-height: 1.25; gap: 4px; }
 .bar-top span:first-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -187,6 +190,10 @@
 .bar-line i { display: block; height: 100%; border-radius: 3px; background: var(--mint); transition: width .5s ease; }
 .bar-line i[data-low] { background: var(--bad); }
 .bar-line i[data-mid] { background: #E2A21A; }
+@media (max-width: 340px) {
+  .bars { gap: 4px 6px; padding-inline: 10px; }
+  .bar-top { font-size: 11px; }
+}
 
 /* ---------- нижняя панель ---------- */
 .nav { display: grid; grid-template-columns: 1fr 1fr 76px 1fr 1fr; align-items: end; padding: 4px 6px calc(8px + env(safe-area-inset-bottom, 0px)); background: var(--paper); }
@@ -247,12 +254,16 @@
   height: calc(14px + env(safe-area-inset-bottom, 0px)); margin: -8px -18px 0;
 }
 .grip { align-self: center; width: 40px; height: 4px; border-radius: 2px; background: var(--tile-line); }
-.sheet-head { display: flex; gap: 10px; align-items: flex-start; }
-.sheet-head h2 { flex: 1; font-family: var(--display); font-weight: 600; font-size: 18px; line-height: 1.25; text-wrap: balance; }
+.sheet-head { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-start; }
+/* the title takes the room left of the button, but never less than its longest word: when a word like
+   «присматривается» does not fit beside «Отложить» on a 320px phone, the button moves under the title,
+   to the right, instead of being pushed off the sheet */
+.sheet-head h2 { flex: 1 1 0; min-width: min-content; font-family: var(--display); font-weight: 600; font-size: 18px; line-height: 1.25; text-wrap: balance; }
 .x { position: relative; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--tile); flex: none; }
 /* touch area 44×44 around the 34px circle, as .snd does */
 .x::before { content: ''; position: absolute; inset: -5px; }
 /* on story cards the control is a «Отложить» pill with a clock: the card comes back, it is not dismissed */
+.sheet-head .x { margin-left: auto; }
 .x.later { width: auto; display: inline-flex; gap: 5px; padding: 0 12px 0 9px; border-radius: var(--r-chip); font-size: 13px; font-weight: 600; white-space: nowrap; }
 .speaker { align-self: flex-start; font-size: 12.5px; font-weight: 600; padding: 2px 10px; border-radius: var(--r-chip); background: var(--note); }
 .sheet-text { font-size: 16px; line-height: 1.5; }
@@ -284,9 +295,10 @@
 }
 .mirror-lg::before { content: ''; position: absolute; top: 26px; left: 30px; width: 14px; height: 120px; border-radius: 7px; background: #fff; opacity: .55; transform: rotate(18deg); }
 .mirror-lg svg { width: 170px; height: auto; display: block; position: relative; }
-.seg { align-self: center; display: inline-flex; background: var(--paper); border-radius: var(--r-chip); padding: 3px; }
-/* chips wrap into touching rows, so the 44px touch height is the chip itself, not an overlapping halo */
-.seg button { min-height: 44px; padding: 6px 16px; border-radius: var(--r-chip); font-size: 13.5px; font-weight: 500; color: var(--ink-soft); }
+.seg { position: relative; align-self: center; display: inline-flex; max-width: 100%; background: var(--paper); border-radius: var(--r-chip); padding: 3px; }
+/* the frames stay in one row and scroll sideways once they outgrow the screen (Day 3 on at 320px),
+   so the pill keeps its shape; the 44px touch height is the chip itself */
+.seg button { flex: none; white-space: nowrap; min-height: 44px; padding: 6px 16px; border-radius: var(--r-chip); font-size: 13.5px; font-weight: 500; color: var(--ink-soft); }
 .seg button[aria-pressed='true'] { background: var(--ink); color: #fff; }
 .rows { display: flex; flex-direction: column; gap: 6px; }
 .row { display: flex; align-items: center; gap: 10px; background: var(--paper); border-radius: var(--r-card); padding: 10px 12px; }
@@ -367,7 +379,8 @@
 .countdown b { color: var(--rasp-deep); font-weight: 700; font-size: 17px; }
 .game button.choice .choice-main { flex: 1; display: flex; flex-direction: column; gap: 2px; }
 .game button.choice small { font-size: 12.5px; font-weight: 400; color: var(--ink-soft); }
-.seg { flex-wrap: wrap; justify-content: center; }
+.seg { flex: none; overflow-x: auto; scrollbar-width: none; overscroll-behavior-x: contain; }
+.seg::-webkit-scrollbar { display: none; }
 .daycard { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; align-items: center; }
 .frame { border-radius: 14px; background: var(--tile); overflow: hidden; display: grid; place-items: end center; }
 .frame svg { width: 96px; height: auto; display: block; }

@@ -44,7 +44,7 @@
 @media (min-height: 600px) {
   .in-howto { height: 190px; }
   .in-parts { display: flex; justify-content: center; gap: 8px; bottom: 64px; }
-  .in-parts span { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--paper); box-shadow: 0 2px 0 var(--tile-line); }
+  .in-parts > span { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--paper); box-shadow: 0 2px 0 var(--tile-line); }
   .in-parts [data-part='morning'] { background: var(--morning); }
   .in-parts [data-part='day'] { background: var(--day); }
   .in-parts [data-part='evening'] { background: var(--evening); }
