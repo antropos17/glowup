@@ -28,10 +28,14 @@ const s = { archetypeId: andrey.id, problems: andrey.problems, lookPatch: {} } a
 
 /** Day 1: the archetype at its starting problem levels. */
 const before: Look = currentLook(c, s, andrey.problems, {});
-/** Every problem solved, plus the look effects the cards give: shaved (Day 14), round glasses and a blue V-neck top. */
+/**
+ * Every problem solved, shaved (Day 14), in the blue of the game's new top. Promo liberties asked by Ruslan
+ * (2026-11-27), not in the game: a collared shirt, fuller hair, no glasses, slimmer than the engine's weight 50.
+ */
 const solved = Object.fromEntries(Object.keys(andrey.problems).map((k) => [k, 0]));
 const after: Look = currentLook(c, s, solved, {
-  facial: 'none', razorBurn: false, glasses: 'round', neckline: 'v', topColor: '#4A6FA5',
+  facial: 'none', razorBurn: false, glasses: 'none', neckline: 'collar', topColor: '#4A6FA5',
+  hair: 'side', weight: 35,
 });
 
 // ---------- palette (src/styles/game.css) ----------
