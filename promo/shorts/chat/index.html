@@ -9,101 +9,185 @@
       @font-face { font-family: "Unbounded30"; src: url("assets/fonts/unbounded-latin-wght-normal.woff2") format("woff2"); font-weight: 200 900; unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2122; }
       @font-face { font-family: "Golos30"; src: url("assets/fonts/golos-text-cyrillic-wght-normal.woff2") format("woff2"); font-weight: 400 900; unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
       @font-face { font-family: "Golos30"; src: url("assets/fonts/golos-text-latin-wght-normal.woff2") format("woff2"); font-weight: 400 900; unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2122; }
-      :root { --paper: #F4EFE6; --ink: #22212A; --accent: #FF5436; --plus: #17A56B; --minus: #E5484D; --chance: #3B5BFF; --muted: #5F5B67; --accent-ink: #D23A1C; }
+      :root { --paper: #F4EFE6; --ink: #22212A; --accent: #FF5436; --accent-ink: #D23A1C; --plus: #17A56B; --plus-ink: #0E7A4C; --minus: #E5484D; --chance: #3B5BFF; --muted: #5F5B67; }
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--paper); }
-      #root { position: relative; width: 1080px; height: 1920px; background: var(--paper); font-family: "Golos30", sans-serif; color: var(--ink); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--paper); font-family: "Golos30", sans-serif; color: var(--ink); }
       .layer { position: absolute; inset: 0; }
-      .title { position: absolute; left: 110px; right: 110px; top: 290px; text-align: center; font-family: "Unbounded30", sans-serif; font-weight: 800; font-size: 76px; line-height: 1.1; letter-spacing: -0.02em; }
+      .inner { position: absolute; inset: 0; }
+      .title { position: absolute; left: 70px; right: 70px; top: 262px; text-align: center; font-family: "Unbounded30", sans-serif; font-weight: 900; font-size: 92px; line-height: 1.08; letter-spacing: -0.02em; }
       .title em { font-style: normal; color: var(--accent-ink); }
+      .card { position: absolute; left: 50px; right: 50px; background: #fff; border-radius: 52px; box-shadow: 0 30px 70px rgba(34, 33, 42, 0.14); }
+      .pill { display: inline-block; border: 4px solid var(--ink); border-radius: 32px; padding: 18px 30px; font-size: 40px; line-height: 1.2; font-weight: 700; background: var(--paper); }
+      /* HUD plate in the game's palette: label, bar and a rolling value */
+      .hud { position: absolute; left: 90px; right: 90px; height: 132px; background: var(--ink); color: var(--paper); border-radius: 36px; padding: 20px 34px; }
+      .hud .lab { font-size: 34px; font-weight: 700; }
+      .hud .val { position: absolute; right: 34px; top: 14px; font-family: "Unbounded30", sans-serif; font-weight: 900; font-size: 58px; }
+      .hud .bar { position: absolute; left: 34px; right: 34px; bottom: 24px; height: 18px; border-radius: 9px; background: rgba(244, 239, 230, 0.18); overflow: hidden; }
+      .hud .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 9px; background: var(--paper); }
+      .badge { position: absolute; font-family: "Unbounded30", sans-serif; font-weight: 900; font-size: 96px; letter-spacing: -0.02em; }
+      .badge.minus { color: var(--minus); }
+      .badge.plus { color: var(--plus-ink); }
+      .burst { position: absolute; width: 0; height: 0; }
+      .burst i { position: absolute; left: -14px; top: -14px; width: 28px; height: 28px; border-radius: 14px; opacity: 0; }
+      #flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; z-index: 50; }
 
-      #phone { position: absolute; left: 100px; width: 880px; top: 560px; height: 950px; background: #fff; border-radius: 48px; box-shadow: 0 24px 60px rgba(34, 33, 42, 0.12); padding: 28px 36px; }
-      .head { display: flex; align-items: center; gap: 22px; padding-bottom: 22px; border-bottom: 2px solid #EEE8DD; }
-      .head img { width: 92px; height: 104px; border-radius: 46px; background: #F1E3D6; object-fit: cover; }
-      .head b { display: block; font-size: 42px; font-weight: 700; }
-      .head span { font-size: 28px; color: #0E7A4C; font-weight: 600; }
-      .msgs { padding-top: 26px; display: flex; flex-direction: column; gap: 16px; }
-      .bubble { align-self: flex-start; max-width: 680px; background: #EFEAF7; border-radius: 34px 34px 34px 10px; padding: 20px 28px; font-size: 40px; line-height: 1.26; font-weight: 500; }
-      .hint { margin-top: 26px; text-align: center; font-size: 28px; color: var(--muted); font-weight: 500; }
-      .btns { position: absolute; left: 36px; right: 36px; bottom: 32px; display: flex; flex-direction: column; gap: 16px; }
-      .btn { position: relative; border: 3px solid var(--ink); border-radius: 30px; padding: 18px 24px 18px 92px; font-size: 33px; line-height: 1.25; font-weight: 600; background: var(--paper); }
-      .num { position: absolute; left: 20px; top: 50%; margin-top: -29px; width: 58px; height: 58px; border-radius: 29px; background: var(--ink); color: var(--paper); font-family: "Unbounded30", sans-serif; font-weight: 800; font-size: 30px; display: flex; align-items: center; justify-content: center; }
-      #finger { position: absolute; width: 120px; height: 120px; border-radius: 60px; border: 6px solid var(--accent); background: rgba(255, 84, 54, 0.15); left: 800px; top: 1111px; }
-      .sub { position: absolute; left: 110px; right: 110px; top: 470px; text-align: center; font-size: 40px; font-weight: 600; color: var(--muted); }
-
-      #endcard { background: var(--ink); color: var(--paper); }
-      #endcard .logo { position: absolute; left: 90px; right: 90px; top: 700px; text-align: center; font-family: "Unbounded30", sans-serif; font-weight: 900; font-size: 128px; line-height: 1.02; letter-spacing: -0.03em; }
+      #endcard { background: var(--ink); color: var(--paper); z-index: 20; }
+      #endcard .logo { position: absolute; left: 60px; right: 60px; top: 820px; text-align: center; font-family: "Unbounded30", sans-serif; font-weight: 900; font-size: 158px; line-height: 1.0; letter-spacing: -0.03em; }
       #endcard .logo em { font-style: normal; color: var(--accent); }
-      #endcard .cta { position: absolute; left: 110px; right: 110px; top: 1050px; text-align: center; font-size: 46px; line-height: 1.3; font-weight: 600; }
-      #endcard img { position: absolute; left: 415px; top: 400px; width: 250px; height: 283px; }
+      #endcard .cta { position: absolute; left: 60px; right: 60px; top: 1210px; text-align: center; font-size: 84px; font-family: Unbounded30, sans-serif; line-height: 1.25; font-weight: 700; }
+      #endcard .cta em { font-style: normal; color: var(--accent); }
+      #endcard img { position: absolute; left: 340px; top: 300px; width: 400px; height: 452px; }
+      #phone { position: absolute; left: 40px; right: 40px; top: 560px; height: 975px; background: #fff; border-radius: 56px; box-shadow: 0 30px 70px rgba(34, 33, 42, 0.14); padding: 30px 40px; }
+      .head { display: flex; align-items: center; gap: 26px; padding-bottom: 24px; border-bottom: 3px solid #EEE8DD; }
+      .head img { width: 112px; height: 126px; border-radius: 56px; background: #F1E3D6; }
+      .head b { display: block; font-size: 50px; font-weight: 800; }
+      .head span { font-size: 34px; color: var(--plus-ink); font-weight: 700; }
+      .bubble { position: absolute; left: 40px; max-width: 840px; background: #EFEAF7; border-radius: 40px 40px 40px 12px; padding: 22px 32px; font-size: 46px; line-height: 1.25; font-weight: 600; transform-origin: 0% 100%; }
+      .typing { position: absolute; left: 40px; top: 360px; background: #EFEAF7; border-radius: 40px; padding: 26px 34px; display: flex; gap: 14px; }
+      .typing i { width: 22px; height: 22px; border-radius: 11px; background: #8A8594; display: block; }
+      .hint { position: absolute; left: 70px; right: 70px; top: 492px; text-align: center; font-size: 34px; color: var(--muted); font-weight: 600; }
+      .btns { position: absolute; left: 34px; right: 34px; bottom: 30px; display: flex; flex-direction: column; gap: 16px; }
+      .btn { position: relative; border: 4px solid var(--ink); border-radius: 34px; padding: 18px 26px 18px 104px; font-size: 38px; line-height: 1.22; font-weight: 700; background: var(--paper); }
+      .num { position: absolute; left: 22px; top: 50%; margin-top: -34px; width: 68px; height: 68px; border-radius: 34px; background: var(--ink); color: var(--paper); font-family: "Unbounded30", sans-serif; font-weight: 900; font-size: 36px; display: flex; align-items: center; justify-content: center; }
+      #finger { position: absolute; width: 130px; height: 130px; border-radius: 65px; border: 8px solid var(--accent); background: rgba(255, 84, 54, 0.18); left: 860px; top: 0; z-index: 5; }
+      .sub { position: absolute; left: 70px; right: 70px; top: 482px; text-align: center; font-size: 40px; font-weight: 800; color: var(--ink); }
     </style>
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="18" data-width="1080" data-height="1920">
-      <!-- hook title, frame 0 -->
-      <div id="title-a" class="clip layer" data-start="0" data-duration="12.5" data-track-index="1">
-        <h1 class="title" id="ta-text">Ответит <em>или нет?</em></h1>
+      <div id="title-a" class="clip layer" data-start="0" data-duration="12" data-track-index="1">
+        <h1 class="title" id="ta-text" style="font-size: 100px">Ответит<br /><em>или нет?</em></h1>
+        <div class="hint" id="hint">Что нажмёшь, то и уйдёт, слово в слово.</div>
       </div>
-      <div id="title-b" class="clip layer" data-start="12.5" data-duration="2.5" data-track-index="1">
-        <h1 class="title" id="tb-text">А ты бы что <em>ответил?</em></h1>
+      <div id="title-b" class="clip layer" data-start="12" data-duration="3" data-track-index="1">
+        <h1 class="title" id="tb-text">А ты бы что<br /><em>ответил?</em></h1>
         <div class="sub" id="tb-sub">1, 2 или 3? Пиши в комментариях</div>
+        <div class="burst" id="q-burst" style="left: 540px; top: 370px"></div>
       </div>
 
-      <!-- the in-game chat (Day 5–6 lines from content/chat.json and card K6-01) -->
+      <!-- in-game chat: Day 5–6 lines from content/chat.json and card K6-01 -->
       <div id="chat" class="clip layer" data-start="0" data-duration="15" data-track-index="2">
-        <div id="phone">
-          <div class="head">
-            <img src="assets/alina.svg" alt="" />
-            <div><b>Алина</b><span>в сети</span></div>
+        <div class="inner" id="chat-in">
+          <div id="phone">
+            <div class="head"><img src="assets/alina.svg" alt="" /><div><b>Алина</b><span>в сети</span></div></div>
+            <div class="bubble" id="m1" style="top: 190px">Привет. Оксана собирает список на встречу.</div>
+            <div class="typing" id="typing"><i></i><i></i><i></i></div>
+            <div class="bubble" id="m2" style="top: 360px">Места в кафе считают заранее. Тебя записывать?</div>
+            <div class="btns">
+              <div class="btn" id="b1"><span class="num" id="n1">1</span>Да, записывай. А кто ещё из наших будет?</div>
+              <div class="btn" id="b2"><span class="num" id="n2">2</span>Записывай. Обещаю не петь, как на выпускном.</div>
+              <div class="btn" id="b3"><span class="num" id="n3">3</span>Да, записывай.</div>
+            </div>
           </div>
-          <div class="msgs">
-            <div class="bubble" id="m1">Привет. Оксана собирает список на встречу.</div>
-            <div class="bubble" id="m2">Места в кафе считают заранее. Тебя записывать?</div>
-          </div>
-          <div class="hint" id="hint">Что нажмёшь, то и уйдёт, слово в слово.</div>
-          <div class="btns">
-            <div class="btn" id="b1"><span class="num">1</span>Да, записывай. А кто ещё из наших будет?</div>
-            <div class="btn" id="b2"><span class="num">2</span>Записывай. Обещаю не петь, как на выпускном.</div>
-            <div class="btn" id="b3"><span class="num">3</span>Да, записывай.</div>
-          </div>
+          <div id="finger"></div>
         </div>
-        <div id="finger"></div>
       </div>
-
       <div id="endcard" class="clip layer" data-start="15" data-duration="3" data-track-index="3">
-        <img id="end-hero" src="assets/andrey.svg" alt="" />
-        <div class="logo" id="end-logo">Краш<br /><em>за 30</em></div>
-        <div class="cta" id="end-cta">Демо на 7 дней — играй бесплатно</div>
+        <div class="inner" id="end-in">
+          <img id="end-hero" src="assets/andrey.svg" alt="" />
+          <div class="logo" id="end-logo">Краш<br /><em>за 30</em></div>
+          <div class="burst" id="end-burst" style="left: 540px; top: 960px"></div>
+          <div class="cta" id="end-cta">Демо — <em>в канале</em></div>
+        </div>
       </div>
-
-      <audio id="music" class="clip" src="assets/music.mp3" data-start="0" data-duration="18" data-track-index="6" data-volume="0.9"></audio>
-      <audio id="sfx-m2" class="clip" src="assets/sfx/message.mp3" data-start="1.0" data-duration="0.38" data-track-index="7" data-volume="1"></audio>
-      <audio id="sfx-b1" class="clip" src="assets/sfx/tap.mp3" data-start="4.0" data-duration="0.11" data-track-index="7" data-volume="1"></audio>
-      <audio id="sfx-b2" class="clip" src="assets/sfx/tap.mp3" data-start="5.0" data-duration="0.11" data-track-index="7" data-volume="1"></audio>
-      <audio id="sfx-b3" class="clip" src="assets/sfx/tap.mp3" data-start="6.0" data-duration="0.11" data-track-index="7" data-volume="1"></audio>
-      <audio id="sfx-end" class="clip" src="assets/sfx/open.mp3" data-start="15" data-duration="0.45" data-track-index="7" data-volume="1"></audio>
+      <div id="flash" data-layout-ignore></div>
+      <audio id="music" class="clip" src="assets/music.mp3" data-start="0" data-duration="18" data-track-index="6" data-volume="0.3"></audio>
+      <audio id="vo-c1" class="clip" src="assets/vo/c1.mp3" data-start="0.2" data-duration="2.95" data-track-index="9" data-volume="1"></audio>
+      <audio id="vo-c2" class="clip" src="assets/vo/c2.mp3" data-start="4.3" data-duration="2.39" data-track-index="9" data-volume="1"></audio>
+      <audio id="vo-c3" class="clip" src="assets/vo/c3.mp3" data-start="12.1" data-duration="2.07" data-track-index="9" data-volume="1"></audio>
+      <audio id="vo-c4" class="clip" src="assets/vo/c4.mp3" data-start="15.6" data-duration="2.39" data-track-index="9" data-volume="1"></audio>
+      <audio id="sfx-01" class="clip" src="assets/sfx/message.mp3" data-start="0.9" data-duration="1.14" data-track-index="7" data-volume="0.7"></audio>
+      <audio id="sfx-02" class="clip" src="assets/sfx/tap-a.mp3" data-start="2.9" data-duration="0.26" data-track-index="8" data-volume="0.9"></audio>
+      <audio id="sfx-03" class="clip" src="assets/sfx/tap-b.mp3" data-start="3.5" data-duration="0.19" data-track-index="7" data-volume="0.9"></audio>
+      <audio id="sfx-04" class="clip" src="assets/sfx/tap-a.mp3" data-start="4.1" data-duration="0.26" data-track-index="8" data-volume="0.9"></audio>
+      <audio id="sfx-05" class="clip" src="assets/sfx/tap-a.mp3" data-start="5.28" data-duration="0.26" data-track-index="7" data-volume="0.9"></audio>
+      <audio id="sfx-06" class="clip" src="assets/sfx/tap-b.mp3" data-start="5.93" data-duration="0.19" data-track-index="8" data-volume="0.9"></audio>
+      <audio id="sfx-07" class="clip" src="assets/sfx/tap-a.mp3" data-start="6.58" data-duration="0.26" data-track-index="7" data-volume="0.9"></audio>
+      <audio id="sfx-08" class="clip" src="assets/sfx/tap-b.mp3" data-start="7.23" data-duration="0.19" data-track-index="8" data-volume="0.9"></audio>
+      <audio id="sfx-09" class="clip" src="assets/sfx/tap-a.mp3" data-start="7.88" data-duration="0.26" data-track-index="7" data-volume="0.9"></audio>
+      <audio id="sfx-10" class="clip" src="assets/sfx/tap-b.mp3" data-start="8.53" data-duration="0.19" data-track-index="8" data-volume="0.9"></audio>
+      <audio id="sfx-11" class="clip" src="assets/sfx/tap-a.mp3" data-start="9.18" data-duration="0.26" data-track-index="7" data-volume="0.9"></audio>
+      <audio id="sfx-12" class="clip" src="assets/sfx/tap-b.mp3" data-start="9.83" data-duration="0.19" data-track-index="8" data-volume="0.9"></audio>
+      <audio id="sfx-13" class="clip" src="assets/sfx/tap-a.mp3" data-start="10.48" data-duration="0.26" data-track-index="7" data-volume="0.9"></audio>
+      <audio id="sfx-14" class="clip" src="assets/sfx/tap-b.mp3" data-start="11.13" data-duration="0.19" data-track-index="8" data-volume="0.9"></audio>
+      <audio id="sfx-15" class="clip" src="assets/sfx/whoosh-a.mp3" data-start="12.0" data-duration="0.19" data-track-index="7" data-volume="0.75"></audio>
+      <audio id="sfx-16" class="clip" src="assets/sfx/stamp.mp3" data-start="12.2" data-duration="0.21" data-track-index="8" data-volume="1.0"></audio>
+      <audio id="sfx-17" class="clip" src="assets/sfx/whoosh-b.mp3" data-start="15.0" data-duration="0.23" data-track-index="7" data-volume="0.75"></audio>
+      <audio id="sfx-18" class="clip" src="assets/sfx/stamp.mp3" data-start="15.53" data-duration="0.21" data-track-index="8" data-volume="1.0"></audio>
+      <audio id="sfx-19" class="clip" src="assets/sfx/plus.mp3" data-start="16.4" data-duration="1.11" data-track-index="7" data-volume="0.55"></audio>
     </div>
     <script>
+      const PUNCH = [[0.26, 0.018, 0.28], [0.9, 0.03, 0.28], [1.31, 0.018, 0.28], [2.35, 0.018, 0.28], [2.9, 0.03, 0.28], [3.5, 0.03, 0.28], [4.1, 0.03, 0.28], [4.44, 0.018, 0.28], [5.28, 0.03, 0.21], [5.49, 0.018, 0.28], [5.93, 0.03, 0.28], [6.58, 0.03, 0.28], [7.23, 0.03, 0.28], [7.58, 0.018, 0.28], [7.88, 0.03, 0.28], [8.53, 0.03, 0.28], [9.18, 0.03, 0.28], [9.83, 0.03, 0.28], [10.48, 0.03, 0.24], [10.72, 0.018, 0.28], [11.13, 0.03, 0.28], [11.76, 0.018, 0.24], [12.0, 0.025, 0.2], [12.2, 0.06, 0.28], [12.81, 0.018, 0.28], [13.85, 0.018, 0.28], [15.0, 0.025, 0.28], [15.53, 0.06, 0.28], [15.95, 0.018, 0.28], [16.4, 0.045, 0.28], [16.99, 0.018, 0.28]];
+      // ---- dopamine helpers (all driven by the paused timeline, seek-safe) ----
       const tl = gsap.timeline({ paused: true });
-      const pop = { duration: 0.35, ease: "back.out(1.6)" };
-      // frame 0 already shows the title and Alina's first line; the title settles a little
-      tl.fromTo("#ta-text", { scale: 1.06 }, { scale: 1, duration: 0.8, ease: "power2.out" }, 0);
-      tl.fromTo("#m2", { opacity: 0, y: 30 }, { opacity: 1, y: 0, ...pop }, 1.0);
-      tl.fromTo("#hint", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 2.6);
-      ["#b1", "#b2", "#b3"].forEach((b, i) => tl.fromTo(b, { opacity: 0, y: 40, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, ...pop }, 4.0 + i));
-      // the finger wavers between the replies and never presses
-      tl.fromTo("#finger", { opacity: 0, x: 0, y: 0 }, { opacity: 1, duration: 0.3 }, 7.5);
-      [0, 142, 264, 142, 0, 264].forEach((y, i) => tl.to("#finger", { y, x: (i % 2) * -50, duration: 0.6, ease: "power2.inOut" }, 7.8 + i * 0.7));
-      tl.to("#finger", { scale: 0.85, yoyo: true, repeat: 1, duration: 0.18 }, 12.0);
-      tl.to("#finger", { opacity: 0, duration: 0.2 }, 12.4);
-      tl.to("#ta-text", { opacity: 0, duration: 0.2 }, 12.3);
-      // the question: numbers pulse so viewers answer with a digit
-      tl.fromTo("#tb-text", { opacity: 0, y: 30 }, { opacity: 1, y: 0, ...pop }, 12.5);
-      tl.fromTo("#tb-sub", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 12.8);
-      tl.fromTo(".num", { scale: 1 }, { scale: 1.25, yoyo: true, repeat: 3, duration: 0.25, stagger: 0.12 }, 12.7);
-      tl.fromTo("#end-hero", { opacity: 0, y: 40 }, { opacity: 1, y: 0, ...pop }, 15.1);
-      tl.fromTo("#end-logo", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, ...pop }, 15.2);
-      tl.fromTo("#end-cta", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4 }, 15.5);
+      const POP = { duration: 0.42, ease: "back.out(2.6)" };
+      const pop = (sel, t, from = 0.3) => tl.fromTo(sel, { opacity: 0, scale: from }, { opacity: 1, scale: 1, ...POP }, t);
+      const slam = (sel, t, rot = -8) => tl.fromTo(sel, { opacity: 0, scale: 2.4, rotation: rot - 10 }, { opacity: 1, scale: 1, rotation: rot, duration: 0.22, ease: "power4.in" }, t);
+      const shake = (sel, t, a = 18) => tl.fromTo(sel, { x: 0, y: 0 }, { keyframes: [{ x: -a, y: a * 0.5 }, { x: a * 0.8, y: -a * 0.6 }, { x: -a * 0.5, y: a * 0.3 }, { x: a * 0.25, y: 0 }, { x: 0, y: 0 }], duration: 0.34, ease: "none" }, t);
+      const bounce = (sel, t, s = 1.12) => tl.fromTo(sel, { scale: 1 }, { keyframes: [{ scale: s, duration: 0.1 }, { scale: 0.97, duration: 0.1 }, { scale: 1, duration: 0.12 }] }, t);
+      const flash = (t, a = 0.85) => tl.fromTo("#flash", { opacity: 0 }, { keyframes: [{ opacity: a, duration: 0.05 }, { opacity: 0, duration: 0.4 }] }, t);
+      // a counter that rolls from a to b; the HTML holds the start text
+      const roll = (sel, a, b, t, fmt = (v) => Math.round(v) + "%", d = 0.7) => {
+        const el = document.querySelector(sel), o = { v: a };
+        tl.fromTo(o, { v: a }, { v: b, duration: d, ease: "power2.out", onUpdate: () => { el.textContent = fmt(o.v); } }, t);
+      };
+      // particle burst: n dots fly out from a point, angles fixed (no randomness)
+      const burst = (id, t, colors, n = 14, r = 220) => {
+        const box = document.getElementById(id);
+        for (let i = 0; i < n; i++) {
+          const dot = document.createElement("i");
+          dot.style.background = colors[i % colors.length];
+          box.appendChild(dot);
+          const ang = (i / n) * Math.PI * 2 + 0.3, rr = r * (0.7 + 0.3 * ((i * 7) % 5) / 4);
+          tl.fromTo(dot, { x: 0, y: 0, scale: 1.2, opacity: 0 }, { keyframes: [{ opacity: 1, duration: 0.01 }, { x: Math.cos(ang) * rr, y: Math.sin(ang) * rr, scale: 0.2, opacity: 0, duration: 0.6, ease: "power3.out" }] }, t);
+        }
+      };
+      // a badge bursts in, then floats up and fades
+      const badge = (sel, t) => {
+        tl.fromTo(sel, { opacity: 0, scale: 0.2, y: 0 }, { opacity: 1, scale: 1.25, duration: 0.18, ease: "power2.out" }, t);
+        tl.to(sel, { scale: 1, duration: 0.15 }, t + 0.18);
+        tl.to(sel, { y: -90, opacity: 0, duration: 0.5, ease: "power1.in" }, t + 0.85);
+      };
+      const ENDCARD = (t) => {
+        flash(t, 0.6);
+        tl.fromTo("#end-hero", { opacity: 0, y: 80, scale: 0.6 }, { opacity: 1, y: 0, scale: 1, ...POP }, t + 0.05);
+        tl.fromTo("#end-logo", { opacity: 0, scale: 1.8 }, { opacity: 1, scale: 1, duration: 0.24, ease: "power4.in" }, t + 0.3);
+        shake("#end-in", t + 0.54, 14);
+        burst("end-burst", t + 0.54, ["#FF5436", "#F4EFE6", "#3B5BFF", "#17A56B"], 18, 360);
+        tl.fromTo("#end-cta", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }, t + 0.75);
+        bounce("#end-logo", t + 1.4, 1.06);
+        bounce("#end-cta", t + 2.0, 1.05);
+      };
+
+      // frame 0: title and Alina's first line are already there; dots type her second line
+      tl.fromTo("#ta-text", { scale: 1.08 }, { scale: 1, duration: 0.5, ease: "back.out(2)" }, 0);
+      tl.fromTo(".typing i", { y: 0 }, { keyframes: [{ y: -14, duration: 0.15 }, { y: 0, duration: 0.15 }], stagger: 0.1, repeat: 1 }, 0.1);
+      tl.to("#typing", { opacity: 0, duration: 0.08 }, 0.85);
+      tl.fromTo("#m2", { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, ...POP }, 0.9);
+      bounce("#m1", 1.6, 1.05);
+      tl.fromTo("#hint", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.3 }, 2.2);
+      ["#b1", "#b2", "#b3"].forEach((b, i) => tl.fromTo(b, { opacity: 0, x: 300, scale: 0.8 }, { opacity: 1, x: 0, scale: 1, ...POP }, 2.9 + i * 0.6));
+      // the finger hops between the replies every 0.65 s and never presses
+      const ys = [1120, 1270, 1395, 1270, 1120, 1395, 1270, 1120, 1395, 1270];
+      const targets = ["#b1", "#b2", "#b3", "#b2", "#b1", "#b3", "#b2", "#b1", "#b3", "#b2"];
+      tl.fromTo("#finger", { opacity: 0, y: 1120, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.25 }, 4.9);
+      ys.forEach((y, i) => {
+        const t = 5.0 + i * 0.65;
+        tl.to("#finger", { y, duration: 0.28, ease: "power2.inOut" }, t);
+        bounce(targets[i], t + 0.28, 1.05);
+      });
+      tl.to("#finger", { opacity: 0, scale: 0.4, duration: 0.2 }, 11.6);
+      tl.to("#ta-text", { opacity: 0, scale: 0.7, duration: 0.15 }, 11.85);
+      // the question slams in
+      tl.fromTo("#tb-text", { opacity: 0, scale: 2.2 }, { opacity: 1, scale: 1, duration: 0.24, ease: "power4.in" }, 12.0);
+      shake("#chat-in", 12.24, 16);
+      burst("q-burst", 12.24, ["#FF5436", "#3B5BFF", "#17A56B", "#22212A"], 16, 420);
+      tl.fromTo("#tb-sub", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.3 }, 12.6);
+      ["#n1", "#n2", "#n3", "#n1", "#n2", "#n3"].forEach((n, i) => bounce(n, 13.0 + i * 0.32, 1.4));
+      ENDCARD(15);
+
+      PUNCH.forEach(([t, a, d]) => tl.fromTo("#root", { scale: 1 + a }, { scale: 1, duration: d, ease: "power2.out", immediateRender: false }, t));
       window.__timelines["main"] = tl;
       tl.seek(0);
     </script>
