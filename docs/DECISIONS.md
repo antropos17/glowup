@@ -6,6 +6,8 @@ Decisions confirmed by Ruslan in the coordinator chat. They override "proposed" 
 
 Rows 42–45 were decided in the monetization chat, not in the coordinator chat. Campaign details: `CAMPAIGN_TIKTOK.md`.
 
+Rows 46–47 were decided by Ruslan in the monetization chat and are not yet confirmed by the co-author.
+
 | # | Question | Decision |
 |---|---|---|
 | 41 | Promo name | Ruslan, 2026-11-27. The RU name is «Краш за 30 дней». The international name is not decided. |
@@ -13,6 +15,8 @@ Rows 42–45 were decided in the monetization chat, not in the coordinator chat.
 | 43 | Telegram layout | Ruslan, 2026-11-27. The channel `t.me/glowupchallenge30` keeps the English name «Glow Up : 30 days challenge». Two groups: «… \| чат», the discussion group linked to the channel (comments under posts), and the community group «… \| чатик» `@glowup30chat`, where only members can write, with the topics «Отзывы», «Баги», «Идеи», «Болтовня», «Обновления», «Предложения». There are two groups because topics cannot be enabled in a group linked to a channel ([channels.toggleForum](https://core.telegram.org/method/channels.toggleForum), `CHAT_DISCUSSION_UNALLOWED`, checked 2026-11-27). |
 | 44 | Wishlist reward | Ruslan, 2026-11-27: «косметика в игре, небольшой бонус, голосование обязательно». Which bonus is open. |
 | 45 | Ad budget and main hook | Ruslan, 2026-11-27. Ad budget $200, up to $300 if it works, spent only on finished strong videos. The main hook is a realistic Andrey. |
+| 46 | Creator share | Ruslan, 2026-11-27: «Да, 20%». A starting share of 20% for creators through Telegram's built-in affiliate program ([Telegram](https://telegram.org/tour/affiliate-programs), checked 2026-11-27). It applies only to Star purchases, so it starts when the first Star purchase exists: the program is switched on together with the donation, which is not built. Nothing is switched on yet. |
+| 47 | Player referral reward | Ruslan, 2026-11-27: «А и Б берём: общая карточка «до/после» с другом и рамка «Позвал друга». Уровни В после релиза.» The reward for inviting a friend is the frame «Позвал друга» and a shared before/after card with that friend, the same for everyone, with no effect on the chance, `affinity`, coins or energy (row 6). Tiers for 3, 5 and 10 friends only after release. Not built. |
 
 ## 2026-11-24 — Day 7 evening tone
 

@@ -14,7 +14,7 @@ Marks: **F** fact (checked in code or docs, or on an official page, then with it
 | Time | 15+ hours a week |
 | Main hook | a realistic Andrey |
 
-Name: Ruslan chose «Краш за 30 дней» on 2026-11-27; the bot greeting uses it (F, commit 393e3cf). The Telegram channel keeps the English name «Glow Up : 30 days challenge» (Ruslan, 2026-11-27). Not decided by the authors, so not promised to anyone: a bonus for a viewer who comes by a code, money or a share for creators.
+Name: Ruslan chose «Краш за 30 дней» on 2026-11-27; the bot greeting uses it (F, commit 393e3cf). The Telegram channel keeps the English name «Glow Up : 30 days challenge» (Ruslan, 2026-11-27). Not decided by the authors, so not promised to anyone: a bonus for a viewer who comes by a code, money now or a fixed fee for creators.
 
 ## 1. Objective
 
@@ -71,10 +71,13 @@ Creators: their link goes straight to the bot with their code, otherwise their s
 **What we can honestly offer in the demo stage:**
 - a ready series with the hook «день 12, ответит ли она?»;
 - their own code with a live count in `/stats`;
+- «20% со звёзд, когда появятся покупки»: a share through Telegram's built-in affiliate program. 20% is the starting rate Ruslan chose on 2026-11-27 (the co-author has not confirmed it). Today the bot sells nothing for Stars (F) and the program is not switched on, so the share brings nothing yet.
+  - F ([Telegram API](https://core.telegram.org/api/bots/referrals), [affiliate programs](https://telegram.org/tour/affiliate-programs), checked 2026-11-27): the developer sets the commission and the period; a referral counts when a person starts the Mini App for the first time by the affiliate link; the affiliate gets the share of that person's later Star purchases automatically; the rate and the period can only be raised, lowering them means ending the program and creating a new one; only Star purchases of digital goods count.
+  - The affiliate link is not the creator code: the code counts people in the wishlist, the affiliate link counts money. How a creator gets both is not worked out. No period is named. The first Star purchase planned is a donation (not built); whether a donation counts for the program is not checked.
 - early access to Day 8 and later, only after the texts are reviewed (they are not yet, F);
 - their name in the credits, only if Ruslan decides so (no credits screen exists).
 
-**Not promised:** money, a share, a bonus for viewers. None of these is decided or built (F).
+**Not promised:** money now, a fixed fee, a bonus for viewers who come by the code. A fixed fee and the viewer bonus are not decided; none of the three is built (F).
 
 **Order for the first 5–10 creators:**
 1. The first 2–3 are people Ruslan knows: they test the whole chain. Then 5–7 cold contacts.
