@@ -58,8 +58,8 @@ describe('1-day funnel', () => {
       for (let d = 2; d <= 7; d++) expect(content.days.find((x) => x.day === d)?.title, `day ${d}`).toBeTruthy();
       for (let d = 1; d <= 6; d++) expect(content.days.find((x) => x.day === d)?.teaser, `day ${d}`).toBeTruthy();
     });
-    it('on Day 5 the crush writes first on every Day 1 path («Через четыре дня… она напишет первой»)', () => {
-      const day5 = content.cards.filter((c) => c.when?.days?.[0] === 5 && /написала первой/.test(c.text ?? ''));
+    it('on Day 5 the phone rings with the crush on every Day 1 path («Через четыре дня… Это будет она»)', () => {
+      const day5 = content.cards.filter((c) => c.when?.days?.[0] === 5 && /Телефон звякнул/.test(c.text ?? ''));
       // the four night cards only look at three Day 1 flags; check that each combination gets one of them
       const holds = (req: { flag?: string; set?: boolean }, f: Record<string, boolean>) =>
         req.flag === 'd5_alina_wrote' ? true : req.set === false ? !f[req.flag!] : !!f[req.flag!];

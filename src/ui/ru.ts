@@ -96,7 +96,7 @@ export const FUNNEL = {
   stampBefore: 'До',
   delivered: 'Доставлено',
   /** cliffhanger before the end screen */
-  cliffHook: 'Через четыре дня телефон звякнет. Она напишет первой.',
+  cliffHook: 'Через четыре дня телефон звякнет. Это будет она.',
   aheadHead: 'Что впереди',
   aheadDay: (n: number) => `День ${n}`,
   aheadLast: 'Дни 8–30',

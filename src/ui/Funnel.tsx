@@ -129,7 +129,7 @@ function ChanceBeat({ pct }: { pct: number }) {
 /**
  * Before the demo end: where the crush stands after Day 1 (the text of the night card the player got)
  * and what lies ahead (titles and teasers of Days 2–7 from content/days.json). Only facts the game keeps:
- * on Day 5 the crush writes first on every path (K5-08a…d).
+ * on Day 5 the crush messages the hero on every path (K5-08a…d).
  */
 export function Cliffhanger({ state, onNext }: { state: GameState; onNext: () => void }) {
   const her = crush(content, state);

@@ -36,7 +36,7 @@ Creator link: `https://t.me/<bot_username>?start=<code>`. Bot usernames always e
 
 - Intro: four short screens before the hero pick, skippable, shown once (`localStorage` key `glowup.introSeen`).
 - Day 1 beats: animated pictures for the class chat invite, the mirror, the first message (or the like) and the first look at the chance; the Day 1 card rows come in one by one. Off under `prefers-reduced-motion`.
-- The demo ends as soon as the player goes to sleep on Day 1 (the 7-day demo still waits for the next morning). Then: the day card, a cliffhanger (the crush's status from the night card, «she writes first in four days» — true on every path, K5-08a…d — and Days 2–7 from `content/days.json` with blurred teasers), then the end screen.
+- The demo ends as soon as the player goes to sleep on Day 1 (the 7-day demo still waits for the next morning). Then: the day card, a cliffhanger (the crush's status from the night card, «in four days the phone rings and it is her» — true on every path, K5-08a…d — and Days 2–7 from `content/days.json` with blurred teasers), then the end screen.
 - End screen outside Telegram: «Записаться в вишлист» opens `https://t.me/glowupchallenge30bot?start=<code>`, the code taken from `?ref=` or `?code=` (sanitized to `[a-z0-9_]`, max 32), or plain `?start`. Inside Telegram: «already on the list», «Позвать друга» (the Telegram share picker with the bot link) and «Вернуться в чат». The two main buttons are equal.
 - Creator link for TikTok: `https://antropos17.github.io/glowup/?demo=1&ref=<code>`; the code must also exist in the bot (`/addcode`) to be counted.
 
