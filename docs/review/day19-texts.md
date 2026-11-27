@@ -3,7 +3,7 @@ Generated 2026-11-25 from `content/cards/day19.json` and `content/days.json`. Fo
 
 ## Deviations from the grid (`docs/WEEK3_GRID.md`, Day 19 row), for Ruslan to confirm or overrule
 
-1. **The promiser's card is two cards with one set of buttons:** K19-01pj for `d10_will_sing` with `d6_reply` = `joke` (Vitya adds «Ты обещал петь не как на выпускном. Вот и проверим», the Day 6 joke), K19-01p for `d10_will_sing` without the joke (the promise came from the Day 7 song thread). The grid had one card with a `joke` line; the engine cannot vary card text by a flag, so the line lives in a second card.
+1. **The promiser's card is two cards with one set of buttons:** K19-01pj for `d10_will_sing` with `d6_reply` = `joke` (Vitya adds «Алина говорит, ты обещал не петь, как на выпускном. Вот и проверим», the Day 6 joke), K19-01p for `d10_will_sing` without the joke (the promise came from the Day 7 song thread). The grid had one card with a `joke` line; the engine cannot vary card text by a flag, so the line lives in a second card.
 2. **Every song choice sets `d19_sing`, the neutrals too:** `practice` / `out` / `promised` on K19-01pj/p («Подумать потом» sets `promised`, the grid left it unset), `promised` / `none` on K19-01g. The grid gave no value for «laugh»; `none` is new: no promise, Gromov sings. A new promise on K19-01g is also `promised`; Day 20 can tell it from the Day 10 promise by `d10_will_sing`. A promiser from K19-01g has no practice button today (the grid gives him only the promise).
 3. **The song cards carry the guard `d19_sing` unset**, so no second song card opens later in the day whatever happens to the Day 6 and Day 10 flags (a test checks every combination).
 4. **«Пять песен» is two cards:** K19-02a for `d14_scene` ≥ 1 (on the planned table only the Gromov song choice raises it, so she quotes «та, под которую Громов уронил стол»), K19-02b otherwise (his pick: «ту, что на выпускном играла последней»). One button, no affinity, no `says`: it is the organisers' chat, as K17-04.
@@ -37,7 +37,7 @@ Generated 2026-11-25 from `content/cards/day19.json` and `content/days.json`. Fo
   - Витя махнул шарфом: «Ладно. Завтра в семь. В пятницу стулья, ноги нужны».
 
 ### K19-01pj · Витя пишет
-- Text: Утро. Витя: «Оксана поставила тебя в программу. Сразу после слайд-шоу: „Песня — {hero}“. Ты обещал петь не как на выпускном. Вот и проверим».
+- Text: Утро. Витя: «Оксана поставила тебя в программу. Сразу после слайд-шоу: „Песня — {hero}“. Алина говорит, ты обещал не петь, как на выпускном. Вот и проверим».
 - Порепетировать дома (2 energy)
   - {hero} спел два раза перед зеркалом, пока закипал чайник. Второй раз почти не стыдно. Соседи не стучали: уже успех.
 - Попросить Оксану убрать песню
