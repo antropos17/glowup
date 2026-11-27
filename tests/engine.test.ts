@@ -2373,7 +2373,7 @@ describe('день 6', () => {
               expect(call(s)).toContain('зарос ты');
               expect(call(evening11(HELPED))).toContain('отправила тебя к Гоше');
               expect(call(evening11(HELPED, { 'K11-03': 'cut' }))).toContain('ты подстригся');
-              expect(call(evening11({}, { 'K11-02': 'book' }))).toContain('в «Люксе»');
+              expect(call(evening11({}, { 'K11-02': 'book' }))).toContain('в „Люксе“');
               expect(call(patch(s, { on: { d8_lunch: 'held' } }))).toContain('от второго пирожка отказался');
               expect(call(patch(s, { on: { d8_lunch: 'ate' } }))).toContain('Пирожки в воскресенье все доел');
               const end = (x: GameState) => next(pick(pick(x, 'K11-04', 'fridge'), 'K11-05', 'talk'));
@@ -3572,7 +3572,7 @@ describe('день 6', () => {
                           const bought = choose(content, clean, 'K17-02b', 'buy');
                           expect([clean.coins - bought.state.coins, bought.state.problems.care - clean.problems.care, bought.state.flags.bought_perfume.value, bought.state.flags.d17_scent.value])
                             .toEqual([120, -6, true, 'bottle']);
-                          expect(bought.outcome.text).toContain('магазинное смой');
+                          expect(bought.outcome.text).toContain('магазинное это смой');
                           const tester = choose(content, patch(clean, { off: ['d17_alpha'] }), 'K17-02b', 'tester');
                           expect([tester.state.problems.care - clean.problems.care, tester.state.flags.d17_scent.value, tester.state.flags.bought_perfume]).toEqual([-2, 'tester', undefined]);
                           expect(tester.outcome.text).toContain('Чистая футболка');
@@ -3912,7 +3912,7 @@ describe('день 6', () => {
                               expect(choicesOf('K19-01p')).toEqual([['practice', false], ['out', false], ['later', true]]);
                               expect(choicesOf('K19-01pj')).toEqual([['practice', false], ['out', false], ['later', true]]);
                               expect(choicesOf('K19-01g')).toEqual([['promise', false], ['laugh', true]]);
-                              for (const id of ['K19-01p', 'K19-01pj']) expect(card(id).text, id).toContain('«Песня — {hero}»');
+                              for (const id of ['K19-01p', 'K19-01pj']) expect(card(id).text, id).toContain('„Песня — {hero}“');
                               expect(card('K19-01pj').text).toContain('не как на выпускном');
                               expect(card('K19-01g').text).toContain('Громов');
                               const promiser = morning19({ on: { d10_will_sing: true, d6_reply: 'joke' } });
