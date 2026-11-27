@@ -123,6 +123,11 @@
     "call_to_action": "«Демо в канале»: TikTok bio → channel t.me/glowupchallenge30 → pinned post → bot with a weekly code (tt-w1 … tt-w4); creators link to the bot with their own code",
     "not_measurable": "Mini App opens and the end of Day 1 (needs an events table), per-video source, the promised broadcast to the wishlist (not built)"
   },
+  "public_page_and_art": {
+    "status": "merged into main 2026-11-27",
+    "note": "the public page opens the game alone, the asset showcase moved to ?kit; scenes, faces, item pictures and empty-screen spots are drawn in code (src/art/cast.ts, items.ts, scenes.ts, tests/art.test.ts)",
+    "verified": "on the merged main: tsc pass, tests 227/227, check:content pass (445 cards), build dist/index.html 1058.51 kB"
+  },
   "engine_todo": [
     "choice buttons inside the feed",
     "demo end screen: referral link and notify button",
