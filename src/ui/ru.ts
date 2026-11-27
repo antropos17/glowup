@@ -62,6 +62,10 @@ export const DEMO_END = {
   shareFailed: (url: string) => `Не получилось скопировать. Ссылка: ${url}`,
   notify: 'Сообщить о полной версии',
   notified: 'Готово: отметили, что ты ждёшь полную версию.',
+  /** Telegram Mini App only: the bot has the player on its list. */
+  listed: 'Ты в списке. Бот напишет, когда выйдет продолжение.',
+  /** Telegram Mini App only: closes the app and returns to the chat. */
+  leave: 'Вернуться в чат',
   close: 'Закрыть',
   restart: 'Начать заново',
   frozenNote: 'Демо закончено: всё можно посмотреть, но играть дальше нельзя.',

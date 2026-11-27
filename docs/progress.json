@@ -1,13 +1,13 @@
 {
-  "updated": "2026-11-25",
+  "updated": "2026-11-27",
   "goal": "7-day demo: first 7 days of the 30-day game, full presentation",
   "verified": {
-    "date": "2026-11-25",
+    "date": "2026-11-27",
     "typecheck": "pass",
-    "tests": "206/206",
+    "tests": "222/222 (206 engine, 16 bot)",
     "check_content": "pass: 445 cards (333 story, 112 action), 1 archetype, 1 crush",
     "economy": "demo economy in items.json, side-jobs.json, balance.json; see docs/DEMO_SCRIPT.md section 5a",
-    "build": "pass: dist/index.html 1028.89 kB",
+    "build": "pass: dist/index.html 1029.96 kB",
     "playthrough": "Day 19: engine tests over the Thursday morning (overslept by d18_late, Vitya's run by d9_pass or d16_pass = vitya, the song: exactly one of K19-01pj/p/g for every d10_will_sing and d6_reply value, none after it is answered whatever those flags become), the five songs K19-02a/b for the music team by d14_scene, the evening (K19-03 football with Vitya, K19-04 the bar, d19_bar went/held/lot/home), the craving at the bar door K19-05a/q/b or on the balcony K19-06a/q/b: exactly one for every place and Day 18 result, the gym by { modifier: gym }, sleep and staying up, a fully skipped Day 19 for three states, the demo still ending on Day 7. Playwright MCP (Chromium, real clicks, page.clock at the Day 19 morning and the dev button for the parts of the day) on the built dist/index.html?full served from a local folder; Day 19 reached with a save built by the engine (days 1-18 played with the first affordable story choice, sleep every night), then flags switched in the save: 360x640 d10_will_sing, d6_reply joke, d15_team music, d14_scene 1, d9_pass vitya, held on Day 18 (K19-run run, K19-01pj practice, K19-02a, K19-03 go, K19-04 held, K19-05b: hold shown disabled at 2 energy, gum, sleep, day-end card with acne_patch and the teaser); 390x844 no promise, no team, smoked on Day 18 (K19-01g promise, A-job, K19-03 home, K19-06a smoke, sleep late with the karaoke line, day-end card). All sheets fit, no horizontal scroll. Screenshots in X:/tmp/glowup-day19"
   },
   "demo_days": {
@@ -108,6 +108,13 @@
       "file": "content/cards/day14.json",
       "note": "written 2026-11-25; past the demo (demoDays 7, contentDays 14), playable on the dev page with ?full. Texts await the authors: docs/review/day14-texts.md (deviations listed at its top). Title «Половина пути» (the grid's working title was «Не случайно»). The planned coffee for d12_helped_music gets a neutral «Остаться дома» (a skipped day must not send him); the salon cut is not counted as a visible change (open question); d8_replied is not read; the mirror is a text card pointing to the Зеркало tab; A14-gym keeps the Day 10 workaround (A5 gap)"
     }
+  },
+  "telegram": {
+    "status": "code done 2026-11-27, not deployed; steps in docs/TELEGRAM.md",
+    "mini_app": "?demo=<n> cuts the demo after day n (Mini App URL https://antropos17.github.io/glowup/?demo=1). Inside Telegram (non-empty initData) the SDK is loaded from the tgWebAppData hash, ready() and expand() are called, the header is coloured #E8EFF1, the game is shown alone, and the demo end screen shows the line «Ты в списке…» and the «Вернуться в чат» button (close()) in place of the notify button",
+    "bot": "Supabase function server/supabase/functions/bot (pure logic in logic.ts, tests/bot.test.ts) and migration 0002_bot_wishlist.sql: /start [code], /stats, /addcode",
+    "verified": "Chrome via playwright-core, built dist/index.html, real clicks, page.clock: ?demo=1 with a stub Telegram.WebApp from a clean save to the demo end after Day 1 at 375x812 and 320x568 (no showcase, no frame, no horizontal scroll, save kept over a reload, calls ready, expand, header, close), ?demo=1 outside Telegram ends after Day 1 with the showcase and notify button unchanged, no parameter goes on to Day 2; no console errors",
+    "not_verified": "real Telegram client and phone, save after closing the Mini App in a real client, bot index.ts on Deno and Supabase (no Deno here), deployment"
   },
   "engine_todo": [
     "choice buttons inside the feed",

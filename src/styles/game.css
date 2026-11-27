@@ -426,3 +426,6 @@
 .frozen span { flex: 1; min-width: 0; }
 .game .frozen button { position: relative; flex: none; padding: 7px 12px; border-radius: 10px; background: var(--tile); color: var(--ink); font-weight: 600; font-size: 13px; }
 .game button.plus[disabled] { cursor: default; color: var(--ink-soft); }
+
+/* Telegram Mini App: the game alone fills the app; the SDK keeps --tg-viewport-stable-height in sync with the client. */
+.tg-app { height: 100vh; height: var(--tg-viewport-stable-height, 100svh); }
