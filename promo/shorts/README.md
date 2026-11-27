@@ -25,11 +25,12 @@ was measured from each `music.mp3` (chat 114.75 bpm, feed 123, pov 144.75).
 `assets/vo/*.mp3`: voice «Max - Alive and Emotional» (shared library, young male, id `Uv3rf12Omd9Asyv54Bqw`),
 model `eleven_v3`, `language_code` ru, stability 0.5, similarity 0.8; each line levelled to −12 LUFS. Lines and
 start times are the `vo-*` audio tags in each `index.html`. Music sits at volume 0.3, about 10 dB under the voice. The API key stays outside the repo.
-The closing line `c4` / `f6` / `p6` is one take shared by all three (2026-11-27): «Краш за тридцать дней. Демо — в канале.»,
-the pause between the sentences cut to 0.1 s and the tempo raised 7% (`atempo=1.07`) so it is 2.34 s long and ends at least
-0.15 s before the video does (chat 15.4–17.74, feed 17.5–19.84, pov 17.3–19.64).
-**This take still says the cancelled name** (the name is now «Glow Up: челлендж 30 дней», `docs/DECISIONS.md` row 48): it was not
-regenerated. Decide what to do with it before publishing the drawn shorts. No other voice-over line says the name.
+The closing line `c4` / `f6` / `p6` is one file shared by all three: «Демо — в канале.» (1.03 s). On 2026-11-27 it was cut
+with ffmpeg, no new generation, from the earlier 2.34 s take «Краш за тридцать дней. Демо — в канале.» (the cancelled name):
+everything before 1.315 s (the silence between the sentences) removed, 15 ms fade-in and 20 ms fade-out, re-encoded as
+`libmp3lame -q:a 2` (CBR 128k lowered the level by 0.4 dB; VBR keeps it within 0.1 dB). It starts 0.6 s into the end card,
+so the «Д» lands as the «Демо — в канале» text appears (chat 15.6, feed 18.3, pov 18.1); pov `p5` moved to 15.84 s so it no
+longer overlaps `p4`. No voice-over line says the game's name now.
 
 ## Rebuild
 
