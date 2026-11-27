@@ -11,7 +11,11 @@
           "promo/shorts/live-2/index.html",
           "promo/shorts/live-3/index.html",
           "promo/shorts/live-4/index.html",
-          "promo/shorts/live-5/index.html"
+          "promo/shorts/live-5/index.html",
+          "promo/shorts/live-v2-park/index.html",
+          "promo/shorts/live-v2-pies/index.html",
+          "promo/shorts/live-v2-mirror/index.html",
+          "promo/shorts/live-v2-soda/index.html"
         ],
         "createdAt": "2026-11-27T10:42:04.496Z",
         "reason": "brand palette #F4EFE6 fixed in docs/AD_30S.md, same as the shipped shorts chat/feed/pov"
@@ -24,7 +28,11 @@
           "promo/shorts/live-2/index.html",
           "promo/shorts/live-3/index.html",
           "promo/shorts/live-4/index.html",
-          "promo/shorts/live-5/index.html"
+          "promo/shorts/live-5/index.html",
+          "promo/shorts/live-v2-park/index.html",
+          "promo/shorts/live-v2-pies/index.html",
+          "promo/shorts/live-v2-mirror/index.html",
+          "promo/shorts/live-v2-soda/index.html"
         ],
         "createdAt": "2026-11-27T10:42:05.160Z",
         "reason": "display titles in a video frame (Unbounded 64-158px), same leading as the shipped shorts"

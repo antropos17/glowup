@@ -232,3 +232,76 @@ The «Утро» label on the run card is the ad's own (A1-run is a day action w
 - «Краш за 30» is still a draft name (`docs/NAME_AND_PROMO.md`).
 - The audio was measured (≈ −15 LUFS, true peak ≤ −1.4 dBFS), not listened to. Tracks were picked by search query and loudness profile only: listen before publishing.
 - Check that the HeyGen catalog music and the Epidemic Sound effects are cleared for paid ads and creator posts on your plans.
+
+## Live shorts v2 (Higgsfield), 2026-11-27
+
+Four ~21 s shorts in the same recipe as `live-1` … `live-5`, but faster and absurd: each opens on a 0.7–0.8 s cold open
+of the absurd peak of its take with a slammed caption, the hero (same AI-generated Андрей) says as the makers «мы
+сделали игру…», game cards from `content/` cut in for 1–1.5 s with their text verbatim, and the end card shows
+«Краш за 30 дней», «Демо — в канале» and the channel nick `glowupchallenge30` as text (until 1000 followers TikTok
+gives no profile link). The same AI label rule applies: **switch on the "AI-generated content" label when publishing.**
+
+Each take is Seedance 2.5, start frame = the location still of `live-2` … `live-5` (Nano Banana Pro), 20 s, 9:16,
+720p, Unlimited mode (0 credits), the model's own voice and lip sync. Prompts follow the `seedance-clean` structure
+(timed HARD CUTs, FOV in degrees, light in Kelvin, positive locks); the full texts are in
+`X:\Projects 2027\Glowup promo\live\v2-prompts\`. Footage lives in `X:\Projects 2027\Glowup promo\live\`
+(`v2-<name>-talk.mp4`); copy it into `promo/shorts/live-v2-<name>/assets/` to render. Finished files:
+`X:\Projects 2027\Glowup promo\shorts\krash30-v2-<name>.mp4` with a frame sheet `krash30-v2-<name>-sheet.jpg`.
+Captions follow the script the model was given; phrase times come from an RMS envelope of the take (speech band
+250–3500 Hz), not from a transcript. Nobody has listened to the takes yet.
+
+### live-v2-park — «Меня обогнала бабушка» (21 s)
+
+Take: he jogs to camera, an old woman with a tartan trolley overtakes him, pigeons fly up, he folds over; selfie end.
+Lines: «Мы сделали игру про скуфа. Скуф — это я. Первый круг!» / «Колет в боку!» / «Меня обогнала бабушка. Побегу
+ли я завтра — решаешь ты. Демо — в канале.» Music: pov's.
+
+| Time | On screen | Heard |
+|---|---|---|
+| 0–0.8 | cold open: she passes him, «Меня обогнала бабушка.» | take 5.9–6.7 |
+| 0.8–5.3 | Андрей jogs to camera, «Мы сделали игру про скуфа.», «Скуф — это я.», «Первый круг!» | his lines (take 0.2–4.7) |
+| 5.3–6.5 | День 1, A1-run: tap «Пробежка в парке» | music |
+| 6.5–10.3 | she overtakes him, «Колет в боку!»; she walks on, he stands bent | take 6.8–8.6, 9.0–11.0 |
+| 10.3–11.8 | День 1, A1-run «закололо в боку»: «Закололо в боку, вторую половину пришлось идти шагом.», Форма +1 | music |
+| 11.8–15.8 | selfie, she is small behind him: «Меня обогнала бабушка.», «Побегу ли я завтра — решаешь ты.» | his lines (take 13.95–17.95) |
+| 15.8–17.2 | День 5, A5-run «получилось»: «Три круга по парку. На третьем обогнал собачника с таксой.», Форма +3 | music |
+| 17.2–18.2 | «Демо — в канале.» | his line (take 18.75–19.75) |
+| 18.2–21 | end card with the nick | music |
+
+The Форма percentages (15→16, 21→24) are invented for the ad, as in v1; the deltas are the cards' own.
+
+### live-v2-pies — «Я на диете» (21 s)
+
+Take: he holds up a plate with one cucumber slice; his mother's arm stacks enamel pots of pirozhki into a tower of six,
+the ginger cat jumps on top, the tower falls, pies roll, he stuffs one whole; he talks with his mouth full. Lines:
+«Мы сделали игру. Я в ней главный скуф. Я на диете.» / «Мама принесла двадцать пирожков. Сколько съем — решаешь ты.
+Демо — в канале.» Music: feed's.
+
+| Time | On screen | Heard |
+|---|---|---|
+| 0–0.7 | cold open: the tower with the cat topples, «Я на диете.» | take 9.5–10.2 |
+| 0.7–4.2 | Андрей with the cucumber plate: «Мы сделали игру.», «Я в ней главный скуф.», «Я на диете.» | his lines (take 0.15–3.65) |
+| 4.2–5.4 | День 1, K1-04 «Мама с пирожками»: «Мама на пороге с кастрюлей. «Двадцать штук, с картошкой. Ешь, пока горячие».», its three choices, tap «Съесть пять» | music |
+| 5.4–11 | jump cuts: pots ×2, ×4, ×6, the cat lands, the tower falls, he stuffs a pie | take 4.0–4.9, 6.7–7.9, 8.0–8.9, 9.3–11.9 |
+| 11–12.6 | «Съесть пять» → «Пять пирожков. Ремень стал теснее.», Форма −2 | music |
+| 12.6–18.3 | mouth full: «Мама принесла двадцать пирожков.», «Сколько съем — решаешь ты.», «Демо — в канале.» | his lines (take 14.25–19.95) |
+| 18.3–21 | end card with the nick | music |
+
+The ×2/×4/×6 counters are ad graphics, not game text.
+
+### live-v2-mirror — «Втягиваю живот» (20.6 s)
+
+Take: sideways at the mirror he sucks in his belly, close-up of the belt straining, the whole belt snaps off, flies
+across the bathroom into the sink and knocks the toothbrush cup over; he holds up the torn belt to camera. The prompt
+asked for the buckle alone; the model sent the whole belt, which reads fine. Lines: «Втягиваю живот.» / «Десять
+секунд — мой рекорд. Мы сделали игру: тридцать дней, и каждый выбор считается. Демо — в канале.» Music: chat's.
+
+| Time | On screen | Heard |
+|---|---|---|
+| 0–0.8 | cold open: the belt in the air, «Втягиваю живот.» | take 4.9–5.7 |
+| 0.8–7.6 | at the mirror «Втягиваю живот.»; the belt strains; it flies, the cup falls into the sink | his line, the creak and clatter (take 1.2–3.0, 3.0–4.6, 4.6–8.0) |
+| 7.6–8.8 | День 2, K2-02a «Зеркало»: «Утро, зеркало. Пирожки никуда не делись.», tap «Втянуть живот» | music |
+| 8.8–10.7 | the torn belt to camera: «Десять секунд — мой рекорд.» | his line (take 11.6–13.5) |
+| 10.7–12 | «Втянуть живот» → «Живот продержался десять секунд.» | music |
+| 12–17.6 | «Мы сделали игру:», «тридцать дней, и каждый выбор считается.», «Демо — в канале.» | his lines (take 14.0–19.6) |
+| 17.6–20.6 | end card with the nick | music |
