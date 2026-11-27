@@ -6,3 +6,6 @@ dist/
 .claude/shots/
 .claude/worktrees/
 .hyperframes/
+# Supabase CLI cache written by link
+supabase/.temp/
+server/supabase/.temp/

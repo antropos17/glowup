@@ -23,14 +23,14 @@ Checked against `package.json` on 2026-11-22:
 - Tests: Vitest 5. Content validation: `scripts/check-content.ts`, run with `tsx`.
 - Fonts: Golos Text and Unbounded from `@fontsource-variable`.
 - Store wrapper: Capacitor (planned, not in `package.json`).
-- Thin server: Supabase scaffold in `server/supabase/` (edge functions `clock`, `sync`, `verify-purchase`, migration `0001_init.sql`). Not deployed. `verify-purchase` throws on store verification by design and must stay disabled until it is implemented.
+- Thin server: Supabase scaffold in `server/supabase/` (edge functions `clock`, `sync`, `verify-purchase`, `bot`, migrations `0001_init.sql` and `0002_bot_wishlist.sql`). Not deployed. `verify-purchase` throws on store verification by design and must stay disabled until it is implemented.
 </stack>
 
 <commands>
 ```
 npm install
 npm run dev            # asset showcase page with the game in a phone frame
-npm test               # engine tests (206/206 on 2026-11-25)
+npm test               # engine and bot tests (222/222 on 2026-11-27)
 npm run check:content  # scenario validation: broken refs, dead-end cards
 npm run build          # typecheck, then single-file dist/index.html
 npx tsc --noEmit       # typecheck
@@ -106,6 +106,7 @@ MCP servers seen on Ruslan's machine (confirm with `/mcp`):
 - `docs/DECISIONS.md`: numbered decisions of the authors.
 - `docs/CONTENT_FORMAT.en.md`: how to write cards, conditions, effects.
 - `docs/AD_30S.md`: the 30-second ad project.
+- `docs/TELEGRAM.md`: the wishlist bot with creator codes and the 1-day Mini App (`?demo=1`), deploy steps.
 - `docs/progress.json`: machine-readable status.
 - `docs/prompts/01-first-session.md`: the first prompt to run.
 - `.claude/commands/write-day.md`: `/write-day <n>` writes one demo day.

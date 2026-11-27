@@ -57,7 +57,8 @@ function useLeaving<T>(v: T | null | undefined): [T | null, boolean] {
  * A new game starts on the hero-pick screen; a save goes straight into the game. Starting over from inside
  * the game returns to the pick screen. `api.restart(id)` (the showcase's dev button) skips the pick.
  */
-export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; api?: (a: GameApi) => void }) {
+/** `onLeave`, given inside the Telegram Mini App, closes the app from the demo end screen. */
+export function Game({ clock, store, api, onLeave }: { clock: Clock; store: SaveStore; api?: (a: GameApi) => void; onLeave?: () => void }) {
   const [first, setFirst] = useState<GameState | null>(() => store.load());
   const [run, setRun] = useState(0);
   const play = useRef<{ refresh(): void } | null>(null);
@@ -68,11 +69,11 @@ export function Game({ clock, store, api }: { clock: Clock; store: SaveStore; ap
   const over = () => { store.clear(); setFirst(null); };
   useEffect(() => { api?.({ restart: (id) => { store.clear(); start(id); }, refresh: () => play.current?.refresh() }); }, []);
   if (!first) return <Pick clock={clock} onPick={start} />;
-  return <Play key={run} clock={clock} store={store} first={first} onRestart={over} api={(a) => (play.current = a)} />;
+  return <Play key={run} clock={clock} store={store} first={first} onRestart={over} onLeave={onLeave} api={(a) => (play.current = a)} />;
 }
 
-function Play({ clock, store, first, onRestart, api }: {
-  clock: Clock; store: SaveStore; first: GameState; onRestart: () => void; api: (a: { refresh(): void }) => void;
+function Play({ clock, store, first, onRestart, onLeave, api }: {
+  clock: Clock; store: SaveStore; first: GameState; onRestart: () => void; onLeave?: () => void; api: (a: { refresh(): void }) => void;
 }) {
   const [state, setState] = useState<GameState>(() => syncClock(content, first, clock.now()));
   const [tab, setTab] = useState<Tab>('journal');
@@ -173,7 +174,7 @@ function Play({ clock, store, first, onRestart, api }: {
   // then the day cards the player has not seen: the last day's card comes before the end screen, never after it
   if (state.demoOver && !endClosed && dayCard) return <div class="game">{dayCard}</div>;
   if (state.demoOver && !endClosed) {
-    return <DemoEnd state={state} onClose={() => { setSheet(null); setTab('journal'); setEndClosed(true); }} onRestart={onRestart} />;
+    return <DemoEnd state={state} onClose={() => { setSheet(null); setTab('journal'); setEndClosed(true); }} onRestart={onRestart} onLeave={onLeave} />;
   }
   // after the demo end screen is closed the game stays open read-only
   const frozen = !!state.demoOver;
@@ -686,7 +687,7 @@ function readNotified() {
   try { return localStorage.getItem(NOTIFY_KEY) === '1'; } catch { return false; }
 }
 
-function DemoEnd({ state, onClose, onRestart }: { state: GameState; onClose: () => void; onRestart: () => void }) {
+function DemoEnd({ state, onClose, onRestart, onLeave }: { state: GameState; onClose: () => void; onRestart: () => void; onLeave?: () => void }) {
   const frames = timelapseFrames(state, false);
   const [notified, setNotified] = useState(readNotified);
   const [shareNote, setShareNote] = useState('');
@@ -750,9 +751,12 @@ function DemoEnd({ state, onClose, onRestart }: { state: GameState; onClose: () 
         </div>
       </div>
       <div class="end-foot">
-        {notified && <p class="end-note" role="status">{DEMO_END.notified}</p>}
+        {/* in Telegram the bot already put the player on the list, so the line replaces the notify button */}
+        {onLeave
+          ? <p class="end-note" role="status">{DEMO_END.listed}</p>
+          : notified && <p class="end-note" role="status">{DEMO_END.notified}</p>}
         <div class="end-actions">
-          <button onClick={notify}>{DEMO_END.notify}</button>
+          {onLeave ? <button onClick={onLeave}>{DEMO_END.leave}</button> : <button onClick={notify}>{DEMO_END.notify}</button>}
           <button onClick={onClose}>{DEMO_END.close}</button>
         </div>
         <button class="end-restart" onClick={onRestart}>{DEMO_END.restart}</button>
