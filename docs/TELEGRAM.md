@@ -1,6 +1,6 @@
 # Telegram: wishlist bot and the 1-day Mini App
 
-Status on 2026-11-27: code written and tested locally, nothing deployed.
+Status on 2026-11-27: deployed. Bot [@glowupchallenge30bot](https://t.me/glowupchallenge30bot); Supabase project `glowup`, ref `mfpdgdiycjavoaoinvsz` (Frankfurt, free plan, org «antropos17's Org»); webhook and the «Играть» menu button set. The channel of the project is `t.me/glowupchallenge30`. Local secrets live outside the repository in `X:secrets` (`glowup-bot-token.txt`, `glowup-webhook-secret.txt`, `glowup-supabase-db-password.txt`, `glowup-bot.env`). The Mini App mode (`?demo=1`, back-to-chat button) reaches GitHub Pages only once this branch is merged and pushed.
 
 ## What runs where
 
@@ -35,12 +35,6 @@ npx supabase login
 ```
 
 ```powershell
-npx supabase init --workdir server
-```
-
-`init` creates `server/supabase/config.toml` if it is missing and leaves the functions and migrations in place. If it says the project is already initialised, go on.
-
-```powershell
 $ref = '<project-ref>'
 ```
 
@@ -51,7 +45,7 @@ npx supabase link --project-ref $ref --workdir server
 ### 2. Database
 
 ```powershell
-npx supabase db push --workdir server
+npx supabase db push --linked --workdir server
 ```
 
 This applies both migrations: `0001_init.sql` (the save and purchase tables of the game, unused for now) and `0002_bot_wishlist.sql`.
@@ -85,7 +79,7 @@ npx supabase secrets set --workdir server --project-ref $ref "TELEGRAM_WEBHOOK_S
 Telegram sends no Supabase JWT, so JWT verification is off for this function; the secret header protects it instead.
 
 ```powershell
-npx supabase functions deploy bot --no-verify-jwt --workdir server --project-ref $ref
+npx supabase functions deploy bot --no-verify-jwt --use-api --workdir server --project-ref $ref
 ```
 
 ### 5. Point Telegram at the function
