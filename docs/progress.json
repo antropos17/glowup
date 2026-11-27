@@ -110,11 +110,11 @@
     }
   },
   "telegram": {
-    "status": "code done 2026-11-27, not deployed; steps in docs/TELEGRAM.md",
+    "status": "bot v2 code merged 2026-11-27, v2 not deployed, not checked in a real Telegram client; deploy steps in docs/TELEGRAM.md, \"Deploy v2\". v1 is recorded as deployed 2026-11-27 at the top of docs/TELEGRAM.md",
     "mini_app": "?demo=<n> cuts the demo after day n (Mini App URL https://antropos17.github.io/glowup/?demo=1). Inside Telegram (non-empty initData) the SDK is loaded from the tgWebAppData hash, ready() and expand() are called, the header is coloured #E8EFF1, the game is shown alone, and the demo end screen shows the line «Ты в списке…» and the «Вернуться в чат» button (close()) in place of the notify button",
-    "bot": "Supabase function server/supabase/functions/bot (pure logic in logic.ts, tests/bot.test.ts) and migration 0002_bot_wishlist.sql: /start [code], /stats, /addcode",
+    "bot": "Supabase function server/supabase/functions/bot (pure logic in logic.ts, tests/bot.test.ts) and migration 0002_bot_wishlist.sql: /start [code], /stats, /addcode. v2 (migration 0003_bot_v2.sql, on only when the function secret TELEGRAM_BOT_TOKEN is set): button menu, reviews, vote link, channel post queue, broadcasts",
     "verified": "Chrome via playwright-core, built dist/index.html, real clicks, page.clock: ?demo=1 with a stub Telegram.WebApp from a clean save to the demo end after Day 1 at 375x812 and 320x568 (no showcase, no frame, no horizontal scroll, save kept over a reload, calls ready, expand, header, close), ?demo=1 outside Telegram ends after Day 1 with the showcase and notify button unchanged, no parameter goes on to Day 2; no console errors",
-    "not_verified": "real Telegram client and phone, save after closing the Mini App in a real client, bot index.ts on Deno and Supabase (no Deno here), deployment"
+    "not_verified": "real Telegram client and phone, save after closing the Mini App in a real client, bot index.ts on Deno and Supabase (no Deno here), v2 deployment and migration 0003_bot_v2.sql"
   },
   "campaign_tiktok": {
     "status": "plan accepted by Ruslan 2026-11-27, revised the same day after the monetization chat, nothing published yet; docs/CAMPAIGN_TIKTOK.md",
