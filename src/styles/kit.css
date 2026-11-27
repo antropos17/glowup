@@ -70,3 +70,16 @@ body { background: #F4F7F8; color: #14233B; font-family: var(--body); font-size:
   .phone { width: auto; max-width: none; margin: 0 -16px; height: 100vh; height: 100svh; max-height: none; min-height: 0; border: 0; border-radius: 0; }
   .phone > .game { border-radius: 0; }
 }
+
+/* illustrations: scene banners, cast, item pictures */
+.scenes { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+.scenes figure { margin: 0; background: #fff; border-radius: 16px; padding: 8px; display: flex; flex-direction: column; gap: 6px; }
+.scenes figcaption { font-size: 12.5px; color: #55637B; display: flex; flex-direction: column; gap: 2px; }
+.scenes figcaption b { color: #14233B; font-weight: 600; }
+.scenes figcaption code { font-size: 11.5px; }
+.path.cast { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+.path.cast figcaption { display: flex; align-items: center; justify-content: center; gap: 6px; }
+.path.cast figcaption b { display: inline; }
+.path.cast .face svg { width: 150%; max-width: none; }
+.kit button.dev-btn[aria-pressed='true'] { background: #14233B; color: #fff; }
+.icons .spot svg { width: 84px; height: auto; }

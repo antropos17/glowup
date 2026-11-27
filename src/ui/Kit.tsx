@@ -4,7 +4,10 @@ import { ICONS, type IconName } from '../art/icons';
 import { DEFAULT_LOOK, HAIR_COLORS, SKIN_TONES, type Look } from '../art/avatar';
 import { DeviceClock, msToNextPart } from '../engine/clock';
 import { LocalSave } from '../engine/save';
-import { Body, Icon, Portrait } from './bits';
+import { CAST } from '../art/cast';
+import { ITEM_ART_IDS, SPOTS } from '../art/items';
+import { SCENES, sceneFor, type Part, type SceneId } from '../art/scenes';
+import { Body, Face, Icon, ItemArt, Portrait, Scene, Spot } from './bits';
 import { Game, type GameApi } from './Game';
 import { SOUND } from './ru';
 import { play, SOUNDS, type SoundName } from './sound';
@@ -43,6 +46,59 @@ function stage(id: string, t: number, patch: Partial<Look> = {}): Look {
     for (const m of def.look ?? []) (look as unknown as Record<string, number>)[m.param] = m.at0 + (m.at100 - m.at0) * ((start * (1 - t)) / 100);
   }
   return { ...look, ...patch };
+}
+
+const PARTS: [Part, string][] = [['morning', 'утро'], ['day', 'день'], ['evening', 'вечер'], ['night', 'ночь']];
+const SCENE_NAME: Record<SceneId, string> = {
+  room: 'комната (запасная)', bed: 'кровать', couch: 'диван', bathroom: 'ванная', kitchen: 'кухня', balcony: 'балкон', park: 'парк',
+  gym: 'зал', clinic: 'поликлиника', office: 'коридор у кабинета', pharmacy: 'аптека', street: 'улица', cafe: 'кофейня', bbq: 'шашлыки',
+  job: 'подработка', phone: 'чат класса', crushPhone: 'переписка с ней', feed: 'лента', call: 'звонок',
+};
+
+/** Which demo cards (days 1..demoDays) fall into each scene; shows how much the room fallback catches. */
+function sceneCards(): Map<SceneId, string[]> {
+  const m = new Map<SceneId, string[]>();
+  for (const c of content.cards) {
+    if ((c.when?.days?.[0] ?? 1) > content.balance.demoDays) continue;
+    const id = sceneFor(c);
+    m.set(id, [...(m.get(id) ?? []), c.title.replace('{crush}', 'Алина')]);
+  }
+  return m;
+}
+
+function Illustrations() {
+  const [part, setPart] = useState<Part>('day');
+  const her = content.crushes[0];
+  const cards = sceneCards();
+  return (
+    <>
+      <section>
+        <h2>Сцены карточек</h2>
+        <p class="sub">Баннер над каждой карточкой. Сцена выбирается по заголовку, говорящему и виду карточки, новых полей в контенте нет. Окна и небо следуют времени суток игрока. Под сценой карточки демо, которые в неё попадают.</p>
+        <div class="dev-row" style="margin-bottom:12px">{PARTS.map(([p, n]) => <button class="dev-btn" aria-pressed={p === part} style={p === part ? 'border-color:#14233B' : ''} onClick={() => setPart(p)}>{n}</button>)}</div>
+        <div class="scenes">{SCENES.map((id) => (
+          <figure><Scene id={id} part={part} crush={her.look} face={CAST['Мама']} />
+            <figcaption><b>{SCENE_NAME[id]}</b> <code>{id}</code><span>{(cards.get(id) ?? []).filter((t, i, a) => a.indexOf(t) === i).join(' · ') || 'в демо нет карточек'}</span></figcaption></figure>
+        ))}</div>
+      </section>
+
+      <section>
+        <h2>Люди вокруг</h2>
+        <p class="sub">Лица собраны из тех же слоёв, что и герой. Появляются у имени говорящего на карточке; лицо Алины ещё и у её сообщений в чате.</p>
+        <div class="path cast">
+          <figure><Portrait look={her.look} /><figcaption><b>{her.name}</b><Face look={her.look} /></figcaption></figure>
+          {Object.entries(CAST).map(([name, l]) => <figure><Portrait look={l} /><figcaption><b>{name}</b><Face look={l} /></figcaption></figure>)}
+        </div>
+      </section>
+
+      <section>
+        <h2>Вещи и пустые экраны</h2>
+        <p class="sub">Картинка на каждую вещь из контента вместо мелкой иконки. Пустые журнал, чат, лента, блокнот и вещи получили по маленькой иллюстрации.</p>
+        <div class="icons">{content.items.map((it) => <div><ItemArt id={it.id} icon={it.icon} />{it.title}{!ITEM_ART_IDS.includes(it.id) && ' (иконка)'}</div>)}</div>
+        <div class="icons" style="margin-top:12px">{SPOTS.map((n) => <div><Spot name={n} />{n}</div>)}</div>
+      </section>
+    </>
+  );
 }
 
 export function Kit() {
@@ -104,6 +160,8 @@ export function Kit() {
             <figure><Portrait look={stage('andrey', 1, { hair: 'buzz', facial: 'none', glasses: 'thin', neckline: 'lapel', topColor: '#22304D', mood: 85 })} /><figcaption><b>день 30</b>всё решено</figcaption></figure>
           </div>
         </section>
+
+        <Illustrations />
 
         <section>
           <h2>Иконки</h2>
