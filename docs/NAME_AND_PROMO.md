@@ -2,6 +2,8 @@
 
 Status: **draft, not confirmed by the authors** (2026-11-27). Nothing here is built. When the authors confirm a part, move it to `DECISIONS.md` as a numbered row.
 
+Ruslan chose the RU name on 2026-11-27: **«Краш за 30 дней»**. The rest is still a draft.
+
 Market order (Ruslan, 2026-11-27): the CIS first, international later.
 
 ## 1. Name
@@ -10,9 +12,9 @@ Market order (Ruslan, 2026-11-27): the CIS first, international later.
 
 | | CIS (first) | International (later) |
 |---|---|---|
-| Brand | **Краш за 30** | **Crush in 30** |
-| Store title | «Краш за 30: глоуап-симулятор» | "Crush in 30: Glow Up Simulator" |
-| Said in videos | «Краш за 30» | "Crush in 30" |
+| Brand | **Краш за 30 дней** | **Crush in 30** |
+| Store title | «Краш за 30 дней: глоуап-симулятор» | "Crush in 30: Glow Up Simulator" |
+| Said in videos | «Краш за 30 дней» | "Crush in 30" |
 
 One brand with the same meaning in both markets: «краш» is a common word among young CIS players, so the RU name is a direct translation and the logo, the icon and creator videos carry over to the international launch.
 
@@ -65,7 +67,7 @@ Hypotheses, to test on the first 5–10 creators:
 
 ### First message (RU, to adapt)
 
-> Привет! Мы делаем мобильную игру «Краш за 30»: у героя 30 реальных дней, чтобы привести себя в порядок и понравиться человеку. Каждый день открывается по настоящему времени, как челлендж. Похоже на твой формат «до/после». Хочешь ранний доступ? Можно вести героя параллельно своему челленджу, а зрители в комментариях выберут, что ответить крашу.
+> Привет! Мы делаем мобильную игру «Краш за 30 дней»: у героя 30 реальных дней, чтобы привести себя в порядок и понравиться человеку. Каждый день открывается по настоящему времени, как челлендж. Похоже на твой формат «до/после». Хочешь ранний доступ? Можно вести героя параллельно своему челленджу, а зрители в комментариях выберут, что ответить крашу.
 
 ### Legal (CIS)
 
@@ -103,6 +105,6 @@ So the reward must not touch the chance, `affinity`, problems, energy or coins (
 
 ## Open questions for the authors
 
-1. Confirm «Краш за 30» / "Crush in 30", or pick an alternative.
+1. RU name: «Краш за 30 дней», chosen by Ruslan on 2026-11-27. Confirm "Crush in 30" for the international launch, or pick an alternative.
 2. The duet card as the only referral reward: yes or no.
 3. Creators in the demo stage: early access and thanks only, or money from the start?

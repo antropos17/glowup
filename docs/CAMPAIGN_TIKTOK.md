@@ -1,4 +1,4 @@
-# TikTok campaign plan: «Краш за 30», 4 weeks
+# TikTok campaign plan: «Краш за 30 дней», 4 weeks
 
 Status: **accepted by Ruslan on 2026-11-27**. Nothing in it is published or sent yet. Related: `docs/NAME_AND_PROMO.md` (name, creator outreach, referral; draft), `docs/TELEGRAM.md` (bot and Mini App), `promo/shorts/README.md` (ready shorts).
 
@@ -13,7 +13,7 @@ Marks: **F** fact (checked in code or docs), **H** hypothesis, **T** taste. Ever
 | Duration | 4 weeks, 2026-11-30 to 2026-12-27, no fixed date |
 | Time | 15+ hours a week |
 
-Not decided by the authors, so not promised to anyone: the name (the bot still greets with «30 дней»), a bonus for a viewer who comes by a code, money or a share for creators.
+Name: Ruslan chose «Краш за 30 дней» on 2026-11-27; the bot greeting uses it. Not decided by the authors, so not promised to anyone: a bonus for a viewer who comes by a code, money or a share for creators.
 
 ## 1. Objective
 
@@ -65,7 +65,7 @@ Creators: their link goes straight to the bot with their code, otherwise their s
 
 **Order for the first 5–10 creators:**
 1. The first 2–3 are people Ruslan knows: they test the whole chain. Then 5–7 cold contacts.
-2. Ruslan sends the letter himself, from the template in `NAME_AND_PROMO.md` with the name «Краш за 30».
+2. Ruslan sends the letter himself, from the template in `NAME_AND_PROMO.md` with the name «Краш за 30 дней».
 3. The creator agrees → writes `/start` to the bot → Ruslan finds their id (the newest row in Supabase `wishlist`) → `/addcode <nick> <Name> <id>` → the bot replies with the link; Ruslan forwards it. The owner must be set at once: a repeated `/addcode` on the same code is refused and there is no "change owner" command (F).
 4. The creator puts the link in their bio or a pinned comment and checks `/stats` themselves.
 5. After 72 hours Ruslan records their views (from the creator's screenshot) and the `/stats` count in the creator table.
@@ -116,7 +116,7 @@ If the session making the live shorts has not added the «по мотивам т
 |---|---|
 | In Russia TikTok may not show new videos, and Promote may not reach a Russian audience (H: so it was from 2022; not checked now) | on day 1 ask someone with a Russian SIM to find our video. If it is not visible, TikTok works for the CIS and Russia moves to other platforms (outside this plan) |
 | The bio link may not be clickable on a personal account with few followers (H) | check; if so, switch to a business account, or put the channel name as text and pin a comment with the link |
-| The bot greets with «Это «30 дней»», the videos say «Краш за 30» (F) | decide the name or change the bot greeting (one line, only with Ruslan's yes) |
+| The three ready shorts and the logo mark (`promo/avatars`) still say «Краш за 30» (F); the bot and the channel post say «Краш за 30 дней» | change the end card and the logo, then re-render the shorts |
 | The Mini App was never checked in a real Telegram client on a phone (F, `TELEGRAM.md`) | walk the whole funnel before the first video of week 1 |
 | Day 1 follows real local time (F); a person who arrives at night may see something odd | check during the funnel walk |
 | The channel has no pinned post with a button to the bot, people get lost at step 3a | make the pinned post before the first video (Ruslan publishes it) |
