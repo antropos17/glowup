@@ -89,16 +89,17 @@ const avatars: Record<string, string> = {
   // 2. «после»: the same hero solved, on a warm background
   '2-posle': svg(radial('bg', '#FFE9A8', GOLD), `<rect width="${S}" height="${S}" fill="url(#bg)"/>${hero(after)}`),
 
-  // 3. logo mark: «КРАШ ЗА 30 ДНЕЙ», a heart and the chance meter
+  // 3. logo mark: «GLOW UP: ЧЕЛЛЕНДЖ 30 ДНЕЙ», a heart and the chance meter
   '3-logo': svg(
     radial('bg', RASP, RASP_DEEP),
     `<rect width="${S}" height="${S}" fill="url(#bg)"/>` +
-      `<g transform="translate(${C - 62} 128) scale(5.2)"><path d="${HEART}" fill="${NOTE}"/></g>` +
-      `<text x="${C}" y="330" text-anchor="middle" font-family="Unbounded" font-weight="800" font-size="92" letter-spacing="2" fill="#fff">КРАШ ЗА</text>` +
-      `<text x="${C + 7}" y="640" text-anchor="middle" font-family="Unbounded" font-weight="900" font-size="330" letter-spacing="-12" fill="#fff">30</text>` +
-      `<text x="${C}" y="768" text-anchor="middle" font-family="Unbounded" font-weight="800" font-size="92" letter-spacing="2" fill="#fff">ДНЕЙ</text>` +
-      `<rect x="${C - 220}" y="804" width="440" height="48" rx="24" fill="#fff" fill-opacity=".28"/>` +
-      `<rect x="${C - 220}" y="804" width="308" height="48" rx="24" fill="${NOTE}"/>`,
+      `<g transform="translate(${C - 48} 116) scale(4)"><path d="${HEART}" fill="${NOTE}"/></g>` +
+      `<text x="${C}" y="300" text-anchor="middle" font-family="Unbounded" font-weight="900" font-size="86" letter-spacing="1" fill="#fff">GLOW UP:</text>` +
+      `<text x="${C}" y="396" text-anchor="middle" font-family="Unbounded" font-weight="800" font-size="74" letter-spacing="1" fill="${NOTE}">ЧЕЛЛЕНДЖ</text>` +
+      `<text x="${C + 6}" y="662" text-anchor="middle" font-family="Unbounded" font-weight="900" font-size="290" letter-spacing="-10" fill="#fff">30</text>` +
+      `<text x="${C}" y="772" text-anchor="middle" font-family="Unbounded" font-weight="800" font-size="86" letter-spacing="2" fill="#fff">ДНЕЙ</text>` +
+      `<rect x="${C - 200}" y="808" width="400" height="44" rx="22" fill="#fff" fill-opacity=".28"/>` +
+      `<rect x="${C - 200}" y="808" width="280" height="44" rx="22" fill="${NOTE}"/>`,
   ),
 
   // 4. split: one face, left half Day 1, right half solved, a thin white divider

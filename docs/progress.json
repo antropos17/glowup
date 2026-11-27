@@ -124,6 +124,11 @@
     "call_to_action": "«Демо в канале»: before 1000 followers no bio link, the handle glowupchallenge30 as text (profile, end cards, pinned comment) → channel t.me/glowupchallenge30 found by hand → pinned post → bot with a weekly code (tt-w1 … tt-w4); creators link to the bot with their own code",
     "not_measurable": "Mini App opens and the end of Day 1 (needs an events table), per-video source, the promised broadcast to the wishlist (not built)"
   },
+  "promo_name": {
+    "status": "2026-11-27: promo renamed to «Glow Up: челлендж 30 дней» (DECISIONS.md row 48) on branch claude/magical-lamport-7eb2c6, not merged, nothing deployed or published",
+    "files": "12 shorts re-rendered as X:\\Projects 2027\\Glowup promo\\shorts\\glowup30-<name>.mp4 with end-card sheets glowup30-<name>-sheet.jpg; the krash30- files are kept and must not be published; logo promo/avatars/out/3-logo*, bot picture promo/botfather/description.png",
+    "open": "the closing voice line c4 / f6 / p6 of chat, feed and pov still says the cancelled name; the new name and description are set in BotFather (2026-11-27 18:02, reported by the main game chat), the redrawn description.png is not uploaded there yet; the deployed bot keeps the old greeting until redeployed; live-1 … live-5 end cards carry no channel nick"
+  },
   "public_page_and_art": {
     "status": "merged into main 2026-11-27",
     "note": "the public page opens the game alone, the asset showcase moved to ?kit; scenes, faces, item pictures and empty-screen spots are drawn in code (src/art/cast.ts, items.ts, scenes.ts, tests/art.test.ts)",
@@ -139,7 +144,7 @@
     "store purchase verification"
   ],
   "awaiting_authors": [
-    "Name, creator outreach and referral: confirm the draft in docs/NAME_AND_PROMO.md (RU name «Краш за 30 дней» chosen by Ruslan 2026-11-27; confirm Crush in 30 and the creator offer in the demo stage; the friend invite reward was decided by Ruslan on 2026-11-27, DECISIONS.md row 47: the frame «Позвал друга» and a shared before/after card, not yet confirmed by the co-author, not built)",
+    "Name, creator outreach and referral: confirm the draft in docs/NAME_AND_PROMO.md (RU name «Glow Up: челлендж 30 дней» decided by Ruslan 2026-11-27, DECISIONS.md row 48; the international name is open; confirm the creator offer in the demo stage; the friend invite reward was decided by Ruslan on 2026-11-27, DECISIONS.md row 47: the frame «Позвал друга» and a shared before/after card, not yet confirmed by the co-author, not built)",
     "Day 18: review the texts (docs/review/day18-texts.md), the title «Костюм с выпускного», the gift gum and the teaser «Завтра четверг. Песня»; confirm the weight thresholds of the fitting (fits <= 48, tight 49-60, no >= 61: a player who never uses the plus menu never fits) and the deviations listed there (separate joke buttons for tight and no, one organisers' answer per suit, three answer-bubble cards)",
     "Day 17: review the texts (docs/review/day17-texts.md), the title «Запах», the gift floss and the teaser; confirm the deviations listed there (K17-02 split into four cards, d17_tester replaced by d17_scent, Gosha before the pharmacy, the cologne care +2 stays, the perfume line on the balcony)",
     "Day 16: review the texts (docs/review/day16-texts.md), the title «Кусок торта», the gift acne_patch and the teaser; confirm the deviations listed there (K16-01b split into two cards, K16-02 split by team, A16-gym open after a renewal, no Alina card, d15_pimple not read)",
