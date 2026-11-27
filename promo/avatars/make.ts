@@ -28,11 +28,26 @@ const s = { archetypeId: andrey.id, problems: andrey.problems, lookPatch: {} } a
 
 /** Day 1: the archetype at its starting problem levels. */
 const before: Look = currentLook(c, s, andrey.problems, {});
-/** Every problem solved, plus the look effects the cards give: shaved (Day 14), round glasses and a blue V-neck top. */
+/**
+ * Every problem solved, shaved (Day 14), in the blue of the game's new top. Promo liberties asked by Ruslan
+ * (2026-11-27), not in the game: a rich look, a black suit over a white shirt, fuller hair, gold-framed sunglasses,
+ * slimmer than the engine's weight 50, a confident smile.
+ */
 const solved = Object.fromEntries(Object.keys(andrey.problems).map((k) => [k, 0]));
 const after: Look = currentLook(c, s, solved, {
-  facial: 'none', razorBurn: false, glasses: 'round', neckline: 'v', topColor: '#4A6FA5',
+  facial: 'none', razorBurn: false, glasses: 'thin', neckline: 'lapel', topColor: '#1C1F26',
+  hair: 'side', weight: 35, mood: 90,
 });
+
+/** The game has no sunglasses: restyle the drawn thin frames as dark lenses in a gold frame. */
+const GOLD = '#D9A520';
+function sunglasses(svg: string) {
+  return svg
+    .replace('fill="#fff" fill-opacity=".14" stroke="#6B7384" stroke-width="2"><rect x="63" y="92" width="32" height="23" rx="9"/><rect x="105" y="92" width="32" height="23" rx="9"/>',
+      `fill="#15181F" stroke="${GOLD}" stroke-width="2.6"><path d="M 60 93 H 96 V 104 Q 96 119 81 119 Q 62 119 60 104 Z"/><path d="M 104 93 H 140 V 104 Q 138 119 119 119 Q 104 119 104 104 Z"/>` +
+      `<path d="M 66 98 L 74 98 M 110 98 L 118 98" stroke="#fff" stroke-opacity=".55" stroke-width="2.4" stroke-linecap="round"/>`)
+    .replace(/stroke="#6B7384" stroke-width="2" fill="none"/, `stroke="${GOLD}" stroke-width="2.6" fill="none"`);
+}
 
 // ---------- palette (src/styles/game.css) ----------
 
@@ -55,7 +70,7 @@ const S = 1024, C = S / 2;
 
 /** The portrait placed so the face fills the middle of the circle. Portrait coordinates are 200×226. */
 function hero(look: Look, scale = 4.3, dy = 30, cx = 100, cy = 112) {
-  return `<g transform="translate(${C - cx * scale} ${C - cy * scale + dy}) scale(${scale})">${portraitInner(look)}</g>`;
+  return `<g transform="translate(${C - cx * scale} ${C - cy * scale + dy}) scale(${scale})">${sunglasses(portraitInner(look))}</g>`;
 }
 
 const radial = (id: string, inner: string, outer: string) =>
@@ -72,7 +87,7 @@ const avatars: Record<string, string> = {
   '1-do': svg(radial('bg', '#2FC0AC', MINT_DEEP), `<rect width="${S}" height="${S}" fill="url(#bg)"/>${hero(before)}`),
 
   // 2. «после»: the same hero solved, on a warm background
-  '2-posle': svg(radial('bg', MORNING, NOTE), `<rect width="${S}" height="${S}" fill="url(#bg)"/>${hero(after)}`),
+  '2-posle': svg(radial('bg', '#FFE9A8', GOLD), `<rect width="${S}" height="${S}" fill="url(#bg)"/>${hero(after)}`),
 
   // 3. logo mark: «КРАШ ЗА 30», a heart and the chance meter
   '3-logo': svg(
@@ -87,7 +102,7 @@ const avatars: Record<string, string> = {
 
   // 4. split: one face, left half Day 1, right half solved, a thin white divider
   '4-split': svg(
-    radial('bgL', '#2FC0AC', MINT_DEEP) + radial('bgR', MORNING, NOTE) +
+    radial('bgL', '#2FC0AC', MINT_DEEP) + radial('bgR', '#FFE9A8', GOLD) +
       `<clipPath id="L"><rect width="${C}" height="${S}"/></clipPath><clipPath id="R"><rect x="${C}" width="${C}" height="${S}"/></clipPath>`,
     `<g clip-path="url(#L)"><rect width="${S}" height="${S}" fill="url(#bgL)"/>${hero(before, 3.9, 140)}</g>` +
       `<g clip-path="url(#R)"><rect width="${S}" height="${S}" fill="url(#bgR)"/>${hero(after, 3.9, 140)}</g>` +
