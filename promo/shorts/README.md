@@ -1,4 +1,4 @@
-# Vertical shorts «Краш за 30»
+# Vertical shorts «Краш за 30 дней»
 
 Three vertical ads for TikTok / Reels / Shorts, built as HyperFrames compositions (2026-11-27).
 Each folder is a standalone project: `index.html`, `assets/` (hero SVGs, fonts, music, sound effects).
@@ -96,7 +96,8 @@ a problem going up is a bar going down.
 | 15.5–17.5 | «Победа не гарантирована», «30 реальных дней. Каждый выбор считается.» |
 | 17.5–20 | End card |
 
-End card in all three: hero portrait, «Краш за 30», «Демо — в канале». No prices, timers,
+End card in all three: hero portrait, «Краш за 30 дней», «Демо — в канале», the channel handle
+`@glowupchallenge30` (no profile link before 1000 TikTok followers). No prices, timers,
 store badges, reviews or winning promises.
 
 ## Live shorts (Higgsfield), 2026-11-27
@@ -229,6 +230,7 @@ The «Утро» label on the run card is the ad's own (A1-run is a day action w
 - The Day 7 look: clothes, frame and shave are what Day 6–7 cards really give (shirt `#4A6FA5`, V-neck,
   round frame, no beard); the problem levels behind it are invented for the ad (`tools/hero.ts`).
 - The tea post compresses two days: the Day 1 post is saved, the outcome line is the Day 2 order (K2-05b).
-- «Краш за 30» is still a draft name (`docs/NAME_AND_PROMO.md`).
+- The voice-over's last line (`c4`, `f6`, `p6`) still says the old name «Краш за тридцать. Демо — в канале.»;
+  the end card shows «Краш за 30 дней» (name chosen by Ruslan on 2026-11-27).
 - The audio was measured (≈ −15 LUFS, true peak ≤ −1.4 dBFS), not listened to. Tracks were picked by search query and loudness profile only: listen before publishing.
 - Check that the HeyGen catalog music and the Epidemic Sound effects are cleared for paid ads and creator posts on your plans.

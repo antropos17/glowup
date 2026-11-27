@@ -33,10 +33,11 @@
       #flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; z-index: 50; }
 
       #endcard { background: var(--ink); color: var(--paper); z-index: 20; }
-      #endcard .logo { position: absolute; left: 60px; right: 60px; top: 820px; text-align: center; font-family: "Unbounded30", sans-serif; font-weight: 900; font-size: 158px; line-height: 1.0; letter-spacing: -0.03em; }
+      #endcard .logo { position: absolute; left: 60px; right: 60px; top: 830px; text-align: center; font-family: "Unbounded30", sans-serif; font-weight: 900; font-size: 116px; line-height: 1.0; letter-spacing: -0.03em; }
       #endcard .logo em { font-style: normal; color: var(--accent); }
       #endcard .cta { position: absolute; left: 60px; right: 60px; top: 1210px; text-align: center; font-size: 84px; font-family: Unbounded30, sans-serif; line-height: 1.25; font-weight: 700; }
       #endcard .cta em { font-style: normal; color: var(--accent); }
+      #endcard .handle { position: absolute; left: 60px; right: 60px; top: 1350px; text-align: center; font-family: "Golos30", sans-serif; font-size: 64px; line-height: 1.2; font-weight: 700; color: var(--paper); }
       #endcard img { position: absolute; left: 340px; top: 300px; width: 400px; height: 452px; }
       .post { top: 560px; padding: 34px 44px 40px; }
       .post .src { display: flex; align-items: center; gap: 20px; font-size: 36px; font-weight: 700; color: var(--muted); }
@@ -112,9 +113,10 @@
       <div id="endcard" class="clip layer" data-start="17.7" data-duration="2.3" data-track-index="3">
         <div class="inner" id="end-in">
           <img id="end-hero" src="assets/andrey.svg" alt="" />
-          <div class="logo" id="end-logo">Краш<br /><em>за 30</em></div>
+          <div class="logo" id="end-logo">Краш<br /><em>за 30 дней</em></div>
           <div class="burst" id="end-burst" style="left: 540px; top: 960px"></div>
           <div class="cta" id="end-cta">Демо — <em>в канале</em></div>
+          <div class="handle" id="end-handle">@glowupchallenge30</div>
         </div>
       </div>
       <div id="flash" data-layout-ignore></div>
@@ -188,6 +190,7 @@
         shake("#end-in", t + 0.54, 14);
         burst("end-burst", t + 0.54, ["#FF5436", "#F4EFE6", "#3B5BFF", "#17A56B"], 18, 360);
         tl.fromTo("#end-cta", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }, t + 0.75);
+        tl.fromTo("#end-handle", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }, t + 0.95);
         bounce("#end-logo", t + 1.4, 1.06);
         bounce("#end-cta", t + 2.0, 1.05);
       };
