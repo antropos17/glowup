@@ -168,8 +168,7 @@ export function syncClock(c: Content, state: GameState, now: number): GameState 
   while (slotIndex(s.day, s.part) < target.index) {
     const i = DAY_PARTS.indexOf(s.part);
     if (i < 3) {
-      s.part = DAY_PARTS[i + 1];
-      s.energy = Math.min(dayEnergy(c, s), s.energy + c.balance.energyPerPart);
+      stepPart(c, s);
     } else {
       // the clock ends the day, not the player's sleep: the story the player missed resolves itself first
       if (s.closedDay !== s.day) autoPlayStory(c, s);
@@ -191,6 +190,27 @@ export function syncClock(c: Content, state: GameState, now: number): GameState 
     s.playedThisPart = 0;
     delete s.current;
   }
+  return s;
+}
+
+/** One part of the day forward inside the same day, with the energy a new part brings. */
+function stepPart(c: Content, s: GameState) {
+  s.part = DAY_PARTS[DAY_PARTS.indexOf(s.part) + 1];
+  s.energy = Math.min(dayEnergy(c, s), s.energy + c.balance.energyPerPart);
+}
+
+/**
+ * The 1-day funnel (`?demo=1`) only: the player moves to the next part of the day by a button instead of
+ * waiting for the clock. Same step as the clock takes (energy, a fresh part), never past night: the night
+ * still ends with the player's sleep. The state then runs ahead of the clock, and syncClock leaves a state
+ * that is ahead alone, so the real clock never pulls it back.
+ */
+export function advancePart(c: Content, state: GameState): GameState {
+  if (state.part === 'night' || state.closedDay === state.day || state.verdict || state.demoOver) return state;
+  const s = clone(state);
+  stepPart(c, s);
+  s.playedThisPart = 0;
+  delete s.current;
   return s;
 }
 

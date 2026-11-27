@@ -11,13 +11,19 @@ export interface SaveStore {
 }
 
 const KEY = 'glowup.save.v2';
+/**
+ * The 1-day funnel (`?demo=1`) keeps its own save: its day parts move by a button, not by the clock,
+ * so its state must never become the save of the real-time game.
+ */
+export const FUNNEL_KEY = 'glowup.save.demo1';
 
 /** Локальное хранилище. Может быть недоступно, поэтому каждая операция под защитой. */
 export class LocalSave implements SaveStore {
   private memory: GameState | null = null;
+  constructor(private key = KEY) {}
   load() {
     try {
-      const raw = localStorage.getItem(KEY);
+      const raw = localStorage.getItem(this.key);
       if (raw) {
         const s = JSON.parse(raw) as GameState;
         if (s?.v === 2) return (this.memory = s);
@@ -27,11 +33,11 @@ export class LocalSave implements SaveStore {
   }
   save(s: GameState) {
     this.memory = s;
-    try { localStorage.setItem(KEY, JSON.stringify(s)); } catch { /* см. выше */ }
+    try { localStorage.setItem(this.key, JSON.stringify(s)); } catch { /* см. выше */ }
   }
   clear() {
     this.memory = null;
-    try { localStorage.removeItem(KEY); } catch { /* см. выше */ }
+    try { localStorage.removeItem(this.key); } catch { /* см. выше */ }
   }
 }
 
