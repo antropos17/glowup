@@ -4246,6 +4246,15 @@ describe('economy', () => {
     expect(trained.coins).toBe(running.coins);
     expect(trained.modifiers).toEqual(running.modifiers);
   });
+  it('an item that costs energy is refused when too little is left, and nothing is spent', () => {
+    const bag = buy(content, rich(start()), 'haircut');
+    const tired = { ...bag, energy: item('haircut').energy! - 1 };
+    expect(() => useItem(content, tired, 'haircut')).toThrow('Не хватает энергии');
+    expect(tired.items.haircut).toBe(1);
+    const used = useItem(content, { ...bag, energy: item('haircut').energy! }, 'haircut');
+    expect(used.items.haircut).toBe(0);
+    expect(used.energy).toBe(0);
+  });
   it('a full week of income does not cover everything in the shop', () => {
     const b = content.balance;
     const maxIncome = b.startCoins + b.dayCoins * 6 + 30 * 7;

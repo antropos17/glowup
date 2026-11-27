@@ -668,6 +668,8 @@ function Shop({ state, commit }: { state: GameState; commit: (s: GameState) => v
     const active = courseActive(state, it);
     // an owned item is counted and applied under «Твои вещи» only; the shop card just sells
     const usable = !selling && have > 0 && !!it.onUse;
+    // useItem refuses an item that costs more energy than is left: say so instead of a dead button
+    const tired = state.energy < (it.energy ?? 0);
     return (
       <div class="item">
         <div class="item-head">
@@ -684,9 +686,10 @@ function Shop({ state, commit }: { state: GameState; commit: (s: GameState) => v
               : coins !== undefined
               ? <button class="buy" disabled={state.coins < coins} onClick={() => { commit(buy(content, state, it.id)); play('coins'); }}>Купить <Icon name="coin" size={16} />{coins}</button>
               : <button class="buy" disabled>За реальные деньги, в прототипе выключено</button>)}
-            {usable && <button class="use" disabled={active} onClick={() => commit(useItem(content, state, it.id))}>Применить</button>}
+            {usable && <button class="use" disabled={active || tired} onClick={() => commit(useItem(content, state, it.id))}>Применить</button>}
           </div>
         )}
+        {usable && !active && tired && <p class="why">Не хватает энергии</p>}
       </div>
     );
   };
