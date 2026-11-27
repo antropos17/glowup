@@ -42,6 +42,8 @@
       #endcard .cta { position: absolute; left: 60px; right: 60px; top: 1210px; text-align: center; font-size: 84px; font-family: Unbounded30, sans-serif; line-height: 1.25; font-weight: 700; }
       #endcard .cta em { font-style: normal; color: var(--accent); }
       #endcard img { position: absolute; left: 340px; top: 300px; width: 400px; height: 452px; }
+      #endcard .nick { position: absolute; left: 60px; right: 60px; top: 1360px; text-align: center; font-family: "Unbounded30", sans-serif; font-weight: 700; font-size: 58px; letter-spacing: -0.01em; color: var(--paper); }
+      #endcard .nick b { display: inline-block; background: var(--accent); color: #fff; border-radius: 28px; padding: 10px 30px; font-weight: 900; }
       .choice { top: 560px; padding: 40px 46px; }
       .choice .who { font-size: 38px; font-weight: 700; color: var(--muted); }
       .choice .txt { margin-top: 16px; font-size: 52px; line-height: 1.2; font-weight: 800; }
@@ -97,6 +99,7 @@
           <div class="logo" id="end-logo">Glow Up:<br /><em>челлендж<br />30 дней</em></div>
           <div class="burst" id="end-burst" style="left: 540px; top: 960px"></div>
           <div class="cta" id="end-cta">Демо — <em>в канале</em></div>
+          <div class="nick" id="end-nick"><b>glowupchallenge30</b></div>
         </div>
       </div>
       <div id="flash" data-layout-ignore></div>
@@ -220,6 +223,8 @@
       say("#say4", 11.6, null);
       bounce("#say4", 12.4, 1.06);
       ENDCARD(13.1);
+      tl.fromTo("#end-nick", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, ...POP }, 13.7);
+      bounce("#end-nick", 15, 1.06);
 
       // feed's music (123 bpm)
       punch(123, 0.45, 16.2, [[0, 4.6], [11.4, 13.1]], [[4.6, 0.04], [6.7, 0.03], [7.6, 0.06], [9.3, 0.03], [10.2, 0.06], [13.1, 0.025], [13.64, 0.06]]);

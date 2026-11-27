@@ -128,7 +128,8 @@
   "promo_name": {
     "status": "2026-11-27: promo renamed to «Glow Up: челлендж 30 дней» (DECISIONS.md row 48) on branch claude/magical-lamport-7eb2c6, not merged, nothing deployed or published",
     "files": "12 shorts re-rendered as X:\\Projects 2027\\Glowup promo\\shorts\\glowup30-<name>.mp4 with end-card sheets glowup30-<name>-sheet.jpg; the krash30- files are kept and must not be published; logo promo/avatars/out/3-logo*, bot picture promo/botfather/description.png",
-    "open": "the closing voice line c4 / f6 / p6 of chat, feed and pov still says the cancelled name; the new name and description are set in BotFather (2026-11-27 18:02, reported by the main game chat), the redrawn description.png was uploaded to BotFather on 2026-11-27 at 18:36; the deployed bot keeps the old greeting until redeployed; live-1 … live-5 end cards carry no channel nick"
+    "nick": "2026-11-27: the channel nick added to the end cards of live-1 … live-5, placed and animated as in v2; those five shorts re-rendered under the same glowup30- names",
+    "open": "the new name and description are set in BotFather (2026-11-27 18:02, reported by the main game chat), the redrawn description.png was uploaded to BotFather on 2026-11-27 at 18:36; the deployed bot keeps the old greeting until redeployed; nobody has listened to the new files"
   },
   "public_page_and_art": {
     "status": "merged into main 2026-11-27",

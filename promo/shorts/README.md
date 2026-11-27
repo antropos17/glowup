@@ -156,7 +156,7 @@ the model's own audio (voice and lip sync come from the same generation):
 | 2.8–7.3 | Day 1 mirror, six problems, «Андрей смотрит в зеркало. 30 дней.» (K1-02); captions «Мы сделали из него игру.», «Тридцать настоящих дней,», «каждый выбор считается.» | his voice goes on under the game |
 | 7.3–11.3 | «Каждый день — выбор», «Рука сама тянется к пачке.» → «Убрать пачку, взять жвачку» → «Пачка в ящике, жвачка во рту.», Уверенность +1 (K1-06) | music, sound effects |
 | 11.3–13 | Андрей again, caption «Демо — в канале.» | his line (file 8.3–10.04 s) |
-| 13–16.5 | End card «Glow Up: челлендж 30 дней», «Демо — в канале» | music |
+| 13–16.5 | End card «Glow Up: челлендж 30 дней», «Демо — в канале», the channel nick `glowupchallenge30` | music |
 
 Captions follow the script the model was given; Ruslan listened to the take and accepted it. Phrase times were
 measured from the pauses (`ffmpeg silencedetect`), not from a transcript. Music and sound effects are pov's.
@@ -167,7 +167,8 @@ The start frames are Nano Banana Pro stills in Unlimited mode with the hero port
 glasses with the taped temple, grey t-shirt), one per location. Each speech take is Seedance 2.5, start frame = that still,
 10 s, 9:16, 720p, Unlimited mode (0 credits), with the model's own voice and lip sync. Every take opens on the
 hero to camera with a hook caption (`.say.hook`, slammed in), then game cards from `content/` cut in over his voice,
-then he comes back for «Демо — в канале», then the end card «Glow Up: челлендж 30 дней». Captions follow the script the model was
+then he comes back for «Демо — в канале», then the end card «Glow Up: челлендж 30 дней» with the channel nick
+`glowupchallenge30` (in `live-1` … `live-5` since 2026-11-27, placed and animated as in v2). Captions follow the script the model was
 given; phrase times come from the pauses (`silencedetect` and an RMS envelope), not from a transcript.
 Music: live-2 and live-4 use feed's track, live-3 chat's, live-5 pov's; sound effects as above.
 
@@ -184,7 +185,7 @@ Music: live-2 and live-4 use feed's track, live-3 chat's, live-5 pov's; sound ef
 | 0–4.6 | Андрей with a pie, «Это я — тот самый скуф.», «Мама принесла двадцать пирожков.» | his lines (file 0.8–5.0 s) |
 | 4.6–11.4 | K1-04 «Мама с пирожками»: «Мама на пороге с кастрюлей. «Двадцать штук, с картошкой. Ешь, пока горячие».», its three choices; caption «Сколько съем — решаешь ты.»; «Съесть пять» → «Пять пирожков. Ремень стал теснее.», Форма −2; «Вежливо отказаться» → «Мама: «Ты заболел?»», Уверенность −1 | his voice, then music |
 | 11.4–13.1 | Андрей, «Демо — в канале.» | his line (file 8.3–10.04 s) |
-| 13.1–16.6 | End card | music |
+| 13.1–16.6 | End card with the nick | music |
 
 ### live-3 — «Втягиваю живот» (15.5 s)
 
@@ -198,7 +199,7 @@ Music: live-2 and live-4 use feed's track, live-3 chat's, live-5 pov's; sound ef
 | 0–4.6 | Андрей at the mirror with puffed cheeks, «Втягиваю живот…», «Десять секунд — мой рекорд.» | his lines (file 0.1–3.3 s), the exhale |
 | 4.6–11 | K2-02a «Зеркало»: «Утро, зеркало. Пирожки никуда не делись.»; «Втянуть живот» → «Живот продержался десять секунд.»; «Пообещать себе салат» → «Зеркало не поверило, но промолчало.»; then A1-couch «Лечь на диван «до понедельника»» → «Диван оказался сильнее.», Уверенность −1; captions «Я тот самый скуф из игры:», «тридцать дней, и каждый выбор считается.» | his voice, then music |
 | 11–11.94 | Андрей, «Демо — в канале.» | his line (file 9.1–10.04 s) |
-| 11.94–15.5 | End card | music |
+| 11.94–15.5 | End card with the nick | music |
 
 The take is odd: his belly sticks out while he holds his breath and goes flat after the exhale (the reverse of the
 prompt), and he "speaks" the first lines with puffed cheeks. Regenerate it (free) if that reads wrong.
@@ -217,7 +218,7 @@ prompt), and he "speaks" the first lines with puffed cheeks. Regenerate it (free
 | 5–6.95 | Андрей winces, holds his cheek, «Ай! Не работает.» | his line |
 | 6.95–11.4 | «Попробовать» → «Зубы скрипят и ноют от холодной воды. Белее не стали.», Зубы −3; caption «В игре проверишь всё сам.»; then K1-07a «Лента: чудо-чай», «Чудо-чай: минус 5 кг за неделю», «Сохранить» → «Чай пришёл через час. Вкус сена, весь вечер бегом в туалет.» (K2-05b, first two sentences), Энергия −2 | his voice, then music |
 | 11.4–12.54 | Андрей, «Демо — в канале.» | his line (file 8.9–10.04 s) |
-| 12.54–16 | End card | music |
+| 12.54–16 | End card with the nick | music |
 
 The tea post compresses two days, as in feed.
 
@@ -235,7 +236,7 @@ The tea post compresses two days, as in feed.
 | 3.6–5.4 | Андрей folds over holding his side, «Колет в боку!» | his line |
 | 5.4–11 | Both A1-run outcomes with their in-game hints: «закололо в боку» → «Закололо в боку, вторую половину пришлось идти шагом.», Форма +1; «получилось» → «Три круга по парку. Ноги гудят, голова ясная.», Форма +3; captions «Тридцать реальных дней —», «и каждый выбор считается.» | his voice, then music |
 | 11–12.09 | Андрей, «Демо — в канале.» | his line (file 8.95–10.04 s) |
-| 12.09–15.6 | End card | music |
+| 12.09–15.6 | End card with the nick | music |
 
 The «Утро» label on the run card is the ad's own (A1-run is a day action without a card title).
 

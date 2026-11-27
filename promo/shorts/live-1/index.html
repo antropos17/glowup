@@ -42,6 +42,8 @@
       #endcard .cta { position: absolute; left: 60px; right: 60px; top: 1210px; text-align: center; font-size: 84px; font-family: Unbounded30, sans-serif; line-height: 1.25; font-weight: 700; }
       #endcard .cta em { font-style: normal; color: var(--accent); }
       #endcard img { position: absolute; left: 340px; top: 300px; width: 400px; height: 452px; }
+      #endcard .nick { position: absolute; left: 60px; right: 60px; top: 1360px; text-align: center; font-family: "Unbounded30", sans-serif; font-weight: 700; font-size: 58px; letter-spacing: -0.01em; color: var(--paper); }
+      #endcard .nick b { display: inline-block; background: var(--accent); color: #fff; border-radius: 28px; padding: 10px 30px; font-weight: 900; }
       .mirror { position: absolute; left: 250px; width: 580px; top: 545px; height: 990px; border-radius: 290px 290px 46px 46px; background: linear-gradient(180deg, #E4ECF1, #CFDCE4); border: 16px solid #B08D62; overflow: hidden; }
       .mirror img { position: absolute; left: 34px; top: 48px; width: 480px; height: 932px; }
       .tag { position: absolute; width: 300px; background: #fff; border: 4px solid var(--minus); border-radius: 24px; padding: 14px 18px; font-size: 34px; line-height: 1.15; font-weight: 800; box-shadow: 0 12px 28px rgba(34, 33, 42, 0.14); }
@@ -107,6 +109,7 @@
           <div class="logo" id="end-logo">Glow Up:<br /><em>челлендж<br />30 дней</em></div>
           <div class="burst" id="end-burst" style="left: 540px; top: 960px"></div>
           <div class="cta" id="end-cta">Демо — <em>в канале</em></div>
+          <div class="nick" id="end-nick"><b>glowupchallenge30</b></div>
         </div>
       </div>
       <div id="flash" data-layout-ignore></div>
@@ -217,6 +220,8 @@
         bounce("#end-cta", t + 2.8, 1.05);
       };
       ENDCARD(13);
+      tl.fromTo("#end-nick", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, ...POP }, 13.6);
+      bounce("#end-nick", 14.9, 1.06);
 
       PUNCH.forEach(([t, a, d]) => tl.fromTo("#root", { scale: 1 + a }, { scale: 1, duration: d, ease: "power2.out", immediateRender: false }, t));
       window.__timelines["main"] = tl;
