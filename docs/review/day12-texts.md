@@ -2,7 +2,7 @@
 Generated 2026-11-25 from `content/cards/day12.json`, `content/chat.json`, `content/rumors.json`, `content/days.json`. Format: card id, then its lines. `[N]` marks the neutral choice (played on a skipped day). `{hero}` is the hero's name (Андрей), `{crush}` is Алина. Odds labels are shown as on the button. Lines repeated word for word from Day 11 are marked *(as Day 11)*. A card with `says` shows her chat line instead of its own text; its own text is listed for completeness.
 
 ## Day 12 entry (`content/days.json`)
-- title: Вторая чистка
+- title: Кресло стоматолога
 - teaser: Завтра пятница. У Вити день рождения
 - gift: `gum` (existing item, no new text)
 
@@ -105,7 +105,7 @@ Generated 2026-11-25 from `content/cards/day12.json`, `content/chat.json`, `cont
 ### K12-run · Витя у подъезда
 - text: Семь утра, четверг. Витя у подъезда, подпрыгивает на месте: «Два круга. Я сегодня в форме, догоняй».
 - Бежать с Витей (cost: 4 энергии) *(as Day 11)*
-  - Два круга с Витей. Ноги ещё помнят капсулы, но уже меньше. Добежал и даже не сел на лавку.
+  - Два круга с Витей. Добежал и даже не сел на лавку.
   - Два круга по парку. Витя в форме: обогнал на финише и полдороги домой об этом рассказывал.
 - [N] Не сегодня *(as Day 11)*
   - Витя пожал плечами и побежал один: «Завтра в семь. Пятница не повод».
