@@ -1,4 +1,4 @@
-# Vertical shorts «Краш за 30»
+# Vertical shorts «Краш за 30 дней»
 
 Three vertical ads for TikTok / Reels / Shorts, built as HyperFrames compositions (2026-11-27).
 Each folder is a standalone project: `index.html`, `assets/` (hero SVGs, fonts, music, sound effects).
@@ -22,6 +22,9 @@ was measured from each `music.mp3` (chat 114.75 bpm, feed 123, pov 144.75).
 `assets/vo/*.mp3`: voice «Max - Alive and Emotional» (shared library, young male, id `Uv3rf12Omd9Asyv54Bqw`),
 model `eleven_v3`, `language_code` ru, stability 0.5, similarity 0.8; each line levelled to −12 LUFS. Lines and
 start times are the `vo-*` audio tags in each `index.html`. Music sits at volume 0.3, about 10 dB under the voice. The API key stays outside the repo.
+The closing line `c4` / `f6` / `p6` is one take shared by all three (2026-11-27): «Краш за тридцать дней. Демо — в канале.»,
+the pause between the sentences cut to 0.1 s and the tempo raised 7% (`atempo=1.07`) so it is 2.34 s long and ends at least
+0.15 s before the video does (chat 15.4–17.74, feed 17.5–19.84, pov 17.3–19.64).
 
 ## Rebuild
 
@@ -96,7 +99,8 @@ a problem going up is a bar going down.
 | 15.5–17.5 | «Победа не гарантирована», «30 реальных дней. Каждый выбор считается.» |
 | 17.5–20 | End card |
 
-End card in all three: hero portrait, «Краш за 30», «Демо — в канале». No prices, timers,
+End card in all three: hero portrait, «Краш за 30 дней», «Демо — в канале», the channel handle
+`@glowupchallenge30` (no profile link before 1000 TikTok followers). No prices, timers,
 store badges, reviews or winning promises.
 
 ## Live shorts (Higgsfield), 2026-11-27
@@ -229,6 +233,5 @@ The «Утро» label on the run card is the ad's own (A1-run is a day action w
 - The Day 7 look: clothes, frame and shave are what Day 6–7 cards really give (shirt `#4A6FA5`, V-neck,
   round frame, no beard); the problem levels behind it are invented for the ad (`tools/hero.ts`).
 - The tea post compresses two days: the Day 1 post is saved, the outcome line is the Day 2 order (K2-05b).
-- «Краш за 30» is still a draft name (`docs/NAME_AND_PROMO.md`).
 - The audio was measured (≈ −15 LUFS, true peak ≤ −1.4 dBFS), not listened to. Tracks were picked by search query and loudness profile only: listen before publishing.
 - Check that the HeyGen catalog music and the Epidemic Sound effects are cleared for paid ads and creator posts on your plans.
