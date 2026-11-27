@@ -5,3 +5,4 @@ dist/
 .claude/*.local.json
 .claude/shots/
 .claude/worktrees/
+.hyperframes/

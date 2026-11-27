@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Unbounded30"; src: url("assets/fonts/unbounded-cyrillic-wght-normal.woff2") format("woff2"); font-weight: 200 900; unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+      @font-face { font-family: "Unbounded30"; src: url("assets/fonts/unbounded-latin-wght-normal.woff2") format("woff2"); font-weight: 200 900; unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2122; }
+      @font-face { font-family: "Golos30"; src: url("assets/fonts/golos-text-cyrillic-wght-normal.woff2") format("woff2"); font-weight: 400 900; unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+      @font-face { font-family: "Golos30"; src: url("assets/fonts/golos-text-latin-wght-normal.woff2") format("woff2"); font-weight: 400 900; unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2122; }
+      :root { --paper: #F4EFE6; --ink: #22212A; --accent: #FF5436; --plus: #17A56B; --minus: #E5484D; --chance: #3B5BFF; --muted: #5F5B67; --accent-ink: #D23A1C; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--paper); }
+      #root { position: relative; width: 1080px; height: 1920px; background: var(--paper); font-family: "Golos30", sans-serif; color: var(--ink); }
+      .layer { position: absolute; inset: 0; }
+      .title { position: absolute; left: 110px; right: 110px; top: 290px; text-align: center; font-family: "Unbounded30", sans-serif; font-weight: 800; font-size: 76px; line-height: 1.1; letter-spacing: -0.02em; }
+      .title em { font-style: normal; color: var(--accent-ink); }
+
+      #phone { position: absolute; left: 100px; width: 880px; top: 560px; height: 950px; background: #fff; border-radius: 48px; box-shadow: 0 24px 60px rgba(34, 33, 42, 0.12); padding: 28px 36px; }
+      .head { display: flex; align-items: center; gap: 22px; padding-bottom: 22px; border-bottom: 2px solid #EEE8DD; }
+      .head img { width: 92px; height: 104px; border-radius: 46px; background: #F1E3D6; object-fit: cover; }
+      .head b { display: block; font-size: 42px; font-weight: 700; }
+      .head span { font-size: 28px; color: #0E7A4C; font-weight: 600; }
+      .msgs { padding-top: 26px; display: flex; flex-direction: column; gap: 16px; }
+      .bubble { align-self: flex-start; max-width: 680px; background: #EFEAF7; border-radius: 34px 34px 34px 10px; padding: 20px 28px; font-size: 40px; line-height: 1.26; font-weight: 500; }
+      .hint { margin-top: 26px; text-align: center; font-size: 28px; color: var(--muted); font-weight: 500; }
+      .btns { position: absolute; left: 36px; right: 36px; bottom: 32px; display: flex; flex-direction: column; gap: 16px; }
+      .btn { position: relative; border: 3px solid var(--ink); border-radius: 30px; padding: 18px 24px 18px 92px; font-size: 33px; line-height: 1.25; font-weight: 600; background: var(--paper); }
+      .num { position: absolute; left: 20px; top: 50%; margin-top: -29px; width: 58px; height: 58px; border-radius: 29px; background: var(--ink); color: var(--paper); font-family: "Unbounded30", sans-serif; font-weight: 800; font-size: 30px; display: flex; align-items: center; justify-content: center; }
+      #finger { position: absolute; width: 120px; height: 120px; border-radius: 60px; border: 6px solid var(--accent); background: rgba(255, 84, 54, 0.15); left: 800px; top: 1111px; }
+      .sub { position: absolute; left: 110px; right: 110px; top: 470px; text-align: center; font-size: 40px; font-weight: 600; color: var(--muted); }
+
+      #endcard { background: var(--ink); color: var(--paper); }
+      #endcard .logo { position: absolute; left: 90px; right: 90px; top: 700px; text-align: center; font-family: "Unbounded30", sans-serif; font-weight: 900; font-size: 128px; line-height: 1.02; letter-spacing: -0.03em; }
+      #endcard .logo em { font-style: normal; color: var(--accent); }
+      #endcard .cta { position: absolute; left: 110px; right: 110px; top: 1050px; text-align: center; font-size: 46px; line-height: 1.3; font-weight: 600; }
+      #endcard img { position: absolute; left: 415px; top: 400px; width: 250px; height: 283px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="18" data-width="1080" data-height="1920">
+      <!-- hook title, frame 0 -->
+      <div id="title-a" class="clip layer" data-start="0" data-duration="12.5" data-track-index="1">
+        <h1 class="title" id="ta-text">Ответит <em>или нет?</em></h1>
+      </div>
+      <div id="title-b" class="clip layer" data-start="12.5" data-duration="2.5" data-track-index="1">
+        <h1 class="title" id="tb-text">А ты бы что <em>ответил?</em></h1>
+        <div class="sub" id="tb-sub">1, 2 или 3? Пиши в комментариях</div>
+      </div>
+
+      <!-- the in-game chat (Day 5–6 lines from content/chat.json and card K6-01) -->
+      <div id="chat" class="clip layer" data-start="0" data-duration="15" data-track-index="2">
+        <div id="phone">
+          <div class="head">
+            <img src="assets/alina.svg" alt="" />
+            <div><b>Алина</b><span>в сети</span></div>
+          </div>
+          <div class="msgs">
+            <div class="bubble" id="m1">Привет. Оксана собирает список на встречу.</div>
+            <div class="bubble" id="m2">Места в кафе считают заранее. Тебя записывать?</div>
+          </div>
+          <div class="hint" id="hint">Что нажмёшь, то и уйдёт, слово в слово.</div>
+          <div class="btns">
+            <div class="btn" id="b1"><span class="num">1</span>Да, записывай. А кто ещё из наших будет?</div>
+            <div class="btn" id="b2"><span class="num">2</span>Записывай. Обещаю не петь, как на выпускном.</div>
+            <div class="btn" id="b3"><span class="num">3</span>Да, записывай.</div>
+          </div>
+        </div>
+        <div id="finger"></div>
+      </div>
+
+      <div id="endcard" class="clip layer" data-start="15" data-duration="3" data-track-index="3">
+        <img id="end-hero" src="assets/andrey.svg" alt="" />
+        <div class="logo" id="end-logo">Краш<br /><em>за 30</em></div>
+        <div class="cta" id="end-cta">Демо на 7 дней — играй бесплатно</div>
+      </div>
+
+      <audio id="music" class="clip" src="assets/music.mp3" data-start="0" data-duration="18" data-track-index="6" data-volume="0.9"></audio>
+      <audio id="sfx-m2" class="clip" src="assets/sfx/message.mp3" data-start="1.0" data-duration="0.38" data-track-index="7" data-volume="1"></audio>
+      <audio id="sfx-b1" class="clip" src="assets/sfx/tap.mp3" data-start="4.0" data-duration="0.11" data-track-index="7" data-volume="1"></audio>
+      <audio id="sfx-b2" class="clip" src="assets/sfx/tap.mp3" data-start="5.0" data-duration="0.11" data-track-index="7" data-volume="1"></audio>
+      <audio id="sfx-b3" class="clip" src="assets/sfx/tap.mp3" data-start="6.0" data-duration="0.11" data-track-index="7" data-volume="1"></audio>
+      <audio id="sfx-end" class="clip" src="assets/sfx/open.mp3" data-start="15" data-duration="0.45" data-track-index="7" data-volume="1"></audio>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const pop = { duration: 0.35, ease: "back.out(1.6)" };
+      // frame 0 already shows the title and Alina's first line; the title settles a little
+      tl.fromTo("#ta-text", { scale: 1.06 }, { scale: 1, duration: 0.8, ease: "power2.out" }, 0);
+      tl.fromTo("#m2", { opacity: 0, y: 30 }, { opacity: 1, y: 0, ...pop }, 1.0);
+      tl.fromTo("#hint", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 2.6);
+      ["#b1", "#b2", "#b3"].forEach((b, i) => tl.fromTo(b, { opacity: 0, y: 40, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, ...pop }, 4.0 + i));
+      // the finger wavers between the replies and never presses
+      tl.fromTo("#finger", { opacity: 0, x: 0, y: 0 }, { opacity: 1, duration: 0.3 }, 7.5);
+      [0, 142, 264, 142, 0, 264].forEach((y, i) => tl.to("#finger", { y, x: (i % 2) * -50, duration: 0.6, ease: "power2.inOut" }, 7.8 + i * 0.7));
+      tl.to("#finger", { scale: 0.85, yoyo: true, repeat: 1, duration: 0.18 }, 12.0);
+      tl.to("#finger", { opacity: 0, duration: 0.2 }, 12.4);
+      tl.to("#ta-text", { opacity: 0, duration: 0.2 }, 12.3);
+      // the question: numbers pulse so viewers answer with a digit
+      tl.fromTo("#tb-text", { opacity: 0, y: 30 }, { opacity: 1, y: 0, ...pop }, 12.5);
+      tl.fromTo("#tb-sub", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 12.8);
+      tl.fromTo(".num", { scale: 1 }, { scale: 1.25, yoyo: true, repeat: 3, duration: 0.25, stagger: 0.12 }, 12.7);
+      tl.fromTo("#end-hero", { opacity: 0, y: 40 }, { opacity: 1, y: 0, ...pop }, 15.1);
+      tl.fromTo("#end-logo", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, ...pop }, 15.2);
+      tl.fromTo("#end-cta", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4 }, 15.5);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
