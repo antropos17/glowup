@@ -7,5 +7,5 @@
     "resolveJsonModule": true, "isolatedModules": true,
     "types": ["vite/client", "node"]
   },
-  "include": ["src", "tests", "scripts", "server/**/*.d.ts"]
+  "include": ["src", "tests", "scripts", "promo", "server/**/*.d.ts"]
 }

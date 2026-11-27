@@ -7,11 +7,13 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "test": "vitest run",
-    "check:content": "tsx scripts/check-content.ts"
+    "check:content": "tsx scripts/check-content.ts",
+    "promo:avatars": "tsx promo/avatars/make.ts"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.10.6",
     "@types/node": "^26.6.6",
+    "playwright-core": "^1.65.1",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "vite": "^8.3.8",
