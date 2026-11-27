@@ -305,3 +305,22 @@ asked for the buckle alone; the model sent the whole belt, which reads fine. Lin
 | 10.7–12 | «Втянуть живот» → «Живот продержался десять секунд.» | music |
 | 12–17.6 | «Мы сделали игру:», «тридцать дней, и каждый выбор считается.», «Демо — в канале.» | his lines (take 14.0–19.6) |
 | 17.6–20.6 | end card with the nick | music |
+
+### live-v2-soda — «Сода с лимоном» (20.5 s)
+
+Take: a spoon of soda over the lemon juice; the glass shoots a foam column as tall as the cabinets, foam floods the
+counter and the phone; he sips anyway, foam moustache, «Ай!»; he wipes the phone and talks to camera. Lines: «Сода с
+лимоном. Зубы белые за вечер.» / «Ай!» / «Не работает. Мы сделали игру — проверяй там, а не на себе. Демо — в
+канале.» Music: feed's.
+
+| Time | On screen | Heard |
+|---|---|---|
+| 0–0.8 | cold open: the foam column, «Сода с лимоном.» | take 3.8–4.6 |
+| 0.8–3.4 | the spoon over the glass: «Сода с лимоном.», «Зубы белые за вечер.» | his lines (take 0.3–2.9) |
+| 3.4–4.6 | День 1, K1-07b «Лента: сода с лимоном»: «Сода с лимоном отбеливают зубы за вечер», tap «Попробовать» | music |
+| 4.6–11 | the eruption; he sips the foam, «Ай!» | take 3.4–7.2, 8.2–10.8 |
+| 11–12.5 | «Зубы скрипят и ноют от холодной воды. Белее не стали.», Зубы −3 | music |
+| 12.5–17.5 | foam moustache, wet phone: «Не работает.», «Мы сделали игру —», «проверяй там, а не на себе.», «Демо — в канале.» | his lines (take 14.7–19.7) |
+| 17.5–20.5 | end card with the nick | music |
+
+The Зубы percentage (30→27) is the ad's own, as in live-4; the −3 is the card's.
