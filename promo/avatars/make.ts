@@ -89,11 +89,11 @@ const avatars: Record<string, string> = {
   '4-split': svg(
     radial('bgL', '#2FC0AC', MINT_DEEP) + radial('bgR', MORNING, NOTE) +
       `<clipPath id="L"><rect width="${C}" height="${S}"/></clipPath><clipPath id="R"><rect x="${C}" width="${C}" height="${S}"/></clipPath>`,
-    `<g clip-path="url(#L)"><rect width="${S}" height="${S}" fill="url(#bgL)"/>${hero(before, 3.9, 95)}</g>` +
-      `<g clip-path="url(#R)"><rect width="${S}" height="${S}" fill="url(#bgR)"/>${hero(after, 3.9, 95)}</g>` +
+    `<g clip-path="url(#L)"><rect width="${S}" height="${S}" fill="url(#bgL)"/>${hero(before, 3.9, 140)}</g>` +
+      `<g clip-path="url(#R)"><rect width="${S}" height="${S}" fill="url(#bgR)"/>${hero(after, 3.9, 140)}</g>` +
       `<rect x="${C - 5}" width="10" height="${S}" fill="#fff"/>` +
-      `<text x="${C - 40}" y="236" text-anchor="end" font-family="Unbounded" font-weight="800" font-size="58" fill="#fff">до</text>` +
-      `<text x="${C + 40}" y="236" font-family="Unbounded" font-weight="800" font-size="58" fill="${INK}">после</text>`,
+      `<text x="${C - 40}" y="292" text-anchor="end" font-family="Unbounded" font-weight="800" font-size="56" fill="#fff">до</text>` +
+      `<text x="${C + 40}" y="292" font-family="Unbounded" font-weight="800" font-size="56" fill="${INK}">после</text>`,
   ),
 };
 
