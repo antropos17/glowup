@@ -29,7 +29,7 @@ Checked against `package.json` on 2026-11-22:
 <commands>
 ```
 npm install
-npm run dev            # asset showcase page with the game in a phone frame
+npm run dev            # the game alone; add ?kit for the asset showcase with the game in a phone frame
 npm test               # engine and bot tests (222/222 on 2026-11-27)
 npm run check:content  # scenario validation: broken refs, dead-end cards
 npm run build          # typecheck, then single-file dist/index.html
@@ -43,9 +43,9 @@ npx tsc --noEmit       # typecheck
 | `content/` | Scenario as JSON. The engine reads it as is. Each day lives in `content/cards/day<n>.json` (days 1–19 on 2026-11-25; the demo stops after `balance.demoDays` = 7, `contentDays` = 19 counts the written days), side jobs in `content/cards/side-jobs.json` |
 | `src/engine/` | Headless core. `types.ts` (content and state schema), `validate.ts` (content rules), `game.ts` (cards, effects, chance, day end), `clock.ts` (day parts from local time), `save.ts` |
 | `src/art/` | Hero drawn in code from layers (`avatar.ts`, portrait and full body) and icons (`icons.ts`) |
-| `src/ui/` | `Game.tsx` (game screens), `Kit.tsx` (asset showcase, the page `main.tsx` renders), `ru.ts` (UI strings), `bits.tsx`, `sound.ts` (sound playback and the mute flag) |
+| `src/ui/` | `Game.tsx` (game screens), `Kit.tsx` (asset showcase, rendered by `main.tsx` at `?kit`; the default page is the game alone), `ru.ts` (UI strings), `bits.tsx`, `sound.ts` (sound playback and the mute flag) |
 | `assets/sounds/` | Eight mp3 sound effects inlined into the build; `README.md` there has the earshot command for each |
-| `src/styles/` | `game.css`, `kit.css`, `fonts.css` |
+| `src/styles/` | `game.css`, `kit.css`, `fonts.css`, `app.css` (public page around the game) |
 | `src/content/` | Loader that bundles `content/` |
 | `server/supabase/` | Supabase scaffold, not deployed |
 | `tests/engine.test.ts` | Engine tests: clock, content check, the flow of each day (1–19), day transition, economy, skipped story, queued quest step |
