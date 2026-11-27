@@ -1,0 +1,36 @@
+/*
+ * Public page: the game alone, no showcase. On a phone it fills the screen;
+ * on a wide screen it stands at phone width on the bathroom tile backdrop.
+ */
+html:has(body.public) { height: 100%; }
+body.public {
+  height: 100%;
+  background: #DCE6E9;
+  background-image:
+    linear-gradient(var(--tile-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--tile-line) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+body.public #app { height: 100%; }
+
+.public-app {
+  box-sizing: border-box; height: 100vh; height: 100dvh; width: 100%;
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+  background: var(--tile); overflow: hidden;
+}
+
+/* phones: the page itself never scrolls or bounces, only the game inside does */
+@media (max-width: 599.98px) {
+  html:has(body.public), body.public { overflow: hidden; overscroll-behavior: none; }
+}
+
+/* wide screens: the game at phone width, centred, lifted off the backdrop */
+@media (min-width: 600px) {
+  body.public #app { display: flex; }
+  .public-app {
+    flex: none; margin: auto; width: 410px; height: min(880px, calc(100dvh - 48px)); min-height: 560px;
+    padding: 0; border-radius: 28px;
+    box-shadow: 0 0 0 1px var(--tile-line), 0 24px 60px rgba(20, 35, 59, .18);
+  }
+  .public-app > .game { border-radius: 28px; }
+}

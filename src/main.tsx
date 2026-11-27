@@ -2,6 +2,7 @@ import { render } from 'preact';
 import './styles/fonts.css';
 import './styles/game.css';
 import './styles/kit.css';
+import './styles/app.css';
 import { Kit } from './ui/Kit';
 import { Game } from './ui/Game';
 import { DeviceClock } from './engine/clock';
@@ -20,5 +21,11 @@ const app = document.getElementById('app')!;
 connectTelegram().then((tg) => {
   // inside Telegram the game takes the whole Mini App, without the showcase around it
   if (tg) render(<div class="tg-app"><Game clock={new DeviceClock()} store={new LocalSave()} onLeave={() => tg.close()} /></div>, app);
-  else render(<Kit />, app);
+  // ?kit opens the asset showcase with the game in a phone frame
+  else if (params.has('kit')) render(<Kit />, app);
+  // public page: the game alone; without onLeave the demo end offers «notify me» instead of «leave»
+  else {
+    document.body.classList.add('public');
+    render(<main class="public-app"><Game clock={new DeviceClock()} store={new LocalSave()} /></main>, app);
+  }
 });
