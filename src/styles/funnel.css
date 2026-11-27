@@ -8,7 +8,7 @@
 .intro { padding: 14px 18px 18px; gap: 14px; }
 .intro-top { display: flex; align-items: center; justify-content: space-between; min-height: 44px; }
 .intro-dots { display: inline-flex; gap: 6px; }
-.intro-dots i { width: 8px; height: 8px; border-radius: 4px; background: var(--tile-line); transition: width .25s var(--ease), background .25s; }
+.intro-dots i { width: 8px; height: 8px; border-radius: 4px; background: var(--tile-line); transition: background .25s; }
 .intro-dots i[data-on] { width: 22px; background: var(--mint-key); }
 .game button.intro-skip { min-height: 44px; padding: 0 6px 0 14px; font-size: 14px; color: var(--ink-soft); text-decoration: underline; text-underline-offset: 3px; }
 .intro-body { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: 12px; text-align: center; }
