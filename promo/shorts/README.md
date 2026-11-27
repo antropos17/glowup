@@ -7,7 +7,13 @@ Rendered mp4 files live outside the repo: `X:\Projects 2027\Glowup promo\shorts\
 Format: 1080×1920, 30 fps, stereo AAC, no voice-over. Palette and fonts follow `docs/AD_30S.md`
 (Unbounded titles, Golos Text body, `#F4EFE6` / `#22212A` / `#FF5436`). Accent text on the light
 background uses the darker `#D23A1C` to reach 3:1 contrast; `#FF5436` stays on buttons and the dark end card.
-Key text sits between 290 and 1500 px vertically.
+Key text sits between 250 and 1540 px vertically; the lower half carries the phone, the outcome rows,
+stamps and the before/after bodies.
+
+Motion style (2026-11-27, "dopamine" pass): every change lands with a hit. Shared GSAP helpers in each
+`index.html`: `pop` (overshoot pop-in), `slam` (stamp drop), `shake`, `bounce`, `flash` (full-frame white),
+`roll` (rolling number on HUD bars), `burst` (deterministic particles) and `badge` («−3» / «+1» burst-in).
+Something moves at least every ~0.7 s; each hit has a sound effect.
 
 ## Rebuild
 
@@ -57,8 +63,8 @@ a problem going up is a bar going down.
 | 0–1 | Title «Ответит или нет?», chat with Алина, «в сети», her line «Привет. Оксана собирает список на встречу.» (`alina_first_list`) |
 | 1–4 | «Места в кафе считают заранее. Тебя записывать?» (`alina_reunion_question`), hint «Что нажмёшь, то и уйдёт, слово в слово.» (K6-01) |
 | 4–7 | Three replies from K6-01 numbered 1–3: «Да, записывай. А кто ещё из наших будет?», «Записывай. Обещаю не петь, как на выпускном.», «Да, записывай.» |
-| 7.5–12.5 | A finger wavers between the replies and never presses |
-| 12.5–15 | «А ты бы что ответил?», «1, 2 или 3? Пиши в комментариях», numbers pulse |
+| 5–12 | A finger hops between the replies (every 0.65 s, each reply bounces) and never presses |
+| 12–15 | «А ты бы что ответил?», «1, 2 или 3? Пиши в комментариях», numbers pulse |
 | 15–18 | End card |
 
 ### feed — «Совет из ленты» (20 s)

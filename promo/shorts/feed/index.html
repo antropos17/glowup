@@ -9,131 +9,212 @@
       @font-face { font-family: "Unbounded30"; src: url("assets/fonts/unbounded-latin-wght-normal.woff2") format("woff2"); font-weight: 200 900; unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2122; }
       @font-face { font-family: "Golos30"; src: url("assets/fonts/golos-text-cyrillic-wght-normal.woff2") format("woff2"); font-weight: 400 900; unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
       @font-face { font-family: "Golos30"; src: url("assets/fonts/golos-text-latin-wght-normal.woff2") format("woff2"); font-weight: 400 900; unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2122; }
-      :root { --paper: #F4EFE6; --ink: #22212A; --accent: #FF5436; --plus: #17A56B; --minus: #E5484D; --chance: #3B5BFF; --muted: #5F5B67; --accent-ink: #D23A1C; }
+      :root { --paper: #F4EFE6; --ink: #22212A; --accent: #FF5436; --accent-ink: #D23A1C; --plus: #17A56B; --plus-ink: #0E7A4C; --minus: #E5484D; --chance: #3B5BFF; --muted: #5F5B67; }
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--paper); }
-      #root { position: relative; width: 1080px; height: 1920px; background: var(--paper); font-family: "Golos30", sans-serif; color: var(--ink); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--paper); font-family: "Golos30", sans-serif; color: var(--ink); }
       .layer { position: absolute; inset: 0; }
-      .title { position: absolute; left: 110px; right: 110px; top: 290px; text-align: center; font-family: "Unbounded30", sans-serif; font-weight: 800; font-size: 76px; line-height: 1.1; letter-spacing: -0.02em; }
+      .inner { position: absolute; inset: 0; }
+      .title { position: absolute; left: 70px; right: 70px; top: 262px; text-align: center; font-family: "Unbounded30", sans-serif; font-weight: 900; font-size: 92px; line-height: 1.08; letter-spacing: -0.02em; }
       .title em { font-style: normal; color: var(--accent-ink); }
-      .count { position: absolute; left: 110px; right: 110px; top: 400px; text-align: center; font-size: 34px; font-weight: 700; color: var(--muted); }
+      .card { position: absolute; left: 50px; right: 50px; background: #fff; border-radius: 52px; box-shadow: 0 30px 70px rgba(34, 33, 42, 0.14); }
+      .pill { display: inline-block; border: 4px solid var(--ink); border-radius: 32px; padding: 18px 30px; font-size: 40px; line-height: 1.2; font-weight: 700; background: var(--paper); }
+      /* HUD plate in the game's palette: label, bar and a rolling value */
+      .hud { position: absolute; left: 90px; right: 90px; height: 132px; background: var(--ink); color: var(--paper); border-radius: 36px; padding: 20px 34px; }
+      .hud .lab { font-size: 34px; font-weight: 700; }
+      .hud .val { position: absolute; right: 34px; top: 14px; font-family: "Unbounded30", sans-serif; font-weight: 900; font-size: 58px; }
+      .hud .bar { position: absolute; left: 34px; right: 34px; bottom: 24px; height: 18px; border-radius: 9px; background: rgba(244, 239, 230, 0.18); overflow: hidden; }
+      .hud .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 9px; background: var(--paper); }
+      .badge { position: absolute; font-family: "Unbounded30", sans-serif; font-weight: 900; font-size: 96px; letter-spacing: -0.02em; }
+      .badge.minus { color: var(--minus); }
+      .badge.plus { color: var(--plus-ink); }
+      .burst { position: absolute; width: 0; height: 0; }
+      .burst i { position: absolute; left: -14px; top: -14px; width: 28px; height: 28px; border-radius: 14px; opacity: 0; }
+      #flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; z-index: 50; }
 
-      .post { position: absolute; left: 100px; width: 880px; top: 480px; background: #fff; border-radius: 44px; box-shadow: 0 24px 60px rgba(34, 33, 42, 0.12); padding: 30px 38px 34px; }
-      .post .src { display: flex; align-items: center; gap: 18px; font-size: 30px; font-weight: 700; color: var(--muted); }
-      .post .src i { width: 60px; height: 60px; border-radius: 30px; background: var(--chance); color: #fff; font-style: normal; display: flex; align-items: center; justify-content: center; font-family: "Unbounded30", sans-serif; font-size: 28px; }
-      .post .txt { margin-top: 24px; font-size: 50px; line-height: 1.2; font-weight: 800; }
-      .post .row { margin-top: 30px; display: flex; gap: 18px; flex-wrap: wrap; }
-      .pill { border: 3px solid var(--ink); border-radius: 26px; padding: 14px 24px; font-size: 32px; font-weight: 600; background: var(--paper); }
-            .out { position: absolute; left: 100px; width: 880px; top: 1080px; display: flex; gap: 26px; align-items: flex-start; }
-      .out img { width: 170px; height: 192px; flex: none; border-radius: 30px; background: #EADFD2; }
-      .out .say { font-size: 38px; line-height: 1.3; font-weight: 500; }
-      .chip { display: inline-block; margin-top: 18px; background: var(--minus); color: #fff; border-radius: 22px; padding: 10px 22px; font-size: 34px; font-weight: 800; }
-      .stamp { position: absolute; right: 110px; top: 470px; border: 8px solid var(--minus); color: var(--minus); border-radius: 22px; padding: 10px 26px; font-family: "Unbounded30", sans-serif; font-weight: 900; font-size: 52px; background: rgba(244, 239, 230, 0.92); }
-      .next { position: absolute; left: 110px; right: 110px; top: 1020px; font-size: 30px; font-weight: 700; color: var(--muted); }
-
-      #moral .big { position: absolute; left: 100px; right: 100px; top: 640px; text-align: center; font-family: "Unbounded30", sans-serif; font-weight: 900; font-size: 92px; line-height: 1.1; letter-spacing: -0.02em; }
-      #moral .big em { font-style: normal; color: var(--accent-ink); }
-
-      #endcard { background: var(--ink); color: var(--paper); }
-      #endcard .logo { position: absolute; left: 90px; right: 90px; top: 700px; text-align: center; font-family: "Unbounded30", sans-serif; font-weight: 900; font-size: 128px; line-height: 1.02; letter-spacing: -0.03em; }
+      #endcard { background: var(--ink); color: var(--paper); z-index: 20; }
+      #endcard .logo { position: absolute; left: 60px; right: 60px; top: 820px; text-align: center; font-family: "Unbounded30", sans-serif; font-weight: 900; font-size: 158px; line-height: 1.0; letter-spacing: -0.03em; }
       #endcard .logo em { font-style: normal; color: var(--accent); }
-      #endcard .cta { position: absolute; left: 110px; right: 110px; top: 1050px; text-align: center; font-size: 46px; line-height: 1.3; font-weight: 600; }
-      #endcard img { position: absolute; left: 415px; top: 400px; width: 250px; height: 283px; }
+      #endcard .cta { position: absolute; left: 90px; right: 90px; top: 1200px; text-align: center; font-size: 58px; line-height: 1.25; font-weight: 700; }
+      #endcard img { position: absolute; left: 340px; top: 300px; width: 400px; height: 452px; }
+      .post { top: 560px; padding: 34px 44px 40px; }
+      .post .src { display: flex; align-items: center; gap: 20px; font-size: 36px; font-weight: 700; color: var(--muted); }
+      .post .src i { width: 72px; height: 72px; border-radius: 36px; background: var(--chance); color: #fff; font-style: normal; display: flex; align-items: center; justify-content: center; font-family: "Unbounded30", sans-serif; font-size: 34px; }
+      .post .txt { margin-top: 24px; font-size: 60px; line-height: 1.16; font-weight: 800; }
+      .post .row { margin-top: 30px; display: flex; gap: 20px; flex-wrap: wrap; }
+      .out { position: absolute; left: 50px; right: 50px; top: 1060px; display: flex; gap: 30px; align-items: flex-start; }
+      .out img { width: 240px; height: 271px; flex: none; border-radius: 36px; background: #EADFD2; }
+      .out .say { font-size: 46px; line-height: 1.26; font-weight: 600; }
+      .stamp { position: absolute; left: 0; right: 0; top: 1370px; text-align: center; }
+      .stamp span { display: inline-block; border: 12px solid var(--minus); color: var(--minus); border-radius: 30px; padding: 12px 40px; font-family: "Unbounded30", sans-serif; font-weight: 900; font-size: 96px; background: rgba(244, 239, 230, 0.95); }
+      #moral .big { position: absolute; left: 60px; right: 60px; top: 620px; text-align: center; font-family: "Unbounded30", sans-serif; font-weight: 900; font-size: 128px; line-height: 1.08; letter-spacing: -0.03em; }
+      #moral .big span { display: inline-block; }
+      #moral .big em { font-style: normal; color: var(--accent-ink); }
     </style>
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="20" data-width="1080" data-height="1920">
       <div id="head" class="clip layer" data-start="0" data-duration="15.9" data-track-index="1">
-        <h1 class="title" id="head-title">Совет из <em>ленты</em></h1>
+        <h1 class="title" id="head-title" style="font-size: 80px; top: 276px">Совет из <em>ленты</em></h1>
       </div>
-
-      <!-- Day 1, card K1-07b -->
+      <!-- Day 1 card K1-07b -->
       <div id="p1" class="clip layer" data-start="0" data-duration="5.3" data-track-index="2">
-        <div class="post" id="p1-post">
-          <div class="src"><i>Л</i>Лента</div>
-          <div class="txt">«Сода с лимоном отбеливают зубы за вечер».</div>
-          <div class="row"><span class="pill" id="p1-try">Попробовать</span><span class="pill">Пролистать</span></div>
+        <div class="inner" id="p1-in">
+          <div class="hud" id="p1-hud" style="top: 400px"><span class="lab">Зубы</span><span class="val" id="p1-val">30%</span><div class="bar"><div class="fill" id="p1-fill" style="width: 30%"></div></div></div>
+          <div class="badge minus" id="p1-badge" style="right: 70px; top: 520px; z-index: 4">−3</div>
+          <div class="card post" id="p1-post">
+            <div class="src"><i>Л</i>Лента</div>
+            <div class="txt">«Сода с лимоном отбеливают зубы за вечер».</div>
+            <div class="row"><span class="pill" id="p1-pill0">Попробовать</span><span class="pill" id="p1-pill1">Пролистать</span></div>
+          </div>
+          <div class="out" id="p1-out"><img src="assets/andrey-sad.svg" alt="" /><div class="say">Зубы скрипят и ноют от холодной воды. Белее не стали.</div></div>
+          <div class="stamp" data-layout-allow-overlap><span id="p1-stamp">Не работает</span></div>
+          <div class="burst" id="p1-burst" style="left: 540px; top: 1450px"></div>
         </div>
-        <div class="out" id="p1-out">
-          <img src="assets/andrey-sad.svg" alt="" />
-          <div><div class="say">Зубы скрипят и ноют от холодной воды. Белее не стали.</div><span class="chip" id="p1-chip">Зубы −3</span></div>
-        </div>
-        <div data-layout-allow-overlap class="stamp" id="p1-stamp">Не работает</div>
       </div>
-
       <!-- Day 1 card K1-07a, then the Day 2 outcome of K2-05b -->
       <div id="p2" class="clip layer" data-start="5.3" data-duration="5.3" data-track-index="2">
-        <div class="post" id="p2-post">
-          <div class="src"><i>Л</i>Лента</div>
-          <div class="txt">«Чудо-чай: минус 5 кг за неделю».</div>
-          <div class="row"><span class="pill" id="p2-try">Сохранить</span><span class="pill">Пролистать</span></div>
+        <div class="inner" id="p2-in">
+          <div class="hud" id="p2-hud" style="top: 400px"><span class="lab">Энергия</span><span class="val" id="p2-val">10</span><div class="bar"><div class="fill" id="p2-fill" style="width: 100%"></div></div></div>
+          <div class="badge minus" id="p2-badge" style="right: 70px; top: 520px; z-index: 4">−2</div>
+          <div class="card post" id="p2-post">
+            <div class="src"><i>Л</i>Лента</div>
+            <div class="txt">«Чудо-чай: минус 5 кг за неделю».</div>
+            <div class="row"><span class="pill" id="p2-pill0">Сохранить</span><span class="pill" id="p2-pill1">Пролистать</span></div>
+          </div>
+          <div class="out" id="p2-out"><img src="assets/andrey-sad.svg" alt="" /><div class="say">Весы показали минус килограмм, к утру он вернулся.</div></div>
+          <div class="stamp" data-layout-allow-overlap><span id="p2-stamp">Мимо</span></div>
+          <div class="burst" id="p2-burst" style="left: 540px; top: 1450px"></div>
         </div>
-        <div class="out" id="p2-out">
-          <img src="assets/andrey-sad.svg" alt="" />
-          <div><div class="say">Весы показали минус килограмм, к утру он вернулся.</div><span class="chip" id="p2-chip">Энергия −2</span></div>
-        </div>
-        <div data-layout-allow-overlap class="stamp" id="p2-stamp">Мимо</div>
       </div>
-
-      <!-- Day 6, card K6-02 -->
+      <!-- Day 6 card K6-02 -->
       <div id="p3" class="clip layer" data-start="10.6" data-duration="5.3" data-track-index="2">
-        <div class="post" id="p3-post">
-          <div class="src"><i>Л</i>Стилист, миллион подписчиков</div>
-          <div class="txt">«Главный образ осени: рубашка поверх худи, штаны подвернуть, носки напоказ».</div>
-          <div class="row"><span class="pill" id="p3-try">Собрать образ из своего шкафа</span></div>
+        <div class="inner" id="p3-in">
+          <div class="hud" id="p3-hud" style="top: 400px"><span class="lab">Стиль</span><span class="val" id="p3-val">20%</span><div class="bar"><div class="fill" id="p3-fill" style="width: 20%"></div></div></div>
+          <div class="badge minus" id="p3-badge" style="right: 70px; top: 520px; z-index: 4">−4</div>
+          <div class="card post" id="p3-post">
+            <div class="src"><i>Л</i>Стилист, миллион подписчиков</div>
+            <div class="txt"><span style="font-size: 52px">«Главный образ осени: рубашка поверх худи, штаны подвернуть, носки напоказ».</span></div>
+            <div class="row"><span class="pill" id="p3-pill0">Собрать образ из своего шкафа</span></div>
+          </div>
+          <div class="out" id="p3-out"><img src="assets/andrey.svg" alt="" /><div class="say">В зеркале не стилист с миллионом подписчиков, а Андрей в двух слоях не того размера.</div></div>
+          <div class="stamp" data-layout-allow-overlap><span id="p3-stamp">Не то</span></div>
+          <div class="burst" id="p3-burst" style="left: 540px; top: 1450px"></div>
         </div>
-        <div class="out" id="p3-out">
-          <img src="assets/andrey.svg" alt="" />
-          <div><div class="say">В зеркале не стилист с миллионом подписчиков, а Андрей в двух слоях не того размера.</div><span class="chip" id="p3-chip">Стиль −4</span></div>
-        </div>
-        <div data-layout-allow-overlap class="stamp" id="p3-stamp">Не то</div>
       </div>
-
       <div id="moral" class="clip layer" data-start="15.9" data-duration="1.8" data-track-index="2">
-        <div class="big" id="moral-text">Не всё из ленты <em>работает</em></div>
+        <div class="inner" id="moral-in">
+          <div class="big"><span id="mw1">Не всё</span> <span id="mw2">из ленты</span> <span id="mw3"><em>работает</em></span></div>
+          <div class="burst" id="moral-burst" style="left: 540px; top: 1000px"></div>
+        </div>
       </div>
-
       <div id="endcard" class="clip layer" data-start="17.7" data-duration="2.3" data-track-index="3">
-        <img id="end-hero" src="assets/andrey.svg" alt="" />
-        <div class="logo" id="end-logo">Краш<br /><em>за 30</em></div>
-        <div class="cta" id="end-cta">Демо на 7 дней — играй бесплатно</div>
+        <div class="inner" id="end-in">
+          <img id="end-hero" src="assets/andrey.svg" alt="" />
+          <div class="logo" id="end-logo">Краш<br /><em>за 30</em></div>
+          <div class="burst" id="end-burst" style="left: 540px; top: 960px"></div>
+          <div class="cta" id="end-cta">Демо на 7 дней —<br />играй бесплатно</div>
+        </div>
       </div>
-
-      <audio id="music" class="clip" src="assets/music.mp3" data-start="0" data-duration="20" data-track-index="6" data-volume="0.9"></audio>
-      <audio id="sfx-t1" class="clip" src="assets/sfx/tap-a.mp3" data-start="1.2" data-duration="0.26" data-track-index="7" data-volume="0.9"></audio>
-      <audio id="sfx-w1" class="clip" src="assets/sfx/wrong.mp3" data-start="2.2" data-duration="0.35" data-track-index="8" data-volume="0.7"></audio>
-      <audio id="sfx-s1" class="clip" src="assets/sfx/stamp.mp3" data-start="3.03" data-duration="0.21" data-track-index="7" data-volume="1.0"></audio>
-      <audio id="sfx-p2" class="clip" src="assets/sfx/whoosh-a.mp3" data-start="5.25" data-duration="0.19" data-track-index="8" data-volume="0.7"></audio>
-      <audio id="sfx-t2" class="clip" src="assets/sfx/tap-b.mp3" data-start="6.5" data-duration="0.19" data-track-index="7" data-volume="0.9"></audio>
-      <audio id="sfx-w2" class="clip" src="assets/sfx/wrong.mp3" data-start="7.5" data-duration="0.35" data-track-index="8" data-volume="0.7"></audio>
-      <audio id="sfx-s2" class="clip" src="assets/sfx/stamp.mp3" data-start="8.33" data-duration="0.21" data-track-index="7" data-volume="1.0"></audio>
-      <audio id="sfx-p3" class="clip" src="assets/sfx/whoosh-b.mp3" data-start="10.55" data-duration="0.23" data-track-index="8" data-volume="0.7"></audio>
-      <audio id="sfx-t3" class="clip" src="assets/sfx/tap-a.mp3" data-start="11.8" data-duration="0.26" data-track-index="7" data-volume="0.9"></audio>
-      <audio id="sfx-w3" class="clip" src="assets/sfx/wrong.mp3" data-start="12.8" data-duration="0.35" data-track-index="8" data-volume="0.7"></audio>
-      <audio id="sfx-s3" class="clip" src="assets/sfx/stamp.mp3" data-start="13.63" data-duration="0.21" data-track-index="7" data-volume="1.0"></audio>
-      <audio id="sfx-moral" class="clip" src="assets/sfx/whoosh-a.mp3" data-start="15.85" data-duration="0.19" data-track-index="8" data-volume="0.8"></audio>
-      <audio id="sfx-end" class="clip" src="assets/sfx/whoosh-b.mp3" data-start="17.65" data-duration="0.23" data-track-index="7" data-volume="0.8"></audio>
+      <div id="flash" data-layout-ignore></div>
+      <audio id="music" class="clip" src="assets/music.mp3" data-start="0" data-duration="20" data-track-index="6" data-volume="0.8"></audio>
+      <audio id="sfx-01" class="clip" src="assets/sfx/tap-b.mp3" data-start="0.45" data-duration="0.19" data-track-index="7" data-volume="0.9"></audio>
+      <audio id="sfx-02" class="clip" src="assets/sfx/tap-a.mp3" data-start="1.15" data-duration="0.26" data-track-index="8" data-volume="0.9"></audio>
+      <audio id="sfx-03" class="clip" src="assets/sfx/whoosh-a.mp3" data-start="1.6" data-duration="0.19" data-track-index="7" data-volume="0.75"></audio>
+      <audio id="sfx-04" class="clip" src="assets/sfx/wrong.mp3" data-start="2.2" data-duration="0.35" data-track-index="8" data-volume="0.65"></audio>
+      <audio id="sfx-05" class="clip" src="assets/sfx/stamp.mp3" data-start="3.07" data-duration="0.21" data-track-index="7" data-volume="1.0"></audio>
+      <audio id="sfx-06" class="clip" src="assets/sfx/whoosh-a.mp3" data-start="5.3" data-duration="0.19" data-track-index="8" data-volume="0.75"></audio>
+      <audio id="sfx-07" class="clip" src="assets/sfx/tap-b.mp3" data-start="5.75" data-duration="0.19" data-track-index="7" data-volume="0.9"></audio>
+      <audio id="sfx-08" class="clip" src="assets/sfx/tap-a.mp3" data-start="6.45" data-duration="0.26" data-track-index="8" data-volume="0.9"></audio>
+      <audio id="sfx-09" class="clip" src="assets/sfx/whoosh-a.mp3" data-start="6.9" data-duration="0.19" data-track-index="7" data-volume="0.75"></audio>
+      <audio id="sfx-10" class="clip" src="assets/sfx/wrong.mp3" data-start="7.5" data-duration="0.35" data-track-index="8" data-volume="0.65"></audio>
+      <audio id="sfx-11" class="clip" src="assets/sfx/stamp.mp3" data-start="8.37" data-duration="0.21" data-track-index="7" data-volume="1.0"></audio>
+      <audio id="sfx-12" class="clip" src="assets/sfx/whoosh-b.mp3" data-start="10.6" data-duration="0.23" data-track-index="8" data-volume="0.75"></audio>
+      <audio id="sfx-13" class="clip" src="assets/sfx/tap-b.mp3" data-start="11.05" data-duration="0.19" data-track-index="7" data-volume="0.9"></audio>
+      <audio id="sfx-14" class="clip" src="assets/sfx/tap-a.mp3" data-start="11.75" data-duration="0.26" data-track-index="8" data-volume="0.9"></audio>
+      <audio id="sfx-15" class="clip" src="assets/sfx/whoosh-a.mp3" data-start="12.2" data-duration="0.19" data-track-index="7" data-volume="0.75"></audio>
+      <audio id="sfx-16" class="clip" src="assets/sfx/wrong.mp3" data-start="12.8" data-duration="0.35" data-track-index="8" data-volume="0.65"></audio>
+      <audio id="sfx-17" class="clip" src="assets/sfx/stamp.mp3" data-start="13.67" data-duration="0.21" data-track-index="7" data-volume="1.0"></audio>
+      <audio id="sfx-18" class="clip" src="assets/sfx/tap-a.mp3" data-start="15.9" data-duration="0.26" data-track-index="8" data-volume="0.9"></audio>
+      <audio id="sfx-19" class="clip" src="assets/sfx/tap-b.mp3" data-start="16.2" data-duration="0.19" data-track-index="7" data-volume="0.9"></audio>
+      <audio id="sfx-20" class="clip" src="assets/sfx/stamp.mp3" data-start="16.55" data-duration="0.21" data-track-index="8" data-volume="1.0"></audio>
+      <audio id="sfx-21" class="clip" src="assets/sfx/whoosh-b.mp3" data-start="17.7" data-duration="0.23" data-track-index="7" data-volume="0.75"></audio>
+      <audio id="sfx-22" class="clip" src="assets/sfx/stamp.mp3" data-start="18.24" data-duration="0.21" data-track-index="8" data-volume="1.0"></audio>
+      <audio id="sfx-23" class="clip" src="assets/sfx/plus.mp3" data-start="19.1" data-duration="1.11" data-track-index="7" data-volume="0.55"></audio>
     </div>
     <script>
+      // ---- dopamine helpers (all driven by the paused timeline, seek-safe) ----
       const tl = gsap.timeline({ paused: true });
-      const pop = { duration: 0.35, ease: "back.out(1.6)" };
-      // one beat per post: post, tap, outcome, chip, verdict stamp
-      const post = (p, t0, first) => {
-        if (!first) tl.fromTo(`#${p}-post`, { opacity: 0, y: 120 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }, t0);
-        else tl.fromTo(`#${p}-post`, { scale: 1.03 }, { scale: 1, duration: 0.6, ease: "power2.out" }, t0);
-        tl.fromTo(`#${p}-try`, { scale: 1 }, { scale: 0.92, yoyo: true, repeat: 1, duration: 0.09 }, t0 + 1.2);
-        tl.fromTo(`#${p}-try`, { backgroundColor: "#F4EFE6", borderColor: "#22212A", color: "#22212A" }, { backgroundColor: "#FF5436", borderColor: "#FF5436", color: "#FFFFFF", duration: 0.1 }, t0 + 1.2);
-        tl.fromTo(`#${p}-out`, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }, t0 + 1.5);
-        tl.fromTo(`#${p}-chip`, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, ...pop }, t0 + 2.2);
-        tl.fromTo(`#${p}-stamp`, { opacity: 0, scale: 1.8, rotation: -14 }, { opacity: 1, scale: 1, rotation: -8, duration: 0.25, ease: "power4.in" }, t0 + 2.8);
+      const POP = { duration: 0.42, ease: "back.out(2.6)" };
+      const pop = (sel, t, from = 0.3) => tl.fromTo(sel, { opacity: 0, scale: from }, { opacity: 1, scale: 1, ...POP }, t);
+      const slam = (sel, t, rot = -8) => tl.fromTo(sel, { opacity: 0, scale: 2.4, rotation: rot - 10 }, { opacity: 1, scale: 1, rotation: rot, duration: 0.22, ease: "power4.in" }, t);
+      const shake = (sel, t, a = 18) => tl.fromTo(sel, { x: 0, y: 0 }, { keyframes: [{ x: -a, y: a * 0.5 }, { x: a * 0.8, y: -a * 0.6 }, { x: -a * 0.5, y: a * 0.3 }, { x: a * 0.25, y: 0 }, { x: 0, y: 0 }], duration: 0.34, ease: "none" }, t);
+      const bounce = (sel, t, s = 1.12) => tl.fromTo(sel, { scale: 1 }, { keyframes: [{ scale: s, duration: 0.1 }, { scale: 0.97, duration: 0.1 }, { scale: 1, duration: 0.12 }] }, t);
+      const flash = (t, a = 0.85) => tl.fromTo("#flash", { opacity: 0 }, { keyframes: [{ opacity: a, duration: 0.05 }, { opacity: 0, duration: 0.4 }] }, t);
+      // a counter that rolls from a to b; the HTML holds the start text
+      const roll = (sel, a, b, t, fmt = (v) => Math.round(v) + "%", d = 0.7) => {
+        const el = document.querySelector(sel), o = { v: a };
+        tl.fromTo(o, { v: a }, { v: b, duration: d, ease: "power2.out", onUpdate: () => { el.textContent = fmt(o.v); } }, t);
       };
-      post("p1", 0, true);
-      post("p2", 5.3, false);
-      post("p3", 10.6, false);
-      tl.fromTo("#moral-text", { opacity: 0, y: 40 }, { opacity: 1, y: 0, ...pop }, 15.9);
-      tl.fromTo("#end-hero", { opacity: 0, y: 40 }, { opacity: 1, y: 0, ...pop }, 17.75);
-      tl.fromTo("#end-logo", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, ...pop }, 17.8);
-      tl.fromTo("#end-cta", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4 }, 17.85);
+      // particle burst: n dots fly out from a point, angles fixed (no randomness)
+      const burst = (id, t, colors, n = 14, r = 220) => {
+        const box = document.getElementById(id);
+        for (let i = 0; i < n; i++) {
+          const dot = document.createElement("i");
+          dot.style.background = colors[i % colors.length];
+          box.appendChild(dot);
+          const ang = (i / n) * Math.PI * 2 + 0.3, rr = r * (0.7 + 0.3 * ((i * 7) % 5) / 4);
+          tl.fromTo(dot, { x: 0, y: 0, scale: 1.2, opacity: 0 }, { keyframes: [{ opacity: 1, duration: 0.01 }, { x: Math.cos(ang) * rr, y: Math.sin(ang) * rr, scale: 0.2, opacity: 0, duration: 0.6, ease: "power3.out" }] }, t);
+        }
+      };
+      // a badge bursts in, then floats up and fades
+      const badge = (sel, t) => {
+        tl.fromTo(sel, { opacity: 0, scale: 0.2, y: 0 }, { opacity: 1, scale: 1.25, duration: 0.18, ease: "power2.out" }, t);
+        tl.to(sel, { scale: 1, duration: 0.15 }, t + 0.18);
+        tl.to(sel, { y: -90, opacity: 0, duration: 0.5, ease: "power1.in" }, t + 0.85);
+      };
+      const ENDCARD = (t) => {
+        flash(t, 0.6);
+        tl.fromTo("#end-hero", { opacity: 0, y: 80, scale: 0.6 }, { opacity: 1, y: 0, scale: 1, ...POP }, t + 0.05);
+        tl.fromTo("#end-logo", { opacity: 0, scale: 1.8 }, { opacity: 1, scale: 1, duration: 0.24, ease: "power4.in" }, t + 0.3);
+        shake("#end-in", t + 0.54, 14);
+        burst("end-burst", t + 0.54, ["#FF5436", "#F4EFE6", "#3B5BFF", "#17A56B"], 18, 360);
+        tl.fromTo("#end-cta", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }, t + 0.75);
+        bounce("#end-logo", t + 1.4, 1.06);
+        bounce("#end-cta", t + 2.0, 1.05);
+      };
+
+      const P = [
+        { n: 1, t0: 0, a: 30, b: 27, fmt: (v) => Math.round(v) + "%", fa: 30, fb: 27 },
+        { n: 2, t0: 5.3, a: 10, b: 8, fmt: (v) => String(Math.round(v)), fa: 100, fb: 80 },
+        { n: 3, t0: 10.6, a: 20, b: 16, fmt: (v) => Math.round(v) + "%", fa: 20, fb: 16 },
+      ];
+      P.forEach(({ n, t0, a, b, fmt, fa, fb }) => {
+        const s = (x) => `#p${n}-${x}`;
+        if (n === 1) tl.fromTo(s("post"), { scale: 1.05 }, { scale: 1, duration: 0.4, ease: "back.out(2)" }, 0);
+        else tl.fromTo(s("post"), { opacity: 0, y: 260, scale: 0.85 }, { opacity: 1, y: 0, scale: 1, ...POP }, t0);
+        pop(s("hud"), t0 + 0.45, 0.6);
+        tl.fromTo(s("pill0"), { backgroundColor: "#F4EFE6", borderColor: "#22212A", color: "#22212A", scale: 1 }, { backgroundColor: "#FF5436", borderColor: "#FF5436", color: "#FFFFFF", scale: 0.92, duration: 0.08 }, t0 + 1.15);
+        tl.to(s("pill0"), { scale: 1, duration: 0.2, ease: "back.out(3)" }, t0 + 1.23);
+        tl.fromTo(s("out"), { opacity: 0, x: -200 }, { opacity: 1, x: 0, ...POP }, t0 + 1.6);
+        // the bar drops: number rolls down, plate turns red and shakes, badge bursts
+        roll(s("val"), a, b, t0 + 2.2, fmt, 0.6);
+        tl.fromTo(s("fill"), { width: fa + "%" }, { width: fb + "%", duration: 0.6, ease: "power2.out" }, t0 + 2.2);
+        tl.fromTo(s("hud"), { backgroundColor: "#22212A" }, { keyframes: [{ backgroundColor: "#E5484D", duration: 0.1 }, { backgroundColor: "#22212A", duration: 0.8 }] }, t0 + 2.2);
+        shake(s("hud"), t0 + 2.2, 14);
+        badge(s("badge"), t0 + 2.25);
+        // the verdict stamp slams the whole frame
+        slam(s("stamp"), t0 + 2.85);
+        shake(s("in"), t0 + 3.07, 22);
+        burst(`p${n}-burst`, t0 + 3.07, ["#E5484D", "#22212A", "#FF5436"], 14, 300);
+        bounce(s("out") + " img", t0 + 3.7, 1.08);
+        bounce(s("stamp"), t0 + 4.4, 1.08);
+      });
+      ["#mw1", "#mw2", "#mw3"].forEach((w, i) => pop(w, 15.9 + i * 0.3, 0.2));
+      shake("#moral-in", 16.55, 16);
+      burst("moral-burst", 16.55, ["#FF5436", "#3B5BFF", "#17A56B"], 16, 380);
+      ENDCARD(17.7);
+
       window.__timelines["main"] = tl;
       tl.seek(0);
     </script>
