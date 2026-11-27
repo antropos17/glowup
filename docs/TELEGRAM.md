@@ -14,6 +14,16 @@ The bot answers through the webhook response (`{"method":"sendMessage", …}` in
 
 Creator link: `https://t.me/<bot_username>?start=<code>`. Bot usernames always end in `bot`; `t.me/glowupchallenge30` is a channel or group name, not a bot username, unless BotFather says otherwise.
 
+## The 1-day funnel (`?demo=1` only)
+
+`?demo=1` is also the funnel for TikTok traffic (`src/funnel.ts`, `src/ui/Funnel.tsx`, `src/styles/funnel.css`). Only this exact value turns it on; no `?demo`, `?demo=7` and `?full` keep the game as before.
+
+- Intro: four short screens before the hero pick, skippable, shown once (`localStorage` key `glowup.introSeen`).
+- Day 1 beats: animated pictures for the class chat invite, the mirror, the first message (or the like) and the first look at the chance; the Day 1 card rows come in one by one. Off under `prefers-reduced-motion`.
+- The demo ends as soon as the player goes to sleep on Day 1 (the 7-day demo still waits for the next morning). Then: the day card, a cliffhanger (the crush's status from the night card, «she writes first in four days» — true on every path, K5-08a…d — and Days 2–7 from `content/days.json` with blurred teasers), then the end screen.
+- End screen outside Telegram: «Записаться в вишлист» opens `https://t.me/glowupchallenge30bot?start=<code>`, the code taken from `?ref=` or `?code=` (sanitized to `[a-z0-9_]`, max 32), or plain `?start`. Inside Telegram: «already on the list», «Позвать друга» (the Telegram share picker with the bot link) and «Вернуться в чат». The two main buttons are equal.
+- Creator link for TikTok: `https://antropos17.github.io/glowup/?demo=1&ref=<code>`; the code must also exist in the bot (`/addcode`) to be counted.
+
 ## Bot commands
 
 - `/start [code]`: adds the person to the wishlist. A known code is attached on the first `/start` and kept forever; a repeat `/start` changes nothing; an unknown code is ignored. Answers with a greeting and the «Играть день 1» button (`web_app` → `MINI_APP_URL`).
