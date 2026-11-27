@@ -7,7 +7,7 @@ import './styles/funnel.css';
 import { Kit } from './ui/Kit';
 import { Game } from './ui/Game';
 import { DeviceClock } from './engine/clock';
-import { LocalSave } from './engine/save';
+import { FUNNEL_KEY, LocalSave } from './engine/save';
 import { content } from './content';
 import { connectTelegram } from './telegram';
 import { funnelFrom } from './funnel';
@@ -20,16 +20,18 @@ const demo = params.get('demo') ?? '';
 if (/^\d+$/.test(demo) && +demo >= 1 && +demo <= content.balance.contentDays) content.balance.demoDays = +demo;
 // ?demo=1 is the 1-day funnel (Mini App, TikTok link): intro, animated beats, cliffhanger, wishlist call
 const funnel = funnelFrom(params);
+// the funnel's day runs by a button, so it keeps a save of its own and never touches the real-time game's
+const save = () => new LocalSave(funnel ? FUNNEL_KEY : undefined);
 
 const app = document.getElementById('app')!;
 connectTelegram().then((tg) => {
   // inside Telegram the game takes the whole Mini App, without the showcase around it
-  if (tg) render(<div class="tg-app"><Game clock={new DeviceClock()} store={new LocalSave()} onLeave={() => tg.close()} funnel={funnel} tg={tg} /></div>, app);
+  if (tg) render(<div class="tg-app"><Game clock={new DeviceClock()} store={save()} onLeave={() => tg.close()} funnel={funnel} tg={tg} /></div>, app);
   // ?kit opens the asset showcase with the game in a phone frame
   else if (params.has('kit')) render(<Kit />, app);
   // public page: the game alone; without onLeave the demo end offers «notify me» instead of «leave»
   else {
     document.body.classList.add('public');
-    render(<main class="public-app"><Game clock={new DeviceClock()} store={new LocalSave()} funnel={funnel} /></main>, app);
+    render(<main class="public-app"><Game clock={new DeviceClock()} store={save()} funnel={funnel} /></main>, app);
   }
 });

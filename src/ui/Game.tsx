@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { content } from '../content';
 import { msToNextPart, type Clock } from '../engine/clock';
 import {
-  actionsFor, buy, chance, choicesFor, choose, courseActive, crush, currentLook, dayEnergy, drawEvent, drawStory,
+  actionsFor, advancePart, buy, chance, choicesFor, choose, courseActive, crush, currentLook, dayEnergy, drawEvent, drawStory,
   fill, hasEvents, hero, markMissedSeen, markSummarySeen, newGame, oddsFor, progress, soldOut, startLook, syncClock, useItem,
 } from '../engine/game';
 import type { SaveStore } from '../engine/save';
@@ -15,7 +15,7 @@ import { sceneFor, type SceneId } from '../art/scenes';
 import { Body, Cost, Face, Icon, ItemArt, Portrait, Scene, Spot } from './bits';
 import { timelapsePng } from './shareTimelapse';
 import { DAY_CARD, DEMO_END, duration, FUNNEL, MISSED, PART_ICON, PART_NAME, PART_NEXT, PICK, SMOKE_FREE, SOUND } from './ru';
-import { beatFor, wishlistUrl, BOT_URL, type Beat, type Funnel } from '../funnel';
+import { beatFor, partAhead, wishlistUrl, BOT_URL, type Beat, type Funnel } from '../funnel';
 import { BeatArt, Cliffhanger, Intro, introSeen } from './Funnel';
 import type { TgWebApp } from '../telegram';
 import { isMuted, play, played, setMuted, tap } from './sound';
@@ -131,6 +131,8 @@ function Play({ clock, store, first, onRestart, onLeave, funnel, tg, api }: {
   const pct = chance(content, state);
   const maxE = dayEnergy(content, state);
   const next = duration(msToNextPart(clock.now(), state.tzOffsetMin));
+  // the funnel moves its day on by a button: the part it leads to, or undefined for the real-time wall
+  const ahead = partAhead(funnel, state);
   const partIdx = DAY_PARTS.indexOf(state.part);
   const problemIds = Object.keys(state.startProblems);
   const chanceShown = !!state.flags.chance_shown || state.day > 1;
@@ -144,14 +146,17 @@ function Play({ clock, store, first, onRestart, onLeave, funnel, tg, api }: {
   const [dayShown, dayLeaving] = useLeaving(unseen ? { state, d: unseen } : null);
   const [missedShown, missedLeaving] = useLeaving(state.missed?.length ? state : null);
 
-  function onPlus() {
-    const d = drawStory(content, state);
+  function onPlus() { openNext(state); }
+  function openNext(from: GameState) {
+    const d = drawStory(content, from);
     if (d.state !== state) commit(d.state);
     play('open');
     if (d.card) return setSheet({ kind: 'card', card: d.card });
     const s = d.state;
     setSheet(actionsFor(content, s).length || hasEvents(content, s) ? { kind: 'menu' } : { kind: 'rest' });
   }
+  /** funnel only: the next part of the day now, and straight to what it brings */
+  function onAdvance() { openNext(advancePart(content, state)); }
   function onChoose(card: Card, choiceId: string) {
     const r = choose(content, state, card.id, choiceId);
     commit(r.state);
@@ -237,7 +242,7 @@ function Play({ clock, store, first, onRestart, onLeave, funnel, tg, api }: {
             <div class="parts" data-part={state.part}>
               <div class="parts-now">
                 <span class="parts-name">{PART_NAME[state.part]}</span>
-                {!frozen && <span class="parts-next">{PART_NEXT[state.part]} через {next}</span>}
+                {!frozen && !funnel && <span class="parts-next">{PART_NEXT[state.part]} через {next}</span>}
               </div>
               <div class="parts-row">
                 <div class="track" aria-hidden="true">
@@ -359,6 +364,7 @@ function Play({ clock, store, first, onRestart, onLeave, funnel, tg, api }: {
                     );
                   })}
                   {hasEvents(content, state) && <ChoiceBtn state={state} label="Посмотреть, что происходит вокруг" more onClick={onEvent} />}
+                  {ahead && <ChoiceBtn state={state} label={FUNNEL.advance(PART_NEXT[state.part])} more onClick={onAdvance} />}
                 </div>
               </>
             )}
@@ -381,8 +387,10 @@ function Play({ clock, store, first, onRestart, onLeave, funnel, tg, api }: {
                 <p class="sheet-text">
                   {dayClosed
                     ? `${me.name} спит. Новый день начнётся в 06:00. Чат, зеркало и лента открыты.`
+                    : ahead ? FUNNEL.advanceText(PART_NEXT[state.part])
                     : `Новые события придут, когда наступит ${PART_NEXT[state.part]}: через ${next}. Чат, зеркало и лента открыты всегда.`}
                 </p>
+                {ahead && !dayClosed && <button class="primary" onClick={onAdvance}>{FUNNEL.advance(PART_NEXT[state.part])}</button>}
                 <button class="quiet" onClick={() => setSheet(null)}>Вернуться в журнал</button>
               </>
             )}

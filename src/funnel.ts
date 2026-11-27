@@ -3,6 +3,7 @@
  * the animated Day 1 beats, the cliffhanger and the wishlist call. Every other address keeps the game as is.
  * Pure functions, so the gating and the creator code are covered by tests.
  */
+import { DAY_PARTS, type DayPart, type GameState } from './engine/types';
 
 export const BOT_URL = 'https://t.me/glowupchallenge30bot';
 
@@ -41,3 +42,13 @@ export function beatFor(cardId: string, choiceId: string): Beat | undefined {
 
 /** The intro is shown once per browser. */
 export const INTRO_KEY = 'glowup.introSeen';
+
+/**
+ * The funnel is one sitting: once a part of the day has nothing left, the player moves on by a button
+ * instead of waiting for the clock. Gives the part the button leads to, or undefined when there is no button:
+ * outside the funnel (the real-time wall stays), at night (the day ends with sleep) and once the day is closed.
+ */
+export function partAhead(funnel: Funnel | undefined, s: GameState): DayPart | undefined {
+  if (!funnel || s.part === 'night' || s.closedDay === s.day || s.verdict || s.demoOver) return undefined;
+  return DAY_PARTS[DAY_PARTS.indexOf(s.part) + 1];
+}

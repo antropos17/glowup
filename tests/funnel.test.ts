@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { content } from '../src/content';
-import { beatFor, funnelFrom, sanitizeCode, wishlistUrl } from '../src/funnel';
+import { beatFor, funnelFrom, partAhead, sanitizeCode, wishlistUrl } from '../src/funnel';
+import { msToNextPart } from '../src/engine/clock';
+import { actionsFor, advancePart, choicesFor, choose, drawStory, newGame, syncClock } from '../src/engine/game';
+import { FUNNEL_KEY, LocalSave } from '../src/engine/save';
+import type { Content, GameState } from '../src/engine/types';
 
 const at = (q: string) => funnelFrom(new URLSearchParams(q));
 
@@ -73,5 +77,95 @@ describe('1-day funnel', () => {
     it('the class reunion is in «Старый двор» (Day 1 invite)', () => {
       expect(content.cards.find((c) => c.id === 'K1-01')?.text).toContain('Старый двор');
     });
+  });
+});
+
+describe('1-day funnel: the whole Day 1 in one sitting', () => {
+  const H = 3_600_000, TZ = 240;
+  // 1 June 2026, 09:00 and 14:00 in Baku (UTC+4)
+  const NINE = Date.UTC(2026, 5, 1, 5, 0), TWO = NINE + 5 * H;
+  // main.tsx cuts the demo after Day 1 for ?demo=1
+  const one: Content = { ...content, balance: { ...content.balance, demoDays: 1 } };
+  const funnel = { code: '' };
+  const start = (now: number) => newGame(one, { seed: 7, now, tzOffsetMin: TZ, archetypeId: 'andrey' });
+  /** every story card of the current part, first affordable choice */
+  function story(s: GameState): GameState {
+    for (let i = 0; i < 20; i++) {
+      const d = drawStory(one, s);
+      s = d.state;
+      if (!d.card) break;
+      s = choose(one, s, d.card.id, choicesFor(one, s, d.card).find((x) => x.affordable)!.choice.id).state;
+    }
+    return s;
+  }
+  /** the funnel's way through the day: play the part, then the «Дальше» button, the clock never moves */
+  function playFunnel(now: number): GameState {
+    let s = story(start(now));
+    const parts = [s.part];
+    for (let next = partAhead(funnel, s); next; next = partAhead(funnel, s)) {
+      s = story(advancePart(one, s));
+      expect(s.part).toBe(next);
+      parts.push(s.part);
+      // the real clock is behind the state and leaves it alone
+      expect(syncClock(one, s, now)).toBe(s);
+    }
+    expect(s.part).toBe('night');
+    expect(actionsFor(one, s).map((c) => c.id)).toContain('K1-09');
+    s = choose(one, s, 'K1-09', 'sleep').state;
+    expect(parts.join(' ')).toMatch(/(morning )?(day )?evening night$/);
+    return s;
+  }
+
+  for (const [label, now] of [['09:00', NINE], ['14:00', TWO]] as const) {
+    it(`from ${label} reaches the closed Day 1 without the clock moving`, () => {
+      const s = playFunnel(now);
+      expect(s.closedDay).toBe(1);
+      expect(s.summaries).toHaveLength(1);
+      expect(s.summaries[0]).toMatchObject({ day: 1, played: true });
+      // Game.tsx: `ended` in the funnel is a closed day at the demo's last day
+      expect(s.day >= one.balance.demoDays).toBe(true);
+      expect(partAhead(funnel, s)).toBeUndefined();
+      expect(syncClock(one, s, now)).toBe(s);
+    });
+  }
+  it('plays the same story cards as the real-time day', () => {
+    let clocked = story(start(NINE));
+    for (const h of [13, 19, 23.5]) clocked = story(syncClock(one, clocked, NINE + (h - 9) * H));
+    clocked = choose(one, clocked, 'K1-09', 'sleep').state;
+    const fast = playFunnel(NINE);
+    expect(Object.keys(fast.seen).sort()).toEqual(Object.keys(clocked.seen).sort());
+    expect(fast.flags).toEqual(clocked.flags);
+  });
+  it('without the funnel the same 09:00 start still hits the time wall', () => {
+    const s = story(start(NINE));
+    expect(s.part).toBe('morning');
+    expect(drawStory(one, s).card).toBeNull();
+    expect(actionsFor(one, s)).toHaveLength(0);
+    expect(partAhead(undefined, s)).toBeUndefined();
+    expect(msToNextPart(NINE, TZ)).toBe(3 * H);
+    expect(syncClock(one, s, NINE + H)).toBe(s);
+  });
+  it('gives no button at night, after the day is closed or past the funnel', () => {
+    const s = story(start(NINE));
+    expect(partAhead(funnel, s)).toBe('day');
+    expect(partAhead(funnel, { ...s, part: 'night' })).toBeUndefined();
+    expect(partAhead(funnel, { ...s, closedDay: 1 })).toBeUndefined();
+    expect(advancePart(one, { ...s, part: 'night' }).part).toBe('night');
+  });
+  it('keeps its own save, so the real-time game never loads a funnel day', () => {
+    const mem = new Map<string, string>();
+    const g = globalThis as { localStorage?: unknown };
+    const prev = g.localStorage;
+    g.localStorage = { getItem: (k: string) => mem.get(k) ?? null, setItem: (k: string, v: string) => mem.set(k, v), removeItem: (k: string) => mem.delete(k) };
+    try {
+      const normal = start(NINE);
+      new LocalSave().save(normal);
+      new LocalSave(FUNNEL_KEY).save(advancePart(one, advancePart(one, story(start(NINE)))));
+      const back = new LocalSave().load()!;
+      expect(back.part).toBe('morning');
+      expect(back).toEqual(normal);
+      expect(new LocalSave(FUNNEL_KEY).load()!.part).toBe('evening');
+      expect(FUNNEL_KEY).not.toBe('glowup.save.v2');
+    } finally { g.localStorage = prev; }
   });
 });
