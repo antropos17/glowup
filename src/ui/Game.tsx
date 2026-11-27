@@ -9,7 +9,10 @@ import {
 import type { SaveStore } from '../engine/save';
 import { DAY_PARTS, type Card, type Choice, type DaySummary, type GameState, type LogEntry } from '../engine/types';
 import type { Look } from '../art/avatar';
-import { Body, Cost, Icon, Portrait } from './bits';
+import { castLook } from '../art/cast';
+import { nightWindowSvg } from '../art/items';
+import { sceneFor, type SceneId } from '../art/scenes';
+import { Body, Cost, Face, Icon, ItemArt, Portrait, Scene, Spot } from './bits';
 import { timelapsePng } from './shareTimelapse';
 import { DAY_CARD, DEMO_END, duration, MISSED, PART_ICON, PART_NAME, PART_NEXT, PICK, SMOKE_FREE, SOUND } from './ru';
 import { isMuted, play, played, setMuted, tap } from './sound';
@@ -18,7 +21,7 @@ type Tab = 'journal' | 'mirror' | 'chat' | 'feed' | 'shop';
 type Sheet =
   | { kind: 'card'; card: Card }
   | { kind: 'menu' }
-  | { kind: 'result'; title: string; text: string; delta: number; why?: string }
+  | { kind: 'result'; title: string; text: string; delta: number; why?: string; scene: SceneId; face?: Look }
   | { kind: 'rest' }
   | null;
 
@@ -145,7 +148,10 @@ function Play({ clock, store, first, onRestart, onLeave, api }: {
     else if (r.chanceDelta !== 0 && (r.state.flags.chance_shown || r.state.day > 1)) play(r.chanceDelta > 0 ? 'up' : 'down');
     else if (fromCrush(r.state) > fromCrush(state)) play('message');
     else if (r.state.coins !== state.coins) play('coins');
-    setSheet({ kind: 'result', title: fill(content, r.state, card.title), text: r.outcome.text, delta: r.chanceDelta, why: r.state.lastChange?.why });
+    setSheet({
+      kind: 'result', title: fill(content, r.state, card.title), text: r.outcome.text, delta: r.chanceDelta, why: r.state.lastChange?.why,
+      scene: sceneFor(card), face: castLook(card.speaker),
+    });
   }
   function onAction(card: Card) {
     const shown = choicesFor(content, state, card);
@@ -344,6 +350,7 @@ function Play({ clock, store, first, onRestart, onLeave, api }: {
             )}
             {shown.kind === 'result' && (
               <>
+                <Scene id={shown.scene} part={state.part} crush={her.look} face={shown.face} />
                 <div class="sheet-head"><h2>{shown.title}</h2></div>
                 <p class="sheet-text">{shown.text}</p>
                 {shown.delta !== 0 && chanceShown && (
@@ -355,6 +362,7 @@ function Play({ clock, store, first, onRestart, onLeave, api }: {
             )}
             {shown.kind === 'rest' && (
               <>
+                <Scene id={dayClosed ? 'bed' : 'room'} part={state.part} />
                 <div class="sheet-head"><h2>{dayClosed ? `День ${state.day} закончен` : `${PART_NAME[state.part]}: всё сделано`}</h2></div>
                 <p class="sheet-text">
                   {dayClosed
@@ -431,11 +439,14 @@ function ChoiceBtn(p: { state: GameState; label: string; choice?: Choice; disabl
 
 function CardSheet({ state, card, onChoose, onClose }: { state: GameState; card: Card; onChoose: (c: Card, id: string) => void; onClose: () => void }) {
   const shown = choicesFor(content, state, card);
-  const speaker = card.speaker === 'crush' ? crush(content, state).name : card.speaker;
+  const her = crush(content, state);
+  const speaker = card.speaker === 'crush' ? her.name : card.speaker;
+  const face = card.speaker === 'crush' ? her.look : castLook(card.speaker);
   const lastLine = card.says ? state.chat.filter((m) => m.from === 'crush').at(-1)?.text : undefined;
   const text = lastLine ? `«${lastLine}»` : fill(content, state, card.text);
   return (
     <>
+      <Scene id={sceneFor(card)} part={state.part} crush={her.look} face={face} />
       <div class="sheet-head">
         <h2>{fill(content, state, card.title)}</h2>
         {/* story cards come back later, so their close control says so in words; an action card just closes */}
@@ -443,7 +454,7 @@ function CardSheet({ state, card, onChoose, onClose }: { state: GameState; card:
           ? <button class="x" onClick={onClose} aria-label="Отложить"><Icon name="close" size={18} /></button>
           : <button class="x later" onClick={onClose}><Icon name="clock" size={16} />Отложить</button>}
       </div>
-      {speaker && <span class="speaker">{speaker}</span>}
+      {speaker && <span class="speaker" data-face={face ? '' : undefined}>{face && <Face look={face} />}{speaker}</span>}
       {text && <p class="sheet-text">{text}</p>}
       <div class="choices">
         {shown.map(({ choice, affordable }) => (
@@ -464,7 +475,10 @@ function DayCard({ state, d, onClose }: { state: GameState; d: DaySummary; onClo
     <>
       <div class="sheet-head"><h2>День {d.day} закончен{info ? `: ${info.title.toLowerCase()}` : ''}</h2></div>
       <div class="daycard">
-        <div class="frame"><Portrait look={d.look} title={`Кадр дня ${d.day}`} /></div>
+        <div class="frame">
+          <span class="frame-bg" dangerouslySetInnerHTML={{ __html: nightWindowSvg() }} />
+          <Portrait look={d.look} title={`Кадр дня ${d.day}`} />
+        </div>
         <div class="rows">
           {changed.length === 0 && <p class="row-sub">Показатели за день не изменились.</p>}
           {slipped ? <p class="row-sub">{DAY_CARD.skipped}</p> : changed.map((b) => {
@@ -505,7 +519,7 @@ function DayCard({ state, d, onClose }: { state: GameState; d: DaySummary; onClo
 
 function Journal({ state }: { state: GameState }) {
   if (!state.log.length) {
-    return <p class="empty">Журнал пуст. Нажми плюс внизу, чтобы начать первый день.</p>;
+    return <div class="empty-spot"><Spot name="journal" /><p class="empty">Журнал пуст. Нажми плюс внизу, чтобы начать первый день.</p></div>;
   }
   const out: preact.JSX.Element[] = [];
   let last = '';
@@ -594,14 +608,21 @@ function Chat({ state }: { state: GameState }) {
       {state.revealed.map((id) => (
         <div class="sticky">{content.tastes.find((t) => t.id === id)?.title}</div>
       ))}
-      {!state.chat.length && <p class="empty">Переписки пока нет.</p>}
-      {state.chat.map((m, i) => (
-        <>
-          {/* same day mark as the journal, so status lines of two evenings do not read as one */}
-          {m.day !== state.chat[i - 1]?.day && <div class="day-mark"><b>День {m.day}</b></div>}
-          <div class="bubble" data-from={m.from} data-quiet={m.status ? '' : undefined}>{m.text}</div>
-        </>
-      ))}
+      {!state.chat.length && <div class="empty-spot"><Spot name="chat" /><p class="empty">Переписки пока нет.</p></div>}
+      {state.chat.map((m, i) => {
+        const bubble = <div class="bubble" data-from={m.from} data-quiet={m.status ? '' : undefined}>{m.text}</div>;
+        // her face sits by the last message of each run of hers, as in a messenger; status lines get none
+        const nextIsHers = state.chat[i + 1]?.from === 'crush' && !state.chat[i + 1]?.status && state.chat[i + 1]?.day === m.day;
+        return (
+          <>
+            {/* same day mark as the journal, so status lines of two evenings do not read as one */}
+            {m.day !== state.chat[i - 1]?.day && <div class="day-mark"><b>День {m.day}</b></div>}
+            {m.from === 'crush' && !m.status
+              ? <div class="brow">{nextIsHers ? <span class="face" /> : <Face look={her.look} />}{bubble}</div>
+              : bubble}
+          </>
+        );
+      })}
     </>
   );
 }
@@ -610,13 +631,13 @@ function Feed({ state }: { state: GameState }) {
   return (
     <>
       <h3>Лента</h3>
-      {!state.rumors.length && <p class="empty">В ленте пока тихо. Посты приходят с событиями, и верить можно не всем.</p>}
+      {!state.rumors.length && <div class="empty-spot"><Spot name="feed" /><p class="empty">В ленте пока тихо. Посты приходят с событиями, и верить можно не всем.</p></div>}
       {[...state.rumors].reverse().map((r) => {
         const x = content.rumors[r.id];
         return <div class="rumor">{x.text}<small>{x.source}, день {r.day}</small></div>;
       })}
       <h3>Блокнот</h3>
-      {!state.hints.length && <p class="empty">Сюда сами попадают подсказки, которые {hero(content, state).name} услышал или заметил.</p>}
+      {!state.hints.length && <div class="empty-spot"><Spot name="notes" /><p class="empty">Сюда сами попадают подсказки, которые {hero(content, state).name} услышал или заметил.</p></div>}
       {state.hints.map((h) => <div class="sticky">{content.hints[h]}</div>)}
     </>
   );
@@ -635,7 +656,7 @@ function Shop({ state, commit }: { state: GameState; commit: (s: GameState) => v
     return (
       <div class="item">
         <div class="item-head">
-          <Icon name={it.icon} />
+          <ItemArt id={it.id} icon={it.icon} />
           <div><b>{it.title}{have && !selling ? ` × ${have}` : ''}</b><small>{it.blurb}</small></div>
         </div>
         <div class="limits">{it.limits}</div>
@@ -657,7 +678,7 @@ function Shop({ state, commit }: { state: GameState; commit: (s: GameState) => v
   return (
     <>
       <h3>Твои вещи</h3>
-      {!mine.length && <p class="empty">Пока пусто. Первый подарок придёт в конце дня.</p>}
+      {!mine.length && <div class="empty-spot"><Spot name="shop" /><p class="empty">Пока пусто. Первый подарок придёт в конце дня.</p></div>}
       {mine.map((it) => card(it, false))}
       <h3>Магазин</h3>
       {!sold.length && <p class="empty">В первый день покупать нечего. Товары появятся по сюжету.</p>}
