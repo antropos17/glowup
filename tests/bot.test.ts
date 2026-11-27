@@ -182,7 +182,7 @@ describe('bot webhook', () => {
 // ====================================================================================================
 
 import {
-  LIMITS, MENU, TG, V2_TEXT, handleTick, menuKeyboard, parseBakuTime,
+  LIMITS, MENU, TG, V2_TEXT, WELCOME_PICTURE, esc, handleTick, menuKeyboard, parseBakuTime,
   type Broadcast, type ChannelPost, type ExtStore, type PostResult, type Review, type Session, type TelegramApi, type TgResult,
 } from '../server/supabase/functions/bot/logic';
 
@@ -305,7 +305,8 @@ describe('bot v2 menu', () => {
     const w = world();
     const r = await w.send(11, '/start masha');
     expect(w.m.wishlist.get(11)).toBe('masha');
-    expect(text(r)).toBe(BOT_TEXT.welcome);
+    expect(text(r)).toBe(V2_TEXT.welcome);
+    expect(r.body).toMatchObject({ parse_mode: 'HTML', link_preview_options: { url: WELCOME_PICTURE, show_above_text: true } });
     expect(r.body?.reply_markup).toEqual(menuKeyboard(env));
     expect(buttons(r).map((b) => b.text)).toEqual([MENU.play, MENU.vote, MENU.review, MENU.links, MENU.reward]);
     expect(buttons(r)[0]).toMatchObject({ web_app: { url: env.miniAppUrl } });
@@ -331,7 +332,7 @@ describe('bot v2 menu', () => {
     await w.send(11, '/start');
     const t = text(await w.tap(11, 'm:reward'));
     expect(t).toContain('27 ноября 2026');
-    expect(t).toContain('косметика');
+    expect(t).toContain('косметику');
     expect(t).not.toMatch(/Stars|звёзд|купи|бонус|\d+ монет/i);
     expect(text(await w.tap(12, 'm:reward'))).toBe(V2_TEXT.rewardOut);
   });
@@ -378,7 +379,7 @@ describe('bot v2 review or bug', () => {
   it('warns that a published review is visible to everyone before anything is sent', async () => {
     const w = world();
     await upToChoice(w, 11, 'review', () => w.send(11, 'Классная игра'));
-    expect(V2_TEXT.reviewChoose('review')).toContain('увидят все участники');
+    expect(V2_TEXT.reviewChoose('review')).toContain('Увидят все участники');
     expect(V2_TEXT.reviewChoose('review')).toContain('«Отзывы»');
     expect(w.sent()).toEqual([]);
   });
@@ -389,7 +390,7 @@ describe('bot v2 review or bug', () => {
     const r = await w.tap(11, 'r:pub');
     expect(text(r)).toBe(V2_TEXT.reviewDonePublic);
     expect(w.sent()).toEqual([{ method: 'sendMessage', at: expect.any(Number), params: {
-      chat_id: TG.group, message_thread_id: 3, text: '💬 Отзыв · Аня\n\nКлассная игра',
+      chat_id: TG.group, message_thread_id: 3, parse_mode: 'HTML', text: '<b>💬 Отзыв</b> · Аня\n<blockquote>Классная игра</blockquote>',
     } }]);
     expect(w.sent()[0].params.text as string).not.toMatch(/Смирнова|anya_s|11/);
     expect(w.reviews).toMatchObject([{ userId: 11, kind: 'review', visibility: 'public', text: 'Классная игра', photo: null }]);
@@ -401,8 +402,18 @@ describe('bot v2 review or bug', () => {
     await upToChoice(w, 11, 'bug', () => w.photo(11, 'Кнопка не жмётся'));
     await w.tap(11, 'r:pub');
     expect(w.sent()).toEqual([{ method: 'sendPhoto', at: expect.any(Number), params: {
-      chat_id: TG.group, message_thread_id: 4, photo: 'big-11', caption: '🐞 Баг · Аня\n\nКнопка не жмётся',
+      chat_id: TG.group, message_thread_id: 4, parse_mode: 'HTML', photo: 'big-11', caption: '<b>🐞 Баг</b> · Аня\n<blockquote>Кнопка не жмётся</blockquote>',
     } }]);
+  });
+
+  it('escapes the person’s text and name, so nothing they type becomes markup', async () => {
+    const w = world();
+    await w.tap(11, 'r:review');
+    await w.send(11, '<b>жирно</b> & <a href="x">ссылка</a>');
+    await handleWebhook(SECRET, { callback_query: { id: 'q', from: { id: 11, first_name: '<i>Аня</i>' }, message: { chat: { id: 11, type: 'private' } }, data: 'r:pub' } }, w.store, env, w.ext2);
+    expect(w.sent()[0].params.text).toBe(
+      '<b>💬 Отзыв</b> · &lt;i&gt;Аня&lt;/i&gt;\n<blockquote>&lt;b&gt;жирно&lt;/b&gt; &amp; &lt;a href="x"&gt;ссылка&lt;/a&gt;</blockquote>');
+    expect(esc('a<b>&c')).toBe('a&lt;b&gt;&amp;c');
   });
 
   it('«Только авторам» reaches the admins in private and nothing reaches the group', async () => {
@@ -411,7 +422,7 @@ describe('bot v2 review or bug', () => {
     expect(text(await w.tap(11, 'r:auth'))).toBe(V2_TEXT.reviewDoneAuthors);
     const sent = w.sent();
     expect(sent.map((c) => c.params.chat_id)).toEqual(env.adminIds);
-    expect(sent[0]).toMatchObject({ method: 'sendPhoto', params: { photo: 'big-11', caption: '🔒 Баг, только для авторов · Аня · id 11' } });
+    expect(sent[0]).toMatchObject({ method: 'sendPhoto', params: { photo: 'big-11', parse_mode: 'HTML', caption: '<b>🔒 Баг, только авторам</b> · Аня · id 11' } });
     expect(sent.some((c) => c.params.chat_id === TG.group)).toBe(false);
     expect(w.reviews).toMatchObject([{ kind: 'bug', visibility: 'authors', text: '', photo: 'big-11' }]);
   });

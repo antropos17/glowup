@@ -117,8 +117,11 @@ export async function handleWebhook(
     const known = CODE.test(raw) ? await store.findCode(raw) : null;
     await store.addToWishlist(userId, known?.code ?? null);
     // writing /start again means the person is reachable: a broadcast may try them again
-    if (v2) await v2.store.unblock(userId);
-    return reply(BOT_TEXT.welcome, true);
+    if (!v2) return reply(BOT_TEXT.welcome, true);
+    await v2.store.unblock(userId);
+    const r = say(chatId, V2_TEXT.welcome, menuKeyboard(env), true);
+    r.body!.link_preview_options = { url: WELCOME_PICTURE, prefer_large_media: true, show_above_text: true };
+    return r;
   }
 
   if (command === 'stats') {
@@ -287,40 +290,59 @@ export const fmtTime = (d: Date) => {
   return `${pad(b.getUTCDate())}.${pad(b.getUTCMonth() + 1)}.${b.getUTCFullYear()} ${pad(b.getUTCHours())}:${pad(b.getUTCMinutes())}`;
 };
 
-/** Texts of v2. Player-facing ones first, then the admin ones. */
+/** Escapes text for Telegram's HTML parse mode. */
+export const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+/**
+ * Picture above the v2 greeting, shown as a link preview: if the URL does not answer (before the merge reaches
+ * GitHub), the greeting still arrives, only without the picture. Drawn by promo/botfather/make.ts.
+ */
+export const WELCOME_PICTURE = 'https://raw.githubusercontent.com/antropos17/glowup/main/promo/botfather/description.png';
+
+/**
+ * Texts of v2. Player-facing ones first, then the admin ones. Texts marked HTML are sent with parse_mode HTML:
+ * anything inserted into them goes through `esc`.
+ */
 export const V2_TEXT = {
-  menuHint: 'Вот что тут есть:',
-  links: 'Новости и посты — в канале. Поговорить с игроками и авторами — в чате.',
-  voteOn: 'Сейчас в канале идёт голосование: от него зависит, что авторы напишут дальше.',
-  voteOff: 'Сейчас голосования нет. Новое объявим в канале.',
+  /** HTML; v1 keeps BOT_TEXT.welcome */
+  welcome: '<b>Краш за 30 дней</b> 💘\n\nУ героя месяц, чтобы привести себя в форму и понравиться человеку. Первый день уже ждёт.\n\nТы в списке: выйдет продолжение — напишу.',
+  menuHint: 'Куда дальше? 👇',
+  links: '📣 В канале — новости и голосования.\n💬 В чате — игроки и авторы.',
+  /** HTML */
+  voteOn: '<b>Идёт голосование</b> 🗳\nОт него зависит, что авторы напишут дальше.',
+  voteOff: 'Сейчас голосования нет. Новое объявим в канале 📣',
+  /** HTML */
   rewardIn: (since: Date) =>
-    `Ты в списке с ${fmtDay(since)}. Когда выйдет продолжение, бот напишет сюда.\n\n` +
-    'Для тех, кто в списке, в игре запланирована награда: косметика для героя, то есть что-то для внешнего вида. ' +
-    'Она не даёт монет и энергии и не влияет на шанс понравиться. Дату пока не называем.',
-  rewardOut: 'Тебя пока нет в списке. Нажми /start, и бот запомнит тебя.',
-  reviewAsk: 'Что хочешь прислать?',
+    `<b>Ты в списке</b> с ${fmtDay(since)} ✅\nВыйдет продолжение — напишу сюда.\n\n` +
+    '🎁 Тем, кто в списке, готовим награду: косметику для героя, что-то для внешнего вида.\n' +
+    '<blockquote>Монет и энергии она не даёт, на шанс понравиться не влияет. Дату пока не называем.</blockquote>',
+  rewardOut: 'Тебя ещё нет в списке. Жми /start — запомню.',
+  reviewAsk: 'Что пришлёшь?',
   reviewWrite: (k: ReviewKind) => k === 'bug'
-    ? 'Опиши баг одним сообщением: что делал и что пошло не так. Можно прислать скриншот с подписью.'
-    : 'Напиши отзыв одним сообщением. Можно прислать скриншот с подписью.',
-  reviewNeedContent: 'Пришли текст или картинку одним сообщением.',
-  reviewTooLong: `Слишком длинно: до ${LIMITS.reviewText} знаков в тексте и до ${LIMITS.reviewCaption} в подписи к картинке.`,
+    ? 'Что делал и что сломалось? Одним сообщением 🐞\nМожно скриншот с подписью.'
+    : 'Пиши одним сообщением ✍️\nМожно скриншот с подписью.',
+  reviewNeedContent: 'Нужен текст или картинка, одним сообщением.',
+  reviewTooLong: `Длинновато: текст до ${LIMITS.reviewText} знаков, подпись к картинке до ${LIMITS.reviewCaption}.`,
+  /** HTML */
   reviewChoose: (k: ReviewKind) =>
-    'Как отправить?\n\n' +
-    `«Опубликовать в чате»: сообщение появится в чате @glowup30chat, в теме «${k === 'bug' ? 'Баги' : 'Отзывы'}». ` +
-    'Его увидят все участники чата. Из твоего профиля будет видно только имя, без ника.\n\n' +
-    '«Только авторам»: прочитают только авторы игры, в чат ничего не попадёт.',
-  reviewPickButton: 'Выбери кнопку под сообщением выше: «Опубликовать в чате», «Только авторам» или «Отмена».',
-  reviewDonePublic: 'Спасибо! Сообщение опубликовано в чате.',
-  reviewDoneAuthors: 'Спасибо! Авторы прочитают.',
-  reviewCancelled: 'Отменено, ничего не отправлено.',
+    '<b>Куда отправить?</b>\n\n' +
+    `📢 <b>Опубликовать в чате</b> — появится в @glowup30chat, в теме «${k === 'bug' ? 'Баги' : 'Отзывы'}». ` +
+    'Увидят все участники чата, из профиля — только имя.\n\n' +
+    '🔒 <b>Только авторам</b> — прочитаем только мы, в чат не попадёт.',
+  reviewPickButton: 'Выбери кнопку выше: опубликовать, только авторам или отмена.',
+  reviewDonePublic: 'Готово, уже в чате 🙌',
+  reviewDoneAuthors: 'Готово, авторы прочитают 🙌',
+  reviewCancelled: 'Отменил. Ничего не ушло.',
   reviewExpired: 'Эта форма уже закрыта. Нажми «Отзыв или баг» ещё раз.',
-  reviewFailed: 'Не получилось отправить. Попробуй ещё раз чуть позже.',
-  reviewCap: `На сегодня всё: можно присылать до ${LIMITS.reviewsPerDay} отзывов или багов в сутки. Спасибо, что пишешь!`,
-  /** first line of a delivered review; the name is the Telegram first name only */
-  header: (k: ReviewKind, v: Visibility, name: string, userId: number) =>
-    v === 'public'
-      ? `${k === 'bug' ? '🐞 Баг' : '💬 Отзыв'} · ${name}`
-      : `🔒 ${k === 'bug' ? 'Баг' : 'Отзыв'}, только для авторов · ${name} · id ${userId}`,
+  reviewFailed: 'Не отправилось. Попробуй чуть позже.',
+  reviewCap: `На сегодня всё: до ${LIMITS.reviewsPerDay} отзывов или багов в сутки. Спасибо, что пишешь 💛`,
+  /** HTML: a delivered review; the name is the Telegram first name only, the person's text goes in a quote */
+  delivered: (k: ReviewKind, v: Visibility, name: string, userId: number, text: string) => {
+    const head = v === 'public'
+      ? `<b>${k === 'bug' ? '🐞 Баг' : '💬 Отзыв'}</b> · ${esc(name)}`
+      : `<b>🔒 ${k === 'bug' ? 'Баг' : 'Отзыв'}, только авторам</b> · ${esc(name)} · id ${userId}`;
+    return text ? `${head}\n<blockquote>${esc(text)}</blockquote>` : head;
+  },
   noName: 'без имени',
 
   // admin
@@ -355,8 +377,10 @@ const ADMIN_COMMANDS = new Set(['setvote', 'post', 'posts', 'delpost', 'broadcas
 const VOTE_URL = /^https:\/\/t\.me\/\S+$/;
 
 type Markup = { inline_keyboard: Record<string, unknown>[][] };
-const say = (chatId: number, text: string, markup?: Markup): WebhookResult =>
-  ({ status: 200, body: { method: 'sendMessage', chat_id: chatId, text, ...(markup ? { reply_markup: markup } : {}) } });
+const say = (chatId: number, text: string, markup?: Markup, html = false): WebhookResult =>
+  ({ status: 200, body: {
+    method: 'sendMessage', chat_id: chatId, text, ...(html ? { parse_mode: 'HTML' } : {}), ...(markup ? { reply_markup: markup } : {}),
+  } });
 const cb = (text: string, data: string) => ({ text, callback_data: data });
 const link = (text: string, url: string) => ({ text, url });
 
@@ -386,12 +410,12 @@ const capReached = async (v2: V2, userId: number) =>
 
 const displayName = (u?: User) => (u?.first_name ?? '').replace(/\s+/g, ' ').trim().slice(0, 64) || V2_TEXT.noName;
 
-/** Sends a text, or a picture with the text as its caption. */
-function sendContent(tg: TelegramApi, chatId: number | string, text: string, photo: string | null, threadId?: number) {
-  const thread = threadId === undefined ? {} : { message_thread_id: threadId };
+/** Sends a text, or a picture with the text as its caption. `html`: the text is HTML with every inserted part escaped. */
+function sendContent(tg: TelegramApi, chatId: number | string, text: string, photo: string | null, threadId?: number, html = false) {
+  const extra = { ...(threadId === undefined ? {} : { message_thread_id: threadId }), ...(html ? { parse_mode: 'HTML' } : {}) };
   return photo
-    ? tg.call('sendPhoto', { chat_id: chatId, photo, ...(text ? { caption: text } : {}), ...thread })
-    : tg.call('sendMessage', { chat_id: chatId, text, ...thread });
+    ? tg.call('sendPhoto', { chat_id: chatId, photo, ...(text ? { caption: text } : {}), ...extra })
+    : tg.call('sendMessage', { chat_id: chatId, text, ...extra });
 }
 
 async function takeContent(msg: Message, chatId: number, userId: number, s: Session, v2: V2): Promise<WebhookResult> {
@@ -402,18 +426,17 @@ async function takeContent(msg: Message, chatId: number, userId: number, s: Sess
   await v2.store.setSession(userId, { state: 'await_visibility', kind: s.kind, text, photo, updatedAt: v2.now() });
   return say(chatId, V2_TEXT.reviewChoose(s.kind), {
     inline_keyboard: [[cb(MENU.publish, 'r:pub')], [cb(MENU.authors, 'r:auth')], [cb(MENU.cancel, 'r:cancel')]],
-  });
+  }, true);
 }
 
 /** Delivers a finished review. True when it reached the group, or at least one admin. */
 async function deliver(v2: V2, env: BotEnv, s: Session, visibility: Visibility, userId: number, from?: User) {
-  const head = V2_TEXT.header(s.kind, visibility, displayName(from), userId);
-  const text = s.text ? `${head}\n\n${s.text}` : head;
+  const text = V2_TEXT.delivered(s.kind, visibility, displayName(from), userId, s.text);
   if (visibility === 'public') {
-    return (await sendContent(v2.tg, TG.group, text, s.photo, s.kind === 'bug' ? TG.bugThread : TG.reviewThread)).ok;
+    return (await sendContent(v2.tg, TG.group, text, s.photo, s.kind === 'bug' ? TG.bugThread : TG.reviewThread, true)).ok;
   }
   let any = false;
-  for (const id of env.adminIds) if ((await sendContent(v2.tg, id, text, s.photo)).ok) any = true;
+  for (const id of env.adminIds) if ((await sendContent(v2.tg, id, text, s.photo, undefined, true)).ok) any = true;
   return any;
 }
 
@@ -431,7 +454,7 @@ async function handleCallback(cq: CallbackQuery, env: BotEnv, v2: V2): Promise<W
     if (action === 'vote') {
       const url = await store.getSetting('vote_url');
       return url
-        ? say(chatId, V2_TEXT.voteOn, { inline_keyboard: [[link(MENU.voteGo, url)]] })
+        ? say(chatId, V2_TEXT.voteOn, { inline_keyboard: [[link(MENU.voteGo, url)]] }, true)
         : say(chatId, V2_TEXT.voteOff, { inline_keyboard: [[link(MENU.channel, TG.channelUrl)]] });
     }
     if (action === 'review') {
@@ -441,7 +464,7 @@ async function handleCallback(cq: CallbackQuery, env: BotEnv, v2: V2): Promise<W
     if (action === 'links') return say(chatId, V2_TEXT.links, linksKeyboard);
     if (action === 'reward') {
       const since = await store.wishlistSince(userId);
-      return say(chatId, since ? V2_TEXT.rewardIn(since) : V2_TEXT.rewardOut);
+      return since ? say(chatId, V2_TEXT.rewardIn(since), undefined, true) : say(chatId, V2_TEXT.rewardOut);
     }
     return { status: 200 };
   }

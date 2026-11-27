@@ -40,6 +40,8 @@ Only private chats are answered. Any other text gets a short line and the play b
 
 ### v2: the button menu (needs `TELEGRAM_BOT_TOKEN` and `callback_query` in the webhook)
 
+The v2 greeting is its own short text in HTML (bold title) with the picture `promo/botfather/description.png` shown above it as a link preview from `raw.githubusercontent.com/antropos17/glowup/main/…`. The picture appears only after the branch is merged and pushed to `main`; until then, or if GitHub does not answer, the greeting arrives without it. Messages that show the person's own text (published reviews, reviews to the authors) use HTML with that text escaped and quoted in a `<blockquote>`; channel posts and broadcasts go out as plain text.
+
 Under the greeting and under any unknown text:
 
 | Button | What happens |
