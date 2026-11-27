@@ -4,10 +4,10 @@
   "verified": {
     "date": "2026-11-27",
     "typecheck": "pass",
-    "tests": "222/222 (206 engine, 16 bot)",
+    "tests": "273/273 (207 engine, 46 bot, 15 funnel, 5 art)",
     "check_content": "pass: 445 cards (333 story, 112 action), 1 archetype, 1 crush",
     "economy": "demo economy in items.json, side-jobs.json, balance.json; see docs/DEMO_SCRIPT.md section 5a",
-    "build": "pass: dist/index.html 1029.96 kB",
+    "build": "pass: dist/index.html 1082.08 kB",
     "playthrough": "Day 19: engine tests over the Thursday morning (overslept by d18_late, Vitya's run by d9_pass or d16_pass = vitya, the song: exactly one of K19-01pj/p/g for every d10_will_sing and d6_reply value, none after it is answered whatever those flags become), the five songs K19-02a/b for the music team by d14_scene, the evening (K19-03 football with Vitya, K19-04 the bar, d19_bar went/held/lot/home), the craving at the bar door K19-05a/q/b or on the balcony K19-06a/q/b: exactly one for every place and Day 18 result, the gym by { modifier: gym }, sleep and staying up, a fully skipped Day 19 for three states, the demo still ending on Day 7. Playwright MCP (Chromium, real clicks, page.clock at the Day 19 morning and the dev button for the parts of the day) on the built dist/index.html?full served from a local folder; Day 19 reached with a save built by the engine (days 1-18 played with the first affordable story choice, sleep every night), then flags switched in the save: 360x640 d10_will_sing, d6_reply joke, d15_team music, d14_scene 1, d9_pass vitya, held on Day 18 (K19-run run, K19-01pj practice, K19-02a, K19-03 go, K19-04 held, K19-05b: hold shown disabled at 2 energy, gum, sleep, day-end card with acne_patch and the teaser); 390x844 no promise, no team, smoked on Day 18 (K19-01g promise, A-job, K19-03 home, K19-06a smoke, sleep late with the karaoke line, day-end card). All sheets fit, no horizontal scroll. Screenshots in X:/tmp/glowup-day19"
   },
   "demo_days": {
@@ -115,7 +115,8 @@
     "bot": "Supabase function server/supabase/functions/bot (pure logic in logic.ts, tests/bot.test.ts) and migration 0002_bot_wishlist.sql: /start [code], /stats, /addcode. v2 (migration 0003_bot_v2.sql, on only when the function secret TELEGRAM_BOT_TOKEN is set): button menu, reviews, vote link, channel post queue, broadcasts",
     "verified": "Chrome via playwright-core, built dist/index.html, real clicks, page.clock: ?demo=1 with a stub Telegram.WebApp from a clean save to the demo end after Day 1 at 375x812 and 320x568 (no showcase, no frame, no horizontal scroll, save kept over a reload, calls ready, expand, header, close), ?demo=1 outside Telegram ends after Day 1 with the showcase and notify button unchanged, no parameter goes on to Day 2; no console errors",
     "not_verified": "real Telegram client and phone, save after closing the Mini App in a real client, bot index.ts on Deno and Supabase (no Deno here), v2 deployment and migration 0003_bot_v2.sql",
-    "funnel_1day": "2026-11-27, branch claude/demo1-polish-86e209, merged into main 2026-11-27: ?demo=1 only. Intro (4 screens, once), animated Day 1 beats, demo ends on sleep, cliffhanger with Days 2-7, wishlist button t.me/glowupchallenge30bot?start=<ref|code>; in Telegram: already listed + share + back to chat. Title «Glow Up: челлендж 30 дней». Playwright 360x640, 320x568, Telegram stub, no-?demo run; not checked on a real phone or a real Telegram client."
+    "funnel_1day": "2026-11-27, branch claude/demo1-polish-86e209, merged into main 2026-11-27: ?demo=1 only. Intro (4 screens, once), animated Day 1 beats, demo ends on sleep, cliffhanger with Days 2-7, wishlist button t.me/glowupchallenge30bot?start=<ref|code>; in Telegram: already listed + share + back to chat. Title «Glow Up: челлендж 30 дней». Playwright 360x640, 320x568, Telegram stub, no-?demo run; not checked on a real phone or a real Telegram client.",
+    "funnel_1day_compressed": "2026-11-27, branch claude/demo1-compressed-3f055b (a046e8d), accepted by Ruslan, merged into main 2026-11-27: ?demo=1 only. The whole Day 1 is played in one sitting: a «Дальше: <part>» button replaces the real-time wait (engine advancePart), the funnel keeps its own save glowup.save.demo1, the intro line about real-time parts says the demo does not make you wait; everything outside ?demo=1 is unchanged. On the merged main: tsc pass, tests 273/273, check:content pass (445 cards), build 1082.08 kB; not checked on a real phone or a real Telegram client."
   },
   "campaign_tiktok": {
     "status": "plan accepted by Ruslan 2026-11-27, revised the same day after the monetization chat, nothing published yet; docs/CAMPAIGN_TIKTOK.md",
@@ -127,12 +128,17 @@
   "promo_name": {
     "status": "2026-11-27: promo renamed to «Glow Up: челлендж 30 дней» (DECISIONS.md row 48) on branch claude/magical-lamport-7eb2c6, not merged, nothing deployed or published",
     "files": "12 shorts re-rendered as X:\\Projects 2027\\Glowup promo\\shorts\\glowup30-<name>.mp4 with end-card sheets glowup30-<name>-sheet.jpg; the krash30- files are kept and must not be published; logo promo/avatars/out/3-logo*, bot picture promo/botfather/description.png",
-    "open": "the closing voice line c4 / f6 / p6 of chat, feed and pov still says the cancelled name; the new name and description are set in BotFather (2026-11-27 18:02, reported by the main game chat), the redrawn description.png is not uploaded there yet; the deployed bot keeps the old greeting until redeployed; live-1 … live-5 end cards carry no channel nick"
+    "open": "the closing voice line c4 / f6 / p6 of chat, feed and pov still says the cancelled name; the new name and description are set in BotFather (2026-11-27 18:02, reported by the main game chat), the redrawn description.png was uploaded to BotFather on 2026-11-27 at 18:36; the deployed bot keeps the old greeting until redeployed; live-1 … live-5 end cards carry no channel nick"
   },
   "public_page_and_art": {
     "status": "merged into main 2026-11-27",
     "note": "the public page opens the game alone, the asset showcase moved to ?kit; scenes, faces, item pictures and empty-screen spots are drawn in code (src/art/cast.ts, items.ts, scenes.ts, tests/art.test.ts)",
     "verified": "on the merged main: tsc pass, tests 227/227, check:content pass (445 cards), build dist/index.html 1058.51 kB"
+  },
+  "layout_320px": {
+    "status": "merged into main 2026-11-27 (branch claude/fix-320-c52e62, 1c1f516..6d6adf5)",
+    "note": "320 px fixes: the mirror and demo end frame strip stays one row and scrolls sideways, long sheet titles move «Отложить» under the title, journal bars fit their labels, «Применить» is disabled when the item needs more energy than is left, the day-part colours on intro slide 4, the case of the crush name in K10-03a and K10-03c",
+    "verified": "on the merged main: tsc pass, tests 273/273, check:content pass (445 cards), build dist/index.html 1082.08 kB"
   },
   "engine_todo": [
     "choice buttons inside the feed",

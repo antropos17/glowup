@@ -32,7 +32,7 @@ Shown in an empty chat with the bot, above the «Старт» button.
 
 ## Description picture (Edit Description Picture, 640×360)
 
-`promo/botfather/description.png`, drawn in code by `promo/botfather/make.ts` (run `npx tsx promo/botfather/make.ts`; the SVG source is `description.svg`). Redrawn with the new name on 2026-11-27 and **not uploaded to BotFather yet**: the main game chat or Ruslan uploads it.
+`promo/botfather/description.png`, drawn in code by `promo/botfather/make.ts` (run `npx tsx promo/botfather/make.ts`; the SVG source is `description.svg`). Redrawn with the new name on 2026-11-27 and uploaded to BotFather on 27.11.2026 at 18:36.
 
 ## Commands (Edit Commands)
 
