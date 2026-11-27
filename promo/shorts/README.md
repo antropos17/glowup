@@ -99,6 +99,53 @@ a problem going up is a bar going down.
 End card in all three: hero portrait, «Краш за 30», «Демо — в канале». No prices, timers,
 store badges, reviews or winning promises.
 
+## Live shorts (Higgsfield), 2026-11-27
+
+`live-1` (pilot; `live-2` … `live-5` wait for the pilot's approval): a live-action Андрей, generated on
+higgsfield.ai, speaks to camera as the voice of the game's makers, the game cuts in over his voice, then the end card.
+Everything live in these shorts is AI-generated (portrait, footage, the hero's voice and lip sync).
+**When publishing on TikTok, switch on the "AI-generated content" label.** He is not a real player and gives no review.
+
+Footage is not in git (`.gitignore`: `promo/shorts/live-*/assets/*.mp4`). It lives in
+`X:\Projects 2027\Glowup promo\live\`; to render, copy it into the short's `assets/` under the same name
+(`live-1-talk.mp4` → `promo/shorts/live-1/assets/live-1-talk.mp4`).
+
+### The hero
+
+Higgsfield Soul 2.0, 9:16, 2K, moodboard «Warm ambient», batch of 4, picked variant 3 (free generations):
+
+> Candid smartphone photo, vertical. An ordinary, likeable man around 40, friendly and dignified. Light skin, short brown
+> hair with a receding hairline, short patchy uneven beard, thick black rectangular glasses with a small piece of white tape
+> wrapped around one temple arm near the hinge. A bit overweight, fully clothed: a plain faded grey crew-neck t-shirt that
+> covers the belly, grey sweatpants. Kind, slightly tired eyes, a hint of a self-ironic smile. Sitting on a worn sofa in a
+> small cozy apartment in the evening, warm lamp light. Clean natural skin, no bruises, no bandages, no tape on the face.
+> Realistic, not a model, not a celebrity. Waist-up medium shot.
+
+A first batch without "fully clothed" and the tape on the temple came out mocking (bare belly, a bandage on the nose)
+and was dropped.
+
+### live-1 — «Глоуап за 30 дней — теперь игра» (16.5 s)
+
+Footage `live-1-talk.mp4`: Seedance 2.5, start frame = the portrait, 10 s, 9:16, 720p, Unlimited mode (0 credits),
+the model's own audio (voice and lip sync come from the same generation):
+
+> The same man sits on the sofa in the same cozy room, looks straight into the camera and talks to the viewer in Russian,
+> warm, friendly and a little self-ironic, like a casual vlog. He says exactly, in Russian: «Тренд „глоуап за 30 дней“
+> знаете? Мы сделали из него игру. Тридцать настоящих дней, каждый выбор считается. Демо — в канале.» Clear natural lip
+> sync, mature male voice of a man around 40, calm pace. Smartphone selfie-style framing, subtle natural motion, warm
+> evening lamp light. No music, no on-screen text, no subtitles, no logos.
+
+| Time | On screen | Heard |
+|---|---|---|
+| 0–2.8 | Андрей to camera, caption «Тренд «глоуап за 30 дней» знаете?» | his line (file 1.0–3.8 s) |
+| 2.8–7.3 | Day 1 mirror, six problems, «Андрей смотрит в зеркало. 30 дней.» (K1-02); captions «Мы сделали из него игру.», «Тридцать настоящих дней,», «каждый выбор считается.» | his voice goes on under the game |
+| 7.3–11.3 | «Каждый день — выбор», «Рука сама тянется к пачке.» → «Убрать пачку, взять жвачку» → «Пачка в ящике, жвачка во рту.», Уверенность +1 (K1-06) | music, sound effects |
+| 11.3–13 | Андрей again, caption «Демо — в канале.» | his line (file 8.3–10.04 s) |
+| 13–16.5 | End card «Краш за 30», «Демо — в канале» | music |
+
+Captions follow the script the model was given; Ruslan listened to the take and accepted it. Phrase times were
+measured from the pauses (`ffmpeg silencedetect`), not from a transcript. Music and sound effects are pov's.
+
 ## Assumptions to confirm
 
 - The Day 7 look: clothes, frame and shave are what Day 6–7 cards really give (shirt `#4A6FA5`, V-neck,
