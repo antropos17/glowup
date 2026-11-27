@@ -13,9 +13,25 @@ Key text sits between 290 and 1500 px vertically.
 
 ```
 npx tsx promo/shorts/tools/hero.ts        # hero and crush SVGs from src/art/avatar.ts + engine currentLook
-python promo/shorts/tools/make_music.py   # music.wav per short (numpy), then:
-ffmpeg -y -i promo/shorts/chat/assets/music.wav -b:a 160k promo/shorts/chat/assets/music.mp3   # same for feed, pov
 ```
+
+### Music (HeyGen catalog, via the media-use audio engine, signed in with `hyperframes auth login`)
+
+Request `{"lines":[],"bgm":{"mode":"retrieve","query":"<mood>"}}` run from the short's folder with
+`plugin-cli.mjs --script <skills>/media-use/audio/scripts/audio.mjs --request req.json --out meta.json --only bgm`,
+then cut to length with a 1.2 s fade-out into `assets/music.mp3`:
+
+| Short | Query | Source length | Cut |
+|---|---|---|---|
+| chat | light playful pop, curious anticipation, plucky synth, soft beat, 110 bpm | 56 s | from 8 s, 18 s (the louder section lands near the question at 12 s) |
+| feed | quirky funny upbeat ukulele pop with claps, comedic, 120 bpm | 30 s | from 0, 20 s |
+| pov | uplifting motivational pop, builds to bright energetic drop, transformation, 120 bpm | 57 s | from 0, 20 s |
+
+### Sound effects (Higgsfield, Epidemic Sound catalog)
+
+`assets/sfx/`: `message` (UI notification, message), `tap-a` / `tap-b` (UI click, bubbly / simple select),
+`stamp` (rubber stamp on document), `wrong` (funny wrong-answer buzz), `plus` (level-up, positive, short),
+`whoosh-a` / `whoosh-b` (fast swipe through air 01 / 02). The licence for ads follows the Higgsfield plan.
 
 Render (HyperFrames CLI 0.9.102, run inside each short's folder), then level the audio to about −15 LUFS:
 
@@ -75,4 +91,5 @@ store badges, reviews or winning promises.
   round frame, no beard); the problem levels behind it are invented for the ad (`tools/hero.ts`).
 - The tea post compresses two days: the Day 1 post is saved, the outcome line is the Day 2 order (K2-05b).
 - «Краш за 30» is still a draft name (`docs/NAME_AND_PROMO.md`).
-- The audio was measured (≈ −15 LUFS, true peak ≤ −1 dBFS), not listened to. Listen before publishing.
+- The audio was measured (≈ −15 LUFS, true peak ≤ −1.4 dBFS), not listened to. Tracks were picked by search query and loudness profile only: listen before publishing.
+- Check that the HeyGen catalog music and the Epidemic Sound effects are cleared for paid ads and creator posts on your plans.
